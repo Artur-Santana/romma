@@ -1,0 +1,12 @@
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseLink = process.env.SUPABASE_URL
+const supabaseRoleKey = process.env.SUPABASE_ROLE_KEY 
+
+const supabaseAdmin = createClient(supabaseLink, supabaseRoleKey)
+
+
+export default supabaseAdmin
+
+
+

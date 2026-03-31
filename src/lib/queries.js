@@ -9,3 +9,8 @@ export async function getEdificios() {
     const { data } = await supabase.from('edificios').select('*')
     return data
 }
+
+export async function getLocatarios() {
+    const {data} = await supabase.from('locatarios').select('*')
+    return data
+}
