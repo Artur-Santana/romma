@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "dashboard",
         "unidades",
-        "locatarios"
+        "locatarios",
+        "contratos"
     ]
 }

@@ -8,7 +8,6 @@ import { getEdificios, getUnidades } from "@/lib/queries"
 import UnidadeCard from "@/components/UnidadeCard";
 
 
-
 export default function Unidades() {
     const [usuario, setUsuario] = useState(null)
     const [unidades, setUnidades] = useState([])
