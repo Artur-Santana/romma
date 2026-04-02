@@ -43,27 +43,38 @@ export default function Contratos() {
 
     function resetForm(){
         setForm({
-            data_inicio: '',
-            data_fim: '',
+            data_inicio: "",
+            data_fim: "",
             status: 'ativo',
-            observacoes: '',
-            unidade_id: '',
-            locatario_id: '',
+            observacoes: "",
+            unidade_id: "",
+            locatario_id: "",
         })
     }
 
     async function insertContrato(e) {
         e.preventDefault()
-        const { errorInsertContrato } = await supabase.from('contratos').insert(form)
-        if (!errorInsertContrato) {
+        const { data, error } = await supabase.from('contratos').insert(form).select().single()
+        if (!error) {
             const { errorUpdateUnidade } = await supabase.from('unidades').update({status:"alugada"}).eq("id",form.unidade_id)
             if (!errorUpdateUnidade){
                 setContratos(await getContratos())
+                const response = await fetch('https://vfymttcajeyhrmsyhrtj.supabase.co/functions/v1/gerar-parcelas', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': 'Bearer '+process.env.NEXT_PUBLIC_SUPABASE_JWT
+                    },
+                    body: JSON.stringify({ contrato_id: data.id })
+                  })
+                  
+                  const dataResponse = await response.json()
                 resetForm()
             }
         }
     }
 
+    
     async function handleSalvarContrato(e) {
         const { error } = await supabase.from('contratos').update(formEdit).eq('id',editandoId)
         if (!error) {

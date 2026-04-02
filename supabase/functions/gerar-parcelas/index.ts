@@ -1,14 +1,23 @@
 import "@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from "jsr:@supabase/supabase-js@2"
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
   try {
     const { contrato_id } = await req.json()
 
     if (!contrato_id) {
       return new Response(
         JSON.stringify({ error: "contrato_id é obrigatório" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       )
     }
 
@@ -27,7 +36,7 @@ Deno.serve(async (req) => {
     if (contratoError || !contrato) {
       return new Response(
         JSON.stringify({ error: "Contrato não encontrado" }),
-        { status: 404, headers: { "Content-Type": "application/json" } }
+        { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
       )
     }
 
@@ -85,19 +94,19 @@ Deno.serve(async (req) => {
     if (insertError) {
       return new Response(
         JSON.stringify({ error: insertError.message }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       )
     }
 
     return new Response(
       JSON.stringify({ ok: true, total: parcelas.length }),
-      { headers: { "Content-Type": "application/json" } }
+       { headers: { "Content-Type": "application/json", ...corsHeaders } }
     )
 
   } catch (err) {
     return new Response(
       JSON.stringify({ error: String(err) }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     )
   }
 })
