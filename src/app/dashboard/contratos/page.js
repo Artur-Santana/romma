@@ -1,10 +1,12 @@
 "use client"
 
 import supabase from "@/lib/supabase";
+import supabaseJWT from "@/lib/supabaseJWT";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getContratos, getLocatarios, getUnidades } from "@/lib/queries";
+
 
 
 export default function Contratos() {
@@ -27,13 +29,14 @@ export default function Contratos() {
                 setUsuario(data.user)
                 setContratos(await getContratos())
                 setForm({
-                    data_inicio: '',
-                    data_fim: '',
+                    data_inicio: "",
+                    data_fim: "",
                     status: 'ativo',
-                    observacoes: '',
-                    unidade_id: '',
-                    locatario_id: '',
+                    observacoes: "",
+                    unidade_id: "",
+                    locatario_id: "",
                 })
+                console.log('jwt key:', process.env.NEXT_PUBLIC_SUPABASE_JWT?.substring(0, 20))
                 setUnidades(await getUnidades())
                 setLocatarios(await getLocatarios())
             }
@@ -59,16 +62,11 @@ export default function Contratos() {
             const { errorUpdateUnidade } = await supabase.from('unidades').update({status:"alugada"}).eq("id",form.unidade_id)
             if (!errorUpdateUnidade){
                 setContratos(await getContratos())
-                const response = await fetch('https://vfymttcajeyhrmsyhrtj.supabase.co/functions/v1/gerar-parcelas', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': 'Bearer '+process.env.NEXT_PUBLIC_SUPABASE_JWT
-                    },
-                    body: JSON.stringify({ contrato_id: data.id })
-                  })
-                  
-                  const dataResponse = await response.json()
+                console.log('jwt key:', process.env.NEXT_PUBLIC_SUPABASE_JWT?.substring(0, 20))
+                const { dataFunction, errorFunction } = await supabaseJWT.functions.invoke('gerar-parcelas', {
+                    body: { contrato_id: data.id },
+                    headers: { Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_SUPABASE_JWT}
+                })
                 resetForm()
             }
         }
