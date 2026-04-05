@@ -3,6 +3,7 @@ import supabaseJWT from "@/lib/supabaseJWT";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getContratos, getLocatarios, getUnidades } from "@/lib/queries";
+import Link from "next/link";
 
 export default function Contratos({}) {
     const [unidades, setUnidades] = useState([])
@@ -125,6 +126,7 @@ export default function Contratos({}) {
                         <p>Status: {contrato.status}</p>
                         <p>Unidade: {contrato.unidades.nome}</p>
                         <p>Locatario: {contrato.locatarios.nome_razao_social}</p>
+                        <Link href={`/dashboard/contratos/${contrato.id}`}>Ver Parcelas</Link>
                         <button onClick={()=> handleEditarContrato(contrato)}>Editar</button>
                         <button onClick={()=> handleDeletarContrato(contrato)}>Deletar</button>
                         </>

@@ -16,6 +16,15 @@ export async function getLocatarios() {
 }
 
 export async function getContratos() {
-    const { data } = await supabase.from('contratos').select('id, data_inicio, data_fim, status, observacoes, locatarios(nome_razao_social), unidades(nome)') 
+    const { data } = await supabase.from('contratos').select('id, data_inicio, data_fim, status, observacoes, unidade_id, locatarios(nome_razao_social), unidades(nome)')
+    return data
+}
+
+export async function getParcelasByContrato(contratoId) {
+    const { data } = await supabase
+        .from('parcelas')
+        .select('id, numero, data_fechamento, data_vencimento, data_pagamento, status')
+        .eq('contrato_id', contratoId)
+        .order('numero', { ascending: true })
     return data
 }

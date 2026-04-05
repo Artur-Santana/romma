@@ -8,7 +8,7 @@ import Contratos from "@/components/features/Contratos";
 
 
 
-export default function Contratos() {
+export default function ContratosPage() {
     const [usuario, setUsuario] = useState(null)
     
 
