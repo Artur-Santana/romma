@@ -112,6 +112,9 @@ Vínculo formal entre um Locatário e uma Unidade. Apenas um Contrato pode estar
 > 📌 O `valor_mensal` do Contrato é sempre o mesmo da Unidade (1:1). Não há campo separado de valor no Contrato.
 > 
 
+> 📌 **Constraint:** índice único parcial — `UNIQUE (unidade_id) WHERE status = 'ativo'`. Garante que nunca exista mais de um Contrato `ativo` para a mesma Unidade ao mesmo tempo. Implementado no banco via SQL Editor do Supabase.
+> 
+
 ---
 
 ## `parcelas`

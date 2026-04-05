@@ -152,6 +152,8 @@ Este roteiro cobre a construção completa do Core do Romma após a conclusão d
 
 **Decisão técnica registrada nesta sessão:** A Edge Function recebe apenas o `contrato_id` (não os dados do contrato). O insert do contrato e o update do status da unidade continuam sendo feitos no frontend — a Edge Function é responsável exclusivamente pela geração das parcelas.
 
+**Nota de implementação:** A chamada à Edge Function foi feita via `supabaseJWT.functions.invoke('gerar-parcelas', { body: { contrato_id }, headers: { Authorization: 'Bearer ' + NEXT_PUBLIC_SUPABASE_JWT } })` — a API idiomática do SDK Supabase, preferida em relação ao `fetch` manual.
+
 > ⚠️ Sessão mais complexa da Fase 1. Incluiu instalação de CLI, debugging de CORS, e descoberta do formato de token JWT legado necessário para autenticação da Edge Function.
 > 
 

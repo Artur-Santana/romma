@@ -42,3 +42,20 @@ O Next.js foi escolhido por centralizar frontend e, caso necessário, chamadas s
 **MongoDB** — os dados do sistema (contratos, parcelas, unidades) têm relações claras e se beneficiam de um banco relacional. Além disso, um banco relacional valoriza na banca avaliadora.
 
 **Prisma ORM** — substituído pelo cliente nativo do Supabase, que já oferece tipagem e é mais simples de configurar dentro desse stack.
+
+---
+
+# Pacotes Instalados (package.json)
+
+| Pacote | Versão | Uso |
+| --- | --- | --- |
+| `next` | `16.2.0` | Framework principal |
+| `react` / `react-dom` | `19.2.4` | Runtime React |
+| `@supabase/supabase-js` | `^2.99.2` | Cliente Supabase principal |
+| `@supabase/ssr` | `^0.9.0` | Utilitários para SSR com Supabase (cookies, server client) |
+| `tailwindcss` | `^4` | Estilização |
+| `@tailwindcss/postcss` | `^4` | Plugin PostCSS para Tailwind v4 |
+| `babel-plugin-react-compiler` | `1.0.0` | Otimização em tempo de compilação pelo React Compiler |
+| `eslint` / `eslint-config-next` | `^9` / `16.2.0` | Linting |
+
+> ⚠️ **shadcn/ui** está planejado na stack (Fase 3 — Refinamento Visual) mas ainda **não instalado**. O projeto usa apenas Tailwind CSS diretamente até essa fase.

@@ -4,28 +4,31 @@
 
 Conjunto mínimo de funcionalidades para que o sistema seja considerado completo e aprovado na banca.
 
+> **Status de implementação (atualizado em 05/04/2026 — F1-S5 concluída):**
+> `[feito]` = implementado e funcional | `[parcial]` = em andamento | `[planejado]` = ainda não iniciado
+
 ## Proprietário
 
-- Login e autenticação
-- Cadastro e gestão de Edifícios
-- Cadastro e gestão de Unidades dentro de um Edifício (nome e descrição livres — ex: "Andar 3", "Sala 301")
-- Cadastro e gestão de Locatários (com envio de convite por email via Supabase)
-- Criação e gestão de Contratos (vinculando Locatário a uma Unidade)
-- Acompanhamento e marcação de Parcelas como pagas
-- Dashboard com visão geral: unidades ocupadas vs. disponíveis (com valor R$), contratos ativos (com valor R$), parcelas pendentes do mês (com valor R$) e contratos vencendo nos próximos 7 dias (com valor R$)
+- `[feito]` Login e autenticação
+- `[feito]` Cadastro e gestão de Edifícios
+- `[feito]` Cadastro e gestão de Unidades dentro de um Edifício (nome e descrição livres — ex: "Andar 3", "Sala 301")
+- `[feito]` Cadastro e gestão de Locatários (com envio de convite por email via Supabase)
+- `[feito]` Criação e gestão de Contratos (vinculando Locatário a uma Unidade)
+- `[planejado]` Acompanhamento e marcação de Parcelas como pagas (F1-S6)
+- `[planejado]` Dashboard com visão geral: unidades ocupadas vs. disponíveis (com valor R$), contratos ativos (com valor R$), parcelas pendentes do mês (com valor R$) e contratos vencendo nos próximos 7 dias (com valor R$) (F1-S6)
 
 ## Locatário
 
-- Login e autenticação (via convite por email enviado pelo Proprietário)
-- Visualização do Contrato ativo
-- Visualização do histórico de Parcelas (pagas, pendentes e vencidas — Parcelas futuras não são exibidas)
+- `[planejado]` Login e autenticação (via convite por email enviado pelo Proprietário)
+- `[planejado]` Visualização do Contrato ativo
+- `[planejado]` Visualização do histórico de Parcelas (pagas, pendentes e vencidas — Parcelas futuras não são exibidas)
 
 ## Landing Page Pública
 
-- Página de apresentação do produto Romma (sem precificação de planos)
-- Listagem de Unidades disponíveis com valor mensal (ou "Consulte o Proprietário" quando o Proprietário optar por ocultar o valor)
-- Atualização em tempo real da listagem via Supabase Realtime — Unidades alugadas somem automaticamente
-- Formulário de contato para interesse em uma Unidade (o Proprietário cria o Contrato manualmente após o contato)
+- `[planejado]` Página de apresentação do produto Romma (sem precificação de planos)
+- `[planejado]` Listagem de Unidades disponíveis com valor mensal (ou "Consulte o Proprietário" quando o Proprietário optar por ocultar o valor)
+- `[planejado]` Atualização em tempo real da listagem via Supabase Realtime — Unidades alugadas somem automaticamente
+- `[planejado]` Formulário de contato para interesse em uma Unidade (o Proprietário cria o Contrato manualmente após o contato)
 
 > 💡 O modelo híbrido foi escolhido para entregar o efeito visual de um marketplace (listagem pública com Realtime) sem a complexidade de um fluxo de aprovação completo, economizando ~2 semanas de desenvolvimento. Ver 📝 Decisões e Justificativas — ARCH-02.
 > 

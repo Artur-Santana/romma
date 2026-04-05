@@ -77,6 +77,28 @@ Este documento registra todas as decisões de design e arquitetura tomadas duran
 
 ---
 
+## ARCH-03 — Geração de Parcelas via Edge Function (Deno) em vez de JavaScript no frontend
+
+**Decisão:** Toda a lógica de cálculo e inserção de Parcelas roda em uma Supabase Edge Function (`gerar-parcelas`), chamada pelo frontend após o insert do Contrato.
+
+**Alternativa considerada:** Calcular as datas no frontend e inserir as Parcelas diretamente via `supabase.from('parcelas').insert([...])`.
+
+**Motivo:** A alternativa frontend criaria risco de estado inconsistente — um erro de rede entre o insert do Contrato e o insert das Parcelas deixaria o sistema com um Contrato sem Parcelas. A Edge Function isola essa operação no servidor, garantindo que as Parcelas existam ou que o erro seja reportado de forma controlada. Benefício adicional: a lógica de datas fica no servidor, facilitando auditoria.
+
+---
+
+## ARCH-04 — Terceiro cliente Supabase com JWT legado para Edge Functions
+
+**Decisão:** Criação de um terceiro cliente Supabase (`supabaseJWT`, em `src/lib/supabaseJWT.js`) usando o token JWT legado (`eyJ...`) exclusivamente para chamar Edge Functions via `functions.invoke()`.
+
+**Contexto:** O projeto Supabase usa o novo formato de chave pública `sb_publishable_...`. Edge Functions do Supabase ainda requerem o formato JWT legado na header `Authorization` para autenticação.
+
+**Alternativa considerada:** Passar o JWT como header manual no cliente anon existente.
+
+**Motivo:** Isolar o JWT legado em um cliente dedicado evita confusão com a autenticação do usuário final. O cliente `supabaseJWT` é usado exclusivamente para `functions.invoke()` — todas as outras queries continuam via `supabase` (anon key). A variável `NEXT_PUBLIC_SUPABASE_JWT` fica disponível no cliente porque é prefixada com `NEXT_PUBLIC_`.
+
+---
+
 ## PROD-05 — Escopo Dream em ordem de prioridade (D1 → D2 → D3)
 
 **Decisão:** O escopo Dream foi dividido em 3 níveis com dependência sequencial: D1 (Usuário do Locatário) → D2 (Reservas em tempo real) → D3 (QR Code de acesso).
