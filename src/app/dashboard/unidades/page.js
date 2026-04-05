@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Unidades from "@/components/features/Unidades";
 
-export default function Unidades() {
+export default function UnidadesPage() {
   const [usuario, setUsuario] = useState(null);
 
   const router = useRouter();

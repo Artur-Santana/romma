@@ -1,118 +1,256 @@
-# CLAUDE.md
+# CLAUDE.md — Romma
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides context for Claude Code to work effectively in this codebase.
 
-@AGENTS.md
+---
 
-## Commands
+## Project Overview
 
-```bash
-npm run dev      # Start development server
-npm run build    # Production build
-npm run start    # Run production build
-npm run lint     # Run ESLint
+**Romma** is a corporate space rental management system built as an undergraduate thesis (TCC). It connects property owners (Proprietários) with tenants (Locatários) who rent commercial spaces. The system manages the full lifecycle of a corporate lease: from public unit listings to contracts and installment tracking.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |      // IMPORTANT: TROW EVERY PRIOR KNOLEGDGE ABOU NEXT. NEXT 16 INTRODUCED A LOT OF BREAKING PRIOR VERSIONS FEATURES!!
+| Language | JavaScript (no TypeScript) |
+| Styling | Tailwind CSS v4 |
+| UI Components | shadcn/ui |
+| Database | Supabase (PostgreSQL) |
+| Auth | Supabase Auth |
+| Row-Level Security | Supabase RLS (per-operation policies) |
+| Edge Functions | Supabase Edge Functions (Deno/TypeScript) |
+| Dev server | Turbopack (`next dev --turbopack`) |
+| Deployment | Vercel |
+
+---
+
+## Project Structure
+
+```
+src/
+  app/
+    layout.js                        # Root layout
+    globals.css                      # Global styles (Tailwind v4)
+    page.js                          # Landing page (public, /)
+    login/
+      page.js                        # Login page
+    dashboard/
+      page.js                        # Dashboard home (Proprietário)
+      unidades/
+        page.js                      # Unit management
+      locatarios/
+        page.js                      # Tenant management
+      contratos/
+        page.js                      # Contract management
+  components/
+    features/
+      GestaoEdificios.js             # Buildings CRUD feature component
+      Unidades.js                    # Units CRUD feature component
+      Locatarios.js                  # Tenants CRUD feature component
+      Contratos.js                   # Contracts CRUD feature component
+    ui/
+      EdificioCard.js                # Building card (view/edit modes)
+      UnidadeCard.js                 # Unit card (view/edit modes)
+  actions/
+    locatarios.js                    # Server Actions for tenant operations
+  lib/
+    supabase.js                      # Supabase client (anon key, singleton)
+    supabase-browser.js              # Supabase browser client
+    supabase-server.js               # Supabase server client
+    supabaseAdmin.js                 # Supabase admin client (service role, server-only)
+    supabaseJWT.js                   # Supabase client with legacy JWT (Edge Function calls only)
+    queries.js                       # Centralized pure query functions (no hooks, no state)
+
+supabase/
+  config.toml
+  functions/
+    gerar-parcelas/
+      index.ts                       # Edge Function: generates all installments for a contract
 ```
 
-## Stack
+---
 
-- **Next.js 16.2.0** with App Router — see `node_modules/next/dist/docs/` for current API (breaking changes from prior versions)
-- **React 19.2.4** with React Compiler enabled (`reactCompiler: true` in `next.config.mjs`)
-- **Tailwind CSS v4** — configured via PostCSS plugin (`@tailwindcss/postcss`), no `tailwind.config.js`; add global styles/utilities in `src/app/globals.css`
-- **Supabase** (`@supabase/supabase-js`) for database/backend; client initialized in `src/lib/supabase.js` using `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+## Standardized Terminology
 
-## Architecture
+These terms are used consistently across code, UI, and documentation. Never use synonyms.
 
-- `src/app/` — App Router routes; `layout.js` is the root layout with Geist fonts
-- `src/lib/supabase.js` — singleton Supabase client, import as `@/lib/supabase`
-- Path alias `@/*` maps to `src/*`
-- Data fetching is done directly in async Server Components (see `src/app/dashboard/page.js` for the pattern)
-- JavaScript only (no TypeScript)
+| Concept | Portuguese Term | Notes |
+|---|---|---|
+| Building owner | **Proprietário** | Single user per instance |
+| Tenant | **Locatário** | Company or individual renting a unit |
+| Building | **Edifício** | Main physical structure |
+| Rentable space | **Unidade** | Any space offered for rent (floor, room, etc.) |
+| Lease | **Contrato** | Formal agreement between Proprietário and Locatário |
+| Monthly installment | **Parcela** | Each monthly payment within a Contrato |
 
 ---
 
-## Project Context — Romma
+## Database Schema
 
-This is a TCC (Computer Engineering thesis) project. The student is building Romma solo with a deadline around June 2026.
+### `edificios`
+| Column | Type | Notes |
+|---|---|---|
+| id | UUID | PK |
+| nome | TEXT | |
+| endereco | TEXT | |
+| created_at | TIMESTAMP | |
 
-**What Romma is:** A web-based management system for corporate space rentals — buildings, floors, and coworking rooms. Proprietários (owners) manage buildings and units; Locatários (tenants) rent them.
+### `unidades`
+| Column | Type | Notes |
+|---|---|---|
+| id | UUID | PK |
+| edificio_id | UUID | FK → edificios |
+| nome | TEXT | e.g. "Andar 3", "Sala 301" |
+| descricao | TEXT | |
+| area_m2 | NUMERIC | |
+| valor_mensal | NUMERIC | |
+| valor_visivel | BOOLEAN | If false, show "Consulte o Proprietário" publicly |
+| status | ENUM | `disponivel`, `alugada` |
+| created_at | TIMESTAMP | |
 
-**Current phase:** Fase 0 — Learning (Next.js, React, Supabase). The student is a beginner in React/Next.js with intermediate HTML/CSS and basic JS knowledge.
+### `locatarios`
+| Column | Type | Notes |
+|---|---|---|
+| id | UUID | PK |
+| usuario_id | UUID | FK → Supabase Auth users |
+| nome_razao_social | TEXT | |
+| tipo | ENUM | `pf`, `pj` |
+| documento | TEXT | CPF or CNPJ, digits only |
+| email | TEXT | Contact email (may differ from login) |
+| telefone | TEXT | |
+| created_at | TIMESTAMP | |
 
-**Scope rules — CRITICAL:**
-- **Core scope** (implement freely): Auth, buildings (edifícios), floors (andares), units (unidades), tenants (locatários), contracts (contratos), installments (parcelas), dashboard for proprietário
-- **Dream scope** (NEVER implement without explicit confirmation): User accounts for tenants, room reservations, QR code access, real-time features
-- When in doubt, ask before implementing anything Dream-scope
+### `contratos`
+| Column | Type | Notes |
+|---|---|---|
+| id | UUID | PK |
+| unidade_id | UUID | FK → unidades |
+| locatario_id | UUID | FK → locatarios |
+| data_inicio | DATE | |
+| data_fim | DATE | |
+| status | ENUM (`status_contrato`) | `ativo`, `encerrado`, `cancelado` |
+| observacoes | TEXT | |
+| created_at | TIMESTAMP | |
 
-**Terminology to use in code and UI:**
-- `edificios`, `andares`, `unidades`, `locatarios`, `contratos`, `parcelas`
-- User types: `proprietario`, `locatario`
-- Status values: `disponivel`, `alugada`, `manutencao`
+Constraint: partial unique index — only one `ativo` contract per `unidade_id` at a time.
 
-**Database tables (Supabase/PostgreSQL):**
-- `edificios` (id, nome, endereco, created_at)
-- `andares` (id, edificio_id, numero, nome, created_at)
-- `unidades` (id, andar_id, nome, tipo, status, valor_mensal, created_at)
-- `locatarios` (id, nome, email, telefone, cnpj, created_at)
-- `contratos` (id, unidade_id, locatario_id, data_inicio, data_fim, status, created_at)
-- `parcelas` (id, contrato_id, numero, valor, data_vencimento, data_pagamento, status, created_at)
-
-**RLS policies:** proprietário is authenticated user; apply RLS to all tables so only authenticated users can read/write their own data.
-
-**Design system:**
-- Primary color: `#370085` (purple)
-- Accent: `#C5A059` (gold)
-- Background LP: `#faf8fc`, surfaces: `#ffffff`, borders: `#ece6f4`
-- Text: `#130c1d` (primary), `#6b45a1` (secondary)
-- Fonts: Manrope (headings/labels), Noto Sans (body)
-
----
-
-## Teaching Methodology — IMPORTANT
-
-This section defines HOW to instruct the student. Read it before every session.
-
-### Student profile
-- Beginner in React/Next.js — needs concepts explained before being asked to implement
-- Intermediate HTML/CSS, basic JS
-- High activation barrier (procrastination before starting), but highly productive once started
-- Learns best with: explain concept → show simple example → ask to apply in Romma
-
-### The correct teaching sequence (ALWAYS follow this order)
-1. **Explain the concept** — what it is, why it exists, when to use it
-2. **Show a minimal example** — simple, isolated, not the full solution
-3. **Ask the student to apply it** to the current Romma task
-4. Only give hints or corrections after the student attempts
-
-### Hint scale (use progressively, never skip levels)
-- **Level 0 — Objective only:** State the goal, no implementation hints
-- **Level 1 — Conceptual direction:** Point toward the right concept (e.g. "which hook manages state?")
-- **Level 2 — Technical hint:** Name the specific tool or pattern (e.g. "you'll need useState here")
-- **Level 3 — Skeleton:** Provide code structure with blanks for the student to fill
-- **Level 4 — Full solution with comments:** Only as last resort, always with explanations
-
-### What to avoid
-- Do NOT give full solutions before the student attempts
-- Do NOT dump multiple concepts at once — max 2-3 new concepts per session
-- Do NOT use purely Socratic hints with a beginner who lacks the base to guess — explain first, then ask
-- Do NOT skip the session closing ritual
-
-### Session opening protocol
-1. Recover context from previous session (what was done, where it stopped)
-2. Ask if anything is unclear from last time
-3. State the session objective clearly
-4. Confirm `npm run dev` is running
-
-### Session closing ritual (always do this before ending)
-Ask two questions:
-1. "What could you implement right now from memory, without help?"
-2. "What concept still feels fuzzy?"
-Use answers to adjust the next session start and update the Notion tracker.
-
-### Observed patterns (update as sessions progress)
-- Session 1 (18/03): Took ~4h — first contact with full stack simultaneously. Recalibrate estimates to 3-4h per session.
-- Session 1 (18/03): Student jumped straight to Next.js + Supabase in practice, skipping isolated React. Roteiro adapted — React consolidated retroactively in Session 6 via refactoring.
-- Session 1 (18/03): High activation barrier identified. Always start with a micro task ("just create the file") to build momentum.
-- Session 2 (20/03): Pure "objective only" approach caused frustration — base too low to infer implementation. Switched to explain → example → apply. Works well.
+### `parcelas`
+| Column | Type | Notes |
+|---|---|---|
+| id | UUID | PK |
+| contrato_id | UUID | FK → contratos |
+| numero | INTEGER | Sequential number (1, 2, 3...) |
+| data_fechamento | DATE | Date the installment becomes visible |
+| data_vencimento | DATE | 7 days after data_fechamento |
+| data_pagamento | DATE | Nullable, filled when marked as paid |
+| status | ENUM (`status_parcela`) | `futura`, `pendente`, `paga`, `vencida` |
+| created_at | TIMESTAMP | |
 
 ---
 
+## Business Rules
+
+### Unit status
+- A unit's status changes to `alugada` when an `ativo` contract is created for it.
+- It reverts to `disponivel` when that contract is closed (`encerrado`) or cancelled (`cancelado`).
+- Both transitions are handled in the frontend at the moment of contract creation/deletion.
+
+### Contract constraints
+- Only one `ativo` contract per unit at a time (enforced by partial unique index in the DB).
+- `valor_mensal` is always taken from the unit — there is no separate value field in the contract.
+
+### Parcela generation rules
+- All parcelas for a contract's full duration are generated atomically at contract creation time via the `gerar-parcelas` Edge Function.
+- **Parcela 1:** If `data_inicio + 7 days` falls in the same month as `data_inicio`, then `data_fechamento` = `data_inicio` and `data_vencimento` = `data_inicio + 7 days`. If it falls in a different month, `data_fechamento` is pushed to the 1st day of the following month and `data_vencimento` = `data_fechamento + 7 days`.
+- **Parcelas 2+:** `data_fechamento` = 1st day of each subsequent month after parcela 1's `data_fechamento`, `data_vencimento` = `data_fechamento + 7 days`.
+- All parcelas are created with status `futura`.
+- Status transitions are date-driven: `futura` → `pendente` when `data_fechamento <= today`; `pendente` → `vencida` when `data_vencimento < today` and still unpaid.
+
+### Tenant invite flow
+- The Proprietário registers a tenant's email. Supabase sends a magic link via `inviteUserByEmail` (admin API).
+- This must run server-side via a Next.js Server Action — never import `supabaseAdmin` in client components.
+
+---
+
+## Code Conventions
+
+### Supabase clients — use the right one for the right context
+
+| File | Key used | When to use |
+|---|---|---|
+| `lib/supabase.js` | anon key | General client-side queries |
+| `lib/supabase-browser.js` | anon key | Browser-specific client |
+| `lib/supabase-server.js` | anon key | Server Components / Server Actions |
+| `lib/supabaseAdmin.js` | service role key | Admin operations (invite, bypass RLS) — **server-only** |
+| `lib/supabaseJWT.js` | legacy JWT | Calling Edge Functions via `functions.invoke()` only |
+
+Never import `supabaseAdmin` or `supabaseJWT` in client components — they use server-only env vars.
+
+### Query centralization
+All Supabase read queries live in `src/lib/queries.js` as pure functions with no hooks and no state. Example functions: `getEdificios()`, `getUnidades()`, `getLocatarios()`, `getContratos()`. Pages call these functions inside `useEffect`.
+
+### Form state pattern
+Use a single object for form/edit state, not separate `useState` calls per field:
+
+```js
+// Correct
+const [editForm, setEditForm] = useState({ nome: '', endereco: '' })
+setEditForm({ ...editForm, nome: value })
+
+// Avoid
+const [nome, setNome] = useState('')
+const [endereco, setEndereco] = useState('')
+```
+
+### Reset pattern
+Extract form reset as a named function rather than inlining the state reset:
+
+```js
+function resetForm() {
+  setForm({ nome: '', endereco: '' })
+  setEditandoId(null)
+}
+```
+
+### RLS policies
+Policies are per-operation. Missing a policy for one operation (SELECT / INSERT / UPDATE / DELETE) returns 403 only for that operation. Always verify all four operations when debugging permission errors.
+
+### Server Actions
+Placed in `src/actions/`. Return a standardized object: `{ status: 200 }` on success or `{ status: 500, erroMessage: '...' }` on failure.
+
+### Commits
+Uses `vivaxy.vscode-conventional-commits` VSCode extension. Always provide type, scope, gitmoji, and description as separate fields.
+
+---
+
+## Edge Functions
+
+### `gerar-parcelas`
+- **Location:** `supabase/functions/gerar-parcelas/index.ts`
+- **Runtime:** Deno (TypeScript)
+- **Trigger:** Called from the frontend after a contract is successfully inserted.
+- **Input:** `{ contrato_id: string }` via POST body.
+- **Responsibility:** Fetch the contract, calculate all parcelas for its full duration, insert them atomically.
+- **Auth:** Legacy Supabase JWT (`eyJ...`) passed via Authorization header. Called via `supabase.functions.invoke()` using `supabaseJWT` client.
+- **CORS:** Full CORS headers configured, including preflight OPTIONS handler.
+
+---
+
+## Environment Variables
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_JWT=        # Legacy JWT for Edge Function auth
+SUPABASE_SERVICE_ROLE_KEY=       # Server-only, never exposed to client
+```
+
+---
+
+## Supabase Project
+
+- **Project ID:** `vfymttcajeyhrmsyhrtj`
+- **URL:** `https://vfymttcajeyhrmsyhrtj.supabase.co`
