@@ -159,7 +159,7 @@ Este roteiro cobre a construção completa do Core do Romma após a conclusão d
 
 ---
 
-## F1-S6 — Visualização e Marcação de Parcelas
+## F1-S6 — Visualização e Marcação de Parcelas ✅
 
 **Objetivo:** Exibir as Parcelas de um Contrato e permitir que o Proprietário marque parcelas como pagas.
 
@@ -167,17 +167,20 @@ Este roteiro cobre a construção completa do Core do Romma após a conclusão d
 
 **Tarefas:**
 
-- [ ]  Implementar busca de Parcelas por `contrato_id`
-- [ ]  Renderizar listagem com status visual diferenciado por cor/badge (futura, pendente, paga, vencida)
-- [ ]  Implementar botão "Marcar como paga": atualiza `status` para `paga` e preenche `data_pagamento` com a data atual
-- [ ]  Aplicar regra de visibilidade: parcelas `futura` exibem data de fechamento mas não têm botão de ação
-- [ ]  Commit das alterações
+- [x]  Implementar busca de Parcelas por `contrato_id`
+- [x]  Renderizar listagem com status visual diferenciado por cor/badge (futura, pendente, paga, vencida)
+- [x]  Implementar botão "Marcar como paga": atualiza `status` para `paga` e preenche `data_pagamento` com a data atual
+- [x]  Aplicar regra de visibilidade: parcelas `futura` exibem data de fechamento mas não têm botão de ação
+- [x]  Dashboard de métricas no `dashboard/page.js` (unidades disponíveis/alugadas, contratos ativos, parcelas pendentes/vencidas)
+- [x]  `countRegistros(tabela, coluna, valor)` — função parametrizada DRY para contagens
+- [x]  Commit das alterações
 
 **Conceitos novos:**
 
 - Rota dinâmica com `[id]` no App Router (se optar por subpágina)
 - Renderização condicional baseada em múltiplos valores de ENUM
 - `new Date().toISOString()` para preencher `data_pagamento`
+- Funções parametrizadas DRY — `countRegistros` em vez de 5 funções quase idênticas
 
 ---
 
