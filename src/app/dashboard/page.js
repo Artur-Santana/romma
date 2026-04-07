@@ -23,7 +23,7 @@ export default function Dashboard() {
       }
     }
     async function grabMetricas() {
-      SetMetricas(await getMetricas())
+      setMetricas(await getMetricas())
     }
     verificarSessao()
     grabMetricas()

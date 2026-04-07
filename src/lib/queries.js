@@ -20,52 +20,21 @@ export async function getContratos() {
     return data
 }
 
-export async function getCountUnidadesDisponiveis(){
-    const { count } =  await supabase
-    .from('unidades')
-    .select('*', { count: 'exact', head: true})
-    .eq('status', 'disponivel')
-    return count
-}
 
-export async function getCountUnidadesAlugadas(){
+export async function countRegistros(tabela, coluna, valor) {
     const { count } =  await supabase
-    .from('unidades')
+    .from(tabela)
     .select('*', { count: 'exact', head: true})
-    .eq('status', 'alugada')
-    return count
-}
-
-export async function getCountContratosAtivos(){
-    const { count } =  await supabase
-    .from('contratos')
-    .select('*', { count: 'exact', head: true})
-    .eq('status', 'ativo')
-    return count
-}
-
-export async function getCountParcelasPendentes(){
-    const { count } =  await supabase
-    .from('parcelas')
-    .select('*', { count: 'exact', head: true})
-    .eq('status', 'pendente')
-    return count
-}
-
-export async function getCountParcelasVencidas(){
-    const { count } =  await supabase
-    .from('parcelas')
-    .select('*', { count: 'exact', head: true})
-    .eq('status', 'vencida')
+    .eq(coluna, valor)
     return count
 }
 
 export async function getMetricas() {
-    const unidadesDisponiveis = await getCountUnidadesDisponiveis()
-    const unidadesAlugadas = await getCountUnidadesAlugadas()
-    const contratosAtivos = await getCountContratosAtivos()
-    const parcelasPendentes = await getCountParcelasPendentes()
-    const parcelasVencidas = await getCountParcelasVencidas()
+    const unidadesDisponiveis = await countRegistros('unidades', 'status', 'disponivel')
+    const unidadesAlugadas = await countRegistros('unidades', 'status', 'alugada')
+    const contratosAtivos = await countRegistros('contratos', 'status', 'ativo')
+    const parcelasPendentes = await countRegistros('parcelas', 'status', 'pendente')
+    const parcelasVencidas = await countRegistros('parcelas', 'status', 'vencida')
 
     return {
         unidadesDisponiveis,
