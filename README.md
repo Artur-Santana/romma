@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Romma
 
-## Getting Started
+Sistema de gerenciamento de aluguéis corporativos desenvolvido como TCC de Engenharia da Computação. Conecta Proprietários de edifícios com Locatários (empresas ou pessoas físicas) que buscam espaços para suas operações, gerenciando o ciclo completo de um aluguel corporativo.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Proprietário
+
+- Cadastro e gestão de Edifícios e Unidades (com área, valor mensal e controle de visibilidade do preço)
+- Convite de Locatários por email — o Locatário recebe um link mágico para ativar seu acesso
+- Criação e gestão de Contratos vinculando Locatários a Unidades
+- Acompanhamento de Parcelas mensais com marcação de pagamento
+- Dashboard com métricas: unidades disponíveis e alugadas, contratos ativos, parcelas pendentes e vencidas
+
+### Locatário
+
+- Visualização do Contrato ativo
+- Histórico de Parcelas (pagas, pendentes e vencidas)
+
+### Landing Page Pública
+
+- Listagem de Unidades disponíveis com atualização em tempo real via Supabase Realtime — Unidades alugadas somem automaticamente da listagem
+- Valor mensal exibido ou substituído por "Consulte o Proprietário" conforme configuração do Proprietário
+- Formulário de contato para interesse em uma Unidade
+
+## Stack
+
+| Camada | Tecnologia |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Linguagem | JavaScript |
+| Estilização | Tailwind CSS v4 |
+| Banco de Dados | Supabase (PostgreSQL) |
+| Autenticação | Supabase Auth |
+| Segurança | Row-Level Security (RLS) por operação |
+| Tempo Real | Supabase Realtime |
+| Edge Functions | Supabase Edge Functions (Deno) |
+| Dev server | Turbopack (`next dev --turbopack`) |
+| Deploy | Vercel |
+
+## Modelo de dados
+
+```
+edificios
+  └── unidades (1:N)
+        └── contratos (1:N, apenas 1 ativo por vez)
+              └── parcelas (1:N, geradas atomicamente na criação)
+
+auth.users
+  └── locatarios (1:1)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Terminologia
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| Conceito | Nome no sistema |
+|---|---|
+| Dono do prédio | Proprietário |
+| Empresa/pessoa que aluga | Locatário |
+| Prédio | Edifício |
+| Espaço alugável | Unidade |
+| Aluguel ativo | Contrato |
+| Pagamento mensal | Parcela |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Regras de negócio principais
 
-## Learn More
+- Uma Unidade só pode ter um Contrato `ativo` por vez — garantido por índice único parcial no banco
+- Ao criar um Contrato, a Unidade muda para `alugada`; ao encerrar ou cancelar, volta para `disponivel`
+- Todas as Parcelas de um Contrato são geradas atomicamente no momento da criação via Edge Function
+- Parcelas ficam com status `futura` até a `data_fechamento` chegar; tornam-se `pendente` ou `vencida` por regra de data
+- O `valor_mensal` do Contrato é sempre o mesmo cadastrado na Unidade
 
-To learn more about Next.js, take a look at the following resources:
+## Configuração
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Pré-requisitos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Node.js 18+
+- Conta no [Supabase](https://supabase.com)
 
-## Deploy on Vercel
+### Variáveis de ambiente
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Crie um arquivo `.env.local` na raiz do projeto:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_JWT=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+`NEXT_PUBLIC_SUPABASE_JWT` é o JWT legado necessário para autenticar chamadas às Edge Functions. `SUPABASE_SERVICE_ROLE_KEY` é server-only — nunca exposto ao client.
+
+### Instalação
+
+```bash
+npm install
+npm run dev
+```
+
+Acesse [http://localhost:3000](http://localhost:3000).
+
+## Licença
+
+Projeto acadêmico — TCC de Engenharia da Computação.
