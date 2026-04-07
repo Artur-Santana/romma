@@ -4,7 +4,7 @@
 
 Conjunto mínimo de funcionalidades para que o sistema seja considerado completo e aprovado na banca.
 
-> **Status de implementação (atualizado em 05/04/2026 — F1-S5 concluída):**
+> **Status de implementação (atualizado em 07/04/2026 — F1-S6 concluída):**
 > `[feito]` = implementado e funcional | `[parcial]` = em andamento | `[planejado]` = ainda não iniciado
 
 ## Proprietário
@@ -14,8 +14,8 @@ Conjunto mínimo de funcionalidades para que o sistema seja considerado completo
 - `[feito]` Cadastro e gestão de Unidades dentro de um Edifício (nome e descrição livres — ex: "Andar 3", "Sala 301")
 - `[feito]` Cadastro e gestão de Locatários (com envio de convite por email via Supabase)
 - `[feito]` Criação e gestão de Contratos (vinculando Locatário a uma Unidade)
-- `[planejado]` Acompanhamento e marcação de Parcelas como pagas (F1-S6)
-- `[planejado]` Dashboard com visão geral: unidades ocupadas vs. disponíveis (com valor R$), contratos ativos (com valor R$), parcelas pendentes do mês (com valor R$) e contratos vencendo nos próximos 7 dias (com valor R$) (F1-S6)
+- `[feito]` Acompanhamento e marcação de Parcelas como pagas (F1-S6)
+- `[parcial]` Dashboard com visão geral: contagens de unidades disponíveis/alugadas, contratos ativos, parcelas pendentes e vencidas implementadas — valores em R$ e alerta de contratos vencendo nos próximos 7 dias ainda não implementados (F1-S6)
 
 ## Locatário
 

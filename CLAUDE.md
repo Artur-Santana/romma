@@ -245,7 +245,7 @@ Uses `vivaxy.vscode-conventional-commits` VSCode extension. Always provide type,
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 NEXT_PUBLIC_SUPABASE_JWT=        # Legacy JWT for Edge Function auth
-SUPABASE_SERVICE_ROLE_KEY=       # Server-only, never exposed to client
+SUPABASE_ROLE_KEY=               # Server-only, never exposed to client
 ```
 
 ---

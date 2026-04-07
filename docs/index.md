@@ -8,7 +8,6 @@
 
 | Arquivo | Descrição |
 | --- | --- |
-| [contexto-claude.md](TCC-Romma/contexto-claude.md) | Protocolo de sessão para o Claude + estado dinâmico (o que foi construído, próximo passo, o que ficou nebuloso) |
 | [visao-geral.md](TCC-Romma/visao-geral.md) | Visão geral do produto, nomenclatura oficial, tipos de usuário e regras de negócio principais |
 | [tech-stack.md](TCC-Romma/tech-stack.md) | Stack tecnológico detalhado, decisões de arquitetura e pacotes instalados |
 | [escopo-funcionalidades.md](TCC-Romma/escopo-funcionalidades.md) | Escopo Core (com status de implementação), Escopo Dream (D1→D3) e o que está fora do escopo |
@@ -43,8 +42,3 @@
 
 ---
 
-## Fase 1 — Core
-
-| Arquivo | Descrição |
-| --- | --- |
-| [fase-1-core/contexto-sessao.md](TCC-Romma/fase-1-core/contexto-sessao.md) | Contexto de sessão da Fase 1 (fonte de verdade para abertura de novas conversas com o Claude) |
