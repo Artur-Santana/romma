@@ -17,7 +17,7 @@ export default function GestaoEdificios({}) {
   }
 
   useEffect(() => {
-    getEdificiosS();
+    getEdificios();
   }, []);
 
   async function insertEdificio(e) {
