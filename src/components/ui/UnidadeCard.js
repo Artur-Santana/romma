@@ -54,6 +54,7 @@ export default function UnidadeCard({
         <div>
           <p>{unidade.nome}</p>
           <p>{unidade.descricao}</p>
+          <p>{unidade.status}</p>
           <p>{unidade.area_m2}</p>
           <p>{unidade.valor_mensal}</p>
           <p>{unidade.valor_visivel}</p>
