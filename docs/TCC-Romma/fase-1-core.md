@@ -194,9 +194,9 @@ Este roteiro cobre a construção completa do Core do Romma após a conclusão d
 
 - [ ]  Implementar botão "Encerrar contrato" com confirmação nativa (`window.confirm` ou estado de confirmação inline)
 - [ ]  Ao confirmar encerramento: `.update()` do Contrato para `encerrado` + `.update()` da Unidade para `disponivel`
-- [ ]  Repetir para "Cancelar contrato" (status `cancelado`)
-- [ ]  Parcelas `futura` do contrato encerrado/cancelado: atualizar para `cancelada` (se quiser implementar — decisão a tomar na sessão)
-- [ ]  Commit das alterações
+- [x]  Repetir para "Cancelar contrato" (status `cancelado`)
+- [x]  Parcelas `futura` do contrato encerrado/cancelado: atualizar para `cancelada` (se quiser implementar — decisão a tomar na sessão)
+- [x]  Commit das alterações
 
 **Conceitos novos:**
 
