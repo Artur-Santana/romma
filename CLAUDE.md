@@ -45,12 +45,15 @@ src/
         page.js                      # Tenant management
       contratos/
         page.js                      # Contract management
+        [id]/
+          page.js                    # Parcelas detail page (dynamic route)
   components/
     features/
       GestaoEdificios.js             # Buildings CRUD feature component
       Unidades.js                    # Units CRUD feature component
       Locatarios.js                  # Tenants CRUD feature component
       Contratos.js                   # Contracts CRUD feature component
+      Parcelas.js                    # Parcelas listing and payment marking
     ui/
       EdificioCard.js                # Building card (view/edit modes)
       UnidadeCard.js                 # Unit card (view/edit modes)
