@@ -4,7 +4,7 @@
 
 Conjunto mínimo de funcionalidades para que o sistema seja considerado completo e aprovado na banca.
 
-> **Status de implementação (atualizado em 07/04/2026 — F1-S6 concluída):**
+> **Status de implementação (atualizado em 08/04/2026 — F1-S7 parcialmente concluída):**
 > `[feito]` = implementado e funcional | `[parcial]` = em andamento | `[planejado]` = ainda não iniciado
 
 ## Proprietário

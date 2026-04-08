@@ -101,11 +101,11 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 **Tarefas:**
 
-- [ ]  Definir quais métricas exibir (ajustável na sessão conforme o tempo)
-- [ ]  Implementar queries agregadas: `select('id', { count: 'exact' })` para contagens
-- [ ]  Implementar filtros por status nas queries (ex: parcelas com `status = vencida`)
-- [ ]  Renderizar cards de resumo com os valores
-- [ ]  Commit das alterações
+- [x]  Definir quais métricas exibir (ajustável na sessão conforme o tempo)
+- [x]  Implementar queries agregadas: `select('id', { count: 'exact' })` para contagens
+- [x]  Implementar filtros por status nas queries (ex: parcelas com `status = vencida`)
+- [x]  Renderizar cards de resumo com os valores
+- [x]  Commit das alterações
 
 **Conceitos novos:**
 
