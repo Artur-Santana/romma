@@ -140,11 +140,11 @@
 
 **Tarefas:**
 
-- [ ]  Ler [react.dev](http://react.dev) [— Synchronizing with Effects](https://react.dev/learn/synchronizing-with-effects) *(30min)*
-- [ ]  Ler [react.dev](http://react.dev) [— You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect) *(20min)*
-- [ ]  Testar fluxo completo: cadastro → login → CRUD → logout *(30min)*
-- [ ]  Revisar código e corrigir padrões ruins (ex: `return console.log()`) *(30min)*
-- [ ]  Completar o Checklist de Prontidão abaixo *(30min)*
+- [x]  Ler [react.dev](http://react.dev) [— Synchronizing with Effects](https://react.dev/learn/synchronizing-with-effects) *(30min)*
+- [x]  Ler [react.dev](http://react.dev) [— You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect) *(20min)*
+- [x]  Testar fluxo completo: cadastro → login → CRUD → logout *(30min)*
+- [x]  Revisar código e corrigir padrões ruins (ex: `return console.log()`) *(30min)*
+- [x]  Completar o Checklist de Prontidão abaixo *(30min)*
 
 **Entregável:** Fluxo completo testado e checklist 100% marcado.
 

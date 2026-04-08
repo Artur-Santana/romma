@@ -117,3 +117,11 @@ Fase final antes da apresentação para a banca. Não adiciona funcionalidades �
 **Refinamento visual em fase separada:** Decisão intencional de separar construção funcional (Fases 1 e 2) de polimento visual (Fase 3) para manter o foco em cada etapa e reduzir retrabalho.
 
 **Figma como referência:** O design Obsidian Blueprint está documentado no arquivo Figma `C16bXWN7RoGwA5oOCu8Qy1`. Usar como referência visual durante o refinamento, não como especificação pixel-perfect.
+
+---
+
+# Melhorias Futuras (Pós-TCC)
+
+**Dívida técnica — `Contratos.js` (F1-S7):** Três itens identificados na revisão de código foram adiados para esta fase: (1) **Feedback de erros ausente** — operações de cancelamento e criação não exibem mensagem ao usuário quando falham; adicionar um `useState` de erro e renderização condicional na UI. (2) **`setContratos` fora do bloco de sucesso em `cancelarContrato`** — a UI atualiza mesmo quando uma das três operações falhou; mover para dentro do `if (!errorParcelas)`. (3) **Atomicidade de `cancelarContrato`** — as três operações (`contratos`, `unidades`, `parcelas`) são chamadas independentes sem rollback; migrar para uma Edge Function `cancelar-contrato` que execute tudo no servidor com service role key.
+
+**Transição automática de status de Contrato para `encerrado`:** Atualmente, a distinção entre `ativo` e `encerrado` é calculada no frontend (`data_fim < hoje` → exibe como encerrado). O banco mantém o status `ativo` mesmo após o prazo. Para um sistema de produção real, essa transição deveria ser feita por um cron job — uma Edge Function agendada que roda diariamente, busca contratos com `status = 'ativo'` e `data_fim < hoje`, e os atualiza para `encerrado` no banco. Isso garante que relatórios, queries e RLS reflitam o estado real sem depender de lógica de exibição no frontend.

@@ -9,23 +9,21 @@ export default function Contratos({}) {
     const [unidades, setUnidades] = useState([])
     const [locatarios, setLocatarios] = useState([])
     const [contratos, setContratos] = useState([])
-    const [form, setForm] = useState({})
+    const [form, setForm] = useState({data_inicio: "",
+        data_fim: "",
+        status: 'ativo',
+        observacoes: "",
+        unidade_id: "",
+        locatario_id: ""})
     const [formEdit, setFormEdit] = useState({})
     const [editandoId, setEditandoId] = useState(null)
+    const [confirmandoId, setConfirmandoId] = useState(null)
 
     useEffect(() => {
         async function carregarDados() {
             setUnidades(await getUnidades())
             setLocatarios(await getLocatarios())
             setContratos(await getContratos())
-            setForm({
-                data_inicio: "",
-                data_fim: "",
-                status: 'ativo',
-                observacoes: "",
-                unidade_id: "",
-                locatario_id: "",
-            })
         }
         carregarDados()
     }, [])
@@ -37,7 +35,15 @@ export default function Contratos({}) {
             status: 'ativo',
             observacoes: "",
             unidade_id: "",
-            locatario_id: "",
+            locatario_id: ""
+        })
+    }
+    function resetEdit() {
+        setFormEdit({
+            data_inicio: "",
+            data_fim: "",
+            status: "",
+            observacoes: ""
         })
     }
 
@@ -48,7 +54,6 @@ export default function Contratos({}) {
             const { errorUpdateUnidade } = await supabase.from('unidades').update({status:"alugada"}).eq("id",form.unidade_id)
             if (!errorUpdateUnidade){
                 setContratos(await getContratos())
-                console.log('jwt key:', process.env.NEXT_PUBLIC_SUPABASE_JWT?.substring(0, 20))
                 const { dataFunction, errorFunction } = await supabaseJWT.functions.invoke('gerar-parcelas', {
                     body: { contrato_id: data.id },
                     headers: { Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_SUPABASE_JWT}
@@ -58,7 +63,7 @@ export default function Contratos({}) {
         }
     }
 
-    async function handleSalvarContrato(e) {
+    async function handleSalvarContrato() {
         const { error } = await supabase.from('contratos').update(formEdit).eq('id',editandoId)
         if (!error) {
             setEditandoId(null)
@@ -66,32 +71,51 @@ export default function Contratos({}) {
         }
     }
 
-    async function handleEditarContrato(locatario) {
-        setEditandoId(locatario.id)
+    async function handleEditarContrato(contrato) {
+        resetEdit()
+        setEditandoId(contrato.id)
         setFormEdit({
-            data_inicio: locatario.data_inicio,
-            data_fim: locatario.data_fim,
-            status: locatario.status,
-            observacoes: locatario.observacoes
+            data_inicio: contrato.data_inicio,
+            data_fim: contrato.data_fim,
+            status: contrato.status,
+            observacoes: contrato.observacoes
         })
     }
 
-    async function handleDeletarContrato(contrato) {
-        const { errorDeleteContrato } = await supabase.from('contratos').delete().eq('id',contrato.id)
-        if (!errorDeleteContrato) {
-            const { errorUpdateUnidade } = await supabase.from('unidades').update({status:"disponivel"}).eq("id",contrato.unidade_id)
-            if (!errorUpdateUnidade){
-                setContratos(await getContratos())
+    async function cancelarContrato(contrato) {
+        const {error} = await supabase
+        .from('contratos')
+        .update({'status': "cancelado"})
+        .eq('id', contrato.id)
+        if (!error) {
+            const {error:errorUnidade} = await supabase
+            .from('unidades')
+            .update({ status: 'disponivel' })
+            .eq('id', contrato.unidade_id)
+    
+            if (!errorUnidade) {
+                const {error: errorParcelas} = await supabase
+                .from('parcelas')
+                .update({ status: 'cancelada' })
+                .eq('contrato_id', contrato.id)
+                .eq('status', 'futura')
             }
         }
+        setContratos(await getContratos())
+        setConfirmandoId(null)
     }
+
+    async function handleCancelarContrato(contrato) {
+        setConfirmandoId(contrato.id)
+    }
+
 
     return (
         <main>
             <form onSubmit={insertContrato}>
                 <input placeholder="Data Inicio" value={form.data_inicio} onChange={(e)=> setForm({...form,data_inicio:e.target.value})} type="date"></input>
                 <input placeholder="Data Fim" value={form.data_fim} onChange={(e)=> setForm({...form,data_fim:e.target.value})} type="date"></input>
-                <input placeholder="Status" value={form.status} onChange={(e)=> setForm({...form,status:e.target.value})}></input>
+                <label>Ativo</label>
                 <input placeholder="Observacoes" value={form.observacoes} onChange={(e)=> setForm({...form,observacoes:e.target.value})}></input>
                 <select value={form.unidade_id} onChange={(e)=> setForm({...form, unidade_id: e.target.value})}>
                     <option value={""}>Selecione</option>
@@ -108,31 +132,46 @@ export default function Contratos({}) {
                 <button type="submit">Enviar</button>
             </form>
 
-            {contratos.map(contrato =>(
+            {contratos.map(contrato =>{
+                const encerrado = contrato.status === 'ativo' && contrato.data_fim < new Date().toISOString().split('T')[0]
+                return (
+                    
                 <div key={contrato.id}>
-                    {editandoId === contrato.id ? (
-                        <>
-                            <input value={formEdit.data_inicio} onChange={(e)=> setFormEdit({...formEdit,data_inicio:e.target.value})}></input>
-                            <input value={formEdit.data_fim} onChange={(e)=> setFormEdit({...formEdit,data_fim:e.target.value})}></input>
-                            <input value={formEdit.status} onChange={(e)=> setFormEdit({...formEdit,status:e.target.value})}></input>
-                            <input value={formEdit.observacoes} onChange={(e)=> setFormEdit({...formEdit,observacoes:e.target.value})}></input>
-                            <button onClick={handleSalvarContrato}>Salvar</button>
-                            <button onClick={()=> setEditandoId(null)}>Cancelar</button>
-                        </>
-                    ): (
-                        <>
-                        <p>Data de Inicio: {contrato.data_inicio}</p>
-                        <p>Data de Final: {contrato.data_fim}</p>
-                        <p>Status: {contrato.status}</p>
-                        <p>Unidade: {contrato.unidades.nome}</p>
-                        <p>Locatario: {contrato.locatarios.nome_razao_social}</p>
-                        <Link href={`/dashboard/contratos/${contrato.id}`}>Ver Parcelas</Link>
-                        <button onClick={()=> handleEditarContrato(contrato)}>Editar</button>
-                        <button onClick={()=> handleDeletarContrato(contrato)}>Deletar</button>
-                        </>
+                {editandoId === contrato.id ? (
+                    <>
+                        <input value={formEdit.data_inicio} onChange={(e)=> setFormEdit({...formEdit,data_inicio:e.target.value})}></input>
+                        <input value={formEdit.data_fim} onChange={(e)=> setFormEdit({...formEdit,data_fim:e.target.value})}></input>
+                        <input value={formEdit.status} onChange={(e)=> setFormEdit({...formEdit,status:e.target.value})}></input>
+                        <input value={formEdit.observacoes} onChange={(e)=> setFormEdit({...formEdit,observacoes:e.target.value})}></input>
+                        <button onClick={handleSalvarContrato}>Salvar</button>
+                        <button onClick={()=> {setEditandoId(null), resetEdit()}}>Cancelar</button>
+                    </>
+                ): (
+                    <>
+                    <p>Data de Inicio: {contrato.data_inicio}</p>
+                    <p>Data de Final: {contrato.data_fim}</p>
+                    <p>Status: {encerrado ? "Encerrado" : contrato.status === 'cancelado' ? "Cancelado" : "Ativo"}</p>
+                    <p>Locatario: {contrato.locatarios.nome_razao_social}</p>
+                    <Link href={`/dashboard/contratos/${contrato.id}`}>Ver Parcelas</Link>
+                    <button onClick={()=> handleEditarContrato(contrato)}>Editar</button>
+                    {contrato.status === 'ativo' && !encerrado && (
+                        <button onClick={() => handleCancelarContrato(contrato)}>Cancelar Contrato</button>
                     )}
-                </div>
-            ))}
+                    {confirmandoId === contrato.id ? (
+                        <>
+                        <span>Confirmar Cancelamento?</span>
+                        <button onClick={() => cancelarContrato(contrato)}>Sim</button>
+                        <button onClick={() => setConfirmandoId(null)}>Não</button>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                    </> 
+                )}
+            </div>
+        
+                )
+            })}
         </main>
     )
 }
