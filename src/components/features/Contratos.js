@@ -54,6 +54,7 @@ export default function Contratos({}) {
             const { errorUpdateUnidade } = await supabase.from('unidades').update({status:"alugada"}).eq("id",form.unidade_id)
             if (!errorUpdateUnidade){
                 setContratos(await getContratos())
+                setUnidades(await getUnidades())
                 const { dataFunction, errorFunction } = await supabaseJWT.functions.invoke('gerar-parcelas', {
                     body: { contrato_id: data.id },
                     headers: { Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_SUPABASE_JWT}
