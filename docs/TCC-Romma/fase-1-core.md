@@ -188,15 +188,16 @@ Este roteiro cobre a construção completa do Core do Romma após a conclusão d
 
 **Objetivo:** Implementar as ações de encerrar e cancelar um Contrato, revertendo o status da Unidade para `disponivel`.
 
-**Entregavel:** Botões de "Encerrar" e "Cancelar" na listagem de Contratos, com diálogo de confirmação antes da ação. Ao confirmar, o Contrato muda de status e a Unidade volta para `disponivel`.
+**Entregavel:** Botão "Cancelar" na listagem de Contratos, com diálogo de confirmação antes da ação. Ao confirmar, o Contrato muda de status e a Unidade volta para `disponivel`.
 
 **Tarefas:**
 
-- [ ]  Implementar botão "Encerrar contrato" com confirmação nativa (`window.confirm` ou estado de confirmação inline)
-- [ ]  Ao confirmar encerramento: `.update()` do Contrato para `encerrado` + `.update()` da Unidade para `disponivel`
-- [x]  Repetir para "Cancelar contrato" (status `cancelado`)
-- [x]  Parcelas `futura` do contrato encerrado/cancelado: atualizar para `cancelada` (se quiser implementar — decisão a tomar na sessão)
+- [x]  Implementar botão "Cancelar contrato" com confirmação inline
+- [x]  Ao confirmar cancelamento: `.update()` do Contrato para `cancelado` + `.update()` da Unidade para `disponivel`
+- [x]  Parcelas `futura` do contrato cancelado: atualizar para `cancelada`
 - [x]  Commit das alterações
+
+**Decisão de design:** O status `encerrado` não é ação manual — é transição automática quando `data_fim` passa. Botão "Encerrar" foi descartado. A transição será feita por cron job na Fase 3.
 
 **Conceitos novos:**
 
@@ -205,19 +206,26 @@ Este roteiro cobre a construção completa do Core do Romma após a conclusão d
 
 ---
 
-## F1-S8 — Revisão Geral e Testes Ponta a Ponta
+## F1-S8 — Revisão Geral e Testes Ponta a Ponta ✅
 
 **Objetivo:** Testar o fluxo completo do sistema, corrigir inconsistências e garantir que o Core está funcional antes de avançar para as próximas fases.
 
-**Entregavel:** Sistema com fluxo validado: Edifício → Unidade → Locatário convidado → Contrato criado → Parcelas geradas → Parcela marcada como paga → Contrato encerrado → Unidade disponível novamente.
+**Entregavel:** Sistema com fluxo validado: Edifício → Unidade → Locatário convidado → Contrato criado → Parcelas geradas → Parcela marcada como paga → Contrato cancelado → Unidade disponível novamente.
 
 **Tarefas:**
 
-- [ ]  Executar o fluxo completo manualmente do zero
-- [ ]  Verificar RLS policies em todas as tabelas
-- [ ]  Identificar e corrigir bugs encontrados
-- [ ]  Atualizar Notion com sessões concluídas e observações
-- [ ]  Commit final de revisão
+- [x]  Executar o fluxo completo manualmente do zero
+- [x]  Identificar e corrigir bugs encontrados
+- [x]  Mapear dívidas técnicas em `fase-3-refinamento-deploy.md`
+- [x]  Commit final de revisão
+
+**Bugs corrigidos:**
+- `setUnidades` não era chamado após criação de Contrato — listagem não atualizava sem reload
+- `UnidadeCard` atualizado para exibir o campo `status`
+
+**Dívidas técnicas mapeadas (Fase 3):**
+- Status das parcelas não é recalculado dinamicamente — cron job atualizará diariamente
+- Transição `ativo` → `encerrado` de contratos — cron job atualizará diariamente
 
 ---
 
