@@ -6,18 +6,18 @@ export default function Home() {
       <header>
         <div className="bg-[#1A1A1A] flex justify-between py-1.25 px-5">
           <div className="text-white/40 font-headline-hanken font-medium text-xs tracking-[0.2em]">REF: RM-2026-X // GRID.OS.ALFA</div>
-          <div className="text-white/40 font-headline-hanken font-medium text-xs tracking-[0.2em]">LOC: -23.608713° N, 46.754611°</div> 
+          <div className="text-white/40 font-headline-hanken font-medium text-xs tracking-[0.2em]">LOC: -23.608713° N, 46.754611°</div>
           <div className="text-white/40 font-headline-hanken font-medium text-xs tracking-[0.2em]">DATA: 09.06.2026 // STATUS: OTIMIZADO</div>
         </div>
         <nav className="bg-black py-5 px-5 flex justify-between content-start">
-          <div className="">
+          <div>
             <div className="text-white font-headline-hanken font-bold text-3xl tracking-[-1.2px]">ROMMA</div>
           </div>
           <div className="text-white/50 flex gap-15 font-headline-hanken font-normal tracking-widest text-sm p-0.5 content-center">
-            <a className="content-center animacao-underscore">PROPRIEDADES</a>
-            <a className="content-center">CONTRATOS</a>
-            <a className="content-center">PORTAIS</a>
-            <a className="content-center">DASHBOARD</a>
+            <span className="animacao-underscore content-center">PROPRIEDADES</span>
+            <span className="animacao-underscore content-center">CONTRATOS</span>
+            <span className="animacao-underscore content-center">PORTAIS</span>
+            <span className="animacao-underscore content-center">DASHBOARD</span>
           </div>
           <div className="text-white/50 flex gap-3 content-center">
             <div className="content-center">ENTRAR</div>
