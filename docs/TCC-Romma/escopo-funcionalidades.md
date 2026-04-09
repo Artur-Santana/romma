@@ -4,7 +4,7 @@
 
 Conjunto mínimo de funcionalidades para que o sistema seja considerado completo e aprovado na banca.
 
-> **Status de implementação (atualizado em 08/04/2026 — F1-S7 parcialmente concluída):**
+> **Status de implementação (atualizado em 09/04/2026 — F2-S0 em andamento):**
 > `[feito]` = implementado e funcional | `[parcial]` = em andamento | `[planejado]` = ainda não iniciado
 
 ## Proprietário
@@ -25,7 +25,7 @@ Conjunto mínimo de funcionalidades para que o sistema seja considerado completo
 
 ## Landing Page Pública
 
-- `[planejado]` Página de apresentação do produto Romma (sem precificação de planos)
+- `[parcial]` Página de apresentação do produto Romma (sem precificação de planos) — estrutura e header implementados em F2-S0; seções hero e sobre ainda com TODO
 - `[planejado]` Listagem de Unidades disponíveis com valor mensal (ou "Consulte o Proprietário" quando o Proprietário optar por ocultar o valor)
 - `[planejado]` Atualização em tempo real da listagem via Supabase Realtime — Unidades alugadas somem automaticamente
 - `[planejado]` Formulário de contato para interesse em uma Unidade (o Proprietário cria o Contrato manualmente após o contato)

@@ -34,11 +34,3 @@
 
 ---
 
-## Fase 0 — Roteiro de Aprendizado
-
-| Arquivo | Descrição |
-| --- | --- |
-| [fase-0-roteiro-aprendizado/contexto-sessoes-2-a-6.md](TCC-Romma/fase-0-roteiro-aprendizado/contexto-sessoes-2-a-6.md) | Contexto consolidado das sessões 2 a 6 da Fase 0 — não modificar (registro histórico) |
-
----
-
