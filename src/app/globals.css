@@ -1,5 +1,16 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import "tailwindcss";
+
+@theme {
+  /* Cores */
+  --color-primary: #4B0082;
+  --color-secondary: #2E2E2E;
+  --color-neutral: #000000;
+
+  /* Fontes */
+  --font-headline: var(--font-public-sans), sans-serif;
+  --font-body: var(--font-space-grotesk), sans-serif;
+
+  /* Sem arredondamento (design system: sharp corners) */
+  --radius: 0;
 }
+
