@@ -20,7 +20,7 @@
 }
 
 @utility animacao-underscore {
-  @apply relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-(--color-primary-hover) after:transition-all after:duration-300 hover:after:w-full cursor-pointer;
+  @apply relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-(--color-primary-hover) after:transition-all after:duration-300 hover:after:w-full hover:text-(--color-primary-hover) transition-colors duration-300 cursor-pointer;
 }
 
 :root {
@@ -47,7 +47,7 @@
   --chart-3: oklch(0.541 0.281 293.009);
   --chart-4: oklch(0.491 0.27 292.581);
   --chart-5: oklch(0.432 0.232 292.759);
-  --radius: 0.625rem;
+  --radius: 0;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0.008 326);
   --sidebar-primary: oklch(0.558 0.288 302.321);
@@ -133,6 +133,11 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@theme {
+  --color-primary: #4B0082;
+  --color-primary-hover: #8B5CF6;
 }
 
 @layer base {
