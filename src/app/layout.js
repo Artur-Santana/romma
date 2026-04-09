@@ -1,8 +1,8 @@
-import { Public_Sans, Space_Grotesk } from "next/font/google";
+import { Public_Sans, Space_Grotesk, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const publicSans = Public_Sans({
-  variable: "--font-public-sans",
+const HankenGrotesks = Hanken_Grotesk({
+  variable: "--font-Hanken_Grotesk",
   subsets: ["latin"],
 });
 
@@ -20,9 +20,9 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="pt-BR"
-      className={`${publicSans.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${HankenGrotesks.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-gray-800">{children}</body>
     </html>
   );
 }
