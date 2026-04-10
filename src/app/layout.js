@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
       lang="pt-BR"
       className={`${HankenGrotesks.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-gray-800">{children}</body>
+      <body className="min-h-full flex flex-col bg-gray-800 text-white">{children}</body>
     </html>
   );
 }
