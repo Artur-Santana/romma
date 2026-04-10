@@ -22,9 +22,10 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 | F2-S1 | Listagem pública de Unidades (`/unidades`) | Server Component público, filtro por status | ~1h |
 | F2-S2 | Realtime na listagem pública | Supabase Realtime, websockets, channels | ~2h |
 | F2-S3 | Dashboard do Proprietário | Queries agregadas, cards de resumo | ~2h |
-| F2-S4 | Revisão e testes | Nenhum | ~1h |
+| F2-S3.5 | Correções críticas de segurança e bugs | `import 'server-only'`, Server Actions, destructuring | ~3h |
+| F2-S4 | Revisão, testes e limpeza de código morto | Nenhum — consolidação | ~1.5h |
 
-**Total sessões guiadas: ~6h. LP autônoma: ~5-6h (paralela).**
+**Total sessões guiadas: ~9.5h. LP autônoma: ~5-6h (paralela).**
 
 ---
 
@@ -114,6 +115,56 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 ---
 
+## F2-S3.5 — Correções Críticas de Segurança e Bugs
+
+**Objetivo:** Corrigir vulnerabilidades de segurança e bugs silenciosos identificados na revisão de código (`code-review.md`). Estes itens bloqueiam o deploy em produção.
+
+**Entregavel:** Todas as importações server-only protegidas, JWT removido do bundle do browser, Edge Function com verificação de autenticação, bugs de destructuring corrigidos, diretivas `"use client"` presentes em todos os Client Components.
+
+**Tarefas:**
+
+**Segurança — JWT exposto no client (CRÍTICO):**
+- [ ]  Criar Server Action `src/actions/contratos.js` que importa `supabaseJWT` e faz a chamada `fetch()` para a Edge Function `gerar-parcelas`
+- [ ]  Remover import de `supabaseJWT` de `src/components/features/Contratos.js` e substituir pela chamada à Server Action
+- [ ]  Renomear variável de ambiente `NEXT_PUBLIC_SUPABASE_JWT` para `SUPABASE_JWT` (remover prefixo `NEXT_PUBLIC_`)
+- [ ]  Atualizar `.env.local` e `CLAUDE.md` com o novo nome da variável
+
+**Segurança — Guards server-only (ALTO):**
+- [ ]  Instalar pacote `server-only`: `npm install server-only`
+- [ ]  Adicionar `import 'server-only'` no topo de `src/lib/supabaseAdmin.js`
+- [ ]  Adicionar `import 'server-only'` no topo de `src/lib/supabaseJWT.js`
+- [ ]  Corrigir `process.env.SUPABASE_URL` em `supabaseAdmin.js` para `process.env.NEXT_PUBLIC_SUPABASE_URL` (ou documentar variável separada)
+
+**Segurança — Edge Function sem autenticação (ALTO):**
+- [ ]  Adicionar verificação do JWT no header `Authorization` em `supabase/functions/gerar-parcelas/index.ts`
+- [ ]  Retornar 401 se o token for inválido ou ausente
+
+**Diretivas `"use client"` ausentes (CRÍTICO — build quebra sem isso):**
+- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/GestaoEdificios.js`
+- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/Unidades.js`
+- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/Locatarios.js`
+- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/Contratos.js`
+
+**Bugs de destructuring — erros silenciados (ALTO):**
+- [ ]  Corrigir `const { errorUpdateUnidade }` para `const { error: errorUpdateUnidade }` em `src/components/features/Contratos.js` (linha ~54)
+- [ ]  Corrigir `const { errorInsert }` para `const { error: errorInsert }` em `src/actions/locatarios.js` (linha ~8)
+
+**Validação:**
+- [ ]  Testar: criar Contrato e verificar que parcelas são geradas corretamente via Server Action
+- [ ]  Testar: forçar falha no insert de unidade e verificar que o erro é capturado (não silenciado)
+- [ ]  Testar: convidar Locatário com dados inválidos e verificar que falhas de insert retornam erro 500
+- [ ]  Commit das alterações
+
+**Conceitos novos:**
+
+- `import 'server-only'`: guard de build-time que causa erro se o módulo for importado em um Client Component — converte bug silencioso de runtime em erro explícito de build
+- Server Actions para operações privilegiadas: mover lógica que usa chaves sensíveis do client para `src/actions/`, mantendo segredos fora do bundle JavaScript
+- Destructuring com alias em JS: `const { error: errorInsert }` extrai a propriedade `error` e renomeia para `errorInsert`. Sem o `: errorInsert`, o JS busca uma propriedade literalmente chamada `errorInsert` (que não existe no retorno do Supabase)
+
+> ⚠️ Esta sessão é **bloqueante para o deploy em produção** (F3-S1). Sem estas correções, o JWT fica exposto no browser, módulos server-only podem vazar para o client, e erros do Supabase são silenciosamente ignorados.
+
+---
+
 ## F2-S4 — Revisão e Testes
 
 **Objetivo:** Validar o fluxo público e administrativo da Fase 2 ponta a ponta.
@@ -126,6 +177,17 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 - [ ]  Verificar que `/unidades` é acessível sem login
 - [ ]  Verificar que o Dashboard só é acessível com login
 - [ ]  Corrigir bugs encontrados
+
+**Limpeza de código morto (identificado na revisão de código):**
+- [ ]  Remover `src/app/login/guia.js` e `src/app/dashboard/guia.js` (duplicatas de `page.js`, nunca importadas)
+- [ ]  Remover `src/components/ShinyText.jsx` (export morto, nunca importado em nenhum arquivo)
+- [ ]  Remover `src/lib/supabase-browser.js` e `src/lib/supabase-server.js` (nunca importados)
+- [ ]  Remover `src/components/ui/button.jsx` (scaffold shadcn/ui nunca utilizado)
+- [ ]  Remover dependência `@remixicon/react` do `package.json` (nunca importada em `src/`)
+- [ ]  Remover dependência `motion` do `package.json` (usada apenas pelo ShinyText removido)
+- [ ]  Mover `shadcn` de `dependencies` para `devDependencies` no `package.json` (é ferramenta CLI, não runtime)
+- [ ]  Atualizar `CLAUDE.md` removendo referências aos arquivos deletados da seção Project Structure
+
 - [ ]  Atualizar Notion com sessões concluídas
 - [ ]  Commit final de revisão
 
@@ -138,3 +200,5 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 **Realtime via Supabase Channels:** Escolhido sobre polling por ser a abordagem nativa do Supabase e um diferencial técnico válido para a monografia. A listagem pública vira Client Component para suportar o estado reativo.
 
 **Refinamento visual postergado para Fase 3:** O polimento completo Obsidian Blueprint não entra nesta fase para manter o foco na entrega funcional dentro do prazo.
+
+**Sessão F2-S3.5 inserida após revisão de código:** 55 findings identificados em auditoria automatizada (`code-review.md`). Itens críticos (JWT exposto, `"use client"` ausente) e de alta severidade (destructuring bugs, Edge Function sem auth) bloqueiam o deploy e foram agrupados em uma sessão dedicada antes de F2-S4. Itens médios e baixos distribuídos nas sessões F2-S4, F3-S1, F3-S3, F3-S4 e Melhorias Futuras.
