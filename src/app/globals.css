@@ -10,6 +10,7 @@
   --color-primary-hover: #8B5CF6;
   --color-secondary: #2E2E2E;
   --color-neutral: #000000;
+  --color-highlight: #C5A059;
 
   /* Fontes */
   --font-headline-hanken: var(--font-Hanken_Grotesk), sans-serif;
@@ -138,6 +139,9 @@
 @theme {
   --color-primary: #4B0082;
   --color-primary-hover: #8B5CF6;
+  --color-secondary: #2E2E2E;
+  --color-neutral: #000000;
+  --color-highlight: #C5A059;
 }
 
 @layer base {
