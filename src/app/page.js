@@ -17,7 +17,7 @@ export default function Home() {
             DATA: 09.06.2026 // STATUS: OTIMIZADO
           </div>
         </div>
-        <nav className="bg-black py-3 px-5 flex justify-between content-start border-white/12 border">
+        <nav className="bg-neutral py-3 px-5 flex justify-between content-start border-white/12 border">
           <div className="content-center">
             <div className="text-white font-headline-hanken font-bold text-3xl tracking-[-1.2px]">
               ROMMA
@@ -52,11 +52,11 @@ export default function Home() {
       </header>
 
       <main>
-        <section className="px-60  bg-black flex-col">
+        <section className="px-60  bg-black flex-col border">
           <div className= "text-highlight font-headline-hanken font-semibold text-xs tracking-[0.2em] px-5 pt-15">◼ SISTEMA_DE_COMANDO.v4</div>
           <div className= "text-white flex">
             <div className="p-5 basis-7/10 flex flex-col gap-8">
-              <div className="font-headline-hanken font-bold text-7xl flex flex-col gap-2">
+              <div className="font-headline-hanken font-black text-7xl flex flex-col gap-2">
                 <span className="text-white tracking-[-3.5px]" >GERENCIE SUAS PROPRIEDADES.</span>
                 <span className="text-primary-hover tracking-[0]">CONTROLE CADA CONTRATO.</span>
               </div>
@@ -69,7 +69,7 @@ export default function Home() {
               </div>
               <div className="flex gap-5 font-headline-hanken font-semibold tracking-4 " >
                   <button type="button" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover ">INICIE GRATUITAMENTE</button>
-                  <button type="button" className="py-4 px-10 bg-secondary " >VER PROJETOS</button>
+                  <button type="button" className="py-4 px-10 bg-background " >VER PROJETOS</button>
               </div>
             </div>
 
@@ -89,16 +89,80 @@ export default function Home() {
         </section>
 
         <section>
-          <div className="px-60 py-15 bg-background">
+          <div className="px-60 py-15 bg-neutral flex flex-col gap-8">
             <div className="flex flex-row gap-3">
               <img src='/horizontal_divider.svg'></img>
-              <div className= "text-highlight font-headline-hanken font-semibold text-xs tracking-[0.2em]">VISÃO GERAL DO SISTEMA // MÉTRICAS EM TEMPO REAL</div>
+              <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] bg-primary-hover/25 p-1">VISÃO GERAL DO SISTEMA // MÉTRICAS EM TEMPO REAL</div>
             </div>
-            <div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
+            <div className="md:mr-120">
+              <span className="font-headline-hanken font-black text-7xl tracking-[-3.0px]">COMPONENTES DE UM SISTEMA INTERCONECTADO.</span>
+            </div>
+            <div className="">
+              <div className="flex bg-background font-headline-hanken">
+                <div className=" p-8">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_qr_01.svg" className="w-7"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.01</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-2xl">LISTAGEM DE UNIDADES</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Sincronização de inventário ao vivo em todos os
+                        portais. Gerencie taxas de ocupação com algoritmos
+                        inteligentes que priorizam leads de alto valor.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className=" p-8">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_doc_02.svg" className="w-5"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.02</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-2xl">CONTRATOS AUTOMATIZADOS</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Entrada manual zero para contratos de aluguel.
+                        Templates jurídicos são gerados instantaneamente
+                        com base nos dados do inquilino e conformidade
+                        regional.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className=" p-8">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_conect_03.svg" className="w-7"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.03</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-2xl">PORTAL DO LOCATÁRIO</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Um espaço de trabalho dedicado para seus
+                        inquilinos. Solicite manutenção, pague faturas e
+                        renove contratos sem precisar de chamadas
+                        telefônicas.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex bg-background font-headline-hanken">
+                <div className=" p-8">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_graph_04.svg" className="w-7"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.04</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-2xl">PAINEL DO PROPRIETÁRIO</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Transparência total para os stakeholders. Visões financeiras
+                      detalhadas e modelagem preditiva de fluxo de caixa.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
