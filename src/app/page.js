@@ -98,8 +98,8 @@ export default function Home() {
               <span className="font-headline-hanken font-black text-7xl tracking-[-3.0px]">COMPONENTES DE UM SISTEMA INTERCONECTADO.</span>
             </div>
             <div className="">
-              <div className="flex bg-background font-headline-hanken">
-                <div className=" p-8">
+              <div className="grid grid-cols-3 gap-y-1 font-headline-hanken bg-white/10">
+                <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
                       <img src="/icon_qr_01.svg" className="w-7"></img>
@@ -114,7 +114,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className=" p-8">
+                <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
                       <img src="/icon_doc_02.svg" className="w-5"></img>
@@ -130,7 +130,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className=" p-8">
+                <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
                       <img src="/icon_conect_03.svg" className="w-7"></img>
@@ -146,9 +146,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex bg-background font-headline-hanken">
-                <div className=" p-8">
+                <div className="p-8 bg-background">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
                       <img src="/icon_graph_04.svg" className="w-7"></img>
@@ -161,6 +159,12 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
+                </div>
+                <div className="p-8 bg-background"></div>
+                <div className="p-8 bg-background flex items-center justify-center">
+                  <button type="button" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover font-headline-hanken font-semibold tracking-[0.2em] text-white text-sm cursor-pointer">
+                    ACESSE ANALITYCS
+                  </button>
                 </div>
               </div>
             </div>
