@@ -51,7 +51,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <main>
+      <main className="flex flex-col gap-15">
         <section className="px-60  bg-black flex-col border">
           <div className= "text-highlight font-headline-hanken font-semibold text-xs tracking-[0.2em] px-5 pt-15">◼ SISTEMA_DE_COMANDO.v4</div>
           <div className= "text-white flex">
@@ -89,8 +89,8 @@ export default function Home() {
         </section>
 
         <section>
-          <div className="px-60 py-15 bg-neutral flex flex-col gap-8">
-            <div className="flex flex-row gap-3">
+          <div className="px-60 bg-neutral flex flex-col gap-8">
+            <div className="flex flex-row gap-3 ">
               <img src='/horizontal_divider.svg'></img>
               <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] bg-primary-hover/25 p-1">VISÃO GERAL DO SISTEMA // MÉTRICAS EM TEMPO REAL</div>
             </div>
@@ -98,7 +98,7 @@ export default function Home() {
               <span className="font-headline-hanken font-black text-7xl tracking-[-3.0px]">COMPONENTES DE UM SISTEMA INTERCONECTADO.</span>
             </div>
             <div className="">
-              <div className="grid grid-cols-3 gap-y-1 font-headline-hanken bg-white/10">
+              <div className="grid grid-cols-3 gap-y-1 font-headline-hanken bg-white/10 shadow-xl/30 shadow-white/20">
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
@@ -170,6 +170,132 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <section className="bg-background/50 font-headline-hanken">
+          <div className="py-15 ">
+          <div className="bg-background/60 mx-60 px-5 py-10 grid grid-cols-2 gap-4 border ">
+            <div className="flex flex-col gap-10">
+              <div className=" w-min text-nowrap px-2">
+                <span className="text-highlight/70 font-normal tracking-[1.5px] ">DASHBOARD // HUB_PRINCIPAL</span>
+              </div>
+              <div className="px-10 flex flex-col gap-8">
+                <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] bg-primary-hover/25 p-1 w-min text-nowrap px-2">VISÃO GERAL DO SISTEMA // MÉTRICAS EM TEMPO REAL</div>
+                <span className="font-headline-hanken font-black text-5xl tracking-[-3.0px]">CENTRAL DE DADOS E INSIGHTS ESTRATÉGICOS.</span>
+                <div className="bg-neutral">
+                  <div className="p-5 flex flex-col gap-3">
+                    <div className="flex justify-between">
+                      <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40">ÍNDICE DE DEMANDA REGIONAL</span>
+                      <span className="font-headline-hanken font-bold tracking-[1.5px] text-sm text-primary-hover">+12.4% ESTE MÊS</span>
+                    </div>
+                    <div>
+                      <img className="w-full" src="/data_regional_demand_graph.png"></img>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-5">
+                  <div className="bg-neutral w-full">
+                    <div className="p-5 flex flex-col gap-3">
+                      <div className="flex justify-between">
+                        <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40 text-nowrap">TAXA DE VACÂNCIA</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-highlight  font-bold tracking-0 text-3xl">2.1%</span>
+                        <span className="text-green-500 font-normal tracking-0 text-sm">↓ 0.4% vs prev.</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-neutral w-full">
+                    <div className="p-5 flex flex-col gap-3">
+                      <div className="flex justify-between">
+                        <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40 text-nowrap">TAXA DE VACÂNCIA</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-highlight  font-bold tracking-0 text-3xl">2.1%</span>
+                        <span className="text-green-500 font-normal tracking-0 text-sm">↓ 0.4% vs prev.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Relatórios analíticos gerados via inteligência neural cruzando dados de
+                  mercado com performance interna do portfólio.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[url(/data_background.png)]">
+              <div className="px-10 py-40 align-middle ">
+                <div className="p-8 bg-background/85">
+                  <div className="flex flex-col gap-10">
+                    <span className="text-white font-headline-hanken font-medium traking-[1.5px]">PREVISÃO_FLUXO_2026</span>
+                    <div className="border-t border-gray-300/15"></div>
+                    <div className="pl-8 pr-2 flex flex-col gap-5">
+                      <div className="flex gap-3">
+                        <div>
+                          <span className="text-white/40 font-normal traking-[1.5px]">ABRIL</span>
+                        </div>
+                        <div className="flex w-full">
+                          <div className="bg-primary-hover self-center h-3 w-[45%]"></div>
+                          <div className="bg-secondary self-center h-3 w-[60%]"></div>
+                        </div>
+                        
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.2M</span>
+                      </div>
+                      <div className="flex gap-3">
+                        <div>
+                          <span className="text-white/40 font-normal traking-[1.5px]">MAIO</span>
+                        </div>
+                        <div className="flex w-full">
+                          <div className="bg-primary-hover self-center h-3 w-[65%]"></div>
+                          <div className="bg-secondary self-center h-3 w-[45%]"></div>
+                        </div>
+                        
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.8M</span>
+                      </div>
+                      <div className="flex gap-3">
+                        <div>
+                          <span className="text-white/40 font-normal traking-[1.5px]">JUNHO</span>
+                        </div>
+                        <div className="flex w-full">
+                          <div className="bg-highlight self-center h-3 w-[85%]"></div>
+                          <div className="bg-secondary self-center h-3 w-[15%]"></div>
+                        </div>
+                        
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.4M</span>
+                      </div>
+                      <div className="flex gap-3">
+                        <span className="text-white/40 font-normal traking-[1.5px]">JULHO</span>
+                        <div className="flex w-full">
+                          <div className="bg-primary-hover self-center h-3 w-[77%]"></div>
+                          <div className="bg-secondary self-center h-3 w-[23%]"></div>
+                        </div>
+                        
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.1M</span>
+                      </div>
+                    </div>
+                    <div className="border-t border-gray-300/15"></div>
+                    <div className="flex justify-between">
+                      <div>
+                        <span className="text-white/30 font-headline-hanken font-medium traking-[1.5px]">ID: INSIGHT_#4492</span>
+                      </div>
+                      <div>
+                        <span className="text-highlight font-headline-hanken font-medium traking-[1.5px] ">A ROMMA TRANSFORMOU NOSSA GESTÃO...</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+
+        </section>
+
+
+
+
+
       </main>
       <footer></footer>
     </div>
