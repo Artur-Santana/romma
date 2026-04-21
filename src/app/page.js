@@ -98,7 +98,7 @@ export default function Home() {
               <span className="font-headline-hanken font-black text-7xl tracking-[-3.0px]">COMPONENTES DE UM SISTEMA INTERCONECTADO.</span>
             </div>
             <div className="">
-              <div className="grid grid-cols-3 gap-y-1 font-headline-hanken bg-white/10 shadow-xl/30 shadow-white/20">
+              <div className="grid grid-cols-3 gap-y-1 font-headline-hanken bg-white/10 ">
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
@@ -206,11 +206,11 @@ export default function Home() {
                   <div className="bg-neutral w-full">
                     <div className="p-5 flex flex-col gap-3">
                       <div className="flex justify-between">
-                        <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40 text-nowrap">TAXA DE VACÂNCIA</span>
+                        <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40 text-nowrap">CAP RATE MÉDIO</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-highlight  font-bold tracking-0 text-3xl">2.1%</span>
-                        <span className="text-green-500 font-normal tracking-0 text-sm">↓ 0.4% vs prev.</span>
+                        <span className="text-white  font-bold tracking-0 text-3xl">6.8%</span>
+                        <span className="text-white/20 font-normal tracking-0 text-sm">Estavel</span>
                       </div>
                     </div>
                   </div>
@@ -222,50 +222,50 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="bg-[url(/data_background.png)]">
+            <div className="bg-[url(/data_background.png)] bg-no-repeat bg-cover">
               <div className="px-10 py-40 align-middle ">
                 <div className="p-8 bg-background/85">
                   <div className="flex flex-col gap-10">
                     <span className="text-white font-headline-hanken font-medium traking-[1.5px]">PREVISÃO_FLUXO_2026</span>
                     <div className="border-t border-gray-300/15"></div>
-                    <div className="pl-8 pr-2 flex flex-col gap-5">
-                      <div className="flex gap-3">
+                    <div className="pl-2 pr-2 flex flex-col gap-5">
+                      <div className="grid grid-cols-8 gap-5">
                         <div>
                           <span className="text-white/40 font-normal traking-[1.5px]">ABRIL</span>
                         </div>
-                        <div className="flex w-full">
-                          <div className="bg-primary-hover self-center h-3 w-[45%]"></div>
+                        <div className="col-span-6 flex w-full">
+                          <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[45%]"></div>
                           <div className="bg-secondary self-center h-3 w-[60%]"></div>
                         </div>
                         
                         <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.2M</span>
                       </div>
-                      <div className="flex gap-3">
+                      <div className="grid grid-cols-8 gap-5">
                         <div>
                           <span className="text-white/40 font-normal traking-[1.5px]">MAIO</span>
                         </div>
-                        <div className="flex w-full">
-                          <div className="bg-primary-hover self-center h-3 w-[65%]"></div>
+                        <div className=" col-span-6 flex w-full">
+                          <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[65%]"></div>
                           <div className="bg-secondary self-center h-3 w-[45%]"></div>
                         </div>
                         
                         <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.8M</span>
                       </div>
-                      <div className="flex gap-3">
+                      <div className="grid grid-cols-8 gap-5">
                         <div>
                           <span className="text-white/40 font-normal traking-[1.5px]">JUNHO</span>
                         </div>
-                        <div className="flex w-full">
-                          <div className="bg-highlight self-center h-3 w-[85%]"></div>
+                        <div className="col-span-6 flex w-full">
+                          <div className="bg-highlight shadow-[0_0_6px_0px_var(--color-highlight)] self-center h-3 w-[85%]"></div>
                           <div className="bg-secondary self-center h-3 w-[15%]"></div>
                         </div>
                         
                         <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.4M</span>
                       </div>
-                      <div className="flex gap-3">
-                        <span className="text-white/40 font-normal traking-[1.5px]">JULHO</span>
-                        <div className="flex w-full">
-                          <div className="bg-primary-hover self-center h-3 w-[77%]"></div>
+                      <div className="grid grid-cols-8 gap-5">
+                        <span className="col-span-1 text-white/40 font-normal traking-[1.5px]">JULHO</span>
+                        <div className="col-span-6 flex w-full">
+                          <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[77%]"></div>
                           <div className="bg-secondary self-center h-3 w-[23%]"></div>
                         </div>
                         
@@ -287,17 +287,70 @@ export default function Home() {
             </div>
           </div>
           </div>
-
-
-
         </section>
-
-
-
-
-
       </main>
-      <footer></footer>
+      <footer className="bg-neutral">
+        <div className="px-60 pt-15 pb-10 grid grid-cols-4 gap-10">
+          <div className="flex flex-col gap-5">
+            <div className="text-white font-headline-hanken font-bold text-3xl tracking-[-1.2px]">
+              ROMMA
+            </div>
+            <p className="text-white/60 font-body text-balance text-sm">
+              GESTÃO DE PROPRIEDADES DE NÍVEL PROFISSIONAL PARA A ELITE ARQUITETÔNICA. CALIBRADO PARA PERFORMANCE.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="text-primary-hover font-headline-hanken font-semibold text-xs tracking-[0.2em]">
+              PLATAFORMA
+            </div>
+            <div className="flex flex-col gap-3 font-headline-hanken text-white/50 text-sm tracking-widest">
+              <Link href="/unidades" className="animacao-underscore w-fit">PROPRIEDADES</Link>
+              <Link href="#" className="animacao-underscore w-fit">CONTRATOS</Link>
+              <Link href="#" className="animacao-underscore w-fit">PORTAIS</Link>
+              <Link href="#" className="animacao-underscore w-fit">DASHBOARD</Link>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="text-primary-hover font-headline-hanken font-semibold text-xs tracking-[0.2em]">
+              SUPORTE
+            </div>
+            <div className="flex flex-col gap-3 font-headline-hanken text-white/50 text-sm tracking-widest">
+              <Link href="#" className="animacao-underscore w-fit">DOCUMENTAÇÃO</Link>
+              <Link href="#" className="animacao-underscore w-fit">CENTRAL DE AJUDA</Link>
+              <Link href="#" className="animacao-underscore w-fit">FALE CONOSCO</Link>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="text-primary-hover font-headline-hanken font-semibold text-xs tracking-[0.2em]">
+              ACESSO
+            </div>
+            <div className="flex flex-col gap-3">
+              <Link
+                href="/login"
+                className="font-headline-hanken font-normal tracking-widest text-sm text-white/50 animacao-underscore w-fit"
+              >
+                ENTRAR
+              </Link>
+              <button type="button" className="w-fit text-white font-headline-hanken font-semibold tracking-4 bg-linear-45 from-primary to-primary-hover py-3 px-6 text-sm cursor-pointer">
+                COMEÇAR AGORA
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-60 py-5 border-t border-white/10 flex justify-between">
+          <div className="font-headline-hanken text-white/40 text-xs tracking-[0.2em]">
+            ©2026 ROMMA — Artur Santana
+          </div>
+          <div className="flex gap-8 font-headline-hanken text-white/40 text-xs tracking-[0.2em]">
+            <Link href="#" className="animacao-underscore">PRIVACIDADE</Link>
+            <Link href="#" className="animacao-underscore">TERMOS</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
