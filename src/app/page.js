@@ -8,7 +8,7 @@ export default function Home() {
       <Header />
 
       <main className="flex flex-col gap-8 md:gap-12 lg:gap-15">
-        <section className="relative overflow-hidden px-5 md:px-10 lg:px-30 xl:px-60 bg-black flex-col">
+        <section className="relative overflow-hidden px-5 md:px-10 lg:px-30 xl:px-60 bg-black flex-col border">
           <img
             src="/Detalhe_Arquitetonico.png"
             alt=""

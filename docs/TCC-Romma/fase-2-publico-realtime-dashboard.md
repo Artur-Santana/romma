@@ -18,7 +18,7 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 | Sessão | Conteúdo | Conceitos Novos | Estimativa |
 | --- | --- | --- | --- |
-| F2-S0 | Landing Page estática (`/app/page.js`) | Nenhum — autônomo | ~5-6h |
+| F2-S0 ✅ | Landing Page estática (`/app/page.js`) | Nenhum — autônomo | ~5-6h |
 | F2-S1 | Listagem pública de Unidades (`/unidades`) | Server Component público, filtro por status | ~1h |
 | F2-S2 | Realtime na listagem pública | Supabase Realtime, websockets, channels | ~2h |
 | F2-S3 | Dashboard do Proprietário | Queries agregadas, cards de resumo | ~2h |
@@ -31,16 +31,21 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 # Detalhamento das Sessões
 
-## F2-S0 — Landing Page Estática (autônomo)
+## F2-S0 — Landing Page Estática (autônomo) ✅
 
 **Objetivo:** Construir a Landing Page pública do Romma como rota principal (`/app/page.js`) sem chamadas ao Supabase.
 
-**Entregavel:** Página `/` completamente estática com hero section, descrição do produto e CTA apontando para `/unidades`. Sem autenticação, sem dados dinâmicos.
+**Status: Concluído.**
 
-**Construída de forma autônoma** — o estudante tem experiência sólida em HTML/CSS e não precisa de sessão guiada para esta entrega. Usar Tailwind para estilização.
+**Entregue em `/app/page.js`:**
+- Hero section com imagem de fundo (`Detalhe_Arquitetonico.png`), headline em dois tons e dois CTAs ("INICIE GRATUITAMENTE" / "VER PROJETOS")
+- Seção de visão geral do sistema com 4 cards (SISTEMA.01 Listagem de Unidades, SISTEMA.02 Contratos Automatizados, SISTEMA.03 Portal do Locatário, SISTEMA.04 Painel do Proprietário) e botão de acesso a analytics
+- Seção de dashboard preview com gráfico de demanda regional, cards de taxa de vacância e cap rate, e gráfico de previsão de fluxo de caixa 2026 (Abril–Julho)
+- Footer completo com links de navegação (Plataforma, Suporte, Acesso), copyright e links de Privacidade/Termos
+- Responsividade completa: breakpoints `sm`, `md`, `lg`, `xl` em todas as seções
+- Zero chamadas ao Supabase — 100% estático, sem autenticação
 
-> ⚠️ Atenção: `/app/page.js` atualmente redireciona para `/login` ou é o dashboard. Verificar o que está na rota raiz antes de começar e ajustar o roteamento conforme necessário.
-> 
+**Construída de forma autônoma** — o estudante tem experiência sólida em HTML/CSS e não precisa de sessão guiada para esta entrega.
 
 ---
 

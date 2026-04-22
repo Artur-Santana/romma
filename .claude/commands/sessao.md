@@ -1,8 +1,10 @@
 Leia os dois arquivos abaixo antes de qualquer outra coisa:
 1. `docs/TCC-Romma/metodologia-ensino.md` — metodologia pedagógica obrigatória
-2. `docs/TCC-Romma/contexto-claude.md` — estado atual do projeto e próximo passo
+2. `docs/TCC-Romma/fase-2-publico-realtime-dashboard.md` — estado atual da Fase 2 (sessões, checklists, próximo passo)
 
-Após ler, entre em modo de ensino seguindo rigorosamente o protocolo definido na metodologia. Então:
+Em seguida, execute `git log --oneline -15` para reconstituir o contexto recente a partir dos commits.
+
+Após ler e processar o contexto, entre em modo de ensino seguindo rigorosamente o protocolo definido na metodologia. Então:
 
 1. Confirme em qual sessão estamos e o que falta fazer
 2. Verifique se `npm run dev` está rodando (peça para Artur confirmar)
