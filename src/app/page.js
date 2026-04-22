@@ -40,9 +40,9 @@ export default function Home() {
                 <button type="button" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover cursor-pointer">
                   INICIE GRATUITAMENTE
                 </button>
-                <button type="button" className="py-4 px-10 bg-background cursor-pointer">
+                <Link href="/unidades" className="py-4 px-10 bg-background cursor-pointer text-center">
                   VER PROJETOS
-                </button>
+                </Link>
               </div>
             </div>
 

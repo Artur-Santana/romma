@@ -49,6 +49,7 @@ next-env.d.ts
 /docs/code-reviews
 code-review.md
 code-review-plan.md
+/docs/plans
 
 #vscode
 .vscode

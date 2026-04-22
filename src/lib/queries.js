@@ -53,3 +53,11 @@ export async function getParcelasByContrato(contratoId) {
         .order('numero', { ascending: true })
     return data
 }
+
+export async function getUnidadesDisponiveis() {
+    const { data } = await supabase
+        .from('unidades')
+        .select('*, edificios(nome)')
+        .eq('status', 'disponivel')
+    return data
+}

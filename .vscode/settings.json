@@ -9,7 +9,8 @@
     "contratos",
     "parcelas",
     "docs",
-    "landing-page"
+    "landing-page",
+    "unidades-publicas"
   ],
   "deno.enablePaths": [
     "supabase/functions"
