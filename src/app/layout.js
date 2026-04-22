@@ -16,13 +16,18 @@ export const metadata = {
   description: "Gestão de espaços corporativos",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html
       lang="pt-BR"
       className={`${HankenGrotesks.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-gray-800 text-white">{children}</body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
