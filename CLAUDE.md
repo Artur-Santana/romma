@@ -1,12 +1,12 @@
 # CLAUDE.md — Romma
 
-This file provides context for Claude Code to work effectively in this codebase.
+Context for Claude Code in this codebase.
 
 ---
 
 ## Project Overview
 
-**Romma** is a corporate space rental management system built as an undergraduate thesis (TCC). It connects property owners (Proprietários) with tenants (Locatários) who rent commercial spaces. The system manages the full lifecycle of a corporate lease: from public unit listings to contracts and installment tracking.
+**Romma** = corporate space rental system, undergraduate thesis (TCC). Connects Proprietários (owners) with Locatários (tenants) renting commercial spaces. Manages full lease lifecycle: public unit listings → contracts → installment tracking.
 
 ---
 
@@ -78,7 +78,7 @@ supabase/
 
 ## Standardized Terminology
 
-These terms are used consistently across code, UI, and documentation. Never use synonyms.
+Terms used consistently across code, UI, docs. Never use synonyms.
 
 | Concept | Portuguese Term | Notes |
 |---|---|---|
@@ -138,7 +138,7 @@ These terms are used consistently across code, UI, and documentation. Never use 
 | observacoes | TEXT | |
 | created_at | TIMESTAMP | |
 
-Constraint: partial unique index — only one `ativo` contract per `unidade_id` at a time.
+Constraint: partial unique index — one `ativo` contract per `unidade_id` max.
 
 ### `parcelas`
 | Column | Type | Notes |
@@ -146,9 +146,9 @@ Constraint: partial unique index — only one `ativo` contract per `unidade_id` 
 | id | UUID | PK |
 | contrato_id | UUID | FK → contratos |
 | numero | INTEGER | Sequential number (1, 2, 3...) |
-| data_fechamento | DATE | Date the installment becomes visible |
+| data_fechamento | DATE | Date installment becomes visible |
 | data_vencimento | DATE | 7 days after data_fechamento |
-| data_pagamento | DATE | Nullable, filled when marked as paid |
+| data_pagamento | DATE | Nullable, set when marked paid |
 | status | ENUM (`status_parcela`) | `futura`, `pendente`, `paga`, `vencida` |
 | created_at | TIMESTAMP | |
 
@@ -157,24 +157,24 @@ Constraint: partial unique index — only one `ativo` contract per `unidade_id` 
 ## Business Rules
 
 ### Unit status
-- A unit's status changes to `alugada` when an `ativo` contract is created for it.
-- It reverts to `disponivel` when that contract is closed (`encerrado`) or cancelled (`cancelado`).
-- Both transitions are handled in the frontend at the moment of contract creation/deletion.
+- Unit status → `alugada` when `ativo` contract created.
+- Reverts to `disponivel` when contract `encerrado` or `cancelado`.
+- Both transitions handled in frontend at contract creation/deletion.
 
 ### Contract constraints
-- Only one `ativo` contract per unit at a time (enforced by partial unique index in the DB).
-- `valor_mensal` is always taken from the unit — there is no separate value field in the contract.
+- One `ativo` contract per unit (enforced by partial unique index in DB).
+- `valor_mensal` always from unit — no separate value field in contract.
 
 ### Parcela generation rules
-- All parcelas for a contract's full duration are generated atomically at contract creation time via the `gerar-parcelas` Edge Function.
-- **Parcela 1:** If `data_inicio + 7 days` falls in the same month as `data_inicio`, then `data_fechamento` = `data_inicio` and `data_vencimento` = `data_inicio + 7 days`. If it falls in a different month, `data_fechamento` is pushed to the 1st day of the following month and `data_vencimento` = `data_fechamento + 7 days`.
-- **Parcelas 2+:** `data_fechamento` = 1st day of each subsequent month after parcela 1's `data_fechamento`, `data_vencimento` = `data_fechamento + 7 days`.
-- All parcelas are created with status `futura`.
-- Status transitions are date-driven: `futura` → `pendente` when `data_fechamento <= today`; `pendente` → `vencida` when `data_vencimento < today` and still unpaid.
+- All parcelas generated atomically at contract creation via `gerar-parcelas` Edge Function.
+- **Parcela 1:** If `data_inicio + 7 days` same month as `data_inicio` → `data_fechamento` = `data_inicio`, `data_vencimento` = `data_inicio + 7 days`. If different month → `data_fechamento` = 1st of following month, `data_vencimento` = `data_fechamento + 7 days`.
+- **Parcelas 2+:** `data_fechamento` = 1st of each subsequent month after parcela 1's `data_fechamento`. `data_vencimento` = `data_fechamento + 7 days`.
+- All parcelas created with status `futura`.
+- Status transitions date-driven: `futura` → `pendente` when `data_fechamento <= today`; `pendente` → `vencida` when `data_vencimento < today` and unpaid.
 
 ### Tenant invite flow
-- The Proprietário registers a tenant's email. Supabase sends a magic link via `inviteUserByEmail` (admin API).
-- This must run server-side via a Next.js Server Action — never import `supabaseAdmin` in client components.
+- Proprietário registers tenant email. Supabase sends magic link via `inviteUserByEmail` (admin API).
+- Must run server-side via Next.js Server Action — never import `supabaseAdmin` in client components.
 
 ---
 
@@ -190,13 +190,13 @@ Constraint: partial unique index — only one `ativo` contract per `unidade_id` 
 | `lib/supabaseAdmin.js` | service role key | Admin operations (invite, bypass RLS) — **server-only** |
 | `lib/supabaseJWT.js` | legacy JWT | Calling Edge Functions via `functions.invoke()` only |
 
-Never import `supabaseAdmin` or `supabaseJWT` in client components — they use server-only env vars.
+Never import `supabaseAdmin` or `supabaseJWT` in client components — server-only env vars.
 
 ### Query centralization
-All Supabase read queries live in `src/lib/queries.js` as pure functions with no hooks and no state. Example functions: `getEdificios()`, `getUnidades()`, `getLocatarios()`, `getContratos()`. Pages call these functions inside `useEffect`.
+All Supabase read queries in `src/lib/queries.js` — pure functions, no hooks, no state. Example: `getEdificios()`, `getUnidades()`, `getLocatarios()`, `getContratos()`. Pages call inside `useEffect`.
 
 ### Form state pattern
-Use a single object for form/edit state, not separate `useState` calls per field:
+Use single object for form/edit state, not separate `useState` per field:
 
 ```js
 // Correct
@@ -209,7 +209,7 @@ const [endereco, setEndereco] = useState('')
 ```
 
 ### Reset pattern
-Extract form reset as a named function rather than inlining the state reset:
+Extract form reset as named function, not inline:
 
 ```js
 function resetForm() {
@@ -219,13 +219,13 @@ function resetForm() {
 ```
 
 ### RLS policies
-Policies are per-operation. Missing a policy for one operation (SELECT / INSERT / UPDATE / DELETE) returns 403 only for that operation. Always verify all four operations when debugging permission errors.
+Policies per-operation. Missing policy for one op (SELECT / INSERT / UPDATE / DELETE) → 403 for that op only. Verify all four when debugging permission errors.
 
 ### Server Actions
-Placed in `src/actions/`. Return a standardized object: `{ status: 200 }` on success or `{ status: 500, erroMessage: '...' }` on failure.
+In `src/actions/`. Return `{ status: 200 }` on success or `{ status: 500, erroMessage: '...' }` on failure.
 
 ### Commits
-Uses `vivaxy.vscode-conventional-commits` VSCode extension. Always provide type, scope, gitmoji, and description as separate fields.
+Uses `vivaxy.vscode-conventional-commits` VSCode extension. Provide type, scope, gitmoji, description as separate fields.
 
 ---
 
@@ -234,11 +234,11 @@ Uses `vivaxy.vscode-conventional-commits` VSCode extension. Always provide type,
 ### `gerar-parcelas`
 - **Location:** `supabase/functions/gerar-parcelas/index.ts`
 - **Runtime:** Deno (TypeScript)
-- **Trigger:** Called from the frontend after a contract is successfully inserted.
+- **Trigger:** Called from frontend after contract inserted.
 - **Input:** `{ contrato_id: string }` via POST body.
-- **Responsibility:** Fetch the contract, calculate all parcelas for its full duration, insert them atomically.
-- **Auth:** Legacy Supabase JWT (`eyJ...`) passed via Authorization header. Called via `supabase.functions.invoke()` using `supabaseJWT` client.
-- **CORS:** Full CORS headers configured, including preflight OPTIONS handler.
+- **Responsibility:** Fetch contract, calculate all parcelas for full duration, insert atomically.
+- **Auth:** Legacy Supabase JWT (`eyJ...`) via Authorization header. Called via `supabase.functions.invoke()` using `supabaseJWT` client.
+- **CORS:** Full CORS headers + preflight OPTIONS handler.
 
 ---
 

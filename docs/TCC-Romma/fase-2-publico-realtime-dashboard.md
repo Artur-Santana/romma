@@ -19,7 +19,7 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 | Sessão | Conteúdo | Conceitos Novos | Estimativa |
 | --- | --- | --- | --- |
 | F2-S0 ✅ | Landing Page estática (`/app/page.js`) | Nenhum — autônomo | ~5-6h |
-| F2-S1 | Listagem pública de Unidades (`/unidades`) | Server Component público, filtro por status | ~1h |
+| F2-S1 ✅ | Listagem pública de Unidades (`/unidades`) | Server Component público, filtro por status | ~1h |
 | F2-S2 | Realtime na listagem pública | Supabase Realtime, websockets, channels | ~2h |
 | F2-S3 | Dashboard do Proprietário | Queries agregadas, cards de resumo | ~2h |
 | F2-S3.5 | Correções críticas de segurança e bugs | `import 'server-only'`, Server Actions, destructuring | ~3h |
@@ -49,19 +49,29 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 ---
 
-## F2-S1 — Listagem Pública de Unidades
+## F2-S1 — Listagem Pública de Unidades ✅
 
 **Objetivo:** Criar a página pública `/unidades` que exibe todas as Unidades com `status = disponivel`, sem autenticação.
 
 **Entregavel:** Página `/unidades` com listagem de unidades disponíveis, exibindo nome, edifício, área, valor (ou "Consulte o Proprietário" se `valor_visivel = false`) e status. Sem botões de ação — apenas visualização.
 
+**Status: Concluído.**
+
+**Entregue em `/app/unidades/page.js`:**
+- Server Component assíncrono, sem `"use client"`
+- Busca via `getUnidadesDisponiveis()` em `src/lib/queries-server.js` — query com colunas explícitas + join `edificios(nome)`, filtro `status = disponivel`
+- Componente `UnidadeCardPublico` para renderização individual de cada unidade
+- Grid responsivo: 1 coluna (mobile) → 2 (`md`) → 3 (`lg`)
+- Estado vazio tratado: mensagem "Nenhuma unidade disponível no momento"
+- `Header` e `Footer` reutilizados
+
 **Tarefas:**
 
-- [ ]  Criar rota `/app/unidades/page.js` como Server Component (sem `"use client"`)
-- [ ]  Buscar unidades com `select('*, edificios(nome)').eq('status', 'disponivel')`
-- [ ]  Renderizar listagem com renderização condicional do valor (`valor_visivel`)
-- [ ]  Confirmar que a RLS policy de SELECT público da tabela `unidades` está ativa
-- [ ]  Commit das alterações
+- [x]  Criar rota `/app/unidades/page.js` como Server Component (sem `"use client"`)
+- [x]  Buscar unidades com `select('id, nome, area_m2, valor_mensal, valor_visivel, edificios(nome)').eq('status', 'disponivel')`
+- [x]  Renderizar listagem com renderização condicional do valor (`valor_visivel`) via `UnidadeCardPublico`
+- [x]  Confirmar que a RLS policy de SELECT público da tabela `unidades` está ativa
+- [x]  Commit das alterações
 
 **Conceitos novos:**
 
