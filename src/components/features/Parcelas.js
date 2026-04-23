@@ -2,7 +2,7 @@
 
 import supabase from "@/lib/supabase"
 import { useEffect, useState } from "react"
-import { getParcelasByContrato } from "@/lib/queries"
+import { getParcelasByContrato } from "@/lib/queries-client"
 import Link from "next/link"
 
 const statusConfig = {

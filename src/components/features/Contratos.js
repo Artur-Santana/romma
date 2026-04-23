@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase";
 import supabaseJWT from "@/lib/supabaseJWT";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getContratos, getLocatarios, getUnidades } from "@/lib/queries";
+import { getContratos, getLocatarios, getUnidades } from "@/lib/queries-client";
 import Link from "next/link";
 
 export default function Contratos({}) {

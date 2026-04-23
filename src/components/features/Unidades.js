@@ -1,7 +1,7 @@
 import supabase from "@/lib/supabase";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getEdificios, getUnidades } from "@/lib/queries";
+import { getEdificios, getUnidades } from "@/lib/queries-client";
 import UnidadeCard from "@/components/ui/UnidadeCard";
 
 export default function Unidades({}) {
