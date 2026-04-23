@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import GestaoEdificios from "@/components/features/GestaoEdificios";
-import { getMetricas } from "@/lib/queries";
+import { getMetricas } from "@/lib/queries-client";
 
 export default function Dashboard() {
   const [usuario, setUsuario] = useState(null)

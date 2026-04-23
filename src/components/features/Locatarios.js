@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase";
 import { useEffect } from "react";
 import { useState } from "react";
 import { convidarLocatario } from "@/actions/locatarios";
-import { getLocatarios } from "@/lib/queries";
+import { getLocatarios } from "@/lib/queries-client";
 
 export default function Locatarios({}) {
   const [nome_razao_social, setNome_razao_social] = useState("");
