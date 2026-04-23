@@ -1,17 +1,17 @@
 import supabase from "@/lib/supabase"
 
 export async function getUnidades() {
-    const { data } = await supabase.from('unidades').select('*')
+    const { data } = await supabase.from('unidades').select('id, edificio_id, nome, descricao, area_m2, valor_mensal, valor_visivel, status')
     return data
 }
 
 export async function getEdificios() {
-    const { data } = await supabase.from('edificios').select('*')
+    const { data } = await supabase.from('edificios').select('id, nome, endereco')
     return data
 }
 
 export async function getLocatarios() {
-    const { data } = await supabase.from('locatarios').select('*')
+    const { data } = await supabase.from('locatarios').select('id, usuario_id, nome_razao_social, tipo, documento, email, telefone')
     return data
 }
 
@@ -57,7 +57,7 @@ export async function getParcelasByContrato(contratoId) {
 export async function getUnidadesDisponiveis() {
     const { data } = await supabase
         .from('unidades')
-        .select('*, edificios(nome)')
+        .select('id, nome, area_m2, valor_mensal, valor_visivel, edificios(nome)')
         .eq('status', 'disponivel')
     return data
 }
