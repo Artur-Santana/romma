@@ -11,6 +11,14 @@ Deno.serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
+  const authHeader = req.headers.get('Authorization')
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return new Response(
+      JSON.stringify({ error: 'Unauthorized' }),
+      { status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    )
+  }
+
   try {
     const { contrato_id } = await req.json()
 
