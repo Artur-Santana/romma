@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import 'server-only'
 
 const supabaseLink = process.env.SUPABASE_URL
 const supabaseRoleKey = process.env.SUPABASE_ROLE_KEY 

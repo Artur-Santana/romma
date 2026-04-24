@@ -1,6 +1,4 @@
-import { createClient } from "@/lib/supabase-browser"
-
-const supabase = createClient()
+import supabase from "@/lib/supabase"
 
 export async function getUnidades() {
     const { data } = await supabase.from('unidades').select('id, edificio_id, nome, descricao, area_m2, valor_mensal, valor_visivel, status')

@@ -5,7 +5,7 @@ import supabaseAdmin from "@/lib/supabaseAdmin"
 export async function convidarLocatario(email, nome_razao_social, documento, telefone, tipo) {
     const { data, error} = await supabaseAdmin.auth.admin.inviteUserByEmail(email)
     if (!error){
-        const {errorInsert} = await supabaseAdmin.from('locatarios')
+        const {error:errorInsert} = await supabaseAdmin.from('locatarios')
         .insert({
             usuario_id:data.user.id, 
             nome_razao_social, 
