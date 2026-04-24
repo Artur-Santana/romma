@@ -1,9 +1,11 @@
+"use client"
+
 import supabase from "@/lib/supabase";
-import supabaseJWT from "@/lib/supabaseJWT";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getContratos, getLocatarios, getUnidades } from "@/lib/queries-client";
 import Link from "next/link";
+import { gerarParcelas } from "@/actions/contratos";
 
 export default function Contratos({}) {
     const [unidades, setUnidades] = useState([])
@@ -51,14 +53,11 @@ export default function Contratos({}) {
         e.preventDefault()
         const { data, error } = await supabase.from('contratos').insert(form).select().single()
         if (!error) {
-            const { errorUpdateUnidade } = await supabase.from('unidades').update({status:"alugada"}).eq("id",form.unidade_id)
+            const { error: errorUpdateUnidade } = await supabase.from('unidades').update({status:"alugada"}).eq("id",form.unidade_id)
             if (!errorUpdateUnidade){
                 setContratos(await getContratos())
                 setUnidades(await getUnidades())
-                const { dataFunction, errorFunction } = await supabaseJWT.functions.invoke('gerar-parcelas', {
-                    body: { contrato_id: data.id },
-                    headers: { Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_SUPABASE_JWT}
-                })
+                const result = await gerarParcelas(data.id)
                 resetForm()
             }
         }
