@@ -20,8 +20,8 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 | --- | --- | --- | --- |
 | F2-S0 ✅ | Landing Page estática (`/app/page.js`) | Nenhum — autônomo | ~5-6h |
 | F2-S1 ✅ | Listagem pública de Unidades (`/unidades`) | Server Component público, filtro por status | ~1h |
-| F2-S2 | Realtime na listagem pública | Supabase Realtime, websockets, channels | ~2h |
-| F2-S3 | Dashboard do Proprietário | Queries agregadas, cards de resumo | ~2h |
+| F2-S2 ✅ | Realtime na listagem pública | Supabase Realtime, websockets, channels | ~2h |
+| F2-S3 ✅ | Dashboard do Proprietário | Queries agregadas, cards de resumo | ~2h |
 | F2-S3.5 ✅ | Correções críticas de segurança e bugs | `import 'server-only'`, Server Actions, destructuring | ~3h |
 | F2-S4 | Revisão, testes e limpeza de código morto | Nenhum — consolidação | ~1.5h |
 
@@ -86,16 +86,28 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 **Entregavel:** A página `/unidades` escuta alterações em tempo real na tabela `unidades` via Supabase Realtime. Quando uma unidade passa para `alugada`, ela desaparece da listagem instantaneamente.
 
+**Status: Concluído.**
+
+**Entregue em `src/hooks/useUnidadesRealtime.js` + `src/app/unidades/page.js`:**
+- `page.js` convertido para Client Component (`"use client"`)
+- Lógica de Realtime extraída para hook customizado `useUnidadesRealtime`
+- Fetch inicial via `getUnidadesDisponiveis()` dentro de `useEffect`
+- Subscription `postgres_changes` em todos os eventos (`*`) na tabela `unidades`
+- `applyEvent()` trata INSERT/UPDATE/DELETE localmente; INSERT/UPDATE com join fazem refetch completo
+- Fallback: `CHANNEL_ERROR` / `TIMED_OUT` → `refetchAll()`
+- Cleanup via `supabase.removeChannel(channel)` + flag `cancelled`
+- Limitação documentada em CLAUDE.md: `disponivel → alugada` não propaga (RLS descarta NEW row)
+
 **Tarefas:**
 
-- [ ]  Converter `/app/unidades/page.js` de Server Component para Client Component (`"use client"`)
-- [ ]  Migrar o fetch inicial para `useEffect` com `useState` para a lista
-- [ ]  Configurar subscription Realtime: `supabase.channel('unidades').on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'unidades' }, callback)`
-- [ ]  No callback: filtrar a lista local removendo unidades que mudaram para `alugada`
-- [ ]  Fazer cleanup da subscription no return do `useEffect`
-- [ ]  Habilitar Realtime na tabela `unidades` no dashboard do Supabase (requisição necessária)
-- [ ]  Testar: criar um Contrato no dashboard e observar a unidade sumir da listagem pública
-- [ ]  Commit das alterações
+- [x]  Converter `/app/unidades/page.js` de Server Component para Client Component (`"use client"`)
+- [x]  Migrar o fetch inicial para `useEffect` com `useState` para a lista
+- [x]  Configurar subscription Realtime: `supabase.channel('public:unidades').on('postgres_changes', { event: '*', schema: 'public', table: 'unidades' }, callback)`
+- [x]  No callback: filtrar a lista local removendo unidades que mudaram para `alugada`
+- [x]  Fazer cleanup da subscription no return do `useEffect`
+- [x]  Habilitar Realtime na tabela `unidades` no dashboard do Supabase (requisição necessária)
+- [x]  Testar: criar um Contrato no dashboard e observar a unidade sumir da listagem pública
+- [x]  Commit das alterações
 
 **Conceitos novos:**
 
@@ -114,6 +126,14 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 **Objetivo:** Criar uma tela de visão geral no dashboard com métricas resumidas do sistema para o Proprietário.
 
 **Entregavel:** Página `/dashboard` (ou seção da página existente) com cards exibindo: total de edifícios, total de unidades (alugadas vs disponíveis), total de contratos ativos, parcelas vencidas pendentes e parcelas pagas no mês.
+
+**Status: Concluído.**
+
+**Entregue em `src/app/dashboard/page.js` + `src/lib/queries-client.js`:**
+- `getMetricas()` em `queries-client.js` agrega 5 métricas via `countRegistros()` (helper interno)
+- Métricas: unidades disponíveis, unidades alugadas, contratos ativos, parcelas pendentes, parcelas vencidas
+- Dashboard fetcha e exibe as métricas no `useEffect`
+- UI básica funcional (polimento visual adiado para F2-S4/F3)
 
 **Tarefas:**
 

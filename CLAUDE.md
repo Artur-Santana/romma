@@ -1,262 +1,96 @@
 # CLAUDE.md — Romma
 
-Context for Claude Code in this codebase.
+**Romma** = sistema de aluguel corporativo (TCC). Proprietário ↔ Locatário. Ciclo: listagem pública de Unidades → Contratos → Parcelas.
 
 ---
 
-## Project Overview
+## Stack
 
-**Romma** = corporate space rental system, undergraduate thesis (TCC). Connects Proprietários (owners) with Locatários (tenants) renting commercial spaces. Manages full lease lifecycle: public unit listings → contracts → installment tracking.
+Next.js 16 App Router (JS, sem TS) · Tailwind v4 · shadcn/ui · Supabase (Postgres + Auth + RLS + Edge Functions Deno) · Turbopack · Vercel
+
+> **Next.js 16** quebra muitas convenções de versões anteriores — não use conhecimento de versões anteriores.
 
 ---
 
-## Tech Stack
+## Terminologia (nunca use sinônimos)
 
-| Layer | Technology |
+| Conceito | Termo |
 |---|---|
-| Framework | Next.js 16 (App Router) |      // IMPORTANT: TROW EVERY PRIOR KNOLEGDGE ABOU NEXT. NEXT 16 INTRODUCED A LOT OF BREAKING PRIOR VERSIONS FEATURES!!
-| Language | JavaScript (no TypeScript) |
-| Styling | Tailwind CSS v4 |
-| UI Components | shadcn/ui |
-| Database | Supabase (PostgreSQL) |
-| Auth | Supabase Auth |
-| Row-Level Security | Supabase RLS (per-operation policies) |
-| Edge Functions | Supabase Edge Functions (Deno/TypeScript) |
-| Dev server | Turbopack (`next dev --turbopack`) |
-| Deployment | Vercel |
+| Dono do espaço | **Proprietário** (único por instância) |
+| Inquilino | **Locatário** |
+| Prédio | **Edifício** |
+| Espaço alugável | **Unidade** |
+| Contrato de locação | **Contrato** |
+| Pagamento mensal | **Parcela** |
 
 ---
 
-## Project Structure
+## Schema (colunas id/created_at implícitas em todas tabelas)
 
-```
-src/
-  app/
-    layout.js                        # Root layout
-    globals.css                      # Global styles (Tailwind v4)
-    page.js                          # Landing page (public, /)
-    login/
-      page.js                        # Login page
-    dashboard/
-      page.js                        # Dashboard home (Proprietário)
-      unidades/
-        page.js                      # Unit management
-      locatarios/
-        page.js                      # Tenant management
-      contratos/
-        page.js                      # Contract management
-        [id]/
-          page.js                    # Parcelas detail page (dynamic route)
-  components/
-    features/
-      GestaoEdificios.js             # Buildings CRUD feature component
-      Unidades.js                    # Units CRUD feature component
-      Locatarios.js                  # Tenants CRUD feature component
-      Contratos.js                   # Contracts CRUD feature component
-      Parcelas.js                    # Parcelas listing and payment marking
-    ui/
-      EdificioCard.js                # Building card (view/edit modes)
-      UnidadeCard.js                 # Unit card (view/edit modes)
-  actions/
-    locatarios.js                    # Server Actions for tenant operations
-  lib/
-    supabase.js                      # Supabase client (anon key, singleton)
-    supabase-browser.js              # Supabase browser client
-    supabase-server.js               # Supabase server client
-    supabaseAdmin.js                 # Supabase admin client (service role, server-only)
-    supabaseJWT.js                   # Supabase client with legacy JWT (Edge Function calls only)
-    queries.js                       # Centralized pure query functions (no hooks, no state)
+**edificios:** `nome`, `endereco`
 
-supabase/
-  config.toml
-  functions/
-    gerar-parcelas/
-      index.ts                       # Edge Function: generates all installments for a contract
-```
+**unidades:** `edificio_id` (FK), `nome`, `descricao`, `area_m2`, `valor_mensal`, `valor_visivel` (BOOLEAN — false → exibir "Consulte o Proprietário"), `status` ENUM(`disponivel`, `alugada`)
+
+**locatarios:** `usuario_id` (FK Auth), `nome_razao_social`, `tipo` ENUM(`pf`,`pj`), `documento` (CPF/CNPJ só dígitos), `email`, `telefone`
+
+**contratos:** `unidade_id` (FK), `locatario_id` (FK), `data_inicio`, `data_fim`, `status` ENUM(`ativo`,`encerrado`,`cancelado`), `observacoes`
+- Constraint: no máx 1 contrato `ativo` por `unidade_id` (partial unique index)
+
+**parcelas:** `contrato_id` (FK), `numero` (INT sequencial), `data_fechamento`, `data_vencimento` (fechamento+7d), `data_pagamento` (nullable), `status` ENUM(`futura`,`pendente`,`paga`,`vencida`)
 
 ---
 
-## Standardized Terminology
+## Regras de Negócio
 
-Terms used consistently across code, UI, docs. Never use synonyms.
+**Status Unidade:** `alugada` ao criar contrato `ativo`; volta `disponivel` ao encerrar/cancelar. Ambas transições no frontend.
 
-| Concept | Portuguese Term | Notes |
-|---|---|---|
-| Building owner | **Proprietário** | Single user per instance |
-| Tenant | **Locatário** | Company or individual renting a unit |
-| Building | **Edifício** | Main physical structure |
-| Rentable space | **Unidade** | Any space offered for rent (floor, room, etc.) |
-| Lease | **Contrato** | Formal agreement between Proprietário and Locatário |
-| Monthly installment | **Parcela** | Each monthly payment within a Contrato |
+**Geração de Parcelas** (via Edge Function `gerar-parcelas`, atômica):
+- Parcela 1: se `data_inicio + 7d` mesmo mês → `fechamento = data_inicio`, `vencimento = +7d`. Se mês diferente → `fechamento = dia 1 mês seguinte`, `vencimento = +7d`.
+- Parcelas 2+: `fechamento = dia 1` de cada mês subsequente. Todas criadas como `futura`.
+- Status date-driven: `futura → pendente` quando `fechamento <= hoje`; `pendente → vencida` quando `vencimento < hoje` e não paga.
 
----
+**Invite Locatário:** `inviteUserByEmail` via Server Action (admin API). Nunca importar `supabaseAdmin` em client components.
 
-## Database Schema
-
-### `edificios`
-| Column | Type | Notes |
-|---|---|---|
-| id | UUID | PK |
-| nome | TEXT | |
-| endereco | TEXT | |
-| created_at | TIMESTAMP | |
-
-### `unidades`
-| Column | Type | Notes |
-|---|---|---|
-| id | UUID | PK |
-| edificio_id | UUID | FK → edificios |
-| nome | TEXT | e.g. "Andar 3", "Sala 301" |
-| descricao | TEXT | |
-| area_m2 | NUMERIC | |
-| valor_mensal | NUMERIC | |
-| valor_visivel | BOOLEAN | If false, show "Consulte o Proprietário" publicly |
-| status | ENUM | `disponivel`, `alugada` |
-| created_at | TIMESTAMP | |
-
-### `locatarios`
-| Column | Type | Notes |
-|---|---|---|
-| id | UUID | PK |
-| usuario_id | UUID | FK → Supabase Auth users |
-| nome_razao_social | TEXT | |
-| tipo | ENUM | `pf`, `pj` |
-| documento | TEXT | CPF or CNPJ, digits only |
-| email | TEXT | Contact email (may differ from login) |
-| telefone | TEXT | |
-| created_at | TIMESTAMP | |
-
-### `contratos`
-| Column | Type | Notes |
-|---|---|---|
-| id | UUID | PK |
-| unidade_id | UUID | FK → unidades |
-| locatario_id | UUID | FK → locatarios |
-| data_inicio | DATE | |
-| data_fim | DATE | |
-| status | ENUM (`status_contrato`) | `ativo`, `encerrado`, `cancelado` |
-| observacoes | TEXT | |
-| created_at | TIMESTAMP | |
-
-Constraint: partial unique index — one `ativo` contract per `unidade_id` max.
-
-### `parcelas`
-| Column | Type | Notes |
-|---|---|---|
-| id | UUID | PK |
-| contrato_id | UUID | FK → contratos |
-| numero | INTEGER | Sequential number (1, 2, 3...) |
-| data_fechamento | DATE | Date installment becomes visible |
-| data_vencimento | DATE | 7 days after data_fechamento |
-| data_pagamento | DATE | Nullable, set when marked paid |
-| status | ENUM (`status_parcela`) | `futura`, `pendente`, `paga`, `vencida` |
-| created_at | TIMESTAMP | |
+**Realtime — limitação conhecida:** `disponivel → alugada` não propaga em tempo real (RLS descarta evento). Card some só no refresh. Reversas/INSERT/DELETE funcionam.
 
 ---
 
-## Business Rules
+## Clientes Supabase
 
-### Unit status
-- Unit status → `alugada` when `ativo` contract created.
-- Reverts to `disponivel` when contract `encerrado` or `cancelado`.
-- Both transitions handled in frontend at contract creation/deletion.
-
-### Contract constraints
-- One `ativo` contract per unit (enforced by partial unique index in DB).
-- `valor_mensal` always from unit — no separate value field in contract.
-
-### Parcela generation rules
-- All parcelas generated atomically at contract creation via `gerar-parcelas` Edge Function.
-- **Parcela 1:** If `data_inicio + 7 days` same month as `data_inicio` → `data_fechamento` = `data_inicio`, `data_vencimento` = `data_inicio + 7 days`. If different month → `data_fechamento` = 1st of following month, `data_vencimento` = `data_fechamento + 7 days`.
-- **Parcelas 2+:** `data_fechamento` = 1st of each subsequent month after parcela 1's `data_fechamento`. `data_vencimento` = `data_fechamento + 7 days`.
-- All parcelas created with status `futura`.
-- Status transitions date-driven: `futura` → `pendente` when `data_fechamento <= today`; `pendente` → `vencida` when `data_vencimento < today` and unpaid.
-
-### Tenant invite flow
-- Proprietário registers tenant email. Supabase sends magic link via `inviteUserByEmail` (admin API).
-- Must run server-side via Next.js Server Action — never import `supabaseAdmin` in client components.
-
-### Realtime — known limitation
-Subscription em `/unidades` usa `postgres_changes` com RLS anon `status = 'disponivel'`. Transições `disponivel → alugada` não são propagadas em tempo real (Realtime descarta evento porque NEW row falha RLS). Card só some em refresh. Transições reversas, INSERT e DELETE funcionam normalmente.
-
----
-
-## Code Conventions
-
-### Supabase clients — use the right one for the right context
-
-| File | Key used | When to use |
+| Arquivo | Chave | Uso |
 |---|---|---|
-| `lib/supabase.js` | anon key | General client-side queries |
-| `lib/supabase-browser.js` | anon key | Browser-specific client |
-| `lib/supabase-server.js` | anon key | Server Components / Server Actions |
-| `lib/supabaseAdmin.js` | service role key | Admin operations (invite, bypass RLS) — **server-only** |
-| `lib/supabaseJWT.js` | legacy JWT | Calling Edge Functions via `functions.invoke()` only |
-
-Never import `supabaseAdmin` or `supabaseJWT` in client components — server-only env vars.
-
-### Query centralization
-All Supabase read queries in `src/lib/queries.js` — pure functions, no hooks, no state. Example: `getEdificios()`, `getUnidades()`, `getLocatarios()`, `getContratos()`. Pages call inside `useEffect`.
-
-### Form state pattern
-Use single object for form/edit state, not separate `useState` per field:
-
-```js
-// Correct
-const [editForm, setEditForm] = useState({ nome: '', endereco: '' })
-setEditForm({ ...editForm, nome: value })
-
-// Avoid
-const [nome, setNome] = useState('')
-const [endereco, setEndereco] = useState('')
-```
-
-### Reset pattern
-Extract form reset as named function, not inline:
-
-```js
-function resetForm() {
-  setForm({ nome: '', endereco: '' })
-  setEditandoId(null)
-}
-```
-
-### RLS policies
-Policies per-operation. Missing policy for one op (SELECT / INSERT / UPDATE / DELETE) → 403 for that op only. Verify all four when debugging permission errors.
-
-### Server Actions
-In `src/actions/`. Return `{ status: 200 }` on success or `{ status: 500, erroMessage: '...' }` on failure.
-
-### Commits
-Uses `vivaxy.vscode-conventional-commits` VSCode extension. Provide type, scope, gitmoji, description as separate fields.
+| `lib/supabase.js` | anon | queries client-side gerais |
+| `lib/supabase-browser.js` | anon | browser-specific |
+| `lib/supabase-server.js` | anon | Server Components / Server Actions |
+| `lib/supabaseAdmin.js` | service role | admin/bypass RLS — **server-only** |
+| `lib/supabaseJWT.js` | legacy JWT | `functions.invoke()` apenas |
 
 ---
 
-## Edge Functions
+## Convenções de Código
 
-### `gerar-parcelas`
-- **Location:** `supabase/functions/gerar-parcelas/index.ts`
-- **Runtime:** Deno (TypeScript)
-- **Trigger:** Called from frontend after contract inserted.
-- **Input:** `{ contrato_id: string }` via POST body.
-- **Responsibility:** Fetch contract, calculate all parcelas for full duration, insert atomically.
-- **Auth:** Legacy Supabase JWT (`eyJ...`) via Authorization header. Called via `supabase.functions.invoke()` using `supabaseJWT` client.
-- **CORS:** Full CORS headers + preflight OPTIONS handler.
+- Queries Supabase centralizadas em `src/lib/queries.js` — funções puras, sem hooks/state. Chamadas em `useEffect`.
+- Form state: objeto único, não `useState` por campo.
+- Reset de form: função nomeada, não inline.
+- RLS: políticas por operação (SELECT/INSERT/UPDATE/DELETE). Falta de uma → 403 só nessa op.
+- Server Actions em `src/actions/`. Retornam `{ status: 200 }` ou `{ status: 500, erroMessage: '...' }`.
+- Commits via extensão `vivaxy.vscode-conventional-commits` (type, scope, gitmoji, descrição).
 
 ---
 
-## Environment Variables
+## Edge Function: `gerar-parcelas`
+
+`supabase/functions/gerar-parcelas/index.ts` · Deno · POST `{ contrato_id }` · Auth: legacy JWT via header · chamada com `supabaseJWT` client · CORS completo.
+
+---
+
+## Env Vars
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_JWT=                    # Legacy JWT for Edge Function auth — server-only, never expose with NEXT_PUBLIC_
-SUPABASE_ROLE_KEY=               # Server-only, never exposed to client
+SUPABASE_JWT=        # server-only, Edge Functions
+SUPABASE_ROLE_KEY=   # server-only, admin
 ```
 
----
-
-## Supabase Project
-
-- **Project ID:** `vfymttcajeyhrmsyhrtj`
-- **URL:** `https://vfymttcajeyhrmsyhrtj.supabase.co`
+**Supabase Project:** `vfymttcajeyhrmsyhrtj` · `https://vfymttcajeyhrmsyhrtj.supabase.co`
