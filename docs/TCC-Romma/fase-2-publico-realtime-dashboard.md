@@ -23,7 +23,7 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 | F2-S2 ✅ | Realtime na listagem pública | Supabase Realtime, websockets, channels | ~2h |
 | F2-S3 ✅ | Dashboard do Proprietário | Queries agregadas, cards de resumo | ~2h |
 | F2-S3.5 ✅ | Correções críticas de segurança e bugs | `import 'server-only'`, Server Actions, destructuring | ~3h |
-| F2-S4 | Revisão, testes e limpeza de código morto | Nenhum — consolidação | ~1.5h |
+| F2-S4 ✅ | Revisão, testes e limpeza de código morto | Nenhum — consolidação | ~1.5h |
 
 **Total sessões guiadas: ~9.5h. LP autônoma: ~5-6h (paralela).**
 
@@ -211,20 +211,19 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 **Tarefas:**
 
-- [ ]  Testar fluxo completo: abrir `/unidades` em uma aba, criar Contrato no dashboard em outra, observar unidade desaparecer em tempo real
-- [ ]  Verificar que `/unidades` é acessível sem login
-- [ ]  Verificar que o Dashboard só é acessível com login
-- [ ]  Corrigir bugs encontrados
+- [x]  Testar fluxo completo: abrir `/unidades` em uma aba, criar Contrato no dashboard em outra, observar unidade desaparecer em tempo real
+- [x]  Verificar que `/unidades` é acessível sem login
+- [x]  Verificar que o Dashboard só é acessível com login
+- [x]  Corrigir bugs encontrados
 
 **Limpeza de código morto (identificado na revisão de código):**
-- [ ]  Remover `src/app/login/guia.js` e `src/app/dashboard/guia.js` (duplicatas de `page.js`, nunca importadas)
-- [ ]  Remover `src/components/ShinyText.jsx` (export morto, nunca importado em nenhum arquivo)
-- [ ]  Remover `src/lib/supabase-browser.js` e `src/lib/supabase-server.js` (nunca importados)
-- [ ]  Remover `src/components/ui/button.jsx` (scaffold shadcn/ui nunca utilizado)
-- [ ]  Remover dependência `@remixicon/react` do `package.json` (nunca importada em `src/`)
-- [ ]  Remover dependência `motion` do `package.json` (usada apenas pelo ShinyText removido)
-- [ ]  Mover `shadcn` de `dependencies` para `devDependencies` no `package.json` (é ferramenta CLI, não runtime)
-- [ ]  Atualizar `CLAUDE.md` removendo referências aos arquivos deletados da seção Project Structure
+- [x]  Remover `src/app/dashboard/guia.js` (duplicata de `page.js`, nunca importada) — `login/guia.js` não existia
+- [x]  Remover `src/components/ShinyText.jsx` (export morto, nunca importado)
+- [x]  Manter `src/lib/supabase-browser.js` e `src/lib/supabase-server.js` — ativamente importados (doc estava desatualizado)
+- [x]  Remover `src/components/ui/button.jsx` (scaffold shadcn/ui nunca utilizado)
+- [x]  Remover dependência `@remixicon/react` do `package.json`
+- [x]  Remover dependência `motion` do `package.json`
+- [x]  Mover `shadcn` de `dependencies` para `devDependencies`
 
 - [ ]  Atualizar Notion com sessões concluídas
 - [ ]  Commit final de revisão
