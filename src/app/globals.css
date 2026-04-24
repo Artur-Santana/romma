@@ -77,6 +77,18 @@
   --sidebar-accent-foreground: oklch(from var(--ds-background) calc(l + 0.7) 0 0);
   --sidebar-border:            oklch(from var(--ds-background) calc(l + 0.08) 0 0);
   --sidebar-ring:              oklch(from var(--ds-primary) l c h);
+
+  /* ── Sign In page ────────────────────────────────────────────────────────  */
+  --primary-glow:        oklch(from var(--ds-primary) l c h / 0.4);
+  --primary-accent:      oklch(from var(--ds-primary) calc(l + 0.2) c h);
+  --primary-accent-glow: oklch(from var(--ds-primary) calc(l + 0.31) c h / 0.4);
+  --fg-2:          oklch(from var(--ds-background) calc(l + 0.55) 0 0);
+  --fg-3:          oklch(from var(--ds-background) calc(l + 0.45) 0 0);
+  --fg-ghost:      oklch(from var(--ds-background) calc(l + 0.06) 0 0);
+  --danger-fg:     oklch(0.826 0.073 22.5);
+  --success:       oklch(0.696 0.17 162.5);
+  --font-mono:     var(--font-headline-hanken);
+  --ease-crisp:    cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Design dark-only: .dark espelha :root — os --ds-* já definem o tema escuro */
@@ -141,4 +153,9 @@
   html {
     @apply font-sans;
   }
+}
+
+@keyframes loadingBar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
 }
