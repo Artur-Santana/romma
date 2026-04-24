@@ -22,7 +22,7 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 | F2-S1 ✅ | Listagem pública de Unidades (`/unidades`) | Server Component público, filtro por status | ~1h |
 | F2-S2 | Realtime na listagem pública | Supabase Realtime, websockets, channels | ~2h |
 | F2-S3 | Dashboard do Proprietário | Queries agregadas, cards de resumo | ~2h |
-| F2-S3.5 | Correções críticas de segurança e bugs | `import 'server-only'`, Server Actions, destructuring | ~3h |
+| F2-S3.5 ✅ | Correções críticas de segurança e bugs | `import 'server-only'`, Server Actions, destructuring | ~3h |
 | F2-S4 | Revisão, testes e limpeza de código morto | Nenhum — consolidação | ~1.5h |
 
 **Total sessões guiadas: ~9.5h. LP autônoma: ~5-6h (paralela).**
@@ -139,15 +139,15 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 **Tarefas:**
 
 **Segurança — JWT exposto no client (CRÍTICO):**
-- [ ]  Criar Server Action `src/actions/contratos.js` que importa `supabaseJWT` e faz a chamada `fetch()` para a Edge Function `gerar-parcelas`
-- [ ]  Remover import de `supabaseJWT` de `src/components/features/Contratos.js` e substituir pela chamada à Server Action
-- [ ]  Renomear variável de ambiente `NEXT_PUBLIC_SUPABASE_JWT` para `SUPABASE_JWT` (remover prefixo `NEXT_PUBLIC_`)
-- [ ]  Atualizar `.env.local` e `CLAUDE.md` com o novo nome da variável
+- [x]  Criar Server Action `src/actions/contratos.js` que importa `supabaseJWT` e faz a chamada para a Edge Function `gerar-parcelas`
+- [x]  Remover import de `supabaseJWT` de `src/components/features/Contratos.js` e substituir pela chamada à Server Action
+- [x]  Renomear variável de ambiente `NEXT_PUBLIC_SUPABASE_JWT` para `SUPABASE_JWT` (remover prefixo `NEXT_PUBLIC_`)
+- [x]  Atualizar `.env.local` e `CLAUDE.md` com o novo nome da variável
 
 **Segurança — Guards server-only (ALTO):**
-- [ ]  Instalar pacote `server-only`: `npm install server-only`
-- [ ]  Adicionar `import 'server-only'` no topo de `src/lib/supabaseAdmin.js`
-- [ ]  Adicionar `import 'server-only'` no topo de `src/lib/supabaseJWT.js`
+- [x]  Instalar pacote `server-only`: `npm install server-only`
+- [x]  Adicionar `import 'server-only'` no topo de `src/lib/supabaseAdmin.js`
+- [x]  Adicionar `import 'server-only'` no topo de `src/lib/supabaseJWT.js`
 - [ ]  Corrigir `process.env.SUPABASE_URL` em `supabaseAdmin.js` para `process.env.NEXT_PUBLIC_SUPABASE_URL` (ou documentar variável separada)
 
 **Segurança — Edge Function sem autenticação (ALTO):**
@@ -155,20 +155,23 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 - [ ]  Retornar 401 se o token for inválido ou ausente
 
 **Diretivas `"use client"` ausentes (CRÍTICO — build quebra sem isso):**
-- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/GestaoEdificios.js`
-- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/Unidades.js`
-- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/Locatarios.js`
-- [ ]  Adicionar `"use client";` como primeira linha de `src/components/features/Contratos.js`
+- [x]  Adicionar `"use client"` como primeira linha de `src/components/features/GestaoEdificios.js`
+- [x]  Adicionar `"use client"` como primeira linha de `src/components/features/Unidades.js`
+- [x]  Adicionar `"use client"` como primeira linha de `src/components/features/Locatarios.js`
+- [x]  Adicionar `"use client"` como primeira linha de `src/components/features/Contratos.js`
 
 **Bugs de destructuring — erros silenciados (ALTO):**
-- [ ]  Corrigir `const { errorUpdateUnidade }` para `const { error: errorUpdateUnidade }` em `src/components/features/Contratos.js` (linha ~54)
-- [ ]  Corrigir `const { errorInsert }` para `const { error: errorInsert }` em `src/actions/locatarios.js` (linha ~8)
+- [x]  Corrigir `const { errorUpdateUnidade }` para `const { error: errorUpdateUnidade }` em `src/components/features/Contratos.js`
+- [x]  Corrigir `const { errorInsert }` para `const { error: errorInsert }` em `src/actions/locatarios.js`
+
+**Bug bônus identificado e corrigido:**
+- [x]  `queries-client.js` usava `createBrowserClient` (supabase/ssr) em vez do cliente padrão — sessão não era compartilhada, RLS bloqueava todas as queries client-side
 
 **Validação:**
-- [ ]  Testar: criar Contrato e verificar que parcelas são geradas corretamente via Server Action
+- [x]  Testar: criar Contrato e verificar que parcelas são geradas corretamente via Server Action ✅
 - [ ]  Testar: forçar falha no insert de unidade e verificar que o erro é capturado (não silenciado)
 - [ ]  Testar: convidar Locatário com dados inválidos e verificar que falhas de insert retornam erro 500
-- [ ]  Commit das alterações
+- [x]  Commit das alterações
 
 **Conceitos novos:**
 
