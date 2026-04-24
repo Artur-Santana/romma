@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { getUnidadesDisponiveis } from "@/lib/queries-client"
 
+// UPDATE → alugada nunca chega aqui: RLS anon filtra NEW row que não é 'disponivel'. Branch mantido caso policy seja ampliada.
 function applyEvent(state, event) {
     const { eventType, new: next, old } = event
 
