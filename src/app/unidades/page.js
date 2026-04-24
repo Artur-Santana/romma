@@ -1,10 +1,12 @@
+"use client"
+
 import Header from "@/components/ui/Header"
 import UnidadeCardPublico from "@/components/ui/UnidadeCardPublico"
 import Footer from "@/components/ui/Footer"
-import { getUnidadesDisponiveis } from "@/lib/queries-server"
+import { useUnidadesRealtime } from "@/hooks/useUnidadesRealtime"
 
-export default async function UnidadesPublicas() {
-    const unidades = await getUnidadesDisponiveis()
+export default function UnidadesPublicas() {
+    const { unidades, loading } = useUnidadesRealtime()
 
     return (
         <div className="bg-neutral min-h-screen">
@@ -20,7 +22,13 @@ export default async function UnidadesPublicas() {
                     </h1>
                 </div>
 
-                {!unidades || unidades.length === 0 ? (
+                {loading ? (
+                    <div className="flex items-center justify-center py-20">
+                        <p className="text-white/50 font-headline-hanken tracking-widest text-sm">
+                            Carregando unidades…
+                        </p>
+                    </div>
+                ) : !unidades || unidades.length === 0 ? (
                     <div className="flex items-center justify-center py-20">
                         <p className="text-white/50 font-headline-hanken tracking-widest text-sm">
                             Nenhuma unidade disponível no momento

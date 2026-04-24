@@ -176,6 +176,9 @@ Constraint: partial unique index — one `ativo` contract per `unidade_id` max.
 - Proprietário registers tenant email. Supabase sends magic link via `inviteUserByEmail` (admin API).
 - Must run server-side via Next.js Server Action — never import `supabaseAdmin` in client components.
 
+### Realtime — known limitation
+Subscription em `/unidades` usa `postgres_changes` com RLS anon `status = 'disponivel'`. Transições `disponivel → alugada` não são propagadas em tempo real (Realtime descarta evento porque NEW row falha RLS). Card só some em refresh. Transições reversas, INSERT e DELETE funcionam normalmente.
+
 ---
 
 ## Code Conventions
