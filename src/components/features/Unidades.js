@@ -17,6 +17,7 @@ export default function Unidades({}) {
   const [edificio_id, setEdificio_id] = useState("");
   const [listaEdificios, setListaEdificios] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
+  const [erro, setErro] = useState(null)
   const [nomeEdit, setNomeEdit] = useState("");
   const [descricaoEdit, setDescricaoEdit] = useState("");
   const [area_m2Edit, setArea_m2Edit] = useState("");
@@ -42,7 +43,10 @@ export default function Unidades({}) {
   async function handleDeletarUnidade(id) {
     const { error } = await supabase.from("unidades").delete().eq("id", id);
     if (!error) {
+      setErro(null)
       setUnidades(await getUnidades());
+    } else{
+      setErro(error.message)
     }
   }
 
@@ -59,8 +63,10 @@ export default function Unidades({}) {
       })
       .eq("id", editandoId);
     if (!error) {
-      setEditandoId(null);
+      setErro(null)
       setUnidades(await getUnidades());
+    } else{
+      setErro(error.message)
     }
   }
 
@@ -82,7 +88,10 @@ export default function Unidades({}) {
         edificio_id,
       });
     if (!error) {
+      setErro(null)
       setUnidades(await getUnidades());
+    } else{
+      setErro(error.message)
     }
   }
 
@@ -144,6 +153,8 @@ export default function Unidades({}) {
         ></input>
         <button type="submit">Enviar</button>
       </form>
+
+      {erro && <p>ERRO!: {erro}</p>}
       {unidades.map((unidade) => (
         <UnidadeCard
           key={unidade.id}

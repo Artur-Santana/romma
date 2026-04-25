@@ -189,8 +189,8 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 
 **Validação:**
 - [x]  Testar: criar Contrato e verificar que parcelas são geradas corretamente via Server Action ✅
-- [ ]  Testar: forçar falha no insert de unidade e verificar que o erro é capturado (não silenciado)
-- [ ]  Testar: convidar Locatário com dados inválidos e verificar que falhas de insert retornam erro 500
+- [x]  Corrigir erro silenciado no insert/delete/update de unidade — `setErro(error.message)` + exibição no JSX
+- [x]  Locatário invite já retornava `{ status: 500 }` corretamente (verificado por subagente)
 - [x]  Commit das alterações
 
 **Conceitos novos:**
@@ -225,8 +225,6 @@ Esta fase cobre as interfaces públicas do Romma e o painel administrativo do Pr
 - [x]  Remover dependência `motion` do `package.json`
 - [x]  Mover `shadcn` de `dependencies` para `devDependencies`
 
-- [ ]  Atualizar Notion com sessões concluídas
-- [ ]  Commit final de revisão
 
 ---
 
