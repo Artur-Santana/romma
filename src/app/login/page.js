@@ -314,10 +314,25 @@ function SignInForm() {
   // Available values: email, password, remember, supabase, router, emailRef
   async function handleSubmit(e) {
     e.preventDefault()
+    setStatus("loading")
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      setStatus("error")
+      return
+    }
+    setStatus("success")
+    router.push("/dashboard")
   }
 
   async function handleForgotPassword(e) {
     e.preventDefault()
+    if (!email) {
+      emailRef.current?.focus()
+      return
+    }
+    setStatus("reset_loading")
+    await supabase.auth.resetPasswordForEmail(email)
+    setStatus("reset_sent")
   }
 
   const isLoading = status === "loading" || status === "reset_loading"
