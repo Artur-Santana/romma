@@ -29,7 +29,7 @@ function LeftPanel() {
         src="/hero-building.png"
         alt="Edifício"
         fill
-        className="object-cover object-center [filter:grayscale(0.3)_contrast(1.1)_brightness(0.7)]"
+        className="object-cover object-center filter-[grayscale(0.3)_contrast(1.1)_brightness(0.7)]"
         priority
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.3)_0%,rgba(0,0,0,0.85)_100%)]" />
@@ -79,10 +79,10 @@ function ErrorBanner() {
         <span className="font-mono text-xs font-bold text-danger-fg">!</span>
       </div>
       <div>
-        <div className="text-xs font-bold tracking-[1.5px] uppercase text-danger-fg mb-1">
+        <div className="text-xs font-headline-hanken font-bold tracking-[1.5px] uppercase text-danger-fg mb-1">
           ERRO_AUTH · 401
         </div>
-        <div className="text-sm text-fg-2">
+        <div className="text-sm font-mono text-fg-2">
           Credenciais inválidas. Verifique e-mail e senha e tente novamente.
         </div>
       </div>
@@ -97,10 +97,10 @@ function ResetBanner() {
         <span className="font-mono text-xs font-bold text-success">✓</span>
       </div>
       <div>
-        <div className="text-xs font-bold tracking-[1.5px] uppercase text-success mb-1">
+        <div className="text-xs font-headline-hanken font-bold tracking-[1.5px] uppercase text-success mb-1">
           EMAIL_ENVIADO · 200
         </div>
-        <div className="text-sm text-fg-2">
+        <div className="text-sm font-mono text-fg-2">
           Verifique sua caixa de entrada para redefinir sua senha.
         </div>
       </div>
@@ -160,12 +160,6 @@ function SignInForm() {
   const emailRef = useRef(null)
   const router = useRouter()
 
-  // TODO(human): implement handleSubmit and handleForgotPassword below.
-  // handleSubmit: empty → loading → success (router.push("/dashboard")) or error
-  // handleForgotPassword: if !email focus emailRef and return; reset_loading → reset_sent
-  // Both functions receive the synthetic event as first argument (call e.preventDefault()).
-  // Available state setters: setStatus, setEmail, setPassword
-  // Available values: email, password, remember, supabase, router, emailRef
   async function handleSubmit(e) {
     e.preventDefault()
     setStatus("loading")
@@ -175,6 +169,7 @@ function SignInForm() {
       return
     }
     setStatus("success")
+    await new Promise(resolve => setTimeout(resolve, 500))
     router.push("/dashboard")
   }
 
