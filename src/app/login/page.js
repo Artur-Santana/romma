@@ -3,8 +3,10 @@
 import Image from "next/image"
 import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import supabase from "@/lib/supabase"
+import { createClient } from '@/lib/supabase-browser'
 import { cn } from "@/lib/utils"
+
+const supabase = createClient()
 
 function TopStrip() {
   return (
