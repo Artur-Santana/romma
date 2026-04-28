@@ -83,11 +83,11 @@ Crie um arquivo `.env.local` na raiz do projeto:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_SUPABASE_JWT=
-SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_JWT=
+SUPABASE_ROLE_KEY=
 ```
 
-`NEXT_PUBLIC_SUPABASE_JWT` é o JWT legado necessário para autenticar chamadas às Edge Functions. `SUPABASE_SERVICE_ROLE_KEY` é server-only — nunca exposto ao client.
+`SUPABASE_JWT` é o JWT legado necessário para autenticar chamadas às Edge Functions. `SUPABASE_ROLE_KEY` é server-only — nunca exposto ao client.
 
 ### Instalação
 
