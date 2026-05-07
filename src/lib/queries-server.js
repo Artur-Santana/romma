@@ -66,5 +66,5 @@ export async function getUnidadesDisponiveis() {
         .from('unidades')
         .select('id, nome, area_m2, valor_mensal, valor_visivel, edificios(nome)')
         .eq('status', 'disponivel')
-    return data
+    return data?.map(u => u.valor_visivel ? u : { ...u, valor_mensal: null }) ?? []
 }

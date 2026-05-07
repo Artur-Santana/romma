@@ -10,6 +10,10 @@ Next.js 16 App Router (JS, sem TS) · Tailwind v4 · shadcn/ui · Supabase (Post
 
 > **Next.js 16** quebra muitas convenções de versões anteriores — não use conhecimento de versões anteriores.
 
+**Next.js 16 — mudanças críticas vs versões anteriores:**
+- `middleware.js` renomeado para **`proxy.js`** (Node.js runtime, não Edge). Arquivo correto: `src/proxy.js`. Nunca criar `middleware.js`.
+- App Router com Server Components por padrão — qualquer componente com hooks/eventos precisa de `'use client'`.
+
 ---
 
 ## Terminologia (nunca use sinônimos)
@@ -69,7 +73,7 @@ Next.js 16 App Router (JS, sem TS) · Tailwind v4 · shadcn/ui · Supabase (Post
 
 ## Convenções de Código
 
-- Queries Supabase centralizadas em `src/lib/queries.js` — funções puras, sem hooks/state. Chamadas em `useEffect`.
+- Queries Supabase centralizadas em `src/lib/queries-client.js` (browser) e `src/lib/queries-server.js` (Server Components/Actions) — funções puras, sem hooks/state. Chamadas em `useEffect` ou Server Actions.
 - Form state: objeto único, não `useState` por campo.
 - Reset de form: função nomeada, não inline.
 - RLS: políticas por operação (SELECT/INSERT/UPDATE/DELETE). Falta de uma → 403 só nessa op.
