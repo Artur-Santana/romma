@@ -1,34 +1,37 @@
 import { createServerClient } from '@supabase/ssr'
-  import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-  export async function proxy(request) {
-    const response = NextResponse.next({ request })
+export async function proxy(request) {
+  let response = NextResponse.next({ request })
 
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      {
-        cookies: {
-          getAll: () => request.cookies.getAll(),
-          setAll: (cookies) => {
-            cookies.forEach(({ name, value, options }) => {
-              response.cookies.set(name, value, options)
-            })
-          },
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
         },
-      }
-    )
-
-    const { data: { session } } = await supabase.auth.getSession()
-    const pathname = request.nextUrl.pathname
-
-    if (pathname.startsWith('/dashboard') && !session) {
-      return NextResponse.redirect(new URL('/login', request.url))  
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          response = NextResponse.next({ request })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          )
+        },
+      },
     }
+  )
 
-    return response
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  export const config = {
-    matcher: ['/dashboard/:path*'],  // não sei esse ultimo 
-  }
+  return response
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*'],
+}
