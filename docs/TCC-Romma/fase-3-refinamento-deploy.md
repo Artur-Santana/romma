@@ -42,7 +42,7 @@ Fase final antes da apresentação para a banca. Não adiciona funcionalidades �
 
 **Tarefas — Eixo Auth & Rotas:**
 
-- [x]  **C2.1** — Criar `src/proxy.js` (middleware Next.js 16) usando `supabase-server.js`: validar sessão antes de renderizar qualquer rota `dashboard/**`. Redirect para `/login` se ausente.
+- [x]  **C2.1** — Criar `src/proxy.js` (middleware Next.js 16) usando `supabase-server.js`: validar sessão antes de renderizar qualquer rota `dashboard/**`. Redirect para `/login` se ausente. *(Patch pós-deploy: substituído `getSession()` por `getUser()` e corrigido handler `setAll` para recriar `response` com cookies atualizados — padrão obrigatório de `@supabase/ssr`.)*
 - [x]  **C2.2** — Em `src/app/login/page.js`: trocar import de `src/lib/supabase.js` por `src/lib/supabase-browser.js` (`createBrowserClient` de `@supabase/ssr`). Sem isso, sessão fica em `localStorage` e `proxy.js` (que lê cookies) não a enxerga → loop de redirect.
 - [x]  **C2.3** — Criar `src/components/ui/HeaderDashboard.js` (client component com nav + logout) e `src/app/dashboard/layout.js` (aplica header em todas as rotas `/dashboard/**`). Remover handleLogout inline de `dashboard/page.js`. (Abordagem ajustada: header separado para dashboard em vez de condicional no header público.)
 
@@ -76,7 +76,7 @@ Fase final antes da apresentação para a banca. Não adiciona funcionalidades �
 - [ ]  Primeiro deploy; verificar build verde.
 - [ ]  Configurar Redirect URL do Supabase Auth para incluir domínio Vercel.
 - [ ]  Testar fluxo de login + invite Locatário em produção.
-- [ ]  **M1.1** — Restringir CORS da Edge Function `gerar-parcelas`: substituir `Access-Control-Allow-Origin: '*'` por allowlist (`https://<projeto>.vercel.app` + `http://localhost:3000` para dev).
+- [x]  **M1.1** — Restringir CORS da Edge Function `gerar-parcelas`: substituir `Access-Control-Allow-Origin: '*'` por allowlist (`https://<projeto>.vercel.app` + `http://localhost:3000` para dev).
 
 **Tarefas — Hardening (Altos):**
 
@@ -168,7 +168,7 @@ Fase final antes da apresentação para a banca. Não adiciona funcionalidades �
 
 **Tarefas — Baixos restantes:**
 
-- [ ]  **B1.1** — Trocar import de `src/lib/supabase.js` por `src/lib/supabase-browser.js` em Client Components que usam auth: `dashboard/page.js`, `Parcelas.js`, `Contratos.js` (login já corrigido em C2.2). Evita dessincronização entre abas.
+- [ ]  **B1.1** — Trocar import de `src/lib/supabase.js` por `src/lib/supabase-browser.js` em Client Components que usam auth: `dashboard/page.js`, `Parcelas.js`, `Contratos.js` (login já corrigido em C2.2). Evita dessincronização entre abas. *(Parcialmente feito: `unidades/page.js`, `locatarios/page.js`, `contratos/page.js`, `contratos/[id]/page.js` já migrados — instâncias duplas causavam redirect loop. Pendente: `dashboard/page.js`, `Parcelas.js`, `Contratos.js`.)*
 - [ ]  **B1.2** — Em `src/actions/contratos.js:13`, remover campo `message` do retorno de sucesso. CLAUDE.md define apenas `{ status: 200 }`.
 - [ ]  **B2.2** — Header com condicional de auth (já resolvido em C2.3 — apenas confirmar).
 - [ ]  **B6.1** — Adicionar comentário em `next.config.mjs` documentando `babel-plugin-react-compiler` + `reactCompiler: true` (top-level em Next 16, promovida de `experimental`).
