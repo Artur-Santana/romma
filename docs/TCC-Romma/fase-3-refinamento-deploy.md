@@ -71,9 +71,9 @@ Fase final antes da apresentação para a banca. Não adiciona funcionalidades �
 
 **Tarefas — Deploy:**
 
-- [ ]  Criar conta no Vercel (se ainda não tiver) e conectar repositório GitHub.
-- [ ]  Configurar variáveis no painel Vercel: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_JWT`, `SUPABASE_ROLE_KEY` (server-only, sem prefixo `NEXT_PUBLIC_`).
-- [ ]  Primeiro deploy; verificar build verde.
+- [x]  Criar conta no Vercel (se ainda não tiver) e conectar repositório GitHub.
+- [x]  Configurar variáveis no painel Vercel: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_JWT`, `SUPABASE_ROLE_KEY` (server-only, sem prefixo `NEXT_PUBLIC_`).
+- [x]  Primeiro deploy; verificar build verde. *(URL: https://romma-alpha.vercel.app)*
 - [ ]  Configurar Redirect URL do Supabase Auth para incluir domínio Vercel.
 - [ ]  Testar fluxo de login + invite Locatário em produção.
 - [x]  **M1.1** — Restringir CORS da Edge Function `gerar-parcelas`: substituir `Access-Control-Allow-Origin: '*'` por allowlist (`https://<projeto>.vercel.app` + `http://localhost:3000` para dev).
