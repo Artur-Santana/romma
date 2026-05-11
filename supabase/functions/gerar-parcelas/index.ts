@@ -94,10 +94,10 @@ Deno.serve(async (req) => {
       numero++
     }
 
-    // Insere todas as parcelas de uma vez
+    // Insere todas as parcelas de uma vez (upsert idempotente via unique index contrato_id+numero)
     const { error: insertError } = await supabase
       .from("parcelas")
-      .insert(parcelas)
+      .upsert(parcelas, { onConflict: 'contrato_id,numero', ignoreDuplicates: true })
 
     if (insertError) {
       return new Response(
@@ -112,8 +112,9 @@ Deno.serve(async (req) => {
     )
 
   } catch (err) {
+    console.error('[gerar-parcelas] erro interno:', err)
     return new Response(
-      JSON.stringify({ error: String(err) }),
+      JSON.stringify({ error: 'Erro interno ao gerar parcelas.' }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     )
   }

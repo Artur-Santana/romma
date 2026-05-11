@@ -55,3 +55,7 @@ code-review-plan.md
 
 #vscode
 .vscode
+
+# claude code
+.claude/agent-memory/
+.claude/worktrees/
