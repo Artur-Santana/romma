@@ -3,7 +3,8 @@
 import { use } from "react"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import supabase from "@/lib/supabase"
+import { createClient } from "@/lib/supabase-browser";
+const supabase = createClient();
 import Parcelas from "@/components/features/Parcelas"
 
 export default function ContratoDetalhePage({ params }) {
