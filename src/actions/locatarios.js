@@ -4,10 +4,15 @@ import supabaseAdmin from "@/lib/supabaseAdmin"
 import { createServer } from "@/lib/supabase-server"
 
 export async function convidarLocatario(email, nome_razao_social, documento, telefone, tipo) {
+    if (!email || !nome_razao_social || !documento || !telefone || !tipo) {
+        return { status: 400, erroMessage: 'Todos os campos são obrigatórios.' }
+    }
     const supabase = await createServer()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
-    const { data, error} = await supabaseAdmin.auth.admin.inviteUserByEmail(email)
+    const { data, error} = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+        redirectTo: `${process.env.SITE_URL}/dashboard`
+    })
     if (!error){
         const {error:errorInsert} = await supabaseAdmin.from('locatarios')
         .insert({
