@@ -39,3 +39,21 @@ export async function convidarLocatario(email, nome_razao_social, documento, tel
         }
     }
 }
+
+export async function editarLocatario(id, form) {
+    const supabase = await createServer()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
+    const { error } = await supabaseAdmin.from('locatarios').update(form).eq('id', id)
+    if (error) return { status: 500, erroMessage: error.message }
+    return { status: 200 }
+}
+
+export async function deletarLocatario(id) {
+    const supabase = await createServer()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
+    const { error } = await supabaseAdmin.from('locatarios').delete().eq('id', id)
+    if (error) return { status: 500, erroMessage: error.message }
+    return { status: 200 }
+}

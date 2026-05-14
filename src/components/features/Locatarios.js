@@ -1,9 +1,8 @@
 "use client"
 
-import supabase from "@/lib/supabase";
 import { useEffect } from "react";
 import { useState } from "react";
-import { convidarLocatario } from "@/actions/locatarios";
+import { convidarLocatario, editarLocatario, deletarLocatario } from "@/actions/locatarios";
 import { getLocatarios } from "@/lib/queries-client";
 
 export default function Locatarios({}) {
@@ -56,20 +55,17 @@ export default function Locatarios({}) {
     });
   }
 
-  async function handleSalvarLocatario(e) {
-    const { error } = await supabase
-      .from("locatarios")
-      .update(editForm)
-      .eq("id", editandoId);
-    if (!error) {
+  async function handleSalvarLocatario() {
+    const { status } = await editarLocatario(editandoId, editForm);
+    if (status === 200) {
       setEditandoId(null);
       setlocatarios(await getLocatarios());
     }
   }
 
   async function handleDeletarlocatario(id) {
-    const { error } = await supabase.from("locatarios").delete().eq("id", id);
-    if (!error) {
+    const { status } = await deletarLocatario(id);
+    if (status === 200) {
       setlocatarios(await getLocatarios());
     }
   }
@@ -128,7 +124,6 @@ export default function Locatarios({}) {
               ></input>
               <select
                 value={editForm.tipo}
-                defaultValue={editForm.tipo}
                 onChange={(e) =>
                   setEditForm({ ...editForm, tipo: e.target.value })
                 }
@@ -152,8 +147,8 @@ export default function Locatarios({}) {
                   setEditForm({ ...editForm, telefone: e.target.value })
                 }
               ></input>
-              <button onClick={handleSalvarLocatario}>Salvar</button>
-              <button onClick={() => setEditandoId(null)}>Cancelar</button>
+              <button onClick={handleSalvarLocatario} className="cursor-pointer px-3 py-1 bg-primary text-primary-foreground hover:bg-primary-hover transition-colors">Salvar</button>
+              <button onClick={() => setEditandoId(null)} className="cursor-pointer px-3 py-1 bg-secondary text-secondary-foreground hover:bg-muted transition-colors">Cancelar</button>
             </div>
           ) : (
             <div>
@@ -161,10 +156,10 @@ export default function Locatarios({}) {
               <p>{locatario.tipo}</p>
               <p>{locatario.documento}</p>
               <p>{locatario.email}</p>
-              <button onClick={() => handleDeletarlocatario(locatario.id)}>
+              <button onClick={() => handleDeletarlocatario(locatario.id)} className="cursor-pointer px-3 py-1 bg-destructive text-foreground hover:opacity-80 transition-opacity">
                 Deletar Locatario
               </button>
-              <button onClick={() => handleEditarLocatario(locatario)}>
+              <button onClick={() => handleEditarLocatario(locatario)} className="cursor-pointer px-3 py-1 bg-primary text-primary-foreground hover:bg-primary-hover transition-colors">
                 Editar
               </button>
             </div>
