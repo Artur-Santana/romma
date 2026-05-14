@@ -15,17 +15,18 @@ export default function Locatarios({}) {
   const [editandoId, setEditandoId] = useState(null);
   const [locatarios, setlocatarios] = useState([]);
   const [editForm, setEditForm] = useState({});
+  const [erroConvite, setErroConvite] = useState("");
 
   useEffect(() => {
     async function carregarLocatarios() {
-      setlocatarios(await getLocatarios());
+      setlocatarios(await getLocatarios() ?? []);
     }
     carregarLocatarios();
   }, []);
 
   async function handleConvidarLocatario(e) {
     e.preventDefault();
-    const { status } = await convidarLocatario(
+    const { status, erroMessage } = await convidarLocatario(
       email,
       nome_razao_social,
       documento,
@@ -33,7 +34,15 @@ export default function Locatarios({}) {
       tipo,
     );
     if (status == 200) {
-      setlocatarios(await getLocatarios());
+      setlocatarios(await getLocatarios() ?? []);
+      setNome_razao_social("");
+      setTipo("");
+      setDocumento("");
+      setEmail("");
+      setTelefone("");
+      setErroConvite("");
+    } else {
+      setErroConvite(erroMessage ?? "Erro ao enviar convite.");
     }
   }
 
@@ -103,6 +112,7 @@ export default function Locatarios({}) {
         ></input>
         <button type="submit">Enviar</button>
       </form>
+      {erroConvite && <p>{erroConvite}</p>}
       {locatarios.map((locatario) => (
         <div key={locatario.id}>
           {editandoId === locatario.id ? (
