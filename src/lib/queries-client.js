@@ -1,4 +1,6 @@
-import supabase from "@/lib/supabase"
+import { createClient } from "@/lib/supabase-browser"
+
+const supabase = createClient()
 
 export async function getUnidades() {
     const { data } = await supabase.from('unidades').select('id, edificio_id, nome, descricao, area_m2, valor_mensal, valor_visivel, status')
@@ -20,12 +22,11 @@ export async function getContratos() {
     return data
 }
 
-
 export async function countRegistros(tabela, coluna, valor) {
-    const { count } =  await supabase
-    .from(tabela)
-    .select('*', { count: 'exact', head: true})
-    .eq(coluna, valor)
+    const { count } = await supabase
+        .from(tabela)
+        .select('*', { count: 'exact', head: true})
+        .eq(coluna, valor)
     return count
 }
 

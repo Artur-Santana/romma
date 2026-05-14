@@ -23,9 +23,9 @@ export default function Contratos({}) {
 
     useEffect(() => {
         async function carregarDados() {
-            setUnidades(await getUnidades())
-            setLocatarios(await getLocatarios())
-            setContratos(await getContratos())
+            setUnidades(await getUnidades() ?? [])
+            setLocatarios(await getLocatarios() ?? [])
+            setContratos(await getContratos() ?? [])
         }
         carregarDados()
     }, [])
