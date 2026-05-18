@@ -48,10 +48,8 @@ export async function editarContrato(id, form) {
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-  const { status } = form
-  if (status && !STATUS_CONTRATO.includes(status)) return { status: 400, erroMessage: 'Status inválido.' }
-
   const { data_inicio, data_fim, status, observacoes } = form
+  if (status && !STATUS_CONTRATO.includes(status)) return { status: 400, erroMessage: 'Status inválido.' }
   const { error } = await supabaseAdmin.from('contratos').update({ data_inicio, data_fim, status, observacoes }).eq('id', id)
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
@@ -98,14 +96,11 @@ export async function gerarParcelas(contratoId) {
         headers: { Authorization: 'Bearer ' + session.access_token }
     })
     if (!error){
-        return {
-            status:200,
-            message: "parcelas criadas"
-        }
+        return { status: 200 }
     } else {
         return {
-            status:500,
-            erroMessage: error.message
+            status: 500,
+            erroMessage: error.message ?? 'Erro ao invocar função.'
         }
     }
 }
