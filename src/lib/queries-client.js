@@ -22,7 +22,16 @@ export async function getContratos() {
     return data
 }
 
+const ALLOWED_FILTERS = {
+    unidades: ['status', 'edificio_id'],
+    contratos: ['status', 'locatario_id', 'unidade_id'],
+    parcelas: ['status', 'contrato_id'],
+}
+
 export async function countRegistros(tabela, coluna, valor) {
+    if (!ALLOWED_FILTERS[tabela]?.includes(coluna)) {
+        throw new Error(`countRegistros: combinação não permitida: ${tabela}.${coluna}`)
+    }
     const { count } = await supabase
         .from(tabela)
         .select('*', { count: 'exact', head: true})
