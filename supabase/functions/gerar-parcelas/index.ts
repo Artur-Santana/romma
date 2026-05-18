@@ -40,10 +40,39 @@ Deno.serve(async (req) => {
       )
     }
 
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!UUID_RE.test(contrato_id)) {
+      return new Response(
+        JSON.stringify({ error: "contrato_id inválido" }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      )
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     )
+
+    // Verifica se o caller é proprietário
+    const token = authHeader!.replace('Bearer ', '')
+    const { data: { user: caller }, error: authErr } = await supabase.auth.getUser(token)
+    if (authErr || !caller) {
+      return new Response(
+        JSON.stringify({ error: 'Não autenticado' }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      )
+    }
+    const { data: perm } = await supabase
+      .from('proprietarios')
+      .select('usuario_id')
+      .eq('usuario_id', caller.id)
+      .maybeSingle()
+    if (!perm) {
+      return new Response(
+        JSON.stringify({ error: 'Sem permissão' }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      )
+    }
 
     // Busca o contrato para pegar data_inicio e data_fim
     const { data: contrato, error: contratoError } = await supabase
