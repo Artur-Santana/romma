@@ -29,6 +29,13 @@ export async function proxy(request) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  if (request.nextUrl.pathname.startsWith('/dashboard') && user) {
+    const { data: perm } = await supabase.rpc('is_proprietario')
+    if (!perm) {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+  }
+
   return response
 }
 
