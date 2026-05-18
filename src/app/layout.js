@@ -1,4 +1,5 @@
 import { Public_Sans, Space_Grotesk, Hanken_Grotesk } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
 
 const HankenGrotesks = Hanken_Grotesk({

@@ -1,58 +1,69 @@
 "use client"
 
-import supabase from "@/lib/supabase";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EdificioCard from "../ui/EdificioCard";
+import { criarEdificio, editarEdificio, deletarEdificio } from "@/actions/edificios";
+import { getEdificios } from "@/lib/queries-client";
 
 export default function GestaoEdificios({}) {
   const [edificios, setEdificios] = useState([]);
-  const [nome, setNome] = useState("");
-  const [endereco, setEndereco] = useState("");
+  const [form, setForm] = useState({ nome: "", endereco: "" });
   const [editandoId, setEditandoId] = useState(null);
-  const [nomeEdit, setNomeEdit] = useState("");
-  const [enderecoEdit, setEnderecoEdit] = useState("");
+  const [formEdit, setFormEdit] = useState({ nome: "", endereco: "" });
+  const [erro, setErro] = useState(null);
 
-  async function getEdificios() {
-    const { data } = await supabase.from("edificios").select("*");
-    if (data) setEdificios(data);
+  function resetForm() {
+    setForm({ nome: "", endereco: "" })
+  }
+
+  function resetFormEdit() {
+    setFormEdit({ nome: "", endereco: "" })
+  }
+
+  async function carregarEdificios() {
+    setEdificios(await getEdificios());
   }
 
   useEffect(() => {
-    getEdificios();
+    carregarEdificios();
   }, []);
 
   async function insertEdificio(e) {
     e.preventDefault();
-    const { error } = await supabase
-      .from("edificios")
-      .insert({ nome, endereco });
-    if (!error) {
-      getEdificios();
+    const result = await criarEdificio(form);
+    if (result.status === 200) {
+      setErro(null)
+      resetForm()
+      await carregarEdificios();
+    } else {
+      setErro(result.erroMessage)
     }
   }
 
   async function handleDeletar(id) {
-    const { error } = await supabase.from("edificios").delete().eq("id", id);
-    if (!error) {
-      getEdificios();
+    const result = await deletarEdificio(id);
+    if (result.status === 200) {
+      setErro(null)
+      await carregarEdificios();
+    } else {
+      setErro(result.erroMessage)
     }
   }
 
   async function handleEditar(edificio) {
-    setNomeEdit(edificio.nome);
-    setEnderecoEdit(edificio.endereco);
+    setFormEdit({ nome: edificio.nome, endereco: edificio.endereco });
     setEditandoId(edificio.id);
   }
 
   async function handleSalvar() {
-    const { error } = await supabase
-      .from("edificios")
-      .update({ nome: nomeEdit, endereco: enderecoEdit })
-      .eq("id", editandoId);
-    if (!error) {
+    const result = await editarEdificio(editandoId, formEdit);
+    if (result.status === 200) {
+      setErro(null)
       setEditandoId(null);
-      getEdificios();
+      resetFormEdit()
+      await carregarEdificios();
+    } else {
+      setErro(result.erroMessage)
     }
   }
 
@@ -60,20 +71,21 @@ export default function GestaoEdificios({}) {
     <main>
       <form onSubmit={insertEdificio}>
         <input
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          value={form.nome}
+          onChange={(e) => setForm({ ...form, nome: e.target.value })}
           type="text"
           placeholder="Nome do edificio"
         />
         <input
-          value={endereco}
-          onChange={(e) => setEndereco(e.target.value)}
+          value={form.endereco}
+          onChange={(e) => setForm({ ...form, endereco: e.target.value })}
           type="text"
           placeholder="Endereço"
         />
         <button type="submit">Enviar</button>
       </form>
 
+      {erro && <p>ERRO!: {erro}</p>}
       <h1>Pagina de dashboard!</h1>
 
       {edificios.map((edificio) => (
@@ -81,10 +93,10 @@ export default function GestaoEdificios({}) {
           key={edificio.id}
           edificio={edificio}
           editandoId={editandoId}
-          nomeEdit={nomeEdit}
-          enderecoEdit={enderecoEdit}
-          setNomeEdit={setNomeEdit}
-          setEnderecoEdit={setEnderecoEdit}
+          nomeEdit={formEdit.nome}
+          enderecoEdit={formEdit.endereco}
+          setNomeEdit={(v) => setFormEdit({ ...formEdit, nome: v })}
+          setEnderecoEdit={(v) => setFormEdit({ ...formEdit, endereco: v })}
           setEditandoId={setEditandoId}
           handleEditar={handleEditar}
           handleDeletar={handleDeletar}
