@@ -1,16 +1,20 @@
 "use client"
 
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { convidarLocatario, editarLocatario, deletarLocatario } from "@/actions/locatarios";
 import { getLocatarios } from "@/lib/queries-client";
 
+function mascararDocumento(doc) {
+  if (!doc) return ''
+  return doc.slice(0, -2).replace(/\d/g, '*') + doc.slice(-2)
+}
+
+function resetForm() {
+  return { nome_razao_social: '', tipo: '', documento: '', email: '', telefone: '' }
+}
+
 export default function Locatarios({}) {
-  const [nome_razao_social, setNome_razao_social] = useState("");
-  const [tipo, setTipo] = useState("");
-  const [documento, setDocumento] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefone, setTelefone] = useState("");
+  const [form, setForm] = useState(resetForm())
   const [editandoId, setEditandoId] = useState(null);
   const [locatarios, setlocatarios] = useState([]);
   const [editForm, setEditForm] = useState({});
@@ -26,19 +30,15 @@ export default function Locatarios({}) {
   async function handleConvidarLocatario(e) {
     e.preventDefault();
     const { status, erroMessage } = await convidarLocatario(
-      email,
-      nome_razao_social,
-      documento,
-      telefone,
-      tipo,
+      form.email,
+      form.nome_razao_social,
+      form.documento,
+      form.telefone,
+      form.tipo,
     );
     if (status == 200) {
       setlocatarios(await getLocatarios() ?? []);
-      setNome_razao_social("");
-      setTipo("");
-      setDocumento("");
-      setEmail("");
-      setTelefone("");
+      setForm(resetForm());
       setErroConvite("");
     } else {
       setErroConvite(erroMessage ?? "Erro ao enviar convite.");
@@ -63,7 +63,7 @@ export default function Locatarios({}) {
     }
   }
 
-  async function handleDeletarlocatario(id) {
+  async function handleDeletarLocatario(id) {
     const { status } = await deletarLocatario(id);
     if (status === 200) {
       setlocatarios(await getLocatarios());
@@ -75,11 +75,11 @@ export default function Locatarios({}) {
       <form onSubmit={handleConvidarLocatario}>
         <input
           placeholder="Nome"
-          value={nome_razao_social}
-          onChange={(e) => setNome_razao_social(e.target.value)}
+          value={form.nome_razao_social}
+          onChange={(e) => setForm({ ...form, nome_razao_social: e.target.value })}
           type="text"
         ></input>
-        <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
+        <select value={form.tipo} onChange={(e) => setForm({ ...form, tipo: e.target.value })}>
           <option value="">Selecione...</option>
           <option key={"pf"} value={"pf"}>
             Pessoa Fisica
@@ -90,20 +90,20 @@ export default function Locatarios({}) {
         </select>
         <input
           placeholder="Documento"
-          value={documento}
-          onChange={(e) => setDocumento(e.target.value)}
+          value={form.documento}
+          onChange={(e) => setForm({ ...form, documento: e.target.value })}
           type="text"
         ></input>
         <input
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
           type="email"
         ></input>
         <input
           placeholder="Telefone "
-          value={telefone}
-          onChange={(e) => setTelefone(e.target.value)}
+          value={form.telefone}
+          onChange={(e) => setForm({ ...form, telefone: e.target.value })}
           type="tel"
         ></input>
         <button type="submit">Enviar</button>
@@ -154,10 +154,10 @@ export default function Locatarios({}) {
             <div>
               <p>{locatario.nome_razao_social}</p>
               <p>{locatario.tipo}</p>
-              <p>{locatario.documento}</p>
+              <p>{mascararDocumento(locatario.documento)}</p>
               <p>{locatario.email}</p>
-              <button onClick={() => handleDeletarlocatario(locatario.id)} className="cursor-pointer px-3 py-1 bg-destructive text-foreground hover:opacity-80 transition-opacity">
-                Deletar Locatario
+              <button onClick={() => handleDeletarLocatario(locatario.id)} className="cursor-pointer px-3 py-1 bg-destructive text-foreground hover:opacity-80 transition-opacity">
+                Deletar Locatário
               </button>
               <button onClick={() => handleEditarLocatario(locatario)} className="cursor-pointer px-3 py-1 bg-primary text-primary-foreground hover:bg-primary-hover transition-colors">
                 Editar
