@@ -47,7 +47,7 @@ export default function UnidadeCard({
             value={statusEdit}
             onChange={(e) => setStatusEdit(e.target.value)}
           />
-          <button onClick={handleSalvarUnidade}>Salvar</button>
+          <button onClick={() => handleSalvarUnidade(unidade.id)}>Salvar</button>
           <button onClick={() => setEditandoId(null)}>Cancelar</button>
         </>
       ) : (
