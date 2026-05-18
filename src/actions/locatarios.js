@@ -10,23 +10,26 @@ export async function convidarLocatario(email, nome_razao_social, documento, tel
     if (!email || !nome_razao_social || !documento || !telefone || !tipo) {
         return { status: 400, erroMessage: 'Todos os campos são obrigatórios.' }
     }
+    const siteUrl = process.env.SITE_URL
+    if (!siteUrl) return { status: 500, erroMessage: 'Configuração de servidor inválida.' }
     const supabase = await createServer()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
     const { data, error} = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-        redirectTo: `${process.env.SITE_URL}/dashboard`
+        redirectTo: `${siteUrl}/dashboard`
     })
     if (!error){
         const {error:errorInsert} = await supabaseAdmin.from('locatarios')
         .insert({
-            usuario_id:data.user.id, 
-            nome_razao_social, 
-            email:data.user.email, 
+            usuario_id:data.user.id,
+            nome_razao_social,
+            email:data.user.email,
             telefone,
-            documento, 
-            tipo}) 
+            documento,
+            tipo})
         if (errorInsert){
+            await supabaseAdmin.auth.admin.deleteUser(data.user.id)
             return {
                 status: 500,
                 erroMessage: errorInsert.message
