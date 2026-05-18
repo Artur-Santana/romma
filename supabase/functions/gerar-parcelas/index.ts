@@ -6,6 +6,10 @@ const ALLOWED_ORIGINS = [
   Deno.env.get('APP_URL') ?? '',
 ].filter(Boolean)
 
+if (!Deno.env.get('APP_URL')) {
+  console.warn('[gerar-parcelas] APP_URL não configurada — CORS pode falhar em produção')
+}
+
 function getCorsHeaders(origin: string | null) {
   const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
   return {
@@ -30,8 +34,11 @@ Deno.serve(async (req) => {
     )
   }
 
+  let contrato_id: string | undefined
+
   try {
-    const { contrato_id } = await req.json()
+    const body = await req.json()
+    contrato_id = body.contrato_id
 
     if (!contrato_id) {
       return new Response(
@@ -137,7 +144,7 @@ Deno.serve(async (req) => {
     // Insere todas as parcelas de uma vez (upsert idempotente via unique index contrato_id+numero)
     const { error: insertError } = await supabase
       .from("parcelas")
-      .upsert(parcelas, { onConflict: 'contrato_id,numero', ignoreDuplicates: true })
+      .upsert(parcelas, { onConflict: 'contrato_id,numero' })
 
     if (insertError) {
       return new Response(
@@ -152,7 +159,7 @@ Deno.serve(async (req) => {
     )
 
   } catch (err) {
-    console.error('[gerar-parcelas] erro interno:', err)
+    console.error('[gerar-parcelas] erro interno:', { contrato_id, err })
     return new Response(
       JSON.stringify({ error: 'Erro interno ao gerar parcelas.' }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
