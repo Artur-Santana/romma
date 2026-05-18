@@ -78,7 +78,7 @@ export default function Home() {
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_qr_01.svg" className="w-7"></img>
+                      <img src="/icon_qr_01.svg" alt="" className="w-7"></img>
                       <span className="bg-primary-hover/10 p-1">SISTEMA.01</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">LISTAGEM DE UNIDADES</div>
@@ -93,14 +93,14 @@ export default function Home() {
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_doc_02.svg" className="w-5"></img>
+                      <img src="/icon_doc_02.svg" alt="" className="w-5"></img>
                       <span className="bg-primary-hover/10 p-1">SISTEMA.02</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">CONTRATOS AUTOMATIZADOS</div>
                     <div>
                       <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Entrada manual zero para contratos de aluguel.
                         Templates jurídicos são gerados instantaneamente
-                        com base nos dados do inquilino e conformidade
+                        com base nos dados do Locatário e conformidade
                         regional.
                       </p>
                     </div>
@@ -109,13 +109,13 @@ export default function Home() {
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_conect_03.svg" className="w-7"></img>
+                      <img src="/icon_conect_03.svg" alt="" className="w-7"></img>
                       <span className="bg-primary-hover/10 p-1">SISTEMA.03</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">PORTAL DO LOCATÁRIO</div>
                     <div>
                       <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Um espaço de trabalho dedicado para seus
-                        inquilinos. Solicite manutenção, pague faturas e
+                        Locatários. Solicite manutenção, pague faturas e
                         renove contratos sem precisar de chamadas
                         telefônicas.
                       </p>
@@ -125,7 +125,7 @@ export default function Home() {
                 <div className="p-8 bg-background">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_graph_04.svg" className="w-7"></img>
+                      <img src="/icon_graph_04.svg" alt="" className="w-7"></img>
                       <span className="bg-primary-hover/10 p-1">SISTEMA.04</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">PAINEL DO PROPRIETÁRIO</div>
@@ -163,7 +163,7 @@ export default function Home() {
                       <span className="font-headline-hanken font-bold tracking-[1.5px] text-sm text-primary-hover">+12.4% ESTE MÊS</span>
                     </div>
                     <div>
-                      <img className="w-full" src="/data_regional_demand_graph.png"></img>
+                      <img className="w-full" src="/data_regional_demand_graph.png" alt="Gráfico de demanda regional"></img>
                     </div>
                   </div>
                 </div>
