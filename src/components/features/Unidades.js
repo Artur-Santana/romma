@@ -1,72 +1,77 @@
 "use client"
 
-import supabase from "@/lib/supabase";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getEdificios, getUnidades } from "@/lib/queries-client";
 import UnidadeCard from "@/components/ui/UnidadeCard";
+import { criarUnidade, editarUnidade, deletarUnidade } from "@/actions/unidades";
 
 export default function Unidades({}) {
   const [unidades, setUnidades] = useState([]);
-  const [nome, setNome] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [area_m2, setArea_m2] = useState("");
-  const [valor_mensal, setValor_mensal] = useState("");
-  const [valor_visivel, setValor_visivel] = useState(false);
-  const [status, setStatus] = useState("");
-  const [edificio_id, setEdificio_id] = useState("");
   const [listaEdificios, setListaEdificios] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   const [erro, setErro] = useState(null)
-  const [nomeEdit, setNomeEdit] = useState("");
-  const [descricaoEdit, setDescricaoEdit] = useState("");
-  const [area_m2Edit, setArea_m2Edit] = useState("");
-  const [valor_mensalEdit, setValor_mensalEdit] = useState("");
-  const [statusEdit, setStatusEdit] = useState("");
-  const [valor_visivelEdit, setValor_visivelEdit] = useState("");
+  const [form, setForm] = useState({
+    nome: "",
+    descricao: "",
+    area_m2: "",
+    valor_mensal: "",
+    valor_visivel: false,
+    status: "disponivel",
+    edificio_id: "",
+  });
+  const [formEdit, setFormEdit] = useState({
+    nome: "",
+    descricao: "",
+    area_m2: "",
+    valor_mensal: "",
+    valor_visivel: false,
+    status: "",
+  });
 
   async function carregarDados() {
-    const data = await getEdificios();
-    setListaEdificios(data);
+    setListaEdificios(await getEdificios());
     setUnidades(await getUnidades());
   }
 
+  function resetForm() {
+    setForm({ nome: "", descricao: "", area_m2: "", valor_mensal: "", valor_visivel: false, status: "disponivel", edificio_id: "" })
+  }
+
+  function resetFormEdit() {
+    setFormEdit({ nome: "", descricao: "", area_m2: "", valor_mensal: "", valor_visivel: false, status: "" })
+  }
+
   async function handleEditarUnidade(unidade) {
-    setNomeEdit(unidade.nome);
-    setDescricaoEdit(unidade.descricao);
-    setArea_m2Edit(unidade.area_m2);
+    setFormEdit({
+      nome: unidade.nome,
+      descricao: unidade.descricao,
+      area_m2: unidade.area_m2,
+      valor_mensal: unidade.valor_mensal,
+      valor_visivel: unidade.valor_visivel,
+      status: unidade.status,
+    });
     setEditandoId(unidade.id);
-    setValor_mensalEdit(unidade.valor_mensal);
-    setValor_visivelEdit(unidade.valor_visivel);
   }
 
   async function handleDeletarUnidade(id) {
-    const { error } = await supabase.from("unidades").delete().eq("id", id);
-    if (!error) {
+    const result = await deletarUnidade(id);
+    if (result.status === 200) {
       setErro(null)
       setUnidades(await getUnidades());
-    } else{
-      setErro(error.message)
+    } else {
+      setErro(result.erroMessage)
     }
   }
 
   async function handleSalvarUnidade(id) {
-    const { error } = await supabase
-      .from("unidades")
-      .update({
-        nome: nomeEdit,
-        descricao: descricaoEdit,
-        area_m2: area_m2Edit,
-        valor_mensal: valor_mensalEdit,
-        valor_visivel: valor_visivelEdit,
-        status: statusEdit,
-      })
-      .eq("id", editandoId);
-    if (!error) {
+    const result = await editarUnidade(id, formEdit);
+    if (result.status === 200) {
       setErro(null)
+      setEditandoId(null)
+      resetFormEdit()
       setUnidades(await getUnidades());
-    } else{
-      setErro(error.message)
+    } else {
+      setErro(result.erroMessage)
     }
   }
 
@@ -76,22 +81,13 @@ export default function Unidades({}) {
 
   async function insertUnidade(e) {
     e.preventDefault();
-    const { error } = await supabase
-      .from("unidades")
-      .insert({
-        nome,
-        descricao,
-        area_m2,
-        valor_mensal,
-        status,
-        valor_visivel,
-        edificio_id,
-      });
-    if (!error) {
+    const result = await criarUnidade(form);
+    if (result.status === 200) {
       setErro(null)
+      resetForm()
       setUnidades(await getUnidades());
-    } else{
-      setErro(error.message)
+    } else {
+      setErro(result.erroMessage)
     }
   }
 
@@ -99,8 +95,8 @@ export default function Unidades({}) {
     <main>
       <form onSubmit={insertUnidade}>
         <select
-          value={edificio_id}
-          onChange={(e) => setEdificio_id(e.target.value)}
+          value={form.edificio_id}
+          onChange={(e) => setForm({ ...form, edificio_id: e.target.value })}
         >
           {listaEdificios.map((edificio) => (
             <option key={edificio.id} value={edificio.id}>
@@ -110,47 +106,41 @@ export default function Unidades({}) {
         </select>
         <input
           placeholder="nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          value={form.nome}
+          onChange={(e) => setForm({ ...form, nome: e.target.value })}
           type="text"
-        ></input>
+        />
         <input
           placeholder="descricao"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
+          value={form.descricao}
+          onChange={(e) => setForm({ ...form, descricao: e.target.value })}
           type="text"
-        ></input>
+        />
         <input
           placeholder="area_m2"
-          value={area_m2}
-          onChange={(e) => setArea_m2(e.target.value)}
+          value={form.area_m2}
+          onChange={(e) => setForm({ ...form, area_m2: e.target.value })}
           type="number"
-        ></input>
+        />
         <input
           placeholder="valor_mensal"
-          value={valor_mensal}
-          onChange={(e) => setValor_mensal(e.target.value)}
+          value={form.valor_mensal}
+          onChange={(e) => setForm({ ...form, valor_mensal: e.target.value })}
           type="number"
-        ></input>
+        />
         <select
-          value={status}
-          onChange={(e) => {
-            setStatus(e.target.value);
-          }}
+          value={form.status}
+          onChange={(e) => setForm({ ...form, status: e.target.value })}
         >
-          <option key={"disponivel"} value={"disponivel"}>
-            Disponivel
-          </option>
-          <option key={"alugada"} value={"alugada"}>
-            Alugada
-          </option>
+          <option value="disponivel">Disponivel</option>
+          <option value="alugada">Alugada</option>
         </select>
         <label>Valor_visivel</label>
         <input
-          checked={valor_visivel}
-          onChange={(e) => setValor_visivel(e.target.checked)}
+          checked={form.valor_visivel}
+          onChange={(e) => setForm({ ...form, valor_visivel: e.target.checked })}
           type="checkbox"
-        ></input>
+        />
         <button type="submit">Enviar</button>
       </form>
 
@@ -160,19 +150,19 @@ export default function Unidades({}) {
           key={unidade.id}
           unidade={unidade}
           editandoId={editandoId}
-          nomeEdit={nomeEdit}
-          descricaoEdit={descricaoEdit}
-          area_m2Edit={area_m2Edit}
-          valor_mensalEdit={valor_mensalEdit}
-          valor_visivelEdit={valor_visivelEdit}
+          nomeEdit={formEdit.nome}
+          descricaoEdit={formEdit.descricao}
+          area_m2Edit={formEdit.area_m2}
+          valor_mensalEdit={formEdit.valor_mensal}
+          valor_visivelEdit={formEdit.valor_visivel}
           setEditandoId={setEditandoId}
-          setNomeEdit={setNomeEdit}
-          setDescricaoEdit={setDescricaoEdit}
-          setArea_m2Edit={setArea_m2Edit}
-          setValor_mensalEdit={setValor_mensalEdit}
-          setValor_visivelEdit={setValor_visivelEdit}
-          statusEdit={statusEdit}
-          setStatusEdit={setStatusEdit}
+          setNomeEdit={(v) => setFormEdit({ ...formEdit, nome: v })}
+          setDescricaoEdit={(v) => setFormEdit({ ...formEdit, descricao: v })}
+          setArea_m2Edit={(v) => setFormEdit({ ...formEdit, area_m2: v })}
+          setValor_mensalEdit={(v) => setFormEdit({ ...formEdit, valor_mensal: v })}
+          setValor_visivelEdit={(v) => setFormEdit({ ...formEdit, valor_visivel: v })}
+          statusEdit={formEdit.status}
+          setStatusEdit={(v) => setFormEdit({ ...formEdit, status: v })}
           handleEditarUnidade={handleEditarUnidade}
           handleDeletarUnidade={handleDeletarUnidade}
           handleSalvarUnidade={handleSalvarUnidade}

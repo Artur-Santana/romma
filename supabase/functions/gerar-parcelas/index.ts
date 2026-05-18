@@ -6,6 +6,10 @@ const ALLOWED_ORIGINS = [
   Deno.env.get('APP_URL') ?? '',
 ].filter(Boolean)
 
+if (!Deno.env.get('APP_URL')) {
+  console.warn('[gerar-parcelas] APP_URL não configurada — CORS pode falhar em produção')
+}
+
 function getCorsHeaders(origin: string | null) {
   const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
   return {
@@ -30,8 +34,11 @@ Deno.serve(async (req) => {
     )
   }
 
+  let contrato_id: string | undefined
+
   try {
-    const { contrato_id } = await req.json()
+    const body = await req.json()
+    contrato_id = body.contrato_id
 
     if (!contrato_id) {
       return new Response(
@@ -40,10 +47,39 @@ Deno.serve(async (req) => {
       )
     }
 
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!UUID_RE.test(contrato_id)) {
+      return new Response(
+        JSON.stringify({ error: "contrato_id inválido" }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      )
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     )
+
+    // Verifica se o caller é proprietário
+    const token = authHeader!.replace('Bearer ', '')
+    const { data: { user: caller }, error: authErr } = await supabase.auth.getUser(token)
+    if (authErr || !caller) {
+      return new Response(
+        JSON.stringify({ error: 'Não autenticado' }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      )
+    }
+    const { data: perm } = await supabase
+      .from('proprietarios')
+      .select('usuario_id')
+      .eq('usuario_id', caller.id)
+      .maybeSingle()
+    if (!perm) {
+      return new Response(
+        JSON.stringify({ error: 'Sem permissão' }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      )
+    }
 
     // Busca o contrato para pegar data_inicio e data_fim
     const { data: contrato, error: contratoError } = await supabase
@@ -108,7 +144,7 @@ Deno.serve(async (req) => {
     // Insere todas as parcelas de uma vez (upsert idempotente via unique index contrato_id+numero)
     const { error: insertError } = await supabase
       .from("parcelas")
-      .upsert(parcelas, { onConflict: 'contrato_id,numero', ignoreDuplicates: true })
+      .upsert(parcelas, { onConflict: 'contrato_id,numero' })
 
     if (insertError) {
       return new Response(
@@ -123,7 +159,7 @@ Deno.serve(async (req) => {
     )
 
   } catch (err) {
-    console.error('[gerar-parcelas] erro interno:', err)
+    console.error('[gerar-parcelas] erro interno:', { contrato_id, err })
     return new Response(
       JSON.stringify({ error: 'Erro interno ao gerar parcelas.' }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
