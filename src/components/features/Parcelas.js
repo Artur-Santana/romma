@@ -1,9 +1,9 @@
 "use client"
 
-import supabase from "@/lib/supabase"
 import { useEffect, useState } from "react"
 import { getParcelasByContrato } from "@/lib/queries-client"
 import Link from "next/link"
+import { marcarParcelaComoPaga } from "@/actions/parcelas"
 
 const statusConfig = {
     futura:   { label: 'Futura',   classe: 'bg-[#1A1A1A] text-[#666666] border border-[#444444]/20' },
@@ -14,6 +14,7 @@ const statusConfig = {
 
 export default function Parcelas({ contratoId }) {
     const [parcelas, setParcelas] = useState([])
+    const [erro, setErro] = useState(null)
 
     useEffect(() => {
         async function carregarParcelas() {
@@ -23,15 +24,12 @@ export default function Parcelas({ contratoId }) {
     }, [contratoId])
 
     async function marcarComoPaga(parcela) {
-        const { error } = await supabase
-            .from('parcelas')
-            .update({
-                status: 'paga',
-                data_pagamento: new Date().toISOString().split('T')[0]
-            })
-            .eq('id', parcela.id)
-        if (!error) {
+        const result = await marcarParcelaComoPaga(parcela.id)
+        if (result.status === 200) {
+            setErro(null)
             setParcelas(await getParcelasByContrato(contratoId))
+        } else {
+            setErro(result.erroMessage)
         }
     }
 
@@ -50,6 +48,8 @@ export default function Parcelas({ contratoId }) {
                 Parcelas
             </h1>
             <div className="w-16 h-1 bg-[#4B0082] mb-8"></div>
+
+            {erro && <p className="text-red-500 mb-4">{erro}</p>}
 
             <div className="flex flex-col gap-0">
                 {parcelas.map(parcela => (
