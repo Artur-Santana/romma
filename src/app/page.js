@@ -1,529 +1,261 @@
-'use client'
-
-import { useState, useEffect, useRef } from 'react'
-import { getUnidades, getEdificios } from '@/lib/queries-client'
-import { fmtBRL } from '@/lib/utils'
-import RealtimeDot from '@/components/ui/RealtimeDot'
-import StatusBadge from '@/components/ui/StatusBadge'
-import { createClient } from '@/lib/supabase-browser'
-
-// ── Helpers ────────────────────────────────────────────────────────────────
-
-function refOf(u) {
-  return 'UN-' + u.id.slice(0, 6).toUpperCase()
-}
-
-function shortenName(nome) {
-  return nome
-    .replace('Edifício ', '')
-    .replace('Centro Empresarial ', 'CE ')
-    .replace('Torre ', '')
-}
-
-// ── Unit Detail Bottom Sheet ───────────────────────────────────────────────
-
-function UnitDetailSheet({ u, edificio, onClose, onSimular }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'oklch(0 0 0 / 0.65)',
-        display: 'flex',
-        alignItems: 'flex-end',
-        zIndex: 50,
-        animation: 'rommaFadeIn 240ms var(--ease-crisp)',
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          width: '100%',
-          maxHeight: '85%',
-          overflow: 'auto',
-          background: 'var(--background)',
-          borderTop: '1px solid var(--indigo)',
-          padding: '24px 20px 32px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 16,
-        }}
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Drag handle */}
-        <div style={{ alignSelf: 'center', width: 32, height: 3, background: 'var(--fg-5)' }} />
-
-        {/* Header row */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 0.8, textTransform: 'uppercase' }}>
-              {refOf(u)}
-            </span>
-            <h2 style={{ fontFamily: 'var(--font-display-arch)', fontWeight: 700, fontSize: 32, letterSpacing: -1.4, color: 'var(--fg-1)', lineHeight: 1, margin: 0 }}>
-              {u.nome}
-            </h2>
-            {edificio && (
-              <span style={{ fontSize: 13, color: 'var(--fg-3)' }}>{edificio.nome}</span>
-            )}
-          </div>
-          <button
-            style={{
-              all: 'unset',
-              cursor: 'pointer',
-              width: 32,
-              height: 32,
-              border: '1px solid var(--border-2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--fg-3)',
-              fontSize: 14,
-              flexShrink: 0,
-            }}
-            onClick={onClose}
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Grid placeholder */}
-        <div
-          style={{
-            height: 160,
-            background: 'oklch(0.21 0 0)',
-            border: '1px solid var(--border-3)',
-            position: 'relative',
-            overflow: 'hidden',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <svg
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.18 }}
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <pattern id="grid-sheet" width="20" height="20" patternUnits="userSpaceOnUse">
-                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--fg-3)" strokeWidth="0.5" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid-sheet)" />
-          </svg>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-4)', letterSpacing: 1.5, textTransform: 'uppercase', position: 'relative' }}>
-            [PLANTA · {refOf(u)}]
-          </span>
-        </div>
-
-        {/* 2-col grid */}
-        <div style={{ border: '1px solid var(--border-3)', display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-          <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 1, textTransform: 'uppercase' }}>Área</span>
-            <span style={{ fontFamily: 'var(--font-display-arch)', fontWeight: 700, fontSize: 22, color: 'var(--fg-1)', letterSpacing: -0.5 }}>
-              {u.area_m2}m²
-            </span>
-          </div>
-          <div style={{ padding: '16px 20px', borderLeft: '1px solid var(--border-3)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 1, textTransform: 'uppercase' }}>Valor mensal</span>
-            <span style={{ fontFamily: 'var(--font-display-arch)', fontWeight: 700, fontSize: 22, color: 'var(--fg-1)', letterSpacing: -0.5 }}>
-              {u.valor_visivel ? fmtBRL(u.valor_mensal) : 'Consultar'}
-            </span>
-          </div>
-        </div>
-
-        {/* Description */}
-        {u.descricao && (
-          <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--fg-2)', margin: 0 }}>
-            {u.descricao}
-          </p>
-        )}
-
-        {/* Endereço row */}
-        {edificio?.endereco && (
-          <div
-            style={{
-              background: 'oklch(0.265 0 0)',
-              border: '1px solid var(--border-2)',
-              padding: '12px 16px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 12,
-            }}
-          >
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 1, textTransform: 'uppercase', flexShrink: 0 }}>
-              Endereço
-            </span>
-            <span style={{ fontSize: 12, color: 'var(--fg-3)', textAlign: 'right' }}>
-              {edificio.endereco}
-            </span>
-          </div>
-        )}
-
-        {/* CTA buttons */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <button
-            style={{
-              all: 'unset',
-              cursor: 'pointer',
-              display: 'block',
-              width: '100%',
-              padding: '14px 20px',
-              background: 'var(--indigo)',
-              fontFamily: 'var(--font-display-arch)',
-              fontWeight: 700,
-              fontSize: 13,
-              color: 'var(--fg-1)',
-              textAlign: 'center',
-              letterSpacing: 0.5,
-              boxSizing: 'border-box',
-            }}
-            onClick={() => onSimular(u.id)}
-          >
-            Tenho interesse →
-          </button>
-          <button
-            style={{
-              all: 'unset',
-              cursor: 'pointer',
-              display: 'block',
-              width: '100%',
-              padding: '14px 20px',
-              border: '1px solid var(--border-3)',
-              fontFamily: 'var(--font-display-arch)',
-              fontWeight: 700,
-              fontSize: 13,
-              color: 'var(--fg-3)',
-              textAlign: 'center',
-              boxSizing: 'border-box',
-            }}
-            onClick={onClose}
-          >
-            Voltar
-          </button>
-        </div>
-
-        {/* Demo note */}
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', textAlign: 'center', letterSpacing: 0.5 }}>
-          Demo · &apos;Tenho interesse&apos; simula aluguel para fins de visualização
-        </span>
-      </div>
-    </div>
-  )
-}
-
-// ── Main Page ──────────────────────────────────────────────────────────────
+import Link from "next/link";
+import Image from "next/image";
+import Header from "@/components/ui/Header";
+import Footer from "@/components/ui/Footer";
 
 export default function Home() {
-  const [unidades, setUnidades] = useState([])
-  const [edificios, setEdificios] = useState([])
-  const [activeTab, setActiveTab] = useState('todos')
-  const [selected, setSelected] = useState(null)
-  const [removedIds, setRemovedIds] = useState(new Set())
-  const [removingId, setRemovingId] = useState(null)
-
-  useEffect(() => {
-    async function load() {
-      const [u, e] = await Promise.all([getUnidades(), getEdificios()])
-      setUnidades(u ?? [])
-      setEdificios(e ?? [])
-    }
-    load()
-
-    // Realtime: subscribe to INSERT/DELETE only
-    // Note: disponivel→alugada UPDATE does NOT propagate via anon RLS (documented limitation)
-    const supabase = createClient()
-    const channel = supabase
-      .channel('public-unidades')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'unidades' }, () => load())
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'unidades' }, () => load())
-      .subscribe()
-
-    return () => { supabase.removeChannel(channel) }
-  }, [])
-
-  const disponiveis = unidades.filter(u => u.status === 'disponivel' && !removedIds.has(u.id))
-
-  const tabs = [
-    { id: 'todos', label: 'Todos' },
-    ...edificios.map(e => ({ id: e.id, label: shortenName(e.nome) })),
-  ]
-
-  const filtered = activeTab === 'todos'
-    ? disponiveis
-    : disponiveis.filter(u => u.edificio_id === activeTab)
-
-  function simularAluguel(uid) {
-    setRemovingId(uid)
-    setTimeout(() => {
-      setRemovingId(null)
-      setSelected(null)
-      setRemovedIds(prev => new Set([...prev, uid]))
-    }, 700)
-  }
-
-  function getEdificio(edificioId) {
-    return edificios.find(e => e.id === edificioId) ?? null
-  }
-
   return (
-    <div
-      style={{
-        background: 'var(--background)',
-        height: '100dvh',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Header */}
-      <div style={{ padding: '20px 20px 24px', borderBottom: '1px solid var(--border-2)', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 1.5, textTransform: 'uppercase' }}>
-            GRID.OS · LIVE FEED
-          </span>
-          <RealtimeDot label="" compact />
-        </div>
-        <h1
-          style={{
-            fontFamily: 'var(--font-display-arch)',
-            fontWeight: 700,
-            fontSize: 32,
-            letterSpacing: -1.6,
-            color: 'var(--fg-1)',
-            lineHeight: 1,
-            margin: 0,
-            whiteSpace: 'pre-line',
-          }}
-        >
-          {'Unidades\nDisponíveis.'}
-        </h1>
-      </div>
+    <div className="bg-neutral">
+      <Header />
 
-      {/* Filter tabs */}
-      <div
-        style={{
-          padding: '16px 20px 0',
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 6,
-          overflowX: 'auto',
-          paddingBottom: 4,
-          scrollbarWidth: 'none',
-        }}
-      >
-        {tabs.map(tab => {
-          const count = tab.id === 'todos'
-            ? disponiveis.length
-            : disponiveis.filter(u => u.edificio_id === tab.id).length
-          const isActive = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              style={{
-                all: 'unset',
-                cursor: 'pointer',
-                flexShrink: 0,
-                padding: '8px 14px',
-                display: 'inline-flex',
-                gap: 8,
-                fontFamily: 'var(--font-display-arch)',
-                fontWeight: 700,
-                fontSize: 10,
-                lineHeight: 1.2,
-                textTransform: 'uppercase',
-                letterSpacing: 0.5,
-                border: isActive ? '1px solid var(--indigo)' : '1px solid var(--border-3)',
-                background: isActive ? 'oklch(0.339 0.179 301.68 / 0.20)' : 'transparent',
-                color: isActive ? 'var(--fg-1)' : 'var(--fg-3)',
-                alignItems: 'center',
-              }}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-              <span style={{ color: isActive ? 'var(--indigo)' : 'var(--fg-5)' }}>{count}</span>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Counter strip */}
-      <div
-        style={{
-          padding: '16px 20px',
-          borderBottom: '1px solid var(--border)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-        }}
-      >
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-4)', letterSpacing: 0.5, opacity: 0.5 }}>
-          {filtered.length} {filtered.length === 1 ? 'UNIDADE' : 'UNIDADES'}
-        </span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-4)', letterSpacing: 0.5, opacity: 0.5 }}>
-          SYNC · {new Date().toISOString().slice(0, 10)}
-        </span>
-      </div>
-
-      {/* List */}
-      <div className="romma-mobile-pane" style={{ flex: 1, overflow: 'auto' }}>
-        {filtered.length === 0 ? (
-          <div
-            style={{
-              padding: '80px 32px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12,
-              alignItems: 'center',
-            }}
-          >
-            <div
-              style={{
-                width: 48,
-                height: 48,
-                border: '1px solid var(--border-3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 18,
-                color: 'var(--fg-4)',
-              }}
-            >
-              —
-            </div>
-            <span
-              style={{
-                fontFamily: 'var(--font-display-arch)',
-                fontWeight: 700,
-                fontSize: 22,
-                letterSpacing: -1,
-                color: 'var(--fg-2)',
-                display: 'block',
-              }}
-            >
-              Tudo ocupado.
-            </span>
-            <p style={{ fontSize: 12, color: 'var(--fg-4)', lineHeight: 1.5, maxWidth: 240, margin: 0 }}>
-              Nenhuma unidade disponível neste filtro no momento.
-            </p>
+      <main className="flex flex-col gap-8 md:gap-12 lg:gap-15">
+        <section className="relative overflow-hidden px-5 md:px-10 lg:px-30 xl:px-60 bg-black flex-col border">
+          <img
+            src="/Detalhe_Arquitetonico.png"
+            alt=""
+            aria-hidden="true"
+            className="lg:hidden absolute inset-0 w-full h-full object-cover opacity-20"
+          />
+          <div className="lg:hidden absolute inset-0 bg-black/40 pointer-events-none" />
+          <div className="relative z-10 text-highlight font-headline-hanken font-semibold text-xs tracking-[0.2em] px-5 pt-8 md:pt-12 lg:pt-15">
+            ◼ SISTEMA_DE_COMANDO.v4
           </div>
-        ) : (
-          filtered.map((u, idx) => {
-            const edificio = getEdificio(u.edificio_id)
-            return (
-              <button
-                key={u.id}
-                className={removingId === u.id ? 'romma-unit-out' : ''}
-                style={{
-                  all: 'unset',
-                  cursor: 'pointer',
-                  display: 'block',
-                  width: '100%',
-                  padding: 20,
-                  borderTop: idx > 0 ? '1px solid var(--border)' : 0,
-                  position: 'relative',
-                  boxSizing: 'border-box',
-                }}
-                onClick={() => setSelected(u)}
-              >
-                {/* Row 1 */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 8 }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 0.8, textTransform: 'uppercase' }}>
-                      {refOf(u)}
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-display-arch)', fontWeight: 700, fontSize: 22, letterSpacing: -0.8, color: 'var(--fg-1)', lineHeight: 1 }}>
-                      {u.nome}
-                    </span>
-                    {edificio && (
-                      <span style={{ fontSize: 12, color: 'var(--fg-3)', marginTop: 2 }}>
-                        {shortenName(edificio.nome)}
-                      </span>
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
-                    {u.area_m2 && (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 0.5, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                        {u.area_m2}m²
-                      </span>
-                    )}
-                    <StatusBadge status="disponivel" />
+          <div className="relative z-10 text-white flex flex-col lg:flex-row">
+            <div className="p-5 basis-full lg:basis-7/10 flex flex-col gap-6 md:gap-8">
+              <div className="font-headline-hanken font-black text-4xl md:text-6xl lg:text-7xl flex flex-col gap-2">
+                <span className="text-white tracking-[-1.5px] md:tracking-[-2.5px] lg:tracking-[-3.5px]">
+                  GERENCIE SUAS PROPRIEDADES.
+                </span>
+                <span className="text-primary-hover tracking-[0]">
+                  CONTROLE CADA CONTRATO.
+                </span>
+              </div>
+              <div>
+                <p className="text-white/60 font-body pr-0 lg:pr-50 text-balance mt-5">
+                  O blueprint digital para operações imobiliárias modernas.
+                  Calibrado para uma grade matemática rigorosa para eliminar
+                  fricção e escalar seu portfólio com eficiência geométrica.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 font-headline-hanken font-semibold tracking-4">
+                <button type="button" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover cursor-pointer">
+                  INICIE GRATUITAMENTE
+                </button>
+                <Link href="/unidades" className="py-4 px-10 bg-background cursor-pointer text-center">
+                  VER PROJETOS
+                </Link>
+              </div>
+            </div>
+
+            <div className="hidden lg:block p-5 basis-5/10">
+              <div className="relative">
+                <img
+                  src="/Detalhe_Arquitetonico.png"
+                  alt=""
+                  className="w-full"
+                />
+                <div className="absolute inset-0 bg-primary-hover/20"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="px-5 md:px-10 lg:px-30 xl:px-60 bg-neutral flex flex-col gap-6 md:gap-8">
+            <div className="flex flex-row gap-3 items-center">
+              <img src='/horizontal_divider.svg' alt="" className="hidden sm:block" />
+              <div className="text-primary-hover font-headline-hanken font-semibold text-xs md:text-sm tracking-[0.2em] bg-primary-hover/25 p-1">
+                VISÃO GERAL DO SISTEMA // MÉTRICAS EM TEMPO REAL
+              </div>
+            </div>
+            <div className="md:mr-0 lg:mr-60 xl:mr-120">
+              <span className="font-headline-hanken font-black text-3xl md:text-5xl lg:text-7xl tracking-[-1px] md:tracking-[-2px] lg:tracking-[-3px]">
+                COMPONENTES DE UM SISTEMA INTERCONECTADO.
+              </span>
+            </div>
+            <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-1 font-headline-hanken bg-white/10">
+                <div className="p-8 bg-background border border-neutral/25">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_qr_01.svg" alt="" className="w-7"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.01</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">LISTAGEM DE UNIDADES</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Sincronização de inventário ao vivo em todos os
+                        portais. Gerencie taxas de ocupação com algoritmos
+                        inteligentes que priorizam leads de alto valor.
+                      </p>
+                    </div>
                   </div>
                 </div>
-
-                {/* Description */}
-                {u.descricao && (
-                  <p
-                    style={{
-                      fontSize: 13,
-                      lineHeight: 1.45,
-                      color: 'var(--fg-2)',
-                      marginBottom: 12,
-                      margin: '0 0 12px 0',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {u.descricao}
+                <div className="p-8 bg-background border border-neutral/25">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_doc_02.svg" alt="" className="w-5"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.02</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">CONTRATOS AUTOMATIZADOS</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Entrada manual zero para contratos de aluguel.
+                        Templates jurídicos são gerados instantaneamente
+                        com base nos dados do Locatário e conformidade
+                        regional.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-8 bg-background border border-neutral/25">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_conect_03.svg" alt="" className="w-7"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.03</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">PORTAL DO LOCATÁRIO</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Um espaço de trabalho dedicado para seus
+                        Locatários. Solicite manutenção, pague faturas e
+                        renove contratos sem precisar de chamadas
+                        telefônicas.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-8 bg-background">
+                  <div className="flex flex-col gap-5">
+                    <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
+                      <img src="/icon_graph_04.svg" alt="" className="w-7"></img>
+                      <span className="bg-primary-hover/10 p-1">SISTEMA.04</span>
+                    </div>
+                    <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">PAINEL DO PROPRIETÁRIO</div>
+                    <div>
+                      <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Transparência total para os stakeholders. Visões financeiras
+                      detalhadas e modelagem preditiva de fluxo de caixa.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden lg:block p-8 bg-background"></div>
+                <div className="p-8 bg-background flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
+                  <button type="button" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover font-headline-hanken font-semibold tracking-[0.2em] text-white text-sm cursor-pointer">
+                    ACESSE ANALITYCS
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="bg-background/50 font-headline-hanken">
+          <div className="py-8 md:py-12 lg:py-15">
+          <div className="bg-background/60 mx-5 md:mx-10 lg:mx-30 xl:mx-60 px-3 md:px-5 py-6 md:py-10 grid grid-cols-1 lg:grid-cols-2 gap-4 border">
+            <div className="flex flex-col gap-8 md:gap-10">
+              <div className="w-min text-nowrap px-2">
+                <span className="text-highlight/70 font-normal tracking-[1.5px]">DASHBOARD // HUB_PRINCIPAL</span>
+              </div>
+              <div className="px-4 md:px-6 lg:px-10 flex flex-col gap-6 md:gap-8">
+                <div className="text-primary-hover font-headline-hanken font-semibold text-xs md:text-sm tracking-[0.2em] bg-primary-hover/25 p-1 px-2 lg:w-min lg:text-nowrap">VISÃO GERAL DO SISTEMA // MÉTRICAS EM TEMPO REAL</div>
+                <span className="font-headline-hanken font-black text-2xl md:text-4xl lg:text-5xl tracking-[-1px] md:tracking-[-2px] lg:tracking-[-3px]">CENTRAL DE DADOS E INSIGHTS ESTRATÉGICOS.</span>
+                <div className="bg-neutral">
+                  <div className="p-5 flex flex-col gap-3">
+                    <div className="flex justify-between">
+                      <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40">ÍNDICE DE DEMANDA REGIONAL</span>
+                      <span className="font-headline-hanken font-bold tracking-[1.5px] text-sm text-primary-hover">+12.4% ESTE MÊS</span>
+                    </div>
+                    <div>
+                      <img className="w-full" src="/data_regional_demand_graph.png" alt="Gráfico de demanda regional"></img>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
+                  <div className="bg-neutral w-full min-w-0">
+                    <div className="p-5 flex flex-col gap-3">
+                      <div className="flex justify-between">
+                        <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40 text-nowrap">TAXA DE VACÂNCIA</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-highlight  font-bold tracking-0 text-3xl">2.1%</span>
+                        <span className="text-green-500 font-normal tracking-0 text-sm">↓ 0.4% vs prev.</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-neutral w-full min-w-0">
+                    <div className="p-5 flex flex-col gap-3">
+                      <div className="flex justify-between">
+                        <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40 text-nowrap">CAP RATE MÉDIO</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-white  font-bold tracking-0 text-3xl">6.8%</span>
+                        <span className="text-white/20 font-normal tracking-0 text-sm">Estavel</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p className="font-body text-white/50 tracking-[0] text-lg wrap-normal">Relatórios analíticos gerados via inteligência neural cruzando dados de
+                  mercado com performance interna do portfólio.
                   </p>
-                )}
-
-                {/* Footer row */}
-                <div
-                  style={{
-                    paddingTop: 12,
-                    borderTop: '1px solid var(--border)',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline',
-                  }}
-                >
-                  <div>
-                    {u.valor_visivel ? (
-                      <span>
-                        <span style={{ fontFamily: 'var(--font-display-arch)', fontWeight: 500, fontSize: 22, letterSpacing: -0.8, color: 'var(--fg-1)' }}>
-                          {fmtBRL(u.valor_mensal)}
-                        </span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-4)', marginLeft: 6 }}>
-                          /mês
-                        </span>
-                      </span>
-                    ) : (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--fg-3)', letterSpacing: 0.5, textTransform: 'uppercase' }}>
-                        Valor sob consulta
-                      </span>
-                    )}
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-display-arch)', fontWeight: 700, fontSize: 10, lineHeight: 1.2, color: 'var(--indigo)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                    Detalhes →
-                  </span>
                 </div>
-              </button>
-            )
-          })
-        )}
-
-        {/* Footer */}
-        <div style={{ padding: '32px 20px 24px', textAlign: 'center', borderTop: filtered.length > 0 ? '1px solid var(--border)' : 'none' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--fg-5)', letterSpacing: 1.5 }}>
-            POWERED BY ROMMA · GRID.OS
-          </span>
-        </div>
-      </div>
-
-      {/* Unit Detail Sheet */}
-      {selected && (
-        <UnitDetailSheet
-          u={selected}
-          edificio={getEdificio(selected.edificio_id)}
-          onClose={() => setSelected(null)}
-          onSimular={simularAluguel}
-        />
-      )}
+              </div>
+            </div>
+            <div className="bg-[url(/data_background.png)] bg-no-repeat bg-cover">
+              <div className="px-4 md:px-6 lg:px-10 py-10 md:py-20 lg:py-40 align-middle">
+                <div className="p-5 md:p-8 bg-background/85">
+                  <div className="flex flex-col gap-10">
+                    <span className="text-white font-headline-hanken font-medium traking-[1.5px]">PREVISÃO_FLUXO_2026</span>
+                    <div className="border-t border-gray-300/15"></div>
+                    <div className="lg:pl-2 lg:pr-2 flex flex-col gap-5">
+                      <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
+                        <span className="text-white/40 font-normal traking-[1.5px]">ABRIL</span>
+                        <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
+                          <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[45%] shrink-0"></div>
+                          <div className="bg-secondary self-center h-3 w-[60%] shrink-0"></div>
+                        </div>
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.2M</span>
+                      </div>
+                      <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
+                        <span className="text-white/40 font-normal traking-[1.5px]">MAIO</span>
+                        <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
+                          <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[65%] shrink-0"></div>
+                          <div className="bg-secondary self-center h-3 w-[45%] shrink-0"></div>
+                        </div>
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.8M</span>
+                      </div>
+                      <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
+                        <span className="text-white/40 font-normal traking-[1.5px]">JUNHO</span>
+                        <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
+                          <div className="bg-highlight shadow-[0_0_6px_0px_var(--color-highlight)] self-center h-3 w-[85%] shrink-0"></div>
+                          <div className="bg-secondary self-center h-3 w-[15%] shrink-0"></div>
+                        </div>
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.4M</span>
+                      </div>
+                      <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
+                        <span className="text-white/40 font-normal traking-[1.5px]">JULHO</span>
+                        <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
+                          <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[77%] shrink-0"></div>
+                          <div className="bg-secondary self-center h-3 w-[23%] shrink-0"></div>
+                        </div>
+                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.1M</span>
+                      </div>
+                    </div>
+                    <div className="border-t border-gray-300/15"></div>
+                    <div className="flex flex-col lg:flex-row lg:justify-between gap-2 lg:gap-0">
+                      <div>
+                        <span className="text-white/30 font-headline-hanken font-medium traking-[1.5px]">ID: INSIGHT_#4492</span>
+                      </div>
+                      <div>
+                        <span className="text-highlight font-headline-hanken font-medium traking-[1.5px] ">A ROMMA TRANSFORMOU NOSSA GESTÃO...</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
     </div>
-  )
+  );
 }
