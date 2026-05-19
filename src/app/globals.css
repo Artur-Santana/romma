@@ -17,7 +17,7 @@
   /* Fontes */
   --font-headline-hanken: var(--font-Hanken_Grotesk), sans-serif;
   --font-body: var(--font-space-grotesk), sans-serif;
-  --font-mono: var(--font-headline-hanken);
+  --font-mono: var(--font-jetbrains-mono), monospace;
 
   /* Sem arredondamento (design system: sharp corners) */
   --radius: 0;
@@ -91,7 +91,7 @@
   --fg-ghost:      oklch(from var(--ds-background) calc(l + 0.06) 0 0);
   --danger-fg:     oklch(0.826 0.073 22.5);
   --success:       oklch(0.696 0.17 162.5);
-  --font-mono:     var(--font-headline-hanken);
+  --font-mono:     var(--font-jetbrains-mono), monospace;
   --ease-crisp:    cubic-bezier(0.22, 1, 0.36, 1);
 }
 
