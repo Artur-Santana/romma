@@ -254,3 +254,12 @@
 .romma-unit-out  { animation: rommaUnitOut 600ms var(--ease-crisp) forwards; }
 .romma-mobile-pane::-webkit-scrollbar { width: 0; }
 .romma-mobile-pane { scrollbar-width: none; }
+
+.romma-desktop-only { display: block; }
+.romma-mobile-only  { display: none; }
+
+@media (max-width: 768px) {
+  .romma-sidebar-wrapper { display: none !important; }
+  .romma-desktop-only    { display: none; }
+  .romma-mobile-only     { display: flex; flex-direction: column; height: 100vh; }
+}
