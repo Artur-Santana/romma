@@ -1,4 +1,4 @@
-import { Public_Sans, Space_Grotesk, Hanken_Grotesk } from "next/font/google";
+import { Public_Sans, Space_Grotesk, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
 
@@ -9,6 +9,11 @@ const HankenGrotesks = Hanken_Grotesk({
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
@@ -26,7 +31,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="pt-BR"
-      className={`${HankenGrotesks.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${HankenGrotesks.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
