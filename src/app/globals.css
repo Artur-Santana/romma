@@ -88,6 +88,38 @@
   --primary-accent-glow: oklch(from var(--ds-primary) calc(l + 0.31) c h / 0.4);
   --fg-2:          oklch(from var(--ds-background) calc(l + 0.55) 0 0);
   --fg-3:          oklch(from var(--ds-background) calc(l + 0.45) 0 0);
+
+  /* ── Prototype tokens (00-css-foundation) ──────────────────────────────── */
+  /* Font alias */
+  --font-display-arch: var(--font-body);                                 /* Space Grotesk — architectural display use */
+
+  /* fg scale extended */
+  --fg-1:          oklch(1 0 0);
+  --fg-4:          oklch(from var(--ds-background) calc(l + 0.317) 0 0);
+  --fg-5:          oklch(from var(--ds-background) calc(l + 0.148) 0 0);
+
+  /* Surface levels */
+  --surface:       oklch(0.182 0 0);
+  --surface-hi:    oklch(0.218 0 0);
+
+  /* Border scale */
+  --border-1:      oklch(1 0 0 / 0.05);
+  --border-2:      oklch(1 0 0 / 0.10);
+  --border-3:      oklch(0.387 0 0 / 0.4);
+
+  /* Indigo aliases */
+  --indigo:        var(--primary);
+  --indigo-soft:   oklch(0.339 0.179 301.68 / 0.4);
+
+  /* Semantic — warning */
+  --warning:       oklch(0.769 0.165 70.08);
+  --warning-bg:    oklch(0.21 0.02 70);
+
+  /* Semantic — danger (extends existing --danger-fg) */
+  --danger:        oklch(0.838 0.089 26.76);
+  --danger-bg:     oklch(0.417 0.17 27.38);
+  --danger-bg2:    oklch(0.27 0.13 27.38);
+
   --fg-ghost:      oklch(from var(--ds-background) calc(l + 0.06) 0 0);
   --danger-fg:     oklch(0.826 0.073 22.5);
   --success:       oklch(0.696 0.17 162.5);
