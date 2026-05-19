@@ -68,7 +68,7 @@ export function MobileTopBar({ title, subtitle, onBack, onMenu, right }) {
   );
 }
 
-export function MobileBottomNav({ items, pathname: pathnameProp }) {
+export function MobileBottomNav({ items = [], pathname: pathnameProp }) {
   const routerPathname = usePathname();
   const pathname = pathnameProp ?? routerPathname;
 
