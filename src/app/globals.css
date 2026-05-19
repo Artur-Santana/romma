@@ -195,7 +195,46 @@
   }
 }
 
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--fg-4);
+  display: block;
+}
+
+.eyebrow--indigo  { color: var(--indigo); }
+.eyebrow--violet  { color: var(--chart-1); }
+.eyebrow--danger  { color: var(--danger); }
+.eyebrow--warning { color: var(--warning); }
+
 @keyframes loadingBar {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(250%); }
 }
+
+@keyframes rommaPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.2; transform: scale(2); }
+}
+
+@keyframes rommaFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rommaUnitOut {
+  to { opacity: 0; transform: translateX(40px); filter: blur(4px); }
+}
+
+@keyframes rommaScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.romma-page      { animation: rommaFadeIn 320ms var(--ease-crisp) both; }
+.romma-unit-out  { animation: rommaUnitOut 600ms var(--ease-crisp) forwards; }
+.romma-mobile-pane::-webkit-scrollbar { width: 0; }
+.romma-mobile-pane { scrollbar-width: none; }
