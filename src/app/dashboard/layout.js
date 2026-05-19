@@ -1,10 +1,16 @@
-import HeaderDashboard from '@/components/ui/HeaderDashboard'
+import TopStrip from "@/components/ui/TopStrip"
+import OwnerSidebar from "@/components/ui/OwnerSidebar"
 
 export default function DashboardLayout({ children }) {
   return (
-    <>
-      <HeaderDashboard />
-      {children}
-    </>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <TopStrip />
+      <div style={{ display: "flex", height: "calc(100vh - 24px)" }}>
+        <OwnerSidebar badges={{}} />
+        <main style={{ flex: 1, overflow: "auto", background: "var(--background)" }}>
+          {children}
+        </main>
+      </div>
+    </div>
   )
 }

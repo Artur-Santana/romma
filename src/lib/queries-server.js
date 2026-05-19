@@ -50,6 +50,17 @@ export async function getMetricas() {
     }
 }
 
+export async function getParcelasByContratos(contratoIds) {
+  if (!contratoIds?.length) return []
+  const supabase = await createServer()
+  const { data } = await supabase
+    .from('parcelas')
+    .select('id, contrato_id, numero, data_fechamento, data_vencimento, data_pagamento, status')
+    .in('contrato_id', contratoIds)
+    .in('status', ['pendente', 'vencida'])
+  return data ?? []
+}
+
 export async function getParcelasByContrato(contratoId) {
     const supabase = await createServer()
     const { data } = await supabase
