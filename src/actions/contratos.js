@@ -84,6 +84,34 @@ export async function cancelarContrato(id, unidade_id) {
   return { status: 200 }
 }
 
+export async function encerrarContrato(id, unidade_id) {
+  const { err } = await authGuard()
+  if (err) return err
+
+  if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+  if (!UUID_RE.test(unidade_id)) return { status: 400, erroMessage: 'Unidade inválida.' }
+
+  const { error } = await supabaseAdmin
+    .from('contratos')
+    .update({ status: 'encerrado' })
+    .eq('id', id)
+  if (error) return { status: 500, erroMessage: error.message }
+
+  const { error: errUnidade } = await supabaseAdmin
+    .from('unidades')
+    .update({ status: 'disponivel' })
+    .eq('id', unidade_id)
+  if (errUnidade) return { status: 500, erroMessage: errUnidade.message }
+
+  await supabaseAdmin
+    .from('parcelas')
+    .delete()
+    .eq('contrato_id', id)
+    .eq('status', 'futura')
+
+  return { status: 200 }
+}
+
 export async function gerarParcelas(contratoId) {
     const supabase = await createServer()
     const { data: { user } } = await supabase.auth.getUser()
