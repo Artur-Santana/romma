@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getContratos, getLocatarios, getUnidades } from "@/lib/queries-client";
 import Link from "next/link";
-import { gerarParcelas, criarContrato, editarContrato, cancelarContrato } from "@/actions/contratos";
+import { gerarParcelas, criarContrato, editarContrato, cancelarContrato, encerrarContrato } from "@/actions/contratos";
 
 export default function Contratos({}) {
     const [unidades, setUnidades] = useState([])
@@ -13,6 +13,7 @@ export default function Contratos({}) {
     const [formEdit, setFormEdit] = useState({ data_inicio: "", data_fim: "", status: "", observacoes: "" })
     const [editandoId, setEditandoId] = useState(null)
     const [confirmandoId, setConfirmandoId] = useState(null)
+    const [confirmandoEncerrarId, setConfirmandoEncerrarId] = useState(null)
     const [erro, setErro] = useState(null)
 
     useEffect(() => {
@@ -85,6 +86,18 @@ export default function Contratos({}) {
         setConfirmandoId(null)
     }
 
+    async function handleEncerrarContrato(contrato) {
+        setConfirmandoEncerrarId(contrato.id)
+    }
+
+    async function confirmarEncerramento(contrato) {
+        const res = await encerrarContrato(contrato.id, contrato.unidade_id)
+        if (res.status !== 200) { setErro(res.erroMessage); return }
+        setErro(null)
+        setContratos(await getContratos())
+        setConfirmandoEncerrarId(null)
+    }
+
     return (
         <main>
             <form onSubmit={insertContrato}>
@@ -130,17 +143,29 @@ export default function Contratos({}) {
                                 <p>Locatario: {contrato.locatarios.nome_razao_social}</p>
                                 <Link href={`/dashboard/contratos/${contrato.id}`}>Ver Parcelas</Link>
                                 <button onClick={() => handleEditarContrato(contrato)}>Editar</button>
-                                {contrato.status === 'ativo' && !encerrado && (
-                                    <button onClick={() => handleCancelarContrato(contrato)}>Cancelar Contrato</button>
-                                )}
-                                {confirmandoId === contrato.id ? (
+                                {encerrado && (
                                     <>
-                                        <span>Confirmar Cancelamento?</span>
-                                        <button onClick={() => confirmarCancelamento(contrato)}>Sim</button>
-                                        <button onClick={() => setConfirmandoId(null)}>Não</button>
+                                        <button onClick={() => handleEncerrarContrato(contrato)}>Encerrar</button>
+                                        {confirmandoEncerrarId === contrato.id && (
+                                            <>
+                                                <span>Confirmar Encerramento?</span>
+                                                <button onClick={() => confirmarEncerramento(contrato)}>Sim</button>
+                                                <button onClick={() => setConfirmandoEncerrarId(null)}>Não</button>
+                                            </>
+                                        )}
                                     </>
-                                ) : (
-                                    <></>
+                                )}
+                                {contrato.status === 'ativo' && !encerrado && (
+                                    <>
+                                        <button onClick={() => handleCancelarContrato(contrato)}>Cancelar Contrato</button>
+                                        {confirmandoId === contrato.id && (
+                                            <>
+                                                <span>Confirmar Cancelamento?</span>
+                                                <button onClick={() => confirmarCancelamento(contrato)}>Sim</button>
+                                                <button onClick={() => setConfirmandoId(null)}>Não</button>
+                                            </>
+                                        )}
+                                    </>
                                 )}
                             </>
                         )}
