@@ -42,28 +42,26 @@ Declared values (multiples of 4):
 | sm | 8px | Badge padding, inline element gaps |
 | md | 16px | Cell padding, form gap |
 | lg | 24px | Card inner padding, section gap |
-| xl | 28px | Metric tile padding (existing dashboard) |
-| 2xl | 32px | Column gap, section separation |
-| 3xl | 48px | Page padding (existing dashboard: `padding: 48`) |
-| 4xl | 64px | Major section padding (setup wizard panel) |
+| xl | 32px | Column gap, section separation |
+| 2xl | 48px | Page padding (existing dashboard: `padding: 48`) |
+| 3xl | 64px | Major section padding (setup wizard panel) |
 
-Exceptions: Touch targets for interactive cells use `padding: 20px 24px` (existing `quick-action-cell` pattern) — 20px is not on the scale but is established convention; do not change it during Phase 1.
+Exceptions:
+- Touch targets for interactive cells use `padding: 20px 24px` (existing `quick-action-cell` pattern) — 20px is not on the scale but is established convention; do not change it during Phase 1.
+- Metric tile padding: `28px` (existing `page.js` pattern — do not change in Phase 1).
 
 ---
 
 ## Typography
 
-The existing dashboard uses a deliberate multi-scale system. Document the real scale with role assignments — do not collapse to 3–4 sizes, as the Console.OS aesthetic depends on scale contrast.
-
 | Role | Size | Weight | Font | Line Height |
 |------|------|--------|------|-------------|
-| Micro label / mono caption | 9–11px | 700 | JetBrains Mono | 1.2 |
-| Body / table data | 12–13px | 400–600 | Space Grotesk | 1.4 |
+| Mono micro / eyebrow / caption | 11px | 700 | JetBrains Mono | 1.2 |
+| Body / table data | 13px | 400 | Space Grotesk | 1.4 |
 | Section heading | 24px | 700 | Space Grotesk (font-display) | 1.1 |
-| Page heading mobile | 28px | 700 | Space Grotesk (font-display) | 1.1 |
-| Sub-page heading | 32px | 700 | Space Grotesk (font-display) | 1.1 |
-| Mobile metric display | 36px | 700 | Space Grotesk (font-display) | 1.0 |
-| Desktop metric display | 48px | 700 | Space Grotesk (font-display) | 1.0 |
+| Display / metric | 48px | 700 | Space Grotesk (font-display) | 1.0 |
+
+**Responsive display variants (not separate table rows):** The 48px display role scales down responsively — 36px on mobile metric tiles, 32px on sub-page headings, 28px on mobile page headings. These are responsive variants of the display role, not distinct type roles. Do not introduce new weight values for these variants; use weight 700 throughout.
 
 **Letter-spacing:** Display sizes use `letterSpacing: -2.4` at 48px, `letterSpacing: -1.8` at 36px, `letterSpacing: -1.5` at 32px, `letterSpacing: -1.4` at 28px, `letterSpacing: -0.5` at 24px.
 
