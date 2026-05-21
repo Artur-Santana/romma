@@ -1,101 +1,184 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getParcelasByContrato } from "@/lib/queries-client"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { getParcelasByContrato, getContratos, getLocatarios, getUnidades } from "@/lib/queries-client"
+import { fmtData } from "@/lib/utils"
+import StatusBadge from "@/components/ui/StatusBadge"
 import { marcarParcelaComoPaga } from "@/actions/parcelas"
 
-const statusConfig = {
-    futura:   { label: 'Futura',   classe: 'bg-[#1A1A1A] text-[#666666] border border-[#444444]/20' },
-    pendente: { label: 'Pendente', classe: 'bg-[#4B0082]/20 text-[#9B59B6] border border-[#4B0082]/30' },
-    paga:     { label: 'Paga',     classe: 'bg-[#0A0A0A] text-[#22C55E] border border-[#22C55E]/20' },
-    vencida:  { label: 'Vencida',  classe: 'bg-[#2D0000] text-[#EF4444] border border-[#EF4444]/30' },
+const COL = "60px 1fr 1fr 1fr 1.2fr 120px"
+
+function HeaderCell({ children }) {
+  return (
+    <div style={{
+      padding: "12px 20px",
+      fontFamily: "var(--font-mono)",
+      fontSize: 10, fontWeight: 700,
+      letterSpacing: 1.4, textTransform: "uppercase",
+      color: "var(--fg-4)",
+    }}>
+      {children}
+    </div>
+  )
 }
 
 export default function Parcelas({ contratoId }) {
-    const [parcelas, setParcelas] = useState([])
-    const [erro, setErro] = useState(null)
+  const router = useRouter()
+  const [parcelas, setParcelas] = useState([])
+  const [contrato, setContrato] = useState(null)
+  const [locatario, setLocatario] = useState(null)
+  const [unidade, setUnidade] = useState(null)
+  const [erro, setErro] = useState(null)
 
-    useEffect(() => {
-        async function carregarParcelas() {
-            setParcelas(await getParcelasByContrato(contratoId))
-        }
-        carregarParcelas()
-    }, [contratoId])
-
-    async function marcarComoPaga(parcela) {
-        const result = await marcarParcelaComoPaga(parcela.id)
-        if (result.status === 200) {
-            setErro(null)
-            setParcelas(await getParcelasByContrato(contratoId))
-        } else {
-            setErro(result.erroMessage)
-        }
+  useEffect(() => {
+    async function carregar() {
+      const [p, contratos, locatarios, unidades] = await Promise.all([
+        getParcelasByContrato(contratoId),
+        getContratos(),
+        getLocatarios(),
+        getUnidades(),
+      ])
+      setParcelas(p ?? [])
+      const c = (contratos ?? []).find(x => x.id === contratoId)
+      if (c) {
+        setContrato(c)
+        setLocatario((locatarios ?? []).find(l => l.id === c.locatario_id) ?? c.locatarios)
+        setUnidade((unidades ?? []).find(u => u.id === c.unidade_id) ?? c.unidades)
+      }
     }
+    carregar()
+  }, [contratoId])
 
-    return (
-        <main className="bg-black min-h-screen p-8">
-            <div className="mb-6">
-                <Link
-                    href="/dashboard/contratos"
-                    className="border border-white/20 text-white px-4 py-2 text-xs uppercase tracking-widest font-bold hover:bg-[#1A1A1A]"
+  async function marcarComoPaga(parcela) {
+    const result = await marcarParcelaComoPaga(parcela.id)
+    if (result.status === 200) {
+      setErro(null)
+      setParcelas(await getParcelasByContrato(contratoId))
+    } else {
+      setErro(result.erroMessage)
+    }
+  }
+
+  const pagas = parcelas.filter(p => p.status === "paga").length
+  const pendentes = parcelas.filter(p => p.status === "pendente" || p.status === "vencida").length
+
+  return (
+    <div className="romma-page" style={{ padding: "48px 48px 80px", background: "var(--background)", minHeight: "100%" }}>
+
+      {/* Back */}
+      <button
+        onClick={() => router.push("/dashboard/contratos")}
+        style={{
+          border: "1px solid var(--border-3)", background: "transparent",
+          padding: "10px 20px", marginBottom: 40,
+          fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700,
+          letterSpacing: 1.2, textTransform: "uppercase", color: "var(--fg-3)",
+          cursor: "pointer",
+        }}
+      >
+        ← Contratos
+      </button>
+
+      {/* Header */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 48 }}>
+        <span className="eyebrow eyebrow--indigo">SISTEMA.02 · PARCELAS</span>
+        <h2 className="font-display" style={{ fontWeight: 700, fontSize: 48, letterSpacing: -2.4, color: "var(--fg-1)", margin: 0, lineHeight: 1 }}>
+          Parcelas.
+        </h2>
+        {(locatario || unidade) && (
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-3)" }}>
+            {locatario?.nome_razao_social ?? "—"} · {unidade?.nome ?? "—"}
+          </span>
+        )}
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)" }}>
+          {pagas} pagas · {pendentes} pendentes · {parcelas.length} total
+        </span>
+      </div>
+
+      {erro && (
+        <div style={{ padding: "10px 16px", marginBottom: 24, background: "var(--danger-bg2)", border: "1px solid var(--danger)", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--danger)" }}>
+          {erro}
+        </div>
+      )}
+
+      {/* Table */}
+      <div style={{ border: "1px solid var(--border-3)", background: "var(--surface)", marginBottom: 32 }}>
+        <div style={{ display: "grid", gridTemplateColumns: COL, background: "oklch(0.26 0 0)", borderBottom: "1px solid var(--border-3)" }}>
+          <HeaderCell>#</HeaderCell>
+          <HeaderCell>Fechamento</HeaderCell>
+          <HeaderCell>Vencimento</HeaderCell>
+          <HeaderCell>Pagamento</HeaderCell>
+          <HeaderCell>Status</HeaderCell>
+          <HeaderCell>Ação</HeaderCell>
+        </div>
+
+        {parcelas.length === 0 && (
+          <div style={{ padding: "48px 20px", textAlign: "center", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)", letterSpacing: 0.5 }}>
+            Nenhuma parcela encontrada.
+          </div>
+        )}
+
+        {parcelas.map((parcela, i) => (
+          <div
+            key={parcela.id}
+            style={{
+              display: "grid", gridTemplateColumns: COL,
+              borderTop: i > 0 ? "1px solid var(--border-3)" : 0,
+              alignItems: "center",
+            }}
+          >
+            <div style={{ padding: "14px 20px" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-2)", fontWeight: 700 }}>
+                {String(parcela.numero).padStart(2, "0")}
+              </span>
+            </div>
+
+            <div style={{ padding: "14px 20px" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-3)" }}>
+                {fmtData(parcela.data_fechamento)}
+              </span>
+            </div>
+
+            <div style={{ padding: "14px 20px" }}>
+              <span style={{
+                fontFamily: "var(--font-mono)", fontSize: 11,
+                color: parcela.status === "vencida" ? "var(--danger)" : "var(--fg-3)",
+              }}>
+                {fmtData(parcela.data_vencimento)}
+              </span>
+            </div>
+
+            <div style={{ padding: "14px 20px" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: parcela.data_pagamento ? "var(--success)" : "var(--fg-5)" }}>
+                {parcela.data_pagamento ? fmtData(parcela.data_pagamento) : "—"}
+              </span>
+            </div>
+
+            <div style={{ padding: "14px 20px" }}>
+              <StatusBadge status={parcela.status} />
+            </div>
+
+            <div style={{ padding: "14px 20px" }}>
+              {(parcela.status === "pendente" || parcela.status === "vencida") && (
+                <button
+                  onClick={() => marcarComoPaga(parcela)}
+                  style={{
+                    border: "1px solid var(--success)", background: "transparent",
+                    padding: "8px 16px", cursor: "pointer",
+                    fontFamily: "var(--font-mono)", fontSize: 10,
+                    fontWeight: 700, letterSpacing: 1, color: "var(--success)",
+                    textTransform: "uppercase",
+                  }}
                 >
-                    ← Voltar
-                </Link>
+                  Marcar Paga
+                </button>
+              )}
             </div>
+          </div>
+        ))}
+      </div>
 
-            <h1 className="text-white text-3xl font-extrabold uppercase tracking-tight mb-2">
-                Parcelas
-            </h1>
-            <div className="w-16 h-1 bg-[#4B0082] mb-8"></div>
-
-            {erro && <p className="text-red-500 mb-4">{erro}</p>}
-
-            <div className="flex flex-col gap-0">
-                {parcelas.map(parcela => (
-                    <div
-                        key={parcela.id}
-                        className="bg-[#121212] border border-[#444444]/20 p-4 flex items-center justify-between hover:bg-[#1A1A1A] transition-colors"
-                    >
-                        <div className="flex items-center gap-6">
-                            <span className="text-white text-sm font-bold w-8">
-                                #{parcela.numero}
-                            </span>
-                            <span className={`px-2 py-1 text-xs uppercase tracking-widest font-bold ${statusConfig[parcela.status]?.classe}`}>
-                                {statusConfig[parcela.status]?.label}
-                            </span>
-                            <div className="text-[#666666] text-xs uppercase tracking-widest">
-                                <span>Fechamento: <span className="text-white">{parcela.data_fechamento}</span></span>
-                                <span className="mx-3">|</span>
-                                <span>Vencimento: <span className="text-white">{parcela.data_vencimento}</span></span>
-                                {parcela.status === 'paga' && (
-                                    <>
-                                        <span className="mx-3">|</span>
-                                        <span>Pago em: <span className="text-[#22C55E]">{parcela.data_pagamento}</span></span>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-
-                        <div>
-                            {(parcela.status === 'pendente' || parcela.status === 'vencida') && (
-                                <button
-                                    onClick={() => marcarComoPaga(parcela)}
-                                    className="bg-[#4B0082] text-white px-4 py-2 text-xs uppercase tracking-widest font-bold hover:bg-[#6B20A2]"
-                                >
-                                    Marcar como paga
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {parcelas.length === 0 && (
-                <p className="text-[#666666] text-sm uppercase tracking-widest mt-8">
-                    Nenhuma parcela encontrada.
-                </p>
-            )}
-        </main>
-    )
+    </div>
+  )
 }
