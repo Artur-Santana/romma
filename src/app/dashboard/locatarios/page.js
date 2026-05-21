@@ -1,5 +1,16 @@
-import Locatarios from "@/components/features/Locatarios";
+import { getLocatarios, getContratos } from "@/lib/queries-server"
+import LocatariosDesktop from "@/components/features/LocatariosDesktop"
 
-export default function LocatariosPage() {
-  return <Locatarios />;
+export default async function LocatariosPage() {
+  const [locatarios, contratos] = await Promise.all([
+    getLocatarios(),
+    getContratos(),
+  ])
+
+  return (
+    <LocatariosDesktop
+      initialLocatarios={locatarios ?? []}
+      contratos={contratos ?? []}
+    />
+  )
 }
