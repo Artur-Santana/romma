@@ -15,7 +15,7 @@ export async function getEdificios() {
 
 export async function getLocatarios() {
     const supabase = await createServer()
-    const { data } = await supabase.from('locatarios').select('id, usuario_id, nome_razao_social, tipo, documento, email, telefone')
+    const { data } = await supabase.from('locatarios').select('id, usuario_id, nome_razao_social, tipo, documento, email, telefone, status_convite')
     return data
 }
 
