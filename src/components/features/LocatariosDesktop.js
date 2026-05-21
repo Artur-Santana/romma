@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import PageHeader from "@/components/ui/PageHeader"
 import StatusBadge from "@/components/ui/StatusBadge"
 import { convidarLocatario, revogarConvite } from "@/actions/locatarios"
@@ -22,6 +23,7 @@ function getInitials(name) {
 }
 
 export default function LocatariosDesktop({ initialLocatarios, contratos }) {
+  const router = useRouter()
   const [locatarios, setLocatarios] = useState(initialLocatarios ?? [])
   const [showInviteForm, setShowInviteForm] = useState(false)
   const [form, setForm] = useState(resetForm())
@@ -155,7 +157,14 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                     }}
                   >REVOGAR</button>
                 ) : (
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--fg-3)" }}>VER →</span>
+                  <button
+                    onClick={() => router.push(`/dashboard/locatarios/${l.id}`)}
+                    style={{
+                      all: "unset", cursor: "pointer",
+                      fontFamily: "var(--font-mono)", fontSize: 10,
+                      letterSpacing: 0.5, color: "var(--fg-3)", fontWeight: 700
+                    }}
+                  >VER →</button>
                 )}
               </div>
             </div>
