@@ -6,6 +6,7 @@ import { getContratos, getLocatarios, getUnidades, getEdificios } from "@/lib/qu
 import { fmtData } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
 import ConfirmDialog from "@/components/ui/ConfirmDialog"
+import PageHeader from "@/components/ui/PageHeader"
 import { gerarParcelas, criarContrato, cancelarContrato, encerrarContrato } from "@/actions/contratos"
 
 function isExpiring(c) {
@@ -159,33 +160,12 @@ export default function Contratos() {
 
       <div className="romma-page" style={{ padding: "48px 48px 80px", background: "var(--background)", minHeight: "100%" }}>
 
-        {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 48 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <span className="eyebrow eyebrow--indigo">SISTEMA.02 // VÍNCULOS</span>
-            <h2 className="font-display" style={{ fontWeight: 700, fontSize: 48, letterSpacing: -2.4, color: "var(--fg-1)", margin: 0, lineHeight: 1 }}>
-              Contratos.
-            </h2>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-3)" }}>
-              {ativos} ativos · {encerrados} encerrados
-            </span>
-          </div>
-          <button
-            onClick={() => setShowForm(v => !v)}
-            style={{
-              display: "flex", alignItems: "center", gap: 12,
-              border: "1px solid var(--indigo)", background: "transparent",
-              padding: "14px 24px", cursor: "pointer",
-            }}
-          >
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 1.4, textTransform: "uppercase", color: "var(--indigo)", fontWeight: 700 }}>
-              {showForm ? "Fechar" : "Novo Contrato"}
-            </span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--indigo)", fontWeight: 700 }}>
-              {showForm ? "×" : "C+"}
-            </span>
-          </button>
-        </div>
+        <PageHeader
+          eyebrow="SISTEMA.02 // VÍNCULOS"
+          title="Contratos."
+          subtitle={`${ativos} ativos · ${encerrados} encerrados`}
+          cta={{ label: showForm ? "Fechar" : "Novo Contrato", code: showForm ? "×" : "C+", onClick: () => setShowForm(v => !v) }}
+        />
 
         {/* New contract form */}
         {showForm && (
