@@ -48,7 +48,7 @@ export function MobileBottomNav({ items = [], pathname: pathnameProp }) {
         const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
         return (
           <Link
-            key={item.id}
+            key={item.href}
             href={item.href}
             className={cn(
               "flex-1 px-2 pt-[14px] pb-4 text-center no-underline flex flex-col items-center gap-0.5 border-t-2",
