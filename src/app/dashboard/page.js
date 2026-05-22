@@ -84,7 +84,7 @@ export default async function Dashboard() {
   if (isEmpty) {
     return (
       <>
-        <div className="romma-desktop-only hidden md:block romma-page">
+        <div className="romma-desktop-only">
           <div className="romma-page p-12 bg-background min-h-full">
             <div className="flex flex-col gap-3 mb-12">
               <span className="eyebrow eyebrow--indigo">CONSOLE.OS // VISÃO DO PROPRIETÁRIO</span>
@@ -162,7 +162,7 @@ export default async function Dashboard() {
 
   return (
     <>
-      <div className="romma-desktop-only hidden md:block romma-page">
+      <div className="romma-desktop-only">
         <div className="romma-page p-12 pb-20 bg-background min-h-full">
 
           {/* Header */}
