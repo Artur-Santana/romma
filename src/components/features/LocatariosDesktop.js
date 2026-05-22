@@ -6,6 +6,9 @@ import PageHeader from "@/components/ui/PageHeader"
 import StatusBadge from "@/components/ui/StatusBadge"
 import { convidarLocatario, revogarConvite } from "@/actions/locatarios"
 import { getLocatarios } from "@/lib/queries-client"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 function resetForm() {
   return { email: "", nome_razao_social: "", tipo: "pf", documento: "", telefone: "" }
@@ -62,7 +65,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   const GRID = "1.8fr 0.5fr 1.2fr 1.2fr 0.8fr 1.4fr 80px"
 
   return (
-    <div className="romma-desktop-only romma-page" style={{ padding: 48, background: "var(--background)", minHeight: "100%" }}>
+    <div className="romma-desktop-only romma-page p-12 bg-background min-h-full">
       <PageHeader
         eyebrow="SISTEMA.03 // PESSOAS"
         title="Locatários."
@@ -71,23 +74,17 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       />
 
       {/* Table */}
-      <div style={{ background: "var(--surface)", border: "1px solid var(--border-3)" }}>
+      <div className="bg-surface border border-border-3">
         {/* Header */}
-        <div style={{
-          display: "grid", gridTemplateColumns: GRID,
-          padding: "12px 20px", background: "oklch(0.26 0 0)"
-        }}>
+        <div style={{ display: "grid", gridTemplateColumns: GRID }} className="px-5 py-3 bg-[oklch(0.26_0_0)]">
           {["Nome", "Tipo", "Documento", "Email", "Contratos", "Status", "Ações"].map(h => (
-            <span key={h} style={{
-              fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700,
-              letterSpacing: 1.5, textTransform: "uppercase", color: "var(--fg-4)"
-            }}>{h}</span>
+            <span key={h} className="font-mono text-[9px] font-bold tracking-[1.5px] uppercase text-fg-4">{h}</span>
           ))}
         </div>
 
         {/* Rows */}
         {locatarios.length === 0 && (
-          <div style={{ padding: "32px 20px", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)", textAlign: "center" }}>
+          <div className="px-5 py-8 font-mono text-[12px] text-fg-4 text-center">
             Nenhum locatário cadastrado.
           </div>
         )}
@@ -98,45 +95,30 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           const isPendente = l.status_convite === "pendente"
 
           return (
-            <div key={l.id} style={{
-              display: "grid", gridTemplateColumns: GRID,
-              padding: "16px 20px", alignItems: "center",
-              borderTop: i > 0 ? "1px solid var(--border-3)" : 0
-            }}>
+            <div key={l.id} style={{ display: "grid", gridTemplateColumns: GRID }} className={cn("px-5 py-4 items-center", i > 0 ? "border-t border-border-3" : "")}>
               {/* Nome + avatar */}
-              <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-                <div style={{
-                  width: 32, height: 32, flexShrink: 0,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  background: isPendente ? "transparent" : "var(--surface)",
-                  border: "1px solid var(--border-2)",
-                  fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 10, letterSpacing: 1,
-                  color: isPendente ? "var(--fg-4)" : "var(--fg-1)"
-                }}>{ini}</div>
-                <span style={{
-                  fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 13,
-                  color: "var(--fg-1)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"
-                }}>{l.nome_razao_social}</span>
+              <div className="flex items-center gap-3 min-w-0">
+                <div className={cn("w-8 h-8 shrink-0 flex items-center justify-center border font-body font-bold text-[10px] tracking-[1px]", isPendente ? "bg-transparent border-[var(--border-2)] text-fg-4" : "bg-surface border-[var(--border-2)] text-fg-1")}>
+                  {ini}
+                </div>
+                <span className="font-body font-medium text-[13px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">{l.nome_razao_social}</span>
               </div>
 
               {/* Tipo */}
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 0.5, color: "var(--fg-3)" }}>
+              <span className="font-mono text-[10px] tracking-[0.5px] text-fg-3">
                 {l.tipo?.toUpperCase()}
               </span>
 
               {/* Documento */}
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-2)" }}>
+              <span className="font-mono text-[11px] text-fg-2">
                 {fmtDoc(l.tipo, l.documento)}
               </span>
 
               {/* Email */}
-              <span style={{
-                fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-3)",
-                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"
-              }}>{l.email}</span>
+              <span className="font-mono text-[11px] text-fg-3 overflow-hidden text-ellipsis whitespace-nowrap">{l.email}</span>
 
               {/* Contratos */}
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-2)" }}>
+              <span className="font-mono text-[12px] text-fg-2">
                 {ativosCount}/{cs.length}
               </span>
 
@@ -146,25 +128,21 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
               </div>
 
               {/* Ações */}
-              <div style={{ display: "flex", gap: 8 }}>
+              <div className="flex gap-2">
                 {isPendente ? (
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleRevogar(l.id)}
-                    style={{
-                      all: "unset", cursor: "pointer",
-                      fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 0.5,
-                      color: "var(--danger)", fontWeight: 700
-                    }}
-                  >REVOGAR</button>
+                    className="font-mono text-[10px] text-danger-fg uppercase tracking-[0.5px] font-bold p-0 h-auto"
+                  >REVOGAR</Button>
                 ) : (
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => router.push(`/dashboard/locatarios/${l.id}`)}
-                    style={{
-                      all: "unset", cursor: "pointer",
-                      fontFamily: "var(--font-mono)", fontSize: 10,
-                      letterSpacing: 0.5, color: "var(--fg-3)", fontWeight: 700
-                    }}
-                  >VER →</button>
+                    className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold p-0 h-auto"
+                  >VER →</Button>
                 )}
               </div>
             </div>
@@ -173,123 +151,110 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       </div>
 
       {/* Invite Callout */}
-      <div style={{
-        marginTop: 32, padding: 24,
-        border: "1px solid var(--indigo)",
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        background: "oklch(0.339 0.179 301.68 / 0.06)"
-      }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <div className="mt-8 p-6 border border-indigo flex justify-between items-center bg-[oklch(0.339_0.179_301.68_/_0.06)]">
+        <div className="flex flex-col gap-1.5">
           <span className="eyebrow eyebrow--indigo">FLUXO DE CONVITE</span>
-          <span style={{ fontSize: 13, color: "var(--fg-2)", lineHeight: 1.5, maxWidth: 540 }}>
+          <span className="text-[13px] text-fg-2 leading-relaxed max-w-[540px]">
             Convide um locatário pelo email. Ele recebe um token único, define a senha e o vínculo é selado. Você pode revogar antes do aceite.
           </span>
         </div>
-        <button
+        <Button
           onClick={() => setShowInviteForm(true)}
-          style={{
-            all: "unset", cursor: "pointer", padding: "12px 20px",
-            background: "var(--indigo)", color: "var(--fg-1)",
-            fontWeight: 700, fontSize: 11, letterSpacing: 1.4, textTransform: "uppercase"
-          }}
-        >Convidar →</button>
+          className="bg-indigo text-fg-1 font-mono font-bold text-[11px] tracking-[1.4px] uppercase rounded-none"
+        >Convidar →</Button>
       </div>
 
       {/* Invite Form Modal */}
       {showInviteForm && (
-        <div style={{
-          position: "fixed", inset: 0, zIndex: 50,
-          background: "oklch(0 0 0 / 0.7)",
-          display: "flex", alignItems: "center", justifyContent: "center"
-        }} onClick={e => { if (e.target === e.currentTarget) setShowInviteForm(false) }}>
-          <div style={{
-            background: "var(--surface)", border: "1px solid var(--border-2)",
-            width: 480, padding: 32, display: "flex", flexDirection: "column", gap: 24
-          }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div
+          className="fixed inset-0 z-50 bg-[oklch(0_0_0/0.7)] flex items-center justify-center"
+          onClick={e => { if (e.target === e.currentTarget) setShowInviteForm(false) }}
+        >
+          <div className="bg-surface border border-[var(--border-2)] w-[480px] p-8 flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">NOVO LOCATÁRIO</span>
-              <h3 style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 20, color: "var(--fg-1)", margin: 0 }}>
+              <h3 className="font-body font-bold text-[20px] text-fg-1 m-0">
                 Enviar Convite
               </h3>
             </div>
 
-            <form onSubmit={handleConvidar} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <form onSubmit={handleConvidar} className="flex flex-col gap-4">
               <Field label="Email" required>
-                <input
-                  type="email" required value={form.email}
+                <Input
+                  type="email"
+                  required
+                  value={form.email}
                   onChange={e => setForm({ ...form, email: e.target.value })}
-                  style={inputStyle}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
                 />
               </Field>
 
               <Field label="Nome / Razão Social" required>
-                <input
-                  type="text" required value={form.nome_razao_social}
+                <Input
+                  type="text"
+                  required
+                  value={form.nome_razao_social}
                   onChange={e => setForm({ ...form, nome_razao_social: e.target.value })}
-                  style={inputStyle}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
                 />
               </Field>
 
               <Field label="Tipo">
-                <div style={{ display: "flex", gap: 0 }}>
+                <div className="flex gap-0">
                   {["pf", "pj"].map(t => (
                     <button
-                      key={t} type="button"
+                      key={t}
+                      type="button"
                       onClick={() => setForm({ ...form, tipo: t })}
-                      style={{
-                        all: "unset", cursor: "pointer", padding: "8px 20px",
-                        fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: 11, letterSpacing: 1,
-                        textTransform: "uppercase",
-                        background: form.tipo === t ? "var(--indigo)" : "var(--surface-hi)",
-                        color: form.tipo === t ? "var(--fg-1)" : "var(--fg-4)",
-                        border: "1px solid var(--border-3)"
-                      }}
+                      className={cn(
+                        "cursor-pointer py-2 px-5 font-mono font-bold text-[11px] tracking-[1px] uppercase border border-border-3",
+                        form.tipo === t ? "bg-indigo text-fg-1" : "bg-surface-hi text-fg-4"
+                      )}
                     >{t === "pf" ? "Pessoa Física" : "Pessoa Jurídica"}</button>
                   ))}
                 </div>
               </Field>
 
               <Field label={form.tipo === "pj" ? "CNPJ" : "CPF"} required>
-                <input
-                  type="text" required value={form.documento}
+                <Input
+                  type="text"
+                  required
+                  value={form.documento}
                   placeholder={form.tipo === "pj" ? "00.000.000/0000-00" : "000.000.000-00"}
                   onChange={e => setForm({ ...form, documento: e.target.value.replace(/\D/g, "") })}
-                  style={inputStyle}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
                 />
               </Field>
 
               <Field label="Telefone" required>
-                <input
-                  type="tel" required value={form.telefone}
+                <Input
+                  type="tel"
+                  required
+                  value={form.telefone}
                   onChange={e => setForm({ ...form, telefone: e.target.value })}
-                  style={inputStyle}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
                 />
               </Field>
 
               {erro && (
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--danger)" }}>{erro}</span>
+                <span className="font-mono text-[11px] text-danger-fg">{erro}</span>
               )}
 
-              <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", marginTop: 8 }}>
-                <button
-                  type="button" onClick={() => { setShowInviteForm(false); setErro("") }}
-                  style={{
-                    all: "unset", cursor: "pointer", padding: "10px 20px",
-                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 11,
-                    letterSpacing: 1.2, textTransform: "uppercase",
-                    border: "1px solid var(--border-3)", color: "var(--fg-3)"
-                  }}
-                >Cancelar</button>
-                <button
-                  type="submit" disabled={loading}
-                  style={{
-                    all: "unset", cursor: loading ? "wait" : "pointer",
-                    padding: "10px 24px", background: "var(--indigo)",
-                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 11,
-                    letterSpacing: 1.2, textTransform: "uppercase", color: "var(--fg-1)",
-                    opacity: loading ? 0.6 : 1
-                  }}
-                >{loading ? "Enviando..." : "Enviar Convite →"}</button>
+              <div className="flex gap-3 justify-end mt-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => { setShowInviteForm(false); setErro("") }}
+                  className="text-fg-3 font-mono text-[12px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
+                >Cancelar</Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className={cn(
+                    "bg-indigo text-fg-1 font-body font-bold text-[11px] tracking-[1.2px] uppercase px-6 py-[10px] rounded-none h-auto",
+                    loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+                  )}
+                >{loading ? "Enviando..." : "Enviar Convite →"}</Button>
               </div>
             </form>
           </div>
@@ -301,19 +266,11 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
 
 function Field({ label, required, children }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <label style={{
-        fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700,
-        letterSpacing: 1, textTransform: "uppercase", color: "var(--fg-4)"
-      }}>{label}{required && <span style={{ color: "var(--danger)", marginLeft: 2 }}>*</span>}</label>
+    <div className="flex flex-col gap-1.5">
+      <label className="font-mono text-[10px] font-bold tracking-[1px] uppercase text-fg-4">
+        {label}{required && <span className="text-danger-fg ml-0.5">*</span>}
+      </label>
       {children}
     </div>
   )
-}
-
-const inputStyle = {
-  all: "unset", display: "block", width: "100%", boxSizing: "border-box",
-  padding: "10px 12px", background: "var(--surface-hi)",
-  border: "1px solid var(--border-3)", color: "var(--fg-1)",
-  fontFamily: "var(--font-mono)", fontSize: 13
 }

@@ -18,7 +18,7 @@ export async function getLocatarios() {
 }
 
 export async function getContratos() {
-    const { data } = await supabase.from('contratos').select('id, data_inicio, data_fim, status, observacoes, unidade_id, locatarios(nome_razao_social), unidades(nome)')
+    const { data } = await supabase.from('contratos').select('id, data_inicio, data_fim, status, observacoes, unidade_id, locatario_id, locatarios(nome_razao_social), unidades(nome)')
     return data
 }
 

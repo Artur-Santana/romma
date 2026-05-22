@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+
 export default function ConfirmDialog({
   open,
   title,
@@ -12,92 +14,41 @@ export default function ConfirmDialog({
 }) {
   if (!open) return null;
 
-  const accentColor = danger ? "var(--danger)" : "var(--indigo)";
-  const accentBg    = danger ? "var(--danger-bg)" : "var(--indigo)";
   const eyebrowMod  = danger ? "eyebrow--danger" : "eyebrow--indigo";
   const eyebrowText = danger ? "AÇÃO DESTRUTIVA" : (confirmLabel ?? "Confirmação");
 
   return (
     <div
       onClick={onCancel}
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "oklch(0 0 0 / 0.7)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 100,
-      }}
+      className="fixed inset-0 bg-[oklch(0_0_0/0.7)] flex items-center justify-center z-[100]"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: 480,
-          background: "var(--background)",
-          border: `1px solid ${accentColor}`,
-          padding: 32,
-          display: "flex",
-          flexDirection: "column",
-          gap: 20,
-        }}
+        className={cn(
+          "w-[480px] bg-background border flex flex-col gap-5 p-8",
+          danger ? "border-danger-fg" : "border-indigo"
+        )}
       >
         <span className={`eyebrow ${eyebrowMod}`}>{eyebrowText}</span>
-        <div
-          style={{
-            fontFamily: "var(--font-display-arch)",
-            fontWeight: 700,
-            fontSize: 28,
-            letterSpacing: -1.2,
-            color: "var(--fg-1)",
-            lineHeight: 1.1,
-          }}
-        >
+        <div className="font-display font-bold text-[28px] tracking-[-1.2px] text-fg-1 leading-[1.1]">
           {title}
         </div>
-        <div
-          style={{
-            fontSize: 14,
-            lineHeight: 1.5,
-            color: "var(--fg-2)",
-          }}
-        >
+        <div className="text-[14px] leading-[1.5] text-fg-2">
           {body}
         </div>
-        <div style={{ display: "flex", gap: 12 }}>
+        <div className="flex gap-3">
           <button
             onClick={onCancel}
-            style={{
-              flex: 1,
-              border: "1px solid var(--border-3)",
-              background: "transparent",
-              padding: "14px 0",
-              fontFamily: "var(--font-body)",
-              fontWeight: 700,
-              fontSize: 12,
-              letterSpacing: 1.2,
-              textTransform: "uppercase",
-              color: "var(--fg-2)",
-              cursor: "pointer",
-            }}
+            className="flex-1 border border-border-3 bg-transparent py-[14px] font-body font-bold text-[12px] tracking-[1.2px] uppercase text-fg-2 cursor-pointer"
           >
             {cancelLabel}
           </button>
           <button
             onClick={onConfirm}
-            style={{
-              flex: 1,
-              border: "none",
-              background: accentBg,
-              padding: "14px 0",
-              fontFamily: "var(--font-body)",
-              fontWeight: 700,
-              fontSize: 12,
-              letterSpacing: 1.2,
-              textTransform: "uppercase",
-              color: danger ? "var(--danger)" : "var(--fg-1)",
-              cursor: "pointer",
-            }}
+            className={cn(
+              "flex-1 border-none py-[14px] font-body font-bold text-[12px] tracking-[1.2px] uppercase cursor-pointer",
+              danger ? "bg-[var(--danger-bg)] text-danger-fg" : "bg-indigo text-fg-1"
+            )}
           >
             {confirmLabel}
           </button>

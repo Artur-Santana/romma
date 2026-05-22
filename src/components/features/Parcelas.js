@@ -3,21 +3,17 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getParcelasByContrato, getContratos, getLocatarios, getUnidades } from "@/lib/queries-client"
-import { fmtData } from "@/lib/utils"
+import { cn, fmtData } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
+import { Button } from "@/components/ui/button"
 import { marcarParcelaComoPaga } from "@/actions/parcelas"
 
 const COL = "60px 1fr 1fr 1fr 1.2fr 120px"
+const gridStyle = { gridTemplateColumns: COL }
 
 function HeaderCell({ children }) {
   return (
-    <div style={{
-      padding: "12px 20px",
-      fontFamily: "var(--font-mono)",
-      fontSize: 10, fontWeight: 700,
-      letterSpacing: 1.4, textTransform: "uppercase",
-      color: "var(--fg-4)",
-    }}>
+    <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">
       {children}
     </div>
   )
@@ -64,47 +60,42 @@ export default function Parcelas({ contratoId }) {
   const pendentes = parcelas.filter(p => p.status === "pendente" || p.status === "vencida").length
 
   return (
-    <div className="romma-page" style={{ padding: "48px 48px 80px", background: "var(--background)", minHeight: "100%" }}>
+    <div className="romma-page bg-background min-h-full px-12 pt-12 pb-20">
 
       {/* Back */}
-      <button
+      <Button
+        variant="outline"
         onClick={() => router.push("/dashboard/contratos")}
-        style={{
-          border: "1px solid var(--border-3)", background: "transparent",
-          padding: "10px 20px", marginBottom: 40,
-          fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700,
-          letterSpacing: 1.2, textTransform: "uppercase", color: "var(--fg-3)",
-          cursor: "pointer",
-        }}
+        className="border-border-3 bg-transparent text-fg-3 font-mono text-[10px] uppercase tracking-[1.2px] font-bold rounded-none mb-10 h-auto py-[10px] px-5"
       >
         ← Contratos
-      </button>
+      </Button>
 
       {/* Header */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 48 }}>
+      <div className="flex flex-col gap-3 mb-12">
         <span className="eyebrow eyebrow--indigo">SISTEMA.02 · PARCELAS</span>
-        <h2 className="font-display" style={{ fontWeight: 700, fontSize: 48, letterSpacing: -2.4, color: "var(--fg-1)", margin: 0, lineHeight: 1 }}>
+        <h2 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">
           Parcelas.
         </h2>
         {(locatario || unidade) && (
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-3)" }}>
+          <span className="font-mono text-[12px] text-fg-3">
             {locatario?.nome_razao_social ?? "—"} · {unidade?.nome ?? "—"}
           </span>
         )}
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)" }}>
+        <span className="font-mono text-[12px] text-fg-4">
           {pagas} pagas · {pendentes} pendentes · {parcelas.length} total
         </span>
       </div>
 
       {erro && (
-        <div style={{ padding: "10px 16px", marginBottom: 24, background: "var(--danger-bg2)", border: "1px solid var(--danger)", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--danger)" }}>
+        <div className="px-4 py-[10px] mb-6 bg-[var(--danger-bg2)] border border-danger-fg font-mono text-[12px] text-danger-fg">
           {erro}
         </div>
       )}
 
       {/* Table */}
-      <div style={{ border: "1px solid var(--border-3)", background: "var(--surface)", marginBottom: 32 }}>
-        <div style={{ display: "grid", gridTemplateColumns: COL, background: "oklch(0.26 0 0)", borderBottom: "1px solid var(--border-3)" }}>
+      <div className="border border-border-3 bg-surface mb-8">
+        <div style={gridStyle} className="grid bg-[oklch(0.26_0_0)] border-b border-border-3">
           <HeaderCell>#</HeaderCell>
           <HeaderCell>Fechamento</HeaderCell>
           <HeaderCell>Vencimento</HeaderCell>
@@ -114,7 +105,7 @@ export default function Parcelas({ contratoId }) {
         </div>
 
         {parcelas.length === 0 && (
-          <div style={{ padding: "48px 20px", textAlign: "center", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)", letterSpacing: 0.5 }}>
+          <div className="px-5 py-12 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
             Nenhuma parcela encontrada.
           </div>
         )}
@@ -122,57 +113,47 @@ export default function Parcelas({ contratoId }) {
         {parcelas.map((parcela, i) => (
           <div
             key={parcela.id}
-            style={{
-              display: "grid", gridTemplateColumns: COL,
-              borderTop: i > 0 ? "1px solid var(--border-3)" : 0,
-              alignItems: "center",
-            }}
+            style={gridStyle}
+            className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
           >
-            <div style={{ padding: "14px 20px" }}>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-2)", fontWeight: 700 }}>
+            <div className="px-5 py-[14px]">
+              <span className="font-mono text-[12px] text-fg-2 font-bold">
                 {String(parcela.numero).padStart(2, "0")}
               </span>
             </div>
 
-            <div style={{ padding: "14px 20px" }}>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-3)" }}>
+            <div className="px-5 py-[14px]">
+              <span className="font-mono text-[11px] text-fg-3">
                 {fmtData(parcela.data_fechamento)}
               </span>
             </div>
 
-            <div style={{ padding: "14px 20px" }}>
-              <span style={{
-                fontFamily: "var(--font-mono)", fontSize: 11,
-                color: parcela.status === "vencida" ? "var(--danger)" : "var(--fg-3)",
-              }}>
+            <div className="px-5 py-[14px]">
+              <span className={cn("font-mono text-[11px]", parcela.status === "vencida" ? "text-danger-fg" : "text-fg-3")}>
                 {fmtData(parcela.data_vencimento)}
               </span>
             </div>
 
-            <div style={{ padding: "14px 20px" }}>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: parcela.data_pagamento ? "var(--success)" : "var(--fg-5)" }}>
+            <div className="px-5 py-[14px]">
+              <span className={cn("font-mono text-[11px]", parcela.data_pagamento ? "text-success" : "text-fg-5")}>
                 {parcela.data_pagamento ? fmtData(parcela.data_pagamento) : "—"}
               </span>
             </div>
 
-            <div style={{ padding: "14px 20px" }}>
+            <div className="px-5 py-[14px]">
               <StatusBadge status={parcela.status} />
             </div>
 
-            <div style={{ padding: "14px 20px" }}>
+            <div className="px-5 py-[14px]">
               {(parcela.status === "pendente" || parcela.status === "vencida") && (
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => marcarComoPaga(parcela)}
-                  style={{
-                    border: "1px solid var(--success)", background: "transparent",
-                    padding: "8px 16px", cursor: "pointer",
-                    fontFamily: "var(--font-mono)", fontSize: 10,
-                    fontWeight: 700, letterSpacing: 1, color: "var(--success)",
-                    textTransform: "uppercase",
-                  }}
+                  className="border-success text-success font-mono text-[10px] uppercase tracking-[1px] font-bold rounded-none h-auto py-2 px-4"
                 >
                   Marcar Paga
-                </button>
+                </Button>
               )}
             </div>
           </div>
