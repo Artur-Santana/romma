@@ -513,17 +513,15 @@ npx shadcn@latest add table    # Para tabelas simples (Unidades, Locatários se 
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`Unidades.js` — migração de escopo total ou substituição por novo componente?**
    - O que sabemos: é HTML puro, sem estilo, sem shadcn. A migração exige construir UI completa.
-   - O que é incerto: o Proprietário usa esta tela ativamente (é a principal de gestão de unidades). Qual nível de completude visual é esperado para a Fase 1?
-   - Recomendação: Migrar para o padrão visual de `Contratos.js` (tabela + formulário inline). O padrão já existe como referência.
+   - RESOLVED: Migrar para o padrão visual de `Contratos.js` (tabela + formulário inline). Plan 01-06 cobre este escopo.
 
 2. **`GestaoEdificios.js` — deletar ou apenas ignorar?**
    - O que sabemos: não está em nenhuma rota do dashboard. É código morto.
-   - O que é incerto: o usuário pode querer usar este componente no futuro ou há um plano para ele.
-   - Recomendação: Ignorar na Fase 1. Registrar como candidato à deleção na Fase 3 (REF).
+   - RESOLVED: Ignorar na Fase 1. Excluído do escopo de migração. Candidato à deleção na Fase 3 (REF-01).
 
 ---
 
