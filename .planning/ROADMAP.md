@@ -32,8 +32,18 @@
 2. Proprietário vê a receita esperada em R$ no dashboard, calculada como a soma de parcelas com status pendente e vencida
 3. Dashboard exibe um alerta com a lista de contratos cujo data_fim está dentro de 7 dias
 4. Todas as telas do dashboard (Contratos, Parcelas, Unidades, Locatários) usam a paleta Obsidian Blueprint com cards, botões e badges visualmente consistentes
-**Plans:** TBD
+**Plans:** 8 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 01-01-PLAN.md — Setup: instalar shadcn (button/input/select) + testes E2E DASH-01/02/03 em RED
+- [ ] 01-02-PLAN.md — Dashboard page.js: corrigir tiles MRR/Receita Esperada + migração completa para Tailwind v4
+- [ ] 01-03-PLAN.md — Parcelas.js: migração completa para Tailwind v4 + shadcn Button
+- [ ] 01-04-PLAN.md — LocatariosDesktop.js: migração completa para Tailwind v4 + shadcn
+- [ ] 01-05-PLAN.md — Contratos.js: migração completa para Tailwind v4 + shadcn (maior arquivo)
+- [ ] 01-06-PLAN.md — Unidades.js: construção de UI completa do zero com Tailwind v4 + shadcn
+- [ ] 01-07-PLAN.md — UI shell (RealtimeDot, TopStrip, PageHeader): migração para Tailwind v4
+- [ ] 01-08-PLAN.md — UI shell (ConfirmDialog, MobileNav, OwnerSidebar): migração para Tailwind v4
 
 ### Phase 2: Portal do Locatário
 **Goal:** Locatário autenticado via convite acessa seu contrato ativo e histórico de parcelas no portal próprio
