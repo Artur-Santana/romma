@@ -33,8 +33,8 @@ test.describe('@smoke Dashboard tiles — DASH-01/02/03', () => {
     await expect(desktopSection.getByText('MRR', { exact: true }).first()).toBeVisible({ timeout: 5_000 })
 
     // Verificar que o valor principal contém "R$" (não número inteiro)
-    // Encontrar o tile 02 pelo seu índice numérico visível
-    const tile02 = desktopSection.locator('text=02').first().locator('..').locator('..')
+    // Span com text-fg-5 é o idx do tile — subir 1 nível chega ao container do tile
+    const tile02 = desktopSection.locator('.text-fg-5').getByText('02').locator('..')
     await expect(tile02.getByText(/R\$/)).toBeVisible({ timeout: 5_000 })
   })
 
