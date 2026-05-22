@@ -28,13 +28,10 @@ test.describe('@smoke Dashboard tiles — DASH-01/02/03', () => {
     // Este teste DEVE FALHAR até que o tile seja migrado para MRR.
     const desktopSection = page.locator('.romma-desktop-only')
 
-    // Verificar que label "MRR" está presente no tile 02 (desktop)
-    // Atualmente está "Contratos Ativos" — portanto esta asserção falha
+    // Verificar que label "MRR" está presente (não mais "Contratos Ativos")
     await expect(desktopSection.getByText('MRR', { exact: true }).first()).toBeVisible({ timeout: 5_000 })
-
-    // Verificar que existe valor monetário (R$) visível na seção desktop
-    // MRR já está verificado acima — confirma que o valor está formatado em BRL não inteiro
-    await expect(desktopSection.getByText(/R\$/).first()).toBeVisible({ timeout: 5_000 })
+    // Verificar que label antigo "Contratos Ativos" foi removido
+    await expect(desktopSection.getByText('Contratos Ativos', { exact: true })).toHaveCount(0)
   })
 
   test('DASH-02 @smoke — tile 03 exibe "Receita Esperada" como label e valor em R$', async ({ page }) => {
