@@ -60,11 +60,11 @@ test.describe('@smoke Dashboard tiles — DASH-01/02/03', () => {
     if (isBannerVisible) {
       // Há contratos vencendo: verificar que o banner tem estilo de warning
       await expect(bannerByText).toBeVisible()
-      // O banner está dentro de um container com background de warning
+      // O banner está dentro de um container com classes Tailwind de warning (bg-warning-bg)
       const bannerContainer = bannerByText.locator('..').locator('..')
-      const bgStyle = await bannerContainer.getAttribute('style')
-      // Verificar que tem background de warning (var(--warning-bg) ou similar)
-      expect(bgStyle).toMatch(/warning/)
+      const bgClass = await bannerContainer.getAttribute('class')
+      // Verificar que tem classe de warning (bg-warning-bg após migração Tailwind v4)
+      expect(bgClass).toMatch(/warning/)
     } else {
       // Sem contratos vencendo no ambiente: banner não deve aparecer
       await expect(bannerByText).not.toBeVisible()
