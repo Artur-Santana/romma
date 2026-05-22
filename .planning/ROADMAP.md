@@ -11,7 +11,7 @@
 
 | # | Phase | Goal | Requirements | Mode |
 |---|-------|------|--------------|------|
-| 1 | Dashboard Completions | 8/8 | Complete   | 2026-05-22 |
+| 1 | Dashboard Completions | 8/8 complete — UAT passed 2026-05-22 | DASH-01, DASH-02, DASH-03, VIS-02 | done |
 | 2 | Portal do Locatário | Locatário acessa seu contrato e histórico de parcelas via portal próprio | PORT-01, PORT-02, PORT-03, VIS-03, TEST-03 | mvp |
 | 3 | Refatoração e Qualidade | Codebase limpo, sem erros de lint/build, pronto para produção | REF-01, REF-02, REF-03, REF-04, DEPL-03 | mvp |
 | 4 | Polimento Visual Público | Página /unidades com design Obsidian Blueprint completo e performático | VIS-01 | mvp |
@@ -112,10 +112,10 @@ Plans:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DASH-01 | Phase 1 | Pending |
-| DASH-02 | Phase 1 | Pending |
-| DASH-03 | Phase 1 | Pending |
-| VIS-02 | Phase 1 | Pending |
+| DASH-01 | Phase 1 | Done |
+| DASH-02 | Phase 1 | Done |
+| DASH-03 | Phase 1 | Done |
+| VIS-02 | Phase 1 | Done |
 | PORT-01 | Phase 2 | Pending |
 | PORT-02 | Phase 2 | Pending |
 | PORT-03 | Phase 2 | Pending |
