@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/dashboard",            label: "Visão Geral",  code: "VG" },
@@ -24,80 +25,40 @@ export default function OwnerSidebar({ badges = {} }) {
   }, []);
 
   return (
-    <div
-      style={{
-        width: 256,
-        background: "var(--background)",
-        borderRight: "1px solid var(--border-1)",
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        flexShrink: 0,
-      }}
-    >
+    <div className="w-64 bg-background border-r border-[var(--border-1)] flex flex-col h-full shrink-0">
       {/* Wordmark */}
-      <div style={{ padding: "32px 32px 24px" }}>
+      <div className="px-8 pt-8 pb-6">
         <span className="eyebrow eyebrow--indigo">Console · Proprietário</span>
-        <div
-          style={{
-            fontFamily: "var(--font-display-arch)",
-            fontWeight: 700,
-            fontSize: 28,
-            letterSpacing: -1,
-            color: "var(--fg-1)",
-            marginTop: 8,
-          }}
-        >
+        <div className="font-display font-bold text-[28px] tracking-[-1px] text-fg-1 mt-2">
           ROMMA
         </div>
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1 }}>
+      <nav className="flex-1">
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 32px",
-                borderLeft: isActive
-                  ? "2px solid var(--indigo)"
-                  : "2px solid transparent",
-                background: isActive ? "var(--surface)" : "transparent",
-                textDecoration: "none",
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) e.currentTarget.style.background = "oklch(0.265 0 0)";
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) e.currentTarget.style.background = "transparent";
-              }}
+              className={cn(
+                "flex items-center justify-between px-8 py-3 border-l-2 no-underline",
+                isActive
+                  ? "border-indigo bg-surface"
+                  : "border-transparent bg-transparent hover:bg-[oklch(0.265_0_0)]"
+              )}
             >
               <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 700,
-                  fontSize: 12,
-                  letterSpacing: 1.2,
-                  textTransform: "uppercase",
-                  color: isActive ? "var(--fg-1)" : "var(--fg-3)",
-                }}
+                className={cn(
+                  "font-body font-bold text-[12px] tracking-[1.2px] uppercase",
+                  isActive ? "text-fg-1" : "text-fg-3"
+                )}
               >
                 {item.label}
               </span>
               {badges[item.code] != null && (
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 10,
-                    color: "var(--indigo)",
-                  }}
-                >
+                <span className="font-mono text-[10px] text-indigo">
                   {badges[item.code]}
                 </span>
               )}
@@ -107,50 +68,21 @@ export default function OwnerSidebar({ badges = {} }) {
       </nav>
 
       {/* Footer */}
-      <div
-        style={{
-          borderTop: "1px solid var(--border-1)",
-          paddingTop: 24,
-          padding: "24px 32px 32px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 10,
-        }}
-      >
+      <div className="border-t border-[var(--border-1)] px-8 pt-6 pb-8 flex flex-col gap-[10px]">
         <Link
           href="/"
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            color: "var(--fg-3)",
-            textDecoration: "none",
-            letterSpacing: 0.5,
-          }}
+          className="font-mono text-[11px] text-fg-3 no-underline tracking-[0.5px]"
         >
           → Ver Página Pública
         </Link>
         <Link
           href="/portal"
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            color: "var(--fg-3)",
-            textDecoration: "none",
-            letterSpacing: 0.5,
-          }}
+          className="font-mono text-[11px] text-fg-3 no-underline tracking-[0.5px]"
         >
           → Acessar como Locatário
         </Link>
         {email && (
-          <span
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-              color: "var(--fg-5)",
-              marginTop: 8,
-              letterSpacing: 0.5,
-            }}
-          >
+          <span className="font-mono text-[10px] text-fg-5 mt-2 tracking-[0.5px]">
             {email}
           </span>
         )}

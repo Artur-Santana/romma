@@ -2,35 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function MobileTopBar({ title, subtitle, onBack, onMenu, right }) {
   return (
-    <div
-      style={{
-        background: "var(--background)",
-        borderBottom: "1px solid var(--border-2)",
-        padding: "20px 20px 16px",
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-        flexShrink: 0,
-      }}
-    >
+    <div className="bg-background border-b border-[var(--border-2)] px-5 pt-5 pb-4 flex items-center gap-3 shrink-0">
       {(onBack || onMenu) && (
         <button
           onClick={onBack || onMenu}
-          style={{
-            width: 32,
-            height: 32,
-            border: "1px solid var(--border-2)",
-            background: "transparent",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            flexShrink: 0,
-            color: "var(--fg-2)",
-          }}
+          className="w-8 h-8 border border-[var(--border-2)] bg-transparent flex items-center justify-center cursor-pointer shrink-0 text-fg-2"
         >
           {onBack ? (
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -43,27 +23,17 @@ export function MobileTopBar({ title, subtitle, onBack, onMenu, right }) {
           )}
         </button>
       )}
-      <div style={{ flex: 1 }}>
+      <div className="flex-1">
         {subtitle && (
-          <span className="eyebrow eyebrow--indigo" style={{ fontSize: 9 }}>
+          <span className="eyebrow eyebrow--indigo text-[9px]">
             {subtitle}
           </span>
         )}
-        <h1
-          style={{
-            fontFamily: "var(--font-display-arch)",
-            fontWeight: 700,
-            fontSize: 22,
-            letterSpacing: -1,
-            color: "var(--fg-1)",
-            margin: 0,
-            lineHeight: 1.1,
-          }}
-        >
+        <h1 className="font-display font-bold text-[22px] tracking-[-1px] text-fg-1 m-0 leading-[1.1]">
           {title}
         </h1>
       </div>
-      {right && <div style={{ flexShrink: 0 }}>{right}</div>}
+      {right && <div className="shrink-0">{right}</div>}
     </div>
   );
 }
@@ -73,54 +43,33 @@ export function MobileBottomNav({ items = [], pathname: pathnameProp }) {
   const pathname = pathnameProp ?? routerPathname;
 
   return (
-    <div
-      style={{
-        background: "var(--background)",
-        borderTop: "1px solid var(--border-2)",
-        display: "flex",
-        flexShrink: 0,
-      }}
-    >
+    <div className="bg-background border-t border-[var(--border-2)] flex shrink-0">
       {items.map((item) => {
         const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
         return (
           <Link
             key={item.id}
             href={item.href}
-            style={{
-              flex: 1,
-              padding: "14px 8px 16px",
-              textAlign: "center",
-              textDecoration: "none",
-              borderTop: isActive
-                ? "2px solid var(--indigo)"
-                : "2px solid transparent",
-              background: isActive ? "oklch(0.265 0 0)" : "transparent",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 2,
-            }}
+            className={cn(
+              "flex-1 px-2 pt-[14px] pb-4 text-center no-underline flex flex-col items-center gap-0.5 border-t-2",
+              isActive
+                ? "border-indigo bg-[oklch(0.265_0_0)]"
+                : "border-transparent bg-transparent"
+            )}
           >
             <span
-              style={{
-                fontFamily: "var(--font-body)",
-                fontWeight: 700,
-                fontSize: 9,
-                letterSpacing: 1,
-                textTransform: "uppercase",
-                color: isActive ? "var(--fg-1)" : "var(--fg-4)",
-                lineHeight: 1.5,
-              }}
+              className={cn(
+                "font-body font-bold text-[9px] tracking-[1px] uppercase leading-[1.5]",
+                isActive ? "text-fg-1" : "text-fg-4"
+              )}
             >
               {item.label}
             </span>
             <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 9,
-                color: isActive ? "var(--indigo)" : "var(--fg-5)",
-              }}
+              className={cn(
+                "font-mono text-[9px]",
+                isActive ? "text-indigo" : "text-fg-5"
+              )}
             >
               {item.code}
             </span>
