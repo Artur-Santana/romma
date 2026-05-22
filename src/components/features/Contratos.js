@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getContratos, getLocatarios, getUnidades, getEdificios } from "@/lib/queries-client"
-import { fmtData } from "@/lib/utils"
+import { fmtData, cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import StatusBadge from "@/components/ui/StatusBadge"
 import ConfirmDialog from "@/components/ui/ConfirmDialog"
 import PageHeader from "@/components/ui/PageHeader"
@@ -16,34 +19,11 @@ function isExpiring(c) {
 }
 
 const COL = "100px 1.6fr 1.6fr 1fr 1fr 1.2fr 80px"
-
-const inputStyle = {
-  background: "var(--surface-hi)",
-  border: "1px solid var(--border-3)",
-  color: "var(--fg-1)",
-  padding: "10px 14px",
-  fontSize: 13,
-  fontFamily: "var(--font-mono)",
-  width: "100%",
-  boxSizing: "border-box",
-}
-
-const actionBtnStyle = {
-  border: "none", background: "transparent",
-  fontFamily: "var(--font-mono)", fontSize: 10,
-  fontWeight: 700, letterSpacing: 1, color: "var(--fg-3)",
-  cursor: "pointer", padding: 0, textTransform: "uppercase",
-}
+const COL_STYLE = { gridTemplateColumns: COL }
 
 function HeaderCell({ children }) {
   return (
-    <div style={{
-      padding: "12px 20px",
-      fontFamily: "var(--font-mono)",
-      fontSize: 10, fontWeight: 700,
-      letterSpacing: 1.4, textTransform: "uppercase",
-      color: "var(--fg-4)",
-    }}>
+    <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">
       {children}
     </div>
   )
@@ -158,7 +138,7 @@ export default function Contratos() {
         onCancel={() => setConfirmDialog(null)}
       />
 
-      <div className="romma-page" style={{ padding: "48px 48px 80px", background: "var(--background)", minHeight: "100%" }}>
+      <div className="romma-page px-12 pt-12 pb-20 bg-background min-h-full">
 
         <PageHeader
           eyebrow="SISTEMA.02 // VÍNCULOS"
@@ -169,127 +149,119 @@ export default function Contratos() {
 
         {/* New contract form */}
         {showForm && (
-          <div style={{
-            border: "1px solid var(--indigo)", padding: 32,
-            marginBottom: 32, background: "var(--surface)",
-          }}>
-            <span className="eyebrow eyebrow--indigo" style={{ marginBottom: 20 }}>NOVO CONTRATO</span>
+          <div className="border border-indigo p-8 mb-8 bg-surface">
+            <span className="eyebrow eyebrow--indigo mb-5 block">NOVO CONTRATO</span>
             <form onSubmit={handleCriarContrato}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-                <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 1, color: "var(--fg-4)", textTransform: "uppercase" }}>Locatário</span>
-                  <select
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <label className="flex flex-col gap-1.5">
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Locatário</span>
+                  <Select
                     required
                     value={form.locatario_id}
-                    onChange={e => setForm({ ...form, locatario_id: e.target.value })}
-                    style={inputStyle}
+                    onValueChange={v => setForm({ ...form, locatario_id: v })}
                   >
-                    <option value="">Selecionar locatário...</option>
-                    {locatarios.map(l => (
-                      <option key={l.id} value={l.id}>{l.nome_razao_social}</option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none">
+                      <SelectValue placeholder="Selecionar locatário..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {locatarios.map(l => (
+                        <SelectItem key={l.id} value={l.id}>{l.nome_razao_social}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </label>
-                <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 1, color: "var(--fg-4)", textTransform: "uppercase" }}>Unidade (disponíveis)</span>
-                  <select
+                <label className="flex flex-col gap-1.5">
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Unidade (disponíveis)</span>
+                  <Select
                     required
                     value={form.unidade_id}
-                    onChange={e => setForm({ ...form, unidade_id: e.target.value })}
-                    style={inputStyle}
+                    onValueChange={v => setForm({ ...form, unidade_id: v })}
                   >
-                    <option value="">Selecionar unidade...</option>
-                    {unidadesDisponiveis.map(u => (
-                      <option key={u.id} value={u.id}>{u.nome}</option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none">
+                      <SelectValue placeholder="Selecionar unidade..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {unidadesDisponiveis.map(u => (
+                        <SelectItem key={u.id} value={u.id}>{u.nome}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </label>
-                <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 1, color: "var(--fg-4)", textTransform: "uppercase" }}>Data de Início</span>
-                  <input
+                <label className="flex flex-col gap-1.5">
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Data de Início</span>
+                  <Input
                     required
                     type="date"
                     value={form.data_inicio}
                     onChange={e => setForm({ ...form, data_inicio: e.target.value })}
-                    style={inputStyle}
+                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
                   />
                 </label>
-                <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 1, color: "var(--fg-4)", textTransform: "uppercase" }}>Data de Término</span>
-                  <input
+                <label className="flex flex-col gap-1.5">
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Data de Término</span>
+                  <Input
                     required
                     type="date"
                     value={form.data_fim}
                     onChange={e => setForm({ ...form, data_fim: e.target.value })}
-                    style={inputStyle}
+                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
                   />
                 </label>
               </div>
 
               {unidadeSelecionada && (
-                <div style={{
-                  padding: "12px 16px", marginBottom: 16,
-                  border: "1px solid var(--border-3)", background: "var(--surface-hi)",
-                  display: "flex", alignItems: "center", gap: 16,
-                }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--fg-4)", letterSpacing: 1, textTransform: "uppercase" }}>Valor Mensal</span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--fg-1)", fontWeight: 700 }}>
+                <div className="px-4 py-3 mb-4 border border-border-3 bg-surface-hi flex items-center gap-4">
+                  <span className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Valor Mensal</span>
+                  <span className="font-mono text-[14px] text-fg-1 font-bold">
                     {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(unidadeSelecionada.valor_mensal ?? 0)}
                   </span>
                 </div>
               )}
 
-              <label style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 20 }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: 1, color: "var(--fg-4)", textTransform: "uppercase" }}>Observações</span>
+              <label className="flex flex-col gap-1.5 mb-5">
+                <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Observações</span>
                 <textarea
                   rows={3}
                   value={form.observacoes}
                   onChange={e => setForm({ ...form, observacoes: e.target.value })}
                   placeholder="Opcional"
-                  style={{ ...inputStyle, resize: "vertical", fontFamily: "var(--font-body)" }}
+                  className="bg-surface-hi border border-border-3 text-fg-1 font-body text-[13px] px-3.5 py-2.5 w-full resize-y focus:outline-none"
                 />
               </label>
 
               {erro && (
-                <div style={{ padding: "10px 16px", marginBottom: 16, background: "var(--danger-bg2)", border: "1px solid var(--danger)", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--danger)" }}>
+                <div className="bg-[var(--danger-bg2)] border border-[var(--danger-bg)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg mb-4">
                   {erro}
                 </div>
               )}
 
-              <div style={{ display: "flex", gap: 12 }}>
-                <button
+              <div className="flex gap-3">
+                <Button
                   type="submit"
                   disabled={loading}
-                  style={{
-                    border: "none", background: "var(--indigo)", padding: "14px 32px",
-                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
-                    letterSpacing: 1.2, textTransform: "uppercase",
-                    color: "var(--fg-1)", cursor: loading ? "not-allowed" : "pointer",
-                    opacity: loading ? 0.6 : 1,
-                  }}
+                  className={cn(
+                    "bg-indigo text-fg-1 font-body font-bold text-[12px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none",
+                    loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+                  )}
                 >
                   {loading ? "Criando..." : "Criar Contrato"}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={() => { resetForm(); setShowForm(false); setErro(null) }}
-                  style={{
-                    border: "1px solid var(--border-3)", background: "transparent", padding: "14px 24px",
-                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
-                    letterSpacing: 1.2, textTransform: "uppercase",
-                    color: "var(--fg-3)", cursor: "pointer",
-                  }}
+                  className="border border-border-3 bg-transparent text-fg-3 font-body font-bold text-[12px] tracking-[1.2px] uppercase px-6 py-[14px] rounded-none cursor-pointer"
                 >
                   Cancelar
-                </button>
+                </Button>
               </div>
             </form>
           </div>
         )}
 
         {/* Contracts table */}
-        <div style={{ border: "1px solid var(--border-3)", background: "var(--surface)", marginBottom: 32 }}>
-          <div style={{ display: "grid", gridTemplateColumns: COL, background: "oklch(0.26 0 0)", borderBottom: "1px solid var(--border-3)" }}>
+        <div className="border border-border-3 bg-surface mb-8">
+          <div style={COL_STYLE} className="grid bg-[oklch(0.26_0_0)] border-b border-border-3">
             <HeaderCell>ID</HeaderCell>
             <HeaderCell>Locatário</HeaderCell>
             <HeaderCell>Unidade</HeaderCell>
@@ -300,7 +272,7 @@ export default function Contratos() {
           </div>
 
           {contratos.length === 0 && (
-            <div style={{ padding: "48px 20px", textAlign: "center", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)", letterSpacing: 0.5 }}>
+            <div className="py-12 px-5 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
               Nenhum contrato cadastrado.
             </div>
           )}
@@ -316,70 +288,76 @@ export default function Contratos() {
             return (
               <div
                 key={contrato.id}
-                style={{
-                  display: "grid", gridTemplateColumns: COL,
-                  borderTop: i > 0 ? "1px solid var(--border-3)" : 0,
-                  alignItems: "center",
-                }}
+                style={COL_STYLE}
+                className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
               >
-                <div style={{ padding: "14px 20px" }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-4)", letterSpacing: 0.3 }}>
+                <div className="px-5 py-3.5">
+                  <span className="font-mono text-[11px] text-fg-4 tracking-[0.3px]">
                     REF_C_{String(i + 1).padStart(3, "0")}
                   </span>
                 </div>
 
-                <div style={{ padding: "14px 20px", overflow: "hidden" }}>
-                  <span style={{
-                    fontSize: 13, color: "var(--fg-1)", fontWeight: 500,
-                    display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                  }}>
+                <div className="px-5 py-3.5 overflow-hidden">
+                  <span className="text-[13px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
                     {loc?.nome_razao_social ?? "—"}
                   </span>
                 </div>
 
-                <div style={{ padding: "14px 20px", overflow: "hidden", display: "flex", flexDirection: "column", gap: 2 }}>
-                  <span style={{ fontSize: 12, color: "var(--fg-1)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <div className="px-5 py-3.5 overflow-hidden flex flex-col gap-0.5">
+                  <span className="text-[12px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
                     {uni?.nome ?? "—"}
                   </span>
                   {edi && (
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--fg-4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <span className="font-mono text-[10px] text-fg-4 overflow-hidden text-ellipsis whitespace-nowrap">
                       {edi.nome.replace(/Edifício\s*/i, "")}
                     </span>
                   )}
                 </div>
 
-                <div style={{ padding: "14px 20px" }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-3)" }}>
+                <div className="px-5 py-3.5">
+                  <span className="font-mono text-[11px] text-fg-3">
                     {fmtData(contrato.data_inicio)}
                   </span>
                 </div>
 
-                <div style={{ padding: "14px 20px" }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: expiring ? "var(--warning)" : "var(--fg-3)" }}>
+                <div className="px-5 py-3.5">
+                  <span className={cn("font-mono text-[11px]", expiring ? "text-warning" : "text-fg-3")}>
                     {fmtData(contrato.data_fim)}
                   </span>
                 </div>
 
-                <div style={{ padding: "14px 20px" }}>
+                <div className="px-5 py-3.5">
                   <StatusBadge status={expiring ? "vencendo" : contrato.status} />
                 </div>
 
-                <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}>
-                  <button
+                <div className="px-3 py-3.5 flex flex-col gap-1.5 items-start">
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => router.push(`/dashboard/contratos/${contrato.id}`)}
-                    style={actionBtnStyle}
+                    className="font-mono text-[10px] text-fg-3 uppercase tracking-[1px] font-bold p-0 h-auto"
                   >
                     VER →
-                  </button>
+                  </Button>
                   {isAtivo && !vencido && (
-                    <button onClick={() => askCancelar(contrato)} style={{ ...actionBtnStyle, color: "var(--danger)" }}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => askCancelar(contrato)}
+                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
+                    >
                       CANC
-                    </button>
+                    </Button>
                   )}
                   {vencido && (
-                    <button onClick={() => askEncerrar(contrato)} style={{ ...actionBtnStyle, color: "var(--warning)" }}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => askEncerrar(contrato)}
+                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
+                    >
                       ENC
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>
@@ -388,20 +366,16 @@ export default function Contratos() {
         </div>
 
         {/* Archive callout */}
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "16px 24px", border: "1px solid var(--border-3)", color: "var(--fg-3)",
-        }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: 0.5 }}>
+        <div className="flex justify-between items-center px-6 py-4 border border-border-3 text-fg-3">
+          <span className="font-mono text-[11px] tracking-[0.5px]">
             Contratos encerrados são preservados como histórico imutável.
           </span>
-          <button style={{
-            border: "none", background: "transparent", cursor: "pointer",
-            fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: 10,
-            letterSpacing: 1.4, color: "var(--fg-2)", textTransform: "uppercase",
-          }}>
+          <Button
+            variant="ghost"
+            className="font-mono font-bold text-[10px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto"
+          >
             Ver Arquivo →
-          </button>
+          </Button>
         </div>
 
       </div>
