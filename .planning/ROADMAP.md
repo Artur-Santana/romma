@@ -11,7 +11,7 @@
 
 | # | Phase | Goal | Requirements | Mode |
 |---|-------|------|--------------|------|
-| 1 | Dashboard Completions | 6/8 | In Progress|  |
+| 1 | Dashboard Completions | 8/8 | Complete   | 2026-05-22 |
 | 2 | Portal do Locatário | Locatário acessa seu contrato e histórico de parcelas via portal próprio | PORT-01, PORT-02, PORT-03, VIS-03, TEST-03 | mvp |
 | 3 | Refatoração e Qualidade | Codebase limpo, sem erros de lint/build, pronto para produção | REF-01, REF-02, REF-03, REF-04, DEPL-03 | mvp |
 | 4 | Polimento Visual Público | Página /unidades com design Obsidian Blueprint completo e performático | VIS-01 | mvp |
@@ -32,7 +32,7 @@
 2. Proprietário vê a receita esperada em R$ no dashboard, calculada como a soma de parcelas com status pendente e vencida
 3. Dashboard exibe um alerta com a lista de contratos cujo data_fim está dentro de 7 dias
 4. Todas as telas do dashboard (Contratos, Parcelas, Unidades, Locatários) usam a paleta Obsidian Blueprint com cards, botões e badges visualmente consistentes
-**Plans:** 6/8 plans executed
+**Plans:** 8/8 plans complete
 **UI hint**: yes
 
 Plans:
@@ -42,8 +42,8 @@ Plans:
 - [x] 01-04-PLAN.md — LocatariosDesktop.js: migração completa para Tailwind v4 + shadcn
 - [x] 01-05-PLAN.md — Contratos.js: migração completa para Tailwind v4 + shadcn (maior arquivo)
 - [x] 01-06-PLAN.md — Unidades.js: construção de UI completa do zero com Tailwind v4 + shadcn
-- [ ] 01-07-PLAN.md — UI shell (RealtimeDot, TopStrip, PageHeader): migração para Tailwind v4
-- [ ] 01-08-PLAN.md — UI shell (ConfirmDialog, MobileNav, OwnerSidebar): migração para Tailwind v4
+- [x] 01-07-PLAN.md — UI shell (RealtimeDot, TopStrip, PageHeader): migração para Tailwind v4
+- [x] 01-08-PLAN.md — UI shell (ConfirmDialog, MobileNav, OwnerSidebar): migração para Tailwind v4
 
 ### Phase 2: Portal do Locatário
 **Goal:** Locatário autenticado via convite acessa seu contrato ativo e histórico de parcelas no portal próprio
