@@ -75,10 +75,10 @@ export default async function Dashboard() {
   ]
 
   const metricas = [
-    { idx: "01", label: "Ocupação",           value: `${pctOcupacao}%`,        sub: `${alugadas} de ${unidades.length} unidades` },
-    { idx: "02", label: "Contratos Ativos",   value: ativos,                   sub: `${fmtBRL(mrr)} / mês` },
-    { idx: "03", label: "Parcelas Pendentes", value: parcelas.length,          sub: fmtBRL(totalPendente) },
-    { idx: "04", label: "Vencendo em 7 dias", value: vencendoContratos.length, sub: `${vencendoContratos.length} contrato(s)`, warn: true },
+    { idx: "01", label: "Ocupação",           value: `${pctOcupacao}%`,                                           sub: `${alugadas} de ${unidades.length} unidades` },
+    { idx: "02", label: "MRR",                value: mrr >= 1000 ? `R$${(mrr/1000).toFixed(1)}k` : fmtBRL(mrr), sub: `${ativos} contrato(s) ativo(s)` },
+    { idx: "03", label: "Receita Esperada",   value: fmtBRL(totalPendente),                                       sub: `${parcelas.length} parcela(s) em aberto` },
+    { idx: "04", label: "Vencendo em 7 dias", value: vencendoContratos.length,                                    sub: `${vencendoContratos.length} contrato(s)`, warn: true },
   ]
 
   if (isEmpty) {
@@ -373,9 +373,9 @@ export default async function Dashboard() {
               <div className="font-mono" style={{ fontSize: 10, color: "var(--fg-4)" }}>/ mês</div>
             </div>
             <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 4 }}>
-              <div className="font-mono" style={{ fontSize: 10, color: "var(--warning)", letterSpacing: 1, textTransform: "uppercase" }}>Pendentes</div>
-              <div className="font-display" style={{ fontWeight: 700, fontSize: 36, letterSpacing: -1.8, color: "var(--warning)", lineHeight: 1 }}>{parcelas.length}</div>
-              <div className="font-mono" style={{ fontSize: 10, color: "var(--warning)" }}>{fmtBRL(totalPendente)}</div>
+              <div className="font-mono" style={{ fontSize: 10, color: "var(--warning)", letterSpacing: 1, textTransform: "uppercase" }}>Receita Esperada</div>
+              <div className="font-display" style={{ fontWeight: 700, fontSize: 36, letterSpacing: -1.8, color: "var(--warning)", lineHeight: 1 }}>{fmtBRL(totalPendente)}</div>
+              <div className="font-mono" style={{ fontSize: 10, color: "var(--warning)" }}>{parcelas.length} parcela(s) em aberto</div>
             </div>
           </div>
 
