@@ -13,55 +13,16 @@ export default function TopStrip() {
   const timestamp = time.toISOString().replace("T", " ").slice(0, 19) + "Z";
 
   return (
-    <div
-      style={{
-        height: 24,
-        background: "oklch(0.218 0 0 / 0.95)",
-        borderBottom: "1px solid var(--border-2)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 32px",
-        flexShrink: 0,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 10,
-          color: "var(--fg-3)",
-          letterSpacing: 1,
-        }}
-      >
+    <div className="h-6 bg-[oklch(0.218_0_0/0.95)] border-b border-border-2 flex items-center justify-between px-8 shrink-0">
+      <span className="font-mono text-[10px] text-fg-3 tracking-[1px]">
         INTEGRATED_SYSTEM_NODE: 0X449F
       </span>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "var(--fg-3)",
-            letterSpacing: 0.5,
-          }}
-        >
+      <div className="flex items-center gap-2">
+        <span className="font-mono text-[10px] text-fg-3 tracking-[0.5px]">
           {timestamp}
         </span>
-        <div
-          style={{
-            width: 6,
-            height: 6,
-            background: "var(--success)",
-            flexShrink: 0,
-          }}
-        />
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "var(--fg-3)",
-            letterSpacing: 1,
-          }}
-        >
+        <div className="w-1.5 h-1.5 bg-success shrink-0" />
+        <span className="font-mono text-[10px] text-fg-3 tracking-[1px]">
           STATUS: SYNCHRONIZED
         </span>
       </div>

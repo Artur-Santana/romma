@@ -1,38 +1,18 @@
+import { cn } from "@/lib/utils";
+
 export default function RealtimeDot({ label, compact = false }) {
   return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-      }}
-    >
-      <span style={{ position: "relative", width: 8, height: 8, flexShrink: 0 }}>
-        <span
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "var(--success)",
-            animation: "rommaPulse 2s ease-in-out infinite",
-          }}
-        />
-        <span
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "var(--success)",
-          }}
-        />
+    <span className="inline-flex items-center gap-2">
+      <span className="relative w-2 h-2 shrink-0">
+        <span className="absolute inset-0 bg-success [animation:rommaPulse_2s_ease-in-out_infinite]" />
+        <span className="absolute inset-0 bg-success" />
       </span>
       {label && (
         <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: compact ? 9 : 10,
-            color: "var(--fg-2)",
-            textTransform: "uppercase",
-            letterSpacing: compact ? 0.5 : 1,
-          }}
+          className={cn(
+            "font-mono uppercase text-fg-2",
+            compact ? "text-[9px] tracking-[0.5px]" : "text-[10px] tracking-[1px]"
+          )}
         >
           {label}
         </span>
