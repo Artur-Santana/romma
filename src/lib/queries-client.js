@@ -71,7 +71,7 @@ export async function getParcelasByContrato(contratoId) {
         .select('id, numero, data_fechamento, data_vencimento, data_pagamento, status')
         .eq('contrato_id', contratoId)
         .order('numero', { ascending: true })
-    return data
+    return data ?? []
 }
 
 export async function getUnidadesDisponiveis() {
@@ -83,29 +83,32 @@ export async function getUnidadesDisponiveis() {
 }
 
 export async function getLocatarioByUserId(userId) {
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from('locatarios')
         .select('id, usuario_id, nome_razao_social, tipo, documento, email, telefone')
         .eq('usuario_id', userId)
         .maybeSingle()
+    if (error) throw new Error(error.message)
     return data
 }
 
 export async function getUnidade(unidadeId) {
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from('unidades')
         .select('id, edificio_id, nome, descricao, area_m2, valor_mensal, valor_visivel, status')
         .eq('id', unidadeId)
         .single()
+    if (error) throw new Error(error.message)
     return data
 }
 
 export async function getEdificio(edificioId) {
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from('edificios')
         .select('id, nome, endereco')
         .eq('id', edificioId)
         .single()
+    if (error) throw new Error(error.message)
     return data
 }
 
@@ -117,23 +120,14 @@ export async function getContratosByLocatario(locatarioId) {
     return data ?? []
 }
 
-export async function updateParcelaStatus(parcelaId, status, dataPagamento) {
-    const updates = { status }
-    if (dataPagamento !== undefined) updates.data_pagamento = dataPagamento
-    const { error } = await supabase
-        .from('parcelas')
-        .update(updates)
-        .eq('id', parcelaId)
-    return error
-}
-
 export async function getContratoAtivoByLocatario(locatarioId) {
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from('contratos')
         .select('id, data_inicio, data_fim, status, observacoes, unidades(nome, valor_mensal)')
         .eq('locatario_id', locatarioId)
         .eq('status', 'ativo')
         .maybeSingle()
+    if (error) throw new Error(error.message)
     return data
 }
 
