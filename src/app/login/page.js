@@ -170,9 +170,11 @@ function SignInForm() {
       setStatus("error")
       return
     }
+    // D-02: status permanece "loading" durante toda a sequência RPC + redirect
+    const { data: isProprietario } = await supabase.rpc('is_proprietario')
     setStatus("success")
     await new Promise(resolve => setTimeout(resolve, 500))
-    router.push("/dashboard")
+    router.push(isProprietario ? '/dashboard' : '/portal/dashboard')
   }
 
   async function handleForgotPassword(e) {
