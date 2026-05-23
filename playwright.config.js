@@ -21,6 +21,7 @@ export default defineConfig({
   ],
 
   globalSetup: './e2e/global-setup.js',
+  globalTeardown: './e2e/global-teardown.js',
 
   webServer: {
     // Vars explícitas no comando garantem override de .env.local no build do Next.js

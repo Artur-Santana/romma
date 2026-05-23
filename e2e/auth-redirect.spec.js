@@ -10,11 +10,11 @@ test.describe('Auth redirect', () => {
     expect(page.url()).toContain('/dashboard')
   })
 
-  test('1.2 — não-proprietário loga e é redirecionado para /', async ({ page }) => {
+  test('1.2 — não-proprietário loga e é redirecionado para /portal/dashboard', async ({ page }) => {
     await login(page, LOCATARIO)
-    // proxy.js: is_proprietario() retorna false → redirect para /
-    await page.waitForURL('http://localhost:3000/', { timeout: 10_000 })
-    expect(page.url()).toBe('http://localhost:3000/')
+    // login/page.js: is_proprietario() retorna false → redirect para /portal/dashboard
+    await page.waitForURL('**/portal/dashboard', { timeout: 10_000 })
+    expect(page.url()).toContain('/portal/dashboard')
   })
 
   test('1.3 — anônimo visita /dashboard e é redirecionado para /login', async ({ page }) => {
