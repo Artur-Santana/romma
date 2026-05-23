@@ -19,7 +19,7 @@ export default function PortalDashboard() {
     async function fetchData() {
       try {
         const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        if (!user) { setLoading(false); return }
         const loc = await getLocatarioByUserId(user.id)
         setLocatario(loc)
         if (!loc) { setLoading(false); return }
