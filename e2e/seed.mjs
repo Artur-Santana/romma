@@ -56,29 +56,35 @@ export async function seed() {
   if (errUnidade) throw errUnidade
 
   // 3. Locatário de teste (tabela locatarios, não auth.users)
-  // Verificar existência antes para idempotência (sem unique constraint em usuario_id)
-  const { data: locatarioExistente } = await admin
+  // Limpar locatarios existentes do usuario para garantir idempotência
+  // (tabela não tem unique constraint em usuario_id — maybeSingle() falha com > 1 row)
+  const { data: locatariosExistentes } = await admin
     .from('locatarios')
     .select('id')
     .eq('usuario_id', locatarioUser.id)
-    .maybeSingle()
-  let locatario = locatarioExistente
-  if (!locatario) {
-    const { data: locatarioNovo, error: errLocatario } = await admin
-      .from('locatarios')
-      .insert({
-        usuario_id: locatarioUser.id,
-        nome_razao_social: 'Locatário Teste',
-        tipo: 'pf',
-        documento: '12345678901',
-        email: locatarioUser.email,
-        telefone: '11999999999',
-      })
-      .select()
-      .single()
-    if (errLocatario) throw errLocatario
-    locatario = locatarioNovo
+  if (locatariosExistentes?.length) {
+    const ids = locatariosExistentes.map(l => l.id)
+    const { data: contratosExistentes } = await admin.from('contratos').select('id').in('locatario_id', ids)
+    const contratoIdsExistentes = contratosExistentes?.map(c => c.id) ?? []
+    if (contratoIdsExistentes.length) {
+      await admin.from('parcelas').delete().in('contrato_id', contratoIdsExistentes)
+      await admin.from('contratos').delete().in('id', contratoIdsExistentes)
+    }
+    await admin.from('locatarios').delete().in('id', ids)
   }
+  const { data: locatario, error: errLocatario } = await admin
+    .from('locatarios')
+    .insert({
+      usuario_id: locatarioUser.id,
+      nome_razao_social: 'Locatário Teste',
+      tipo: 'pf',
+      documento: '12345678901',
+      email: locatarioUser.email,
+      telefone: '11999999999',
+    })
+    .select()
+    .single()
+  if (errLocatario) throw errLocatario
 
   // 4. Contrato ativo
   const dataInicio = new Date().toISOString().split('T')[0]
