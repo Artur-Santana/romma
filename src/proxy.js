@@ -36,9 +36,20 @@ export async function proxy(request) {
     }
   }
 
+  // Guard /portal (D-04, D-05)
+  if (request.nextUrl.pathname.startsWith('/portal') && !user) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+  if (request.nextUrl.pathname.startsWith('/portal') && user) {
+    const { data: perm } = await supabase.rpc('is_proprietario')
+    if (perm) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+  }
+
   return response
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ['/dashboard/:path*', '/portal/:path*'],
 }
