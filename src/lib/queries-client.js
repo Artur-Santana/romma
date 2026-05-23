@@ -126,3 +126,23 @@ export async function updateParcelaStatus(parcelaId, status, dataPagamento) {
         .eq('id', parcelaId)
     return error
 }
+
+export async function getContratoAtivoByLocatario(locatarioId) {
+    const { data } = await supabase
+        .from('contratos')
+        .select('id, data_inicio, data_fim, status, observacoes, unidades(nome, valor_mensal)')
+        .eq('locatario_id', locatarioId)
+        .eq('status', 'ativo')
+        .maybeSingle()
+    return data
+}
+
+export async function getParcelasPortal(contratoId) {
+    const { data } = await supabase
+        .from('parcelas')
+        .select('id, numero, data_vencimento, data_pagamento, status')
+        .eq('contrato_id', contratoId)
+        .neq('status', 'futura')
+        .order('data_vencimento', { ascending: false })
+    return data ?? []
+}
