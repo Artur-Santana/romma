@@ -184,7 +184,8 @@ function SignInForm() {
       return
     }
     setStatus("reset_loading")
-    await supabase.auth.resetPasswordForEmail(email)
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    if (error) { setStatus("error"); return }
     setStatus("reset_sent")
   }
 
