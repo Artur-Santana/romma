@@ -15,17 +15,19 @@ export default async function globalTeardown() {
   const locatarioUser = list.users.find(u => u.email === 'locatario@test.romma.local')
   if (!locatarioUser) return
 
-  const { data: locatario } = await admin
+  // Usar select() (não maybeSingle) para funcionar mesmo com duplicatas
+  const { data: locatarios } = await admin
     .from('locatarios')
     .select('id')
     .eq('usuario_id', locatarioUser.id)
-    .maybeSingle()
-  if (!locatario) return
+  if (!locatarios?.length) return
+
+  const locatarioIds = locatarios.map(l => l.id)
 
   const { data: contratos } = await admin
     .from('contratos')
     .select('id')
-    .eq('locatario_id', locatario.id)
+    .in('locatario_id', locatarioIds)
   const contratoIds = contratos?.map(c => c.id) ?? []
 
   // Ordem obrigatória: parcelas → contratos → locatarios → unidades → edificios
@@ -33,7 +35,7 @@ export default async function globalTeardown() {
     await admin.from('parcelas').delete().in('contrato_id', contratoIds)
     await admin.from('contratos').delete().in('id', contratoIds)
   }
-  await admin.from('locatarios').delete().eq('id', locatario.id)
+  await admin.from('locatarios').delete().in('id', locatarioIds)
 
   // Limpar unidades e edificios criados pelo seed (identificados pelo nome único de teste)
   const { data: unidades } = await admin
@@ -41,8 +43,8 @@ export default async function globalTeardown() {
     .select('id, edificio_id')
     .eq('nome', 'Sala 101')
   if (unidades?.length) {
-    const edificioId = unidades[0].edificio_id
+    const edificioIds = [...new Set(unidades.map(u => u.edificio_id))]
     await admin.from('unidades').delete().in('id', unidades.map(u => u.id))
-    await admin.from('edificios').delete().eq('id', edificioId)
+    await admin.from('edificios').delete().in('id', edificioIds)
   }
 }
