@@ -514,14 +514,14 @@ export default async function globalTeardown() {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **`status_convite` no seed**
+1. **`status_convite` no seed** — RESOLVED
    - O que sabemos: tabela `locatarios` tem coluna `status_convite` (vista em `getLocatarios`)
    - O que não está claro: se há RLS que exige `status_convite = 'aceito'` para SELECT na tabela, e se o seed deve setá-lo
    - Recomendação: o planner deve incluir `status_convite: 'aceito'` no upsert do seed como precaução, ou verificar as policies RLS da tabela
 
-2. **Escopo do D-11 em `login/page.js`**
+2. **Escopo do D-11 em `login/page.js`** — RESOLVED
    - O que sabemos: D-11 proíbe inline styles em arquivos novos ou modificados
    - O que não está claro: se "modificado" implica migrar o componente `Field` inteiro para Tailwind
    - Recomendação: tratar como "código novo adicionado não usa inline styles; código existente permanece" — o planner confirma
