@@ -135,4 +135,11 @@ export async function seed() {
 }
 
 // executa quando chamado diretamente: node e2e/seed.mjs
-seed().then(() => console.log('seed ok')).catch(e => { console.error(e); process.exit(1) })
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  if (!url.includes('test') && !url.includes('local') && !url.includes('127.0.0.1')) {
+    console.error('ABORT: URL de Supabase não parece ser de teste:', url)
+    process.exit(1)
+  }
+  seed().then(() => console.log('seed ok')).catch(e => { console.error(e); process.exit(1) })
+}
