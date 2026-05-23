@@ -56,7 +56,12 @@ Plans:
 3. Locatário logado visualiza o histórico de parcelas com status paga, pendente e vencida — parcelas futuras não aparecem
 4. Portal exibe design Obsidian Blueprint consistente com o restante do sistema (paleta roxo/dourado, fontes Manrope/Noto Sans)
 5. Testes Playwright cobrem login via convite, visualização do contrato ativo e visualização do histórico de parcelas
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Infra de testes E2E (RED): seed expandido, global-teardown, portal.spec.js, auth-redirect fix
+- [ ] 02-02-PLAN.md — Slice vertical 1: login routing + proxy guard + portal shell visual (PORT-01)
+- [ ] 02-03-PLAN.md — Slice vertical 2: queries portal + ContratoCard + ParcelsTable + wire PortalDashboard (PORT-02/PORT-03)
 **UI hint**: yes
 
 ### Phase 3: Refatoração e Qualidade
