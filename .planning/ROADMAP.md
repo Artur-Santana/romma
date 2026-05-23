@@ -12,7 +12,7 @@
 | # | Phase | Goal | Requirements | Mode |
 |---|-------|------|--------------|------|
 | 1 | Dashboard Completions | 8/8 complete — UAT passed 2026-05-22 | DASH-01, DASH-02, DASH-03, VIS-02 | done |
-| 2 | Portal do Locatário | 1/3 | In Progress|  |
+| 2 | Portal do Locatário | 2/3 | In Progress|  |
 | 3 | Refatoração e Qualidade | Codebase limpo, sem erros de lint/build, pronto para produção | REF-01, REF-02, REF-03, REF-04, DEPL-03 | mvp |
 | 4 | Polimento Visual Público | Página /unidades com design Obsidian Blueprint completo e performático | VIS-01 | mvp |
 | 5 | Testes E2E | Suite Playwright cobre todos os fluxos críticos do Proprietário e Realtime | TEST-01, TEST-02, TEST-04 | mvp |
@@ -56,11 +56,11 @@ Plans:
 3. Locatário logado visualiza o histórico de parcelas com status paga, pendente e vencida — parcelas futuras não aparecem
 4. Portal exibe design Obsidian Blueprint consistente com o restante do sistema (paleta roxo/dourado, fontes Manrope/Noto Sans)
 5. Testes Playwright cobrem login via convite, visualização do contrato ativo e visualização do histórico de parcelas
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 - [x] 02-01-PLAN.md — Infra de testes E2E (RED): seed expandido, global-teardown, portal.spec.js, auth-redirect fix
-- [ ] 02-02-PLAN.md — Slice vertical 1: login routing + proxy guard + portal shell visual (PORT-01)
+- [x] 02-02-PLAN.md — Slice vertical 1: login routing + proxy guard + portal shell visual (PORT-01)
 - [ ] 02-03-PLAN.md — Slice vertical 2: queries portal + ContratoCard + ParcelsTable + wire PortalDashboard (PORT-02/PORT-03)
 **UI hint**: yes
 
