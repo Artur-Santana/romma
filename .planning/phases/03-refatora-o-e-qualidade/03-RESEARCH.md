@@ -162,18 +162,21 @@ useEffect(() => {
 }, []);
 ```
 
-**Fix recomendado — inline IIFE no body do effect:**
+**Fix recomendado — função nomeada declarada e chamada dentro do useEffect:**
 ```javascript
 useEffect(() => {
-  (async () => {
+  async function fetchDados() {
     setEdificios(await getEdificios());
-  })();
+  }
+  fetchDados()
 }, []);
 ```
 
-**Atenção:** O CONTEXT.md levantou dúvida se o IIFE silencia a regra. A resposta é: **sim, silencia**, porque o `setState` agora ocorre dentro do body literal do effect (dentro da IIFE, que está dentro do useEffect callback). A regra `set-state-in-effect` detecta chamadas de funções externas que fazem setState — quando a lógica fica inline no body do effect, a regra não dispara. [ASSUMED — baseado na leitura da mensagem de erro e comportamento esperado da regra; confidência MEDIUM]
+**Por que este padrão funciona:** A regra dispara quando `setState` é chamado via função definida **fora** do escopo do useEffect. Quando a função async é declarada **dentro** do body do useEffect e então chamada, o `setState` está no escopo local do effect — a regra não dispara. [VERIFIED: `PortalDashboard.js` usa exatamente este padrão (função `fetchData` declarada dentro do useEffect) e o lint não reporta nenhum erro nesse arquivo — confirmado no output do lint]
 
-**Alternativa segura se IIFE não silenciar:** `// eslint-disable-next-line react-hooks/set-state-in-effect` com comentário `// fetch-on-mount: padrão estabelecido no projeto`. Esta abordagem é aceitável para padrão fetch-on-mount documentado. O disabling seria na linha que chama a função, não no `setState`.
+**Referência canônica no projeto:** `src/components/features/portal/PortalDashboard.js` — o useEffect declara `async function fetchData() { ... setState calls ... }` e chama `fetchData()` dentro do body do effect. Zero erros de lint nesse arquivo.
+
+**Alternativa (fallback):** `// eslint-disable-next-line react-hooks/set-state-in-effect` com comentário `// fetch-on-mount: padrão estabelecido no projeto`. Usar somente se o padrão da função nomeada não silenciar a regra por alguma razão específica do contexto.
 
 **Impacto em `carregarEdificios()` como função reutilizada:** GestaoEdificios usa `carregarEdificios()` em 3 outros lugares (após insert, delete, salvar). Esses usos são em handlers de evento, não em effects — a regra NÃO dispara neles. A função deve ser mantida; apenas o `useEffect` precisa ser alterado.
 
@@ -299,7 +302,7 @@ O critério `npm audit --omit=dev` passa sem vulnerabilidades de alta/crítica s
 2. **Ignorar vulnerabilidades sem fix** via `npm audit --omit=dev --audit-level=none` — não recomendado para documentação de TCC.
 3. **Não rodar `npm audit fix`** e documentar o estado atual como exceção conhecida.
 
-**Recomendação:** Opção 1 — executar `npm audit fix` para upgrade minor do Next.js (16.2.4 → 16.2.6, apenas patch releases, sem breaking changes esperados) e documentar as CVEs de Next.js como exceção conhecida no plano, apontando que a versão estável 16.x não possui fix disponível. O critério de sucesso DEPL-03 deve ser reformulado como "sem vulnerabilidades de alta/crítica *com fix disponível*".
+**Decisão requerida:** As três opções implicam em reformulação ou não do critério DEPL-03 definido pelo usuário. O plano deve apresentar esse conflito como `checkpoint:human-confirm` — a escolha de qual critério adotar para o TCC cabe ao usuário, não ao planner. O planner pode sugerir a Opção 1 como ponto de partida, mas não deve fechar o critério sem confirmação explícita.
 
 ---
 
@@ -447,7 +450,7 @@ Nenhum — testes existentes (Playwright E2E) não cobrem os fixes desta fase, m
 - Leitura da mensagem de erro do ESLint para `react-hooks/set-state-in-effect` — comportamento da regra inferido da mensagem
 
 ### Terciárias (confiança LOW — marcadas [ASSUMED])
-- Fix via IIFE no useEffect silencia a regra — provável mas não verificado em execução
+- (nenhuma — A1 foi promovido a VERIFIED via evidência em PortalDashboard.js)
 
 ---
 
@@ -455,7 +458,7 @@ Nenhum — testes existentes (Playwright E2E) não cobrem os fixes desta fase, m
 
 | # | Afirmação | Seção | Risco se Errado |
 |---|-----------|-------|-----------------|
-| A1 | IIFE inline no useEffect silencia `react-hooks/set-state-in-effect` | D-01 | Precisar usar `eslint-disable-next-line` como fallback — impacto baixo |
+| ~~A1~~ | ~~Função declarada dentro do useEffect silencia a regra~~ | D-01 | REMOVIDO — verificado via PortalDashboard.js: zero erros com exatamente esse padrão |
 | A2 | signOut() via supabase-browser.js + router.push('/login') invalida sessão corretamente no App Router com @supabase/ssr | D-06 | Sessão persistente no server shell — fallback: adicionar router.refresh() antes do push |
 | A3 | `next 16.2.6` não tem fix para as CVEs de HIGH severity listadas | DEPL-03 | Se 16.2.7+ resolver as CVEs, npm audit fix resolveria completamente — verificar no momento da execução |
 
@@ -463,10 +466,7 @@ Nenhum — testes existentes (Playwright E2E) não cobrem os fixes desta fase, m
 
 ## Questões Abertas
 
-1. **A1: IIFE silencia o lint error?**
-   - O que sabemos: a regra dispara em chamadas indiretas de função que fazem setState
-   - O que é incerto: se IIFE dentro do useEffect é tratada como "body literal" pela regra
-   - Recomendação: tentar o IIFE primeiro; se falhar, usar `eslint-disable-next-line` com comentário justificando fetch-on-mount
+1. **A1: RESOLVIDO** — padrão função-nomeada-dentro-do-useEffect verificado em PortalDashboard.js. Não há questão aberta.
 
 2. **DEPL-03 e vulnerabilidades residuais de next.js**
    - O que sabemos: `npm audit fix` não resolve as HIGH do next.js 16.x; a versão estável máxima é 16.2.6
@@ -480,7 +480,7 @@ Nenhum — testes existentes (Playwright E2E) não cobrem os fixes desta fase, m
 **Breakdown de confiança:**
 - Arquivos a modificar (5): HIGH — leitura direta do código
 - Fix de segurança D-04/D-05: HIGH — pattern direto, sem ambiguidade
-- Fix de lint D-01: MEDIUM — fix provável via IIFE, fallback eslint-disable disponível
+- Fix de lint D-01: HIGH — pattern verificado em PortalDashboard.js (mesmo projeto, zero erros)
 - Logout D-06: HIGH para "o que fazer", MEDIUM para "router.push vs refresh"
 - DEPL-03 audit: HIGH — baseline verificado; vulnerabilidades residuais confirmadas
 
