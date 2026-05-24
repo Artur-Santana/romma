@@ -132,6 +132,8 @@ export async function seed() {
     },
   ])
   if (errParcelas) throw errParcelas
+
+  return { edificioId: edificio.id, unidadeId: unidade.id }
 }
 
 // executa quando chamado diretamente: node e2e/seed.mjs
