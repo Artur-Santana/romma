@@ -8,9 +8,9 @@ export default async function PortalLayout({ children }) {
   if (!user) redirect("/login")
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <div className="flex flex-col h-screen bg-background">
       <TopStrip />
-      <main style={{ flex: 1, overflow: "auto", background: "var(--background)" }}>
+      <main className="flex-1 overflow-auto">
         {children}
       </main>
     </div>

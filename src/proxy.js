@@ -25,20 +25,22 @@ export async function proxy(request) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
+  const onDashboard = request.nextUrl.pathname.startsWith('/dashboard')
+  const onPortal = request.nextUrl.pathname.startsWith('/portal')
+
+  if ((onDashboard || onPortal) && !user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (request.nextUrl.pathname.startsWith('/dashboard') && user) {
-    const { data: perm } = await supabase.rpc('is_proprietario')
-    if (!perm) {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
+  if (onDashboard || onPortal) {
+    const { data: isProprietario } = await supabase.rpc('is_proprietario')
+    if (onDashboard && !isProprietario) return NextResponse.redirect(new URL('/', request.url))
+    if (onPortal && isProprietario) return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   return response
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ['/dashboard', '/dashboard/:path*', '/portal', '/portal/:path*'],
 }
