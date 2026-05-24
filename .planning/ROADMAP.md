@@ -75,7 +75,14 @@ Plans:
 3. Client Components do dashboard usam supabase-browser.js (não supabase.js) em todas as instâncias restantes
 4. Todos os Server Actions retornam `erroMessage` (sem typos) e consumidores recebem a mensagem corretamente
 5. useState em Unidades.js, GestaoEdificios.js e Locatarios.js consolidados em objetos form
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Fixes de seguranca HIGH: IDOR em cancelar/encerrarContrato (D-04) + mass assignment em editarLocatario (D-05)
+- [ ] 03-02-PLAN.md — Fix lint set-state-in-effect em GestaoEdificios.js e Unidades.js (D-01)
+- [ ] 03-03-PLAN.md — Logout no portal do Locatario: LogoutButton.js + render no PortalDashboard (D-06)
+- [ ] 03-04-PLAN.md — Gate auditoria REF-01..04 + lint/build/npm audit + checkpoint DEPL-03 (D-07..D-10)
+**UI hint**: yes
 
 ### Phase 4: Polimento Visual Público
 **Goal:** Página /unidades entrega a experiência visual Obsidian Blueprint com performance de imagem adequada
