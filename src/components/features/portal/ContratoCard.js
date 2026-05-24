@@ -1,5 +1,3 @@
-'use client'
-
 import { fmtBRL, fmtData } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
 
