@@ -51,8 +51,7 @@ export default function PortalDashboard() {
         <div className="mt-8 font-mono text-[12px] text-fg-4">Carregando...</div>
       ) : !contrato ? (
         <div className="mt-8">
-          <span className="eyebrow eyebrow--indigo">PORTAL DO LOCATÁRIO</span>
-          <h2 className="font-display font-bold text-[28px] text-fg-1 mt-2">Nenhum contrato ativo</h2>
+          <h2 className="font-display font-bold text-[28px] text-fg-1">Nenhum contrato ativo</h2>
           <p className="font-mono text-[12px] text-fg-4 mt-2">Você não possui contrato ativo. Entre em contato com o proprietário.</p>
         </div>
       ) : (
