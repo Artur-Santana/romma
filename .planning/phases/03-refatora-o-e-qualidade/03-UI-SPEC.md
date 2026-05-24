@@ -1,7 +1,8 @@
 ---
 phase: 3
 slug: refatora-o-e-qualidade
-status: draft
+status: approved
+reviewed_at: 2026-05-24
 shadcn_initialized: true
 preset: radix-lyra
 created: 2026-05-24
