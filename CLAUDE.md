@@ -4,6 +4,20 @@
 
 ---
 
+## Git Workflow
+
+**NUNCA commitar diretamente na `main`.** Sempre criar branch antes do primeiro commit:
+
+```bash
+git checkout -b <tipo>/<descricao>
+```
+
+Exemplos: `feat/portal-logout`, `fix/auth-bypass-contratos`, `docs/phase-03-context`.
+
+`.githooks/pre-commit` bloqueia commits em `main` como hard stop. Regra se aplica mesmo se o hook falhar — criar branch primeiro, sempre.
+
+---
+
 ## Stack
 
 Next.js 16 App Router (JS, sem TS) · Tailwind v4 · shadcn/ui · Supabase (Postgres + Auth + RLS + Edge Functions Deno) · Turbopack · Vercel
