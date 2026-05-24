@@ -4,9 +4,9 @@ fixed_at: 2026-05-23T00:00:00Z
 review_path: .planning/phases/02-portal-do-locat-rio/02-REVIEW.md
 iteration: 1
 findings_in_scope: 9
-fixed: 8
-skipped: 1
-status: partial
+fixed: 9
+skipped: 0
+status: complete
 ---
 
 # Fase 02: Relatório de Code Review Fix — Portal do Locatário
@@ -17,8 +17,8 @@ status: partial
 
 **Summary:**
 - Findings in scope: 9 (CR-01, CR-02, CR-03, WR-01, WR-02, WR-03, WR-04, WR-05, WR-06)
-- Fixed: 8 (WR-05 verificado — código correto, sem alteração necessária)
-- Skipped: 1
+- Fixed: 9 (todos resolvidos — WR-05 verificado no banco, WR-06 implementado)
+- Skipped: 0
 
 ---
 
@@ -80,8 +80,6 @@ status: partial
 
 ---
 
-## Skipped Issues
-
 ### WR-05: `getLocatarios` seleciona `status_convite` — coluna não documentada no schema
 
 **File:** `src/lib/queries-client.js:16`
@@ -89,16 +87,15 @@ status: partial
 
 **Action taken:** Nenhuma alteração em código. CLAUDE.md pode ser atualizado para documentar a coluna (fora do escopo deste fix).
 
-**Original issue:** `getLocatarios` seleciona `status_convite`, coluna ausente no schema documentado em CLAUDE.md.
+**Commit:** 30b982e
 
 ---
 
 ### WR-06: `global-teardown.js` identifica unidade por nome (frágil)
 
-**File:** `e2e/global-teardown.js:43-49`
-**Reason:** A correção proposta requer que o seed exporte/persista o `edificio_id` em um artefato compartilhado (ex: arquivo temporário ou variável global via globalSetup). Não há tal mecanismo no projeto atualmente. Implementar isso requer mudanças arquiteturais no setup/teardown do Playwright que vão além do escopo de um fix atômico. Marcado como "requer atenção manual".
-
-**Original issue:** Teardown identifica unidade pelo nome `'Sala 101'` em vez de pelo ID do edifício criado pelo seed, podendo deletar dados de outros testes em execuções paralelas.
+**Files modified:** `e2e/seed.mjs`, `e2e/global-setup.js`, `e2e/global-teardown.js`, `.gitignore`
+**Commit:** c10b979
+**Applied fix:** `seed()` agora retorna `{ edificioId, unidadeId }`. `global-setup.js` persiste esse estado em `.e2e-state.json`. `global-teardown.js` lê o arquivo e usa os IDs para cleanup exato via `.eq('id', ...)`, com fallback por nome caso o arquivo não exista. `.e2e-state.json` adicionado ao `.gitignore`.
 
 ---
 
