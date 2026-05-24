@@ -170,9 +170,10 @@ function SignInForm() {
       setStatus("error")
       return
     }
+    const { data: isProprietario } = await supabase.rpc('is_proprietario')
     setStatus("success")
     await new Promise(resolve => setTimeout(resolve, 500))
-    router.push("/dashboard")
+    router.push(isProprietario ? '/dashboard' : '/portal/dashboard')
   }
 
   async function handleForgotPassword(e) {
@@ -182,7 +183,8 @@ function SignInForm() {
       return
     }
     setStatus("reset_loading")
-    await supabase.auth.resetPasswordForEmail(email)
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    if (error) { setStatus("error"); return }
     setStatus("reset_sent")
   }
 
