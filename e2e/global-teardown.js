@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { config } from 'dotenv'
+import { existsSync, readFileSync, unlinkSync } from 'fs'
+import { resolve } from 'path'
 
 config({ path: '.env.test' })
 
@@ -8,6 +10,8 @@ const admin = createClient(
   process.env.SUPABASE_ROLE_KEY,
   { auth: { autoRefreshToken: false, persistSession: false } }
 )
+
+const STATE_FILE = resolve('.e2e-state.json')
 
 export default async function globalTeardown() {
   // Buscar o usuario_id do locatário de teste
@@ -37,14 +41,33 @@ export default async function globalTeardown() {
   }
   await admin.from('locatarios').delete().in('id', locatarioIds)
 
-  // Limpar unidades e edificios criados pelo seed (identificados pelo nome único de teste)
-  const { data: unidades } = await admin
-    .from('unidades')
-    .select('id, edificio_id')
-    .eq('nome', 'Sala 101')
-  if (unidades?.length) {
-    const edificioIds = [...new Set(unidades.map(u => u.edificio_id))]
-    await admin.from('unidades').delete().in('id', unidades.map(u => u.id))
-    await admin.from('edificios').delete().in('id', edificioIds)
+  // Limpar unidade e edificio pelo ID persistido pelo global-setup (robusto).
+  // Fallback por nome apenas se o arquivo de estado não existir (ex: seed executado manualmente).
+  let unidadeId = null
+  let edificioId = null
+
+  if (existsSync(STATE_FILE)) {
+    try {
+      const state = JSON.parse(readFileSync(STATE_FILE, 'utf-8'))
+      unidadeId = state.unidadeId ?? null
+      edificioId = state.edificioId ?? null
+    } finally {
+      unlinkSync(STATE_FILE)
+    }
+  }
+
+  if (unidadeId && edificioId) {
+    await admin.from('unidades').delete().eq('id', unidadeId)
+    await admin.from('edificios').delete().eq('id', edificioId)
+  } else {
+    const { data: unidades } = await admin
+      .from('unidades')
+      .select('id, edificio_id')
+      .eq('nome', 'Sala 101')
+    if (unidades?.length) {
+      const edificioIds = [...new Set(unidades.map(u => u.edificio_id))]
+      await admin.from('unidades').delete().in('id', unidades.map(u => u.id))
+      await admin.from('edificios').delete().in('id', edificioIds)
+    }
   }
 }
