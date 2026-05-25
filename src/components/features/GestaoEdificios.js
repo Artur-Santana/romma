@@ -25,7 +25,10 @@ export default function GestaoEdificios({}) {
   }
 
   useEffect(() => {
-    carregarEdificios();
+    async function fetchDados() {
+      setEdificios(await getEdificios());
+    }
+    fetchDados();
   }, []);
 
   async function insertEdificio(e) {
