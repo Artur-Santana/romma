@@ -131,6 +131,7 @@ export async function gerarParcelas(contratoId) {
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
 
     const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return { status: 401, erroMessage: 'Sessão expirada.' }
     const { error } = await supabaseJWT.functions.invoke('gerar-parcelas', {
         body: { contrato_id: contratoId },
         headers: { Authorization: 'Bearer ' + session.access_token }

@@ -28,7 +28,7 @@ export default function PortalDashboard() {
         setContrato(ct)
         if (!ct) { setLoading(false); return }
         const parc = await getParcelasPortal(ct.id)
-        setParcelas(parc)
+        setParcelas(parc ?? [])
       } catch (e) {
         setErro(e.message ?? "Erro desconhecido")
       } finally {
