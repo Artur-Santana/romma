@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase-browser"
 import { getLocatarioByUserId, getContratoAtivoByLocatario, getParcelasPortal } from "@/lib/queries-client"
 import ContratoCard from "./ContratoCard"
 import ParcelsTable from "./ParcelsTable"
+import LogoutButton from "@/components/ui/LogoutButton"
 
 const supabase = createClient()
 
@@ -27,7 +28,7 @@ export default function PortalDashboard() {
         setContrato(ct)
         if (!ct) { setLoading(false); return }
         const parc = await getParcelasPortal(ct.id)
-        setParcelas(parc)
+        setParcelas(parc ?? [])
       } catch (e) {
         setErro(e.message ?? "Erro desconhecido")
       } finally {
@@ -39,7 +40,10 @@ export default function PortalDashboard() {
 
   return (
     <div className="romma-page bg-background min-h-full px-12 pt-12 pb-20">
-      <span className="eyebrow eyebrow--indigo">PORTAL DO LOCATÁRIO</span>
+      <div className="flex justify-between items-center">
+        <span className="eyebrow eyebrow--indigo">PORTAL DO LOCATÁRIO</span>
+        <LogoutButton />
+      </div>
       <h1 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Seu Contrato.</h1>
       <p className="font-mono text-[11px] text-fg-4 mt-2">Acesso restrito — contrato e histórico de parcelas.</p>
 

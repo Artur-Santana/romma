@@ -67,7 +67,11 @@ export default function Contratos() {
     const result = await criarContrato({ ...form, status: "ativo" })
     if (result.status === 200) {
       const parcResult = await gerarParcelas(result.data.id)
-      if (parcResult.status !== 200) setErro(parcResult.erroMessage ?? "Erro ao gerar parcelas.")
+      if (parcResult.status !== 200) {
+        setErro(parcResult.erroMessage ?? "Erro ao gerar parcelas.")
+        setLoading(false)
+        return
+      }
       const [c, u] = await Promise.all([getContratos(), getUnidades()])
       setContratos(c ?? [])
       setUnidades(u ?? [])
@@ -105,7 +109,7 @@ export default function Contratos() {
 
   async function confirmarCancelamento(contrato) {
     setConfirmDialog(null)
-    const result = await cancelarContrato(contrato.id, contrato.unidade_id)
+    const result = await cancelarContrato(contrato.id)
     if (result.status !== 200) { setErro(result.erroMessage); return }
     setErro(null)
     const [c, u] = await Promise.all([getContratos(), getUnidades()])
@@ -115,7 +119,7 @@ export default function Contratos() {
 
   async function confirmarEncerramento(contrato) {
     setConfirmDialog(null)
-    const res = await encerrarContrato(contrato.id, contrato.unidade_id)
+    const res = await encerrarContrato(contrato.id)
     if (res.status !== 200) { setErro(res.erroMessage); return }
     setErro(null)
     const [c, u] = await Promise.all([getContratos(), getUnidades()])

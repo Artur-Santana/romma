@@ -13,7 +13,7 @@
 |---|-------|------|--------------|------|
 | 1 | Dashboard Completions | 8/8 complete — UAT passed 2026-05-22 | DASH-01, DASH-02, DASH-03, VIS-02 | done |
 | 2 | Portal do Locatário | 3/3 | Complete   | 2026-05-23 |
-| 3 | Refatoração e Qualidade | Codebase limpo, sem erros de lint/build, pronto para produção | REF-01, REF-02, REF-03, REF-04, DEPL-03 | mvp |
+| 3 | Refatoração e Qualidade | 4/4 | Complete   | 2026-05-25 |
 | 4 | Polimento Visual Público | Página /unidades com design Obsidian Blueprint completo e performático | VIS-01 | mvp |
 | 5 | Testes E2E | Suite Playwright cobre todos os fluxos críticos do Proprietário e Realtime | TEST-01, TEST-02, TEST-04 | mvp |
 | 6 | Deploy Final e Demo | Sistema estável em produção, fluxo de convite validado, demo pronto | DEPL-01, DEPL-02, DEMO-01 | mvp |
@@ -71,11 +71,20 @@ Plans:
 **Requirements:** REF-01, REF-02, REF-03, REF-04, DEPL-03
 **Success Criteria:**
 1. `npm run lint` e `npm run build` passam sem erros ou warnings críticos
-2. `npm audit --omit=dev` passa sem vulnerabilidades de alta/crítica severidade
+2. `npm audit --omit=dev` sem vulnerabilidades HIGH/CRITICAL — vulnerabilidades MODERATE residuais de next.js sem fix disponível no 16.x são exceção conhecida documentada (fix só existe na linha 17.x, fora de escopo pré-banca)
 3. Client Components do dashboard usam supabase-browser.js (não supabase.js) em todas as instâncias restantes
 4. Todos os Server Actions retornam `erroMessage` (sem typos) e consumidores recebem a mensagem corretamente
 5. useState em Unidades.js, GestaoEdificios.js e Locatarios.js consolidados em objetos form
-**Plans:** TBD
+
+**Exceção conhecida — no-img-element:** 8 warnings `@next/next/no-img-element` em `src/app/page.js` são deferidos para Fase 4 (VIS-01). Página pública `/unidades` receberá `next/image` no plano de polimento visual — fora de escopo desta fase (D-02).
+**Plans:** 4/4 plans complete
+
+Plans:
+- [x] 03-01-PLAN.md — Fixes de seguranca HIGH: IDOR em cancelar/encerrarContrato (D-04) + mass assignment em editarLocatario (D-05)
+- [x] 03-02-PLAN.md — Fix lint set-state-in-effect em GestaoEdificios.js e Unidades.js (D-01)
+- [x] 03-03-PLAN.md — Logout no portal do Locatario: LogoutButton.js + render no PortalDashboard (D-06)
+- [x] 03-04-PLAN.md — Gate auditoria REF-01..04 + lint/build/npm audit + checkpoint DEPL-03 (D-07..D-10)
+**UI hint**: yes
 
 ### Phase 4: Polimento Visual Público
 **Goal:** Página /unidades entrega a experiência visual Obsidian Blueprint com performance de imagem adequada
