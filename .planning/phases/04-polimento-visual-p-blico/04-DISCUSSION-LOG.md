@@ -17,8 +17,8 @@
 | Só nas páginas públicas | Carregar Manrope/Noto Sans com variables extras. Dashboard e portal ficam com fontes atuais. | |
 | Manter fontes atuais | Space Grotesk já é o --font-display-arch. VIS-01 sobre fontes já está satisfeito. | ✓ |
 
-**User's choice:** Manter fontes atuais
-**Notes:** VIS-01 considerado satisfeito com Space Grotesk + JetBrains Mono já instalados.
+**User's choice:** Manter fontes atuais (+ correção pós-discussão)
+**Notes:** VIS-01 satisfeito com Space Grotesk. JetBrains Mono removido — Space Grotesk cobre todos os spots incluindo usos mono. Correção aplicada após discussão inicial.
 
 ---
 

@@ -8,7 +8,7 @@
 
 Fase 4 entrega: (1) redesign completo da `/unidades` pública — Tailwind v4 + Obsidian Blueprint, extração de subcomponentes, substituição do SVG placeholder por `<Image>` do next/image com placeholder estático; (2) correção dos 8 `<img>` nativos em `src/app/page.js` para next/image (deferido da Fase 3, limpa lint/build); (3) redesign do `UnidadeCard.js` — o componente do dashboard que foi deixado como skeleton propositalmente no Plano 01-06; (4) botão de editar Locatário ausente em `LocatariosDesktop.js` (UAT Fase 3, issue deferido).
 
-**Fora de escopo:** redesign completo da landing page `/` (VIS-04 — deferred v2), troca de fontes globais, novas funcionalidades de negócio.
+**Fora de escopo:** redesign completo da landing page `/` (VIS-04 — deferred v2), novas funcionalidades de negócio.
 
 </domain>
 
@@ -16,7 +16,7 @@ Fase 4 entrega: (1) redesign completo da `/unidades` pública — Tailwind v4 + 
 ## Implementation Decisions
 
 ### Fontes (VIS-01)
-- **D-01:** Fontes atuais (Space Grotesk como `--font-display-arch`, JetBrains Mono como `--font-mono`) são mantidas. VIS-01 sobre Manrope/Noto Sans é considerado satisfeito com o stack atual. Nenhuma alteração em `layout.js` ou `globals.css`.
+- **D-01:** JetBrains Mono removido do projeto. Space Grotesk passa a cobrir todos os usos, incluindo os spots que antes usavam `--font-mono`. Remover `JetBrains_Mono` de `layout.js` e `--font-jetbrains-mono` de `globals.css`. `--font-mono` passa a referenciar `var(--font-space-grotesk)` (ou ser removido se não houver usos restantes). VIS-01 sobre Manrope/Noto Sans satisfeito com Space Grotesk.
 
 ### Imagens e next/image
 - **D-02:** 8 tags `<img>` nativas em `src/app/page.js` devem ser substituídas por `<Image>` do `next/image`. Corrige os 8 warnings `@next/next/no-img-element` deferidos da Fase 3. Necessário para DEPL-03 limpo.
