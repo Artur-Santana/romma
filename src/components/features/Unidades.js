@@ -36,8 +36,8 @@ export default function Unidades({}) {
   });
 
   async function carregarDados() {
-    setListaEdificios(await getEdificios());
-    setUnidades(await getUnidades());
+    setListaEdificios(await getEdificios() ?? []);
+    setUnidades(await getUnidades() ?? []);
   }
 
   function resetForm() {
@@ -64,7 +64,7 @@ export default function Unidades({}) {
     const result = await deletarUnidade(id);
     if (result.status === 200) {
       setErro(null)
-      setUnidades(await getUnidades());
+      setUnidades(await getUnidades() ?? []);
     } else {
       setErro(result.erroMessage)
     }
@@ -76,7 +76,7 @@ export default function Unidades({}) {
       setErro(null)
       setEditandoId(null)
       resetFormEdit()
-      setUnidades(await getUnidades());
+      setUnidades(await getUnidades() ?? []);
     } else {
       setErro(result.erroMessage)
     }
@@ -84,8 +84,8 @@ export default function Unidades({}) {
 
   useEffect(() => {
     async function fetchDados() {
-      setListaEdificios(await getEdificios());
-      setUnidades(await getUnidades());
+      setListaEdificios(await getEdificios() ?? []);
+      setUnidades(await getUnidades() ?? []);
     }
     fetchDados();
   }, []);
@@ -98,7 +98,7 @@ export default function Unidades({}) {
     if (result.status === 200) {
       setErro(null)
       resetForm()
-      setUnidades(await getUnidades());
+      setUnidades(await getUnidades() ?? []);
       setShowForm(false)
     } else {
       setErro(result.erroMessage)

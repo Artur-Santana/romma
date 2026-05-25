@@ -67,7 +67,11 @@ export default function Contratos() {
     const result = await criarContrato({ ...form, status: "ativo" })
     if (result.status === 200) {
       const parcResult = await gerarParcelas(result.data.id)
-      if (parcResult.status !== 200) setErro(parcResult.erroMessage ?? "Erro ao gerar parcelas.")
+      if (parcResult.status !== 200) {
+        setErro(parcResult.erroMessage ?? "Erro ao gerar parcelas.")
+        setLoading(false)
+        return
+      }
       const [c, u] = await Promise.all([getContratos(), getUnidades()])
       setContratos(c ?? [])
       setUnidades(u ?? [])

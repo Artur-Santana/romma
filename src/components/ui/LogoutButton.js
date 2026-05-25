@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase-browser"
 
 const supabase = createClient()
 
-function SairButton() {
+function LogoutButton() {
   const router = useRouter()
   const [saindo, setSaindo] = useState(false)
   const [erro, setErro] = useState(false)
@@ -19,6 +19,7 @@ function SairButton() {
       setSaindo(false)
       return
     }
+    router.refresh()
     router.push("/login")
   }
 
@@ -41,4 +42,4 @@ function SairButton() {
   )
 }
 
-export default SairButton
+export default LogoutButton
