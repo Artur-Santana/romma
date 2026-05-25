@@ -54,7 +54,13 @@ blocked: 0
   reason: "User reported: Não existe botão para editar o locatário"
   severity: major
   test: 4
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "A page /dashboard/locatarios renderiza LocatariosDesktop.js, não Locatarios.js. LocatariosDesktop.js não tem edição implementada — editarLocatario server action existe mas nunca foi conectado ao componente desktop."
+  artifacts:
+    - path: "src/components/features/LocatariosDesktop.js"
+      issue: "Sem estado editandoId, sem editForm, sem botão Editar, sem handleEditarLocatario"
+    - path: "src/app/dashboard/locatarios/page.js"
+      issue: "Renderiza LocatariosDesktop (sem edição), não Locatarios.js (com edição)"
+  missing:
+    - "Implementar edição inline em LocatariosDesktop.js: editandoId state, editForm state, handleEditarLocatario, handleSalvarLocatario, botão Editar por row"
   debug_session: ""
+  deferred_to: "fase-04"
