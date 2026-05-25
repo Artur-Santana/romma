@@ -55,12 +55,18 @@ export async function editarContrato(id, form) {
   return { status: 200 }
 }
 
-export async function cancelarContrato(id, unidade_id) {
+export async function cancelarContrato(id) {
   const { err } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-  if (!UUID_RE.test(unidade_id)) return { status: 400, erroMessage: 'Unidade inválida.' }
+
+  const { data: contrato, error: fetchErr } = await supabaseAdmin
+    .from('contratos')
+    .select('unidade_id')
+    .eq('id', id)
+    .single()
+  if (fetchErr || !contrato) return { status: 404, erroMessage: 'Contrato não encontrado.' }
 
   const { error } = await supabaseAdmin
     .from('contratos')
@@ -71,7 +77,7 @@ export async function cancelarContrato(id, unidade_id) {
   const { error: errUnidade } = await supabaseAdmin
     .from('unidades')
     .update({ status: 'disponivel' })
-    .eq('id', unidade_id)
+    .eq('id', contrato.unidade_id)
   if (errUnidade) return { status: 500, erroMessage: errUnidade.message }
 
   // Deleta parcelas futuras (status 'cancelada' não existe no enum)
@@ -84,12 +90,18 @@ export async function cancelarContrato(id, unidade_id) {
   return { status: 200 }
 }
 
-export async function encerrarContrato(id, unidade_id) {
+export async function encerrarContrato(id) {
   const { err } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-  if (!UUID_RE.test(unidade_id)) return { status: 400, erroMessage: 'Unidade inválida.' }
+
+  const { data: contrato, error: fetchErr } = await supabaseAdmin
+    .from('contratos')
+    .select('unidade_id')
+    .eq('id', id)
+    .single()
+  if (fetchErr || !contrato) return { status: 404, erroMessage: 'Contrato não encontrado.' }
 
   const { error } = await supabaseAdmin
     .from('contratos')
@@ -100,7 +112,7 @@ export async function encerrarContrato(id, unidade_id) {
   const { error: errUnidade } = await supabaseAdmin
     .from('unidades')
     .update({ status: 'disponivel' })
-    .eq('id', unidade_id)
+    .eq('id', contrato.unidade_id)
   if (errUnidade) return { status: 500, erroMessage: errUnidade.message }
 
   await supabaseAdmin

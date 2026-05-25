@@ -105,7 +105,7 @@ export default function Contratos() {
 
   async function confirmarCancelamento(contrato) {
     setConfirmDialog(null)
-    const result = await cancelarContrato(contrato.id, contrato.unidade_id)
+    const result = await cancelarContrato(contrato.id)
     if (result.status !== 200) { setErro(result.erroMessage); return }
     setErro(null)
     const [c, u] = await Promise.all([getContratos(), getUnidades()])
@@ -115,7 +115,7 @@ export default function Contratos() {
 
   async function confirmarEncerramento(contrato) {
     setConfirmDialog(null)
-    const res = await encerrarContrato(contrato.id, contrato.unidade_id)
+    const res = await encerrarContrato(contrato.id)
     if (res.status !== 200) { setErro(res.erroMessage); return }
     setErro(null)
     const [c, u] = await Promise.all([getContratos(), getUnidades()])
