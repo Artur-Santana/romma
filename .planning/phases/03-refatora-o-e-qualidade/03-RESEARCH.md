@@ -464,7 +464,7 @@ Nenhum — testes existentes (Playwright E2E) não cobrem os fixes desta fase, m
 
 ---
 
-## Questões Abertas
+## Questões Abertas (RESOLVED)
 
 1. **A1: RESOLVIDO** — padrão função-nomeada-dentro-do-useEffect verificado em PortalDashboard.js. Não há questão aberta.
 
@@ -472,6 +472,7 @@ Nenhum — testes existentes (Playwright E2E) não cobrem os fixes desta fase, m
    - O que sabemos: `npm audit fix` não resolve as HIGH do next.js 16.x; a versão estável máxima é 16.2.6
    - O que é incerto: se o critério de DEPL-03 do TCC exige auditoria limpa ou "sem vulnerabilidades com fix disponível"
    - Recomendação: o plano deve ajustar o critério de sucesso de DEPL-03 para refletir a realidade — "sem vulnerabilidades com fix disponível" — e documentar as CVEs de next.js como exceção conhecida
+   - **RESOLVIDO:** Decisão delegada via `checkpoint:decision` em 03-04-PLAN.md — usuário escolhe o critério na execução (option-a, option-b ou option-c).
 
 ---
 

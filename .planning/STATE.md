@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-05-24T23:12:21.665Z"
+last_updated: "2026-05-25T21:43:02.054Z"
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 11
+  total_plans: 15
   completed_plans: 11
   percent: 33
 ---
@@ -19,7 +19,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-21)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 02 — portal-do-locat-rio
+**Current focus:** Phase 03 — refatora-o-e-qualidade
 
 ---
 
@@ -40,7 +40,7 @@ See: .planning/PROJECT.md (updated 2026-05-21)
 
 **Phase 1: Dashboard Completions**
 Goal: Proprietário vê valores financeiros reais (MRR e receita esperada) e alerta de contratos vencendo no dashboard
-Status: Executing Phase 02
+Status: Executing Phase 03
 Plans: 8 planos em 5 waves
 
 ---
