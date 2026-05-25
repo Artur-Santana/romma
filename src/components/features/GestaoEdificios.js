@@ -21,11 +21,14 @@ export default function GestaoEdificios({}) {
   }
 
   async function carregarEdificios() {
-    setEdificios(await getEdificios());
+    setEdificios(await getEdificios() ?? []);
   }
 
   useEffect(() => {
-    carregarEdificios();
+    async function fetchDados() {
+      setEdificios(await getEdificios() ?? []);
+    }
+    fetchDados();
   }, []);
 
   async function insertEdificio(e) {
