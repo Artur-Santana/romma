@@ -53,7 +53,8 @@ export async function editarLocatario(id, form) {
     if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
     if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-    const { error } = await supabaseAdmin.from('locatarios').update(form).eq('id', id)
+    const { nome_razao_social, tipo, documento, email, telefone } = form
+    const { error } = await supabaseAdmin.from('locatarios').update({ nome_razao_social, tipo, documento, email, telefone }).eq('id', id)
     if (error) return { status: 500, erroMessage: error.message }
     return { status: 200 }
 }
