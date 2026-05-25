@@ -83,7 +83,11 @@ export default function Unidades({}) {
   }
 
   useEffect(() => {
-    carregarDados();
+    async function fetchDados() {
+      setListaEdificios(await getEdificios());
+      setUnidades(await getUnidades());
+    }
+    fetchDados();
   }, []);
 
   async function insertUnidade(e) {
