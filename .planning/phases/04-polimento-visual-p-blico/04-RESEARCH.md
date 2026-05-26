@@ -469,17 +469,17 @@ function UnidadePublicaCard({ unidade, edificio, onSelect }) {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **SVGs de ícone com `<Image>`**
    - O que sabemos: `next/image` pode ter comportamento especial com SVGs (sanitização, tamanho)
-   - O que está incerto: se `width`/`height` fixos funcionam bem para todos os 4 SVGs de ícone em `page.js`
-   - Recomendação: Usar `<Image width={28} height={28} unoptimized>` para SVGs — ou manter os SVGs como elementos `<img>` e justificar no lint (`eslint-disable-next-line @next/next/no-img-element`) apenas para SVGs, aplicando `<Image>` apenas para imagens raster. Decisão de baixo risco.
+   - O que estava incerto: se `width`/`height` fixos funcionam bem para todos os 4 SVGs de ícone em `page.js`
+   - RESOLVED: Usar `<Image width={28} height={28} unoptimized>` para SVGs — aplica `<Image>` apenas para imagens raster; SVGs ficam com `<Image unoptimized>`. Decisão baked in em 04-02 Task 2.
 
 2. **Localização do modal de edição em LocatariosDesktop.js (D-09)**
    - O que sabemos: O componente já tem um modal de convite (showInviteForm) com padrão bem estabelecido
-   - O que está incerto: Se a edição deve ser inline na linha da tabela ou em modal separado
-   - Recomendação: Modal separado, seguindo o padrão do modal de convite — `showEditForm` + `editandoId` — consistente com o componente existente.
+   - O que estava incerto: Se a edição deve ser inline na linha da tabela ou em modal separado
+   - RESOLVED: Modal separado, seguindo o padrão do modal de convite — `showEditForm` + `editandoId`. Baked in em 04-04 Task 1.
 
 ---
 
