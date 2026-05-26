@@ -37,15 +37,14 @@ Declared values (multiples of 4):
 | xs | 4px | Icon gaps, badge padding |
 | sm | 8px | Compact element spacing, inline gaps |
 | md | 16px | Default element spacing, modal inner padding |
+| — | 20px | Card padding — established pattern from `ContratoCard.js`, `LocatariosDesktop.js`. Use in `UnidadePublicaCard.js` and `UnidadeDetailSheet.js` (`px-5` / `py-5`). (4×5) |
 | lg | 24px | Section padding, card vertical rhythm |
 | xl | 32px | Layout gaps, page-level padding |
 | 2xl | 48px | Major section breaks |
+| — | 44px | Touch target minimum — interactive elements in `UnidadeDetailSheet` on mobile must meet 44px minimum touch height. (4×11) |
 | 3xl | 64px | Page-level spacing (public page hero) |
 
-Exceptions:
-- **20px (`px-5` / `py-5`)** — established card padding from Fase 2 canonical refs (`ContratoCard.js`, `LocatariosDesktop.js`). Preserve in `UnidadePublicaCard.js` and `UnidadeDetailSheet.js`.
-- **14px (`py-[14px]`)** — established bottom sheet button padding from current `unidades/page.js`. Preserve in `UnidadeDetailSheet.js`.
-- **44px touch target minimum** — interactive elements in the public bottom sheet (`UnidadeDetailSheet`) must meet 44px minimum touch height on mobile.
+Exceptions: none — all values above are multiples of 4.
 
 ---
 
@@ -53,14 +52,14 @@ Exceptions:
 
 | Role | Size | Weight | Line Height | Class Pattern |
 |------|------|--------|-------------|---------------|
-| Label / Eyebrow (mono, uppercase, tracked) | 9–11px | 700 | 1.4 | `font-mono text-[11px] tracking-[1px] uppercase` |
+| Label / Eyebrow (mono, uppercase, tracked) | 11px | 700 | 1.4 | `font-mono text-[11px] tracking-[1px] uppercase` |
 | Body | 13px | 400 | 1.5 | `font-body text-[13px]` |
 | Heading (card titles, section heads) | 22px | 700 | 1.2 | `font-body font-bold text-[22px] tracking-[-0.8px]` |
 | Display (page title, detail sheet unit name) | 32px | 700 | 1.1 | `font-body font-bold text-[32px] tracking-[-1.6px]` |
 
 Notes:
 - Two weights only: 400 (regular) and 700 (bold). The `font-medium` (500) used in a few places in `LocatariosDesktop.js` is a grandfathered exception — do not introduce new 500-weight usages in Phase 4 components.
-- Label row covers the 9–11px mono/eyebrow range. Use 9px for ref tags (UN-XXXXXX), 10px for table headers, 11px for standard eyebrows. All uppercase with tracking.
+- Label / Eyebrow role is 11px uniformly across all uses: ref tags (UN-XXXXXX), table headers, standard eyebrows. All uppercase with 1px letter-spacing.
 - The 56px hero display (login page) is landing-page-only and out of scope for this phase.
 
 Sources: `src/components/features/portal/ContratoCard.js`, `src/components/features/LocatariosDesktop.js`, RESEARCH.md Padrão 4.
