@@ -95,7 +95,13 @@ Plans:
 1. /unidades usa a paleta Romma (roxo #370085, dourado #C5A059) com fontes Manrope/Noto Sans carregadas via next/font
 2. Imagens na página /unidades usam next/image (sem tags `<img>` nativas)
 3. Layout de cards de unidades reflete o design Obsidian Blueprint visualmente consistente com o portal e dashboard
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Slice vertical /unidades pública (UnidadesPublicas + UnidadePublicaCard + UnidadeDetailSheet + page.js thin shell)
+- [ ] 04-02-PLAN.md — Cross-cutting: remoção JetBrains Mono + migração 8 img nativas em page.js para next/image
+- [ ] 04-03-PLAN.md — Dashboard leftover: reescrita de UnidadeCard.js com Tailwind v4 + shadcn (modo leitura + edição inline)
+- [ ] 04-04-PLAN.md — Locatários: implementar edição completa em LocatariosDesktop.js (estado + handlers + modal)
 **UI hint**: yes
 
 ### Phase 5: Testes E2E
