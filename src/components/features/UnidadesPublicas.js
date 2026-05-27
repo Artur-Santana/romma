@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { getUnidadesDisponiveis, getEdificios } from '@/lib/queries-client'
 import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
@@ -21,6 +21,7 @@ export default function UnidadesPublicas() {
   const [selected, setSelected] = useState(null)
   const [removedIds, setRemovedIds] = useState(new Set())
   const [removingId, setRemovingId] = useState(null)
+  const timerRef = useRef(null)
 
   useEffect(() => {
     async function load() {
@@ -37,7 +38,10 @@ export default function UnidadesPublicas() {
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'unidades' }, () => load())
       .subscribe()
 
-    return () => { supabase.removeChannel(channel) }
+    return () => {
+      supabase.removeChannel(channel)
+      clearTimeout(timerRef.current)
+    }
   }, [])
 
   const disponiveis = unidades.filter(u => !removedIds.has(u.id))
@@ -53,7 +57,7 @@ export default function UnidadesPublicas() {
 
   function simularAluguel(uid) {
     setRemovingId(uid)
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setRemovingId(null)
       setSelected(null)
       setRemovedIds(prev => new Set([...prev, uid]))
