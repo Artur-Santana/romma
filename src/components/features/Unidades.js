@@ -256,22 +256,13 @@ export default function Unidades({}) {
             key={unidade.id}
             unidade={unidade}
             editandoId={editandoId}
-            nomeEdit={formEdit.nome}
-            descricaoEdit={formEdit.descricao}
-            area_m2Edit={formEdit.area_m2}
-            valor_mensalEdit={formEdit.valor_mensal}
-            valor_visivelEdit={formEdit.valor_visivel}
-            setEditandoId={setEditandoId}
-            setNomeEdit={(v) => setFormEdit({ ...formEdit, nome: v })}
-            setDescricaoEdit={(v) => setFormEdit({ ...formEdit, descricao: v })}
-            setArea_m2Edit={(v) => setFormEdit({ ...formEdit, area_m2: v })}
-            setValor_mensalEdit={(v) => setFormEdit({ ...formEdit, valor_mensal: v })}
-            setValor_visivelEdit={(v) => setFormEdit({ ...formEdit, valor_visivel: v })}
-            statusEdit={formEdit.status}
-            setStatusEdit={(v) => setFormEdit({ ...formEdit, status: v })}
-            handleEditarUnidade={handleEditarUnidade}
-            handleDeletarUnidade={handleDeletarUnidade}
-            handleSalvarUnidade={handleSalvarUnidade}
+            formEdit={formEdit}
+            onEditar={handleEditarUnidade}
+            onSalvar={handleSalvarUnidade}
+            onDeletar={handleDeletarUnidade}
+            onFormChange={setFormEdit}
+            onCancelar={() => { setEditandoId(null); resetFormEdit() }}
+            erro={erro}
           />
         ))}
       </div>
