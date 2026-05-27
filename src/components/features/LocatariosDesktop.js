@@ -59,12 +59,13 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   }
 
   function handleEditarLocatario(locatario) {
+    setErro("")
     setFormEdit({
-      nome_razao_social: locatario.nome_razao_social,
-      tipo: locatario.tipo,
-      documento: locatario.documento,
-      email: locatario.email,
-      telefone: locatario.telefone,
+      nome_razao_social: locatario.nome_razao_social ?? "",
+      tipo: locatario.tipo ?? "pf",
+      documento: locatario.documento ?? "",
+      email: locatario.email ?? "",
+      telefone: locatario.telefone ?? "",
     })
     setEditandoId(locatario.id)
   }

@@ -50,12 +50,12 @@ export default function Unidades({}) {
 
   async function handleEditarUnidade(unidade) {
     setFormEdit({
-      nome: unidade.nome,
-      descricao: unidade.descricao,
-      area_m2: unidade.area_m2,
-      valor_mensal: unidade.valor_mensal,
-      valor_visivel: unidade.valor_visivel,
-      status: unidade.status,
+      nome: unidade.nome ?? "",
+      descricao: unidade.descricao ?? "",
+      area_m2: unidade.area_m2 ?? "",
+      valor_mensal: unidade.valor_mensal ?? "",
+      valor_visivel: unidade.valor_visivel ?? false,
+      status: unidade.status ?? "",
     });
     setEditandoId(unidade.id);
   }
