@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUnidades, getEdificios } from '@/lib/queries-client'
+import { getUnidadesDisponiveis, getEdificios } from '@/lib/queries-client'
 import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
 import UnidadePublicaCard from '@/components/features/UnidadePublicaCard'
@@ -24,7 +24,7 @@ export default function UnidadesPublicas() {
 
   useEffect(() => {
     async function load() {
-      const [u, e] = await Promise.all([getUnidades(), getEdificios()])
+      const [u, e] = await Promise.all([getUnidadesDisponiveis(), getEdificios()])
       setUnidades(u ?? [])
       setEdificios(e ?? [])
     }
@@ -40,7 +40,7 @@ export default function UnidadesPublicas() {
     return () => { supabase.removeChannel(channel) }
   }, [])
 
-  const disponiveis = unidades.filter(u => u.status === 'disponivel' && !removedIds.has(u.id))
+  const disponiveis = unidades.filter(u => !removedIds.has(u.id))
 
   const tabs = [
     { id: 'todos', label: 'Todos' },
