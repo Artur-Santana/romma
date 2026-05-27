@@ -207,49 +207,49 @@ export default function Home() {
               <div className="px-4 md:px-6 lg:px-10 py-10 md:py-20 lg:py-40 align-middle">
                 <div className="p-5 md:p-8 bg-background/85">
                   <div className="flex flex-col gap-10">
-                    <span className="text-white font-headline-hanken font-medium traking-[1.5px]">PREVISÃO_FLUXO_2026</span>
+                    <span className="text-white font-headline-hanken font-medium tracking-[1.5px]">PREVISÃO_FLUXO_2026</span>
                     <div className="border-t border-gray-300/15"></div>
                     <div className="lg:pl-2 lg:pr-2 flex flex-col gap-5">
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">ABRIL</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">ABRIL</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[45%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[60%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.2M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 1.2M</span>
                       </div>
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">MAIO</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">MAIO</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[65%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[45%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.8M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 1.8M</span>
                       </div>
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">JUNHO</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">JUNHO</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-highlight shadow-[0_0_6px_0px_var(--color-highlight)] self-center h-3 w-[85%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[15%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.4M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 2.4M</span>
                       </div>
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">JULHO</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">JULHO</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[77%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[23%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.1M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 2.1M</span>
                       </div>
                     </div>
                     <div className="border-t border-gray-300/15"></div>
                     <div className="flex flex-col lg:flex-row lg:justify-between gap-2 lg:gap-0">
                       <div>
-                        <span className="text-white/30 font-headline-hanken font-medium traking-[1.5px]">ID: INSIGHT_#4492</span>
+                        <span className="text-white/30 font-headline-hanken font-medium tracking-[1.5px]">ID: INSIGHT_#4492</span>
                       </div>
                       <div>
-                        <span className="text-highlight font-headline-hanken font-medium traking-[1.5px] ">A ROMMA TRANSFORMOU NOSSA GESTÃO...</span>
+                        <span className="text-highlight font-headline-hanken font-medium tracking-[1.5px] ">A ROMMA TRANSFORMOU NOSSA GESTÃO...</span>
                       </div>
                     </div>
                   </div>
