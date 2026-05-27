@@ -52,7 +52,7 @@ export default function UnidadeDetailSheet({ unidade, edificio, onClose, onSimul
           <div className="p-4 flex flex-col gap-1.5">
             <span className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase">Área</span>
             <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-1">
-              {unidade.area_m2}m²
+              {unidade.area_m2 != null ? `${unidade.area_m2}m²` : '—'}
             </span>
           </div>
           <div className="p-4 border-l border-border-3 flex flex-col gap-1.5">
