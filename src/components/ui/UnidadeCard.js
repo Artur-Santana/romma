@@ -31,7 +31,7 @@ export default function UnidadeCard({
     return (
       <div className="border-t border-border-3 px-5 py-5 bg-surface">
         <div className="mb-4">
-          <span className="font-mono text-[9px] text-fg-5 tracking-[1px] uppercase">{refOf(unidade)}</span>
+          <span className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase">{refOf(unidade)}</span>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
@@ -124,7 +124,7 @@ export default function UnidadeCard({
     <div className="border-t border-border-3 px-5 py-4">
       <div className="flex justify-between items-start gap-3">
         <div className="flex flex-col gap-1 min-w-0">
-          <span className="font-mono text-[9px] text-fg-5 tracking-[0.8px] uppercase">
+          <span className="font-mono text-[11px] text-fg-5 tracking-[0.8px] uppercase">
             {refOf(unidade)}
           </span>
           <span className="font-display font-bold text-[18px] tracking-[-0.6px] text-fg-1">
