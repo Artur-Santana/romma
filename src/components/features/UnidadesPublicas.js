@@ -8,6 +8,7 @@ import UnidadePublicaCard from '@/components/features/UnidadePublicaCard'
 import UnidadeDetailSheet from '@/components/features/UnidadeDetailSheet'
 
 function shortenName(nome) {
+  if (!nome) return ''
   return nome
     .replace('Edifício ', '')
     .replace('Centro Empresarial ', 'CE ')
