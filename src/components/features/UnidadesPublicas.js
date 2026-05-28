@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { getUnidadesDisponiveis, getEdificios } from '@/lib/queries-client'
 import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
@@ -65,8 +65,13 @@ export default function UnidadesPublicas() {
     }, 700)
   }
 
+  const edificioById = useMemo(
+    () => Object.fromEntries(edificios.map(e => [e.id, e])),
+    [edificios]
+  )
+
   function getEdificio(edificioId) {
-    return edificios.find(e => e.id === edificioId) ?? null
+    return edificioById[edificioId] ?? null
   }
 
   return (

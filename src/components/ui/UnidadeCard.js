@@ -1,18 +1,12 @@
-"use client"
+'use client'
 
-// D-08: Opção A (objeto único) — formEdit centralizado no parent (Unidades.js).
-// Props: { unidade, editandoId, formEdit, onEditar, onSalvar, onDeletar, onFormChange, onCancelar, erro }
 // valor_visivel excluído do modo edição (must_have define apenas 5 campos: nome, descrição, área, valor, status).
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import StatusBadge from "@/components/ui/StatusBadge"
-import { fmtBRL } from "@/lib/utils"
-
-function refOf(u) {
-  return "UN-" + u.id.slice(0, 6).toUpperCase()
-}
+import { fmtBRL, refOf } from "@/lib/utils"
 
 export default function UnidadeCard({
   unidade,
