@@ -1,11 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { fmtBRL } from '@/lib/utils'
-
-function refOf(u) {
-  return 'UN-' + u.id.slice(0, 6).toUpperCase()
-}
+import { fmtBRL, refOf } from '@/lib/utils'
 
 export default function UnidadeDetailSheet({ unidade, edificio, onClose, onSimular }) {
   return (
