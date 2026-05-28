@@ -1,3 +1,5 @@
+'use client'
+
 import StatusBadge from '@/components/ui/StatusBadge'
 import { fmtBRL } from '@/lib/utils'
 
@@ -25,12 +27,12 @@ export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemo
           )}
         </div>
         <div className="flex flex-col items-end gap-1 shrink-0">
-          {unidade.area_m2 && (
+          {unidade.area_m2 != null && (
             <span className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase whitespace-nowrap">
               {unidade.area_m2}m²
             </span>
           )}
-          <StatusBadge status="disponivel" />
+          <StatusBadge status={unidade.status} />
         </div>
       </div>
       <div className="pt-3 border-t border-border-3 flex justify-between items-baseline">
