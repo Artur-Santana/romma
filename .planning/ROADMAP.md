@@ -14,7 +14,7 @@
 | 1 | Dashboard Completions | 8/8 complete — UAT passed 2026-05-22 | DASH-01, DASH-02, DASH-03, VIS-02 | done |
 | 2 | Portal do Locatário | 3/3 | Complete   | 2026-05-23 |
 | 3 | Refatoração e Qualidade | 4/4 | Complete   | 2026-05-25 |
-| 4 | Polimento Visual Público | Página /unidades com design Obsidian Blueprint completo e performático | VIS-01 | mvp |
+| 4 | Polimento Visual Público | 4/4 | Complete   | 2026-05-27 |
 | 5 | Testes E2E | Suite Playwright cobre todos os fluxos críticos do Proprietário e Realtime | TEST-01, TEST-02, TEST-04 | mvp |
 | 6 | Deploy Final e Demo | Sistema estável em produção, fluxo de convite validado, demo pronto | DEPL-01, DEPL-02, DEMO-01 | mvp |
 
@@ -95,7 +95,13 @@ Plans:
 1. /unidades usa a paleta Romma (roxo #370085, dourado #C5A059) com fontes Manrope/Noto Sans carregadas via next/font
 2. Imagens na página /unidades usam next/image (sem tags `<img>` nativas)
 3. Layout de cards de unidades reflete o design Obsidian Blueprint visualmente consistente com o portal e dashboard
-**Plans:** TBD
+**Plans:** 4/4 plans complete
+
+Plans:
+- [x] 04-01-PLAN.md — Slice vertical /unidades pública (UnidadesPublicas + UnidadePublicaCard + UnidadeDetailSheet + page.js thin shell)
+- [x] 04-02-PLAN.md — Cross-cutting: remoção JetBrains Mono + migração 8 img nativas em page.js para next/image
+- [x] 04-03-PLAN.md — Dashboard leftover: reescrita de UnidadeCard.js com Tailwind v4 + shadcn (modo leitura + edição inline)
+- [x] 04-04-PLAN.md — Locatários: implementar edição completa em LocatariosDesktop.js (estado + handlers + modal)
 **UI hint**: yes
 
 ### Phase 5: Testes E2E

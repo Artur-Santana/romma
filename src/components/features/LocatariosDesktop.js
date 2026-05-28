@@ -4,11 +4,12 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import PageHeader from "@/components/ui/PageHeader"
 import StatusBadge from "@/components/ui/StatusBadge"
-import { convidarLocatario, revogarConvite } from "@/actions/locatarios"
+import { convidarLocatario, revogarConvite, editarLocatario } from "@/actions/locatarios"
 import { getLocatarios } from "@/lib/queries-client"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 function resetForm() {
   return { email: "", nome_razao_social: "", tipo: "pf", documento: "", telefone: "" }
@@ -32,6 +33,10 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   const [form, setForm] = useState(resetForm())
   const [erro, setErro] = useState("")
   const [loading, setLoading] = useState(false)
+  const [editandoId, setEditandoId] = useState(null)
+  const [formEdit, setFormEdit] = useState({
+    nome_razao_social: "", tipo: "pf", documento: "", email: "", telefone: ""
+  })
 
   const ativos = locatarios.filter(l => l.status_convite === "aceito").length
   const pendentes = locatarios.filter(l => l.status_convite === "pendente").length
@@ -50,6 +55,31 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       setShowInviteForm(false)
     } else {
       setErro(erroMessage ?? "Erro ao enviar convite.")
+    }
+  }
+
+  function handleEditarLocatario(locatario) {
+    setErro("")
+    setFormEdit({
+      nome_razao_social: locatario.nome_razao_social ?? "",
+      tipo: locatario.tipo ?? "pf",
+      documento: locatario.documento ?? "",
+      email: locatario.email ?? "",
+      telefone: locatario.telefone ?? "",
+    })
+    setEditandoId(locatario.id)
+  }
+
+  async function handleSalvarLocatario() {
+    setLoading(true)
+    setErro("")
+    const { status, erroMessage } = await editarLocatario(editandoId, formEdit)
+    setLoading(false)
+    if (status === 200) {
+      setEditandoId(null)
+      setLocatarios(await getLocatarios() ?? [])
+    } else {
+      setErro(erroMessage ?? "Erro ao salvar locatário.")
     }
   }
 
@@ -137,12 +167,20 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                     className="font-mono text-[10px] text-danger-fg uppercase tracking-[0.5px] font-bold p-0 h-auto"
                   >REVOGAR</Button>
                 ) : (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => router.push(`/dashboard/locatarios/${l.id}`)}
-                    className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold p-0 h-auto"
-                  >VER →</Button>
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEditarLocatario(l)}
+                      className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold p-0 h-auto"
+                    >Editar</Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => router.push(`/dashboard/locatarios/${l.id}`)}
+                      className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold p-0 h-auto"
+                    >VER →</Button>
+                  </>
                 )}
               </div>
             </div>
@@ -163,6 +201,103 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           className="bg-indigo text-fg-1 font-mono font-bold text-[11px] tracking-[1.4px] uppercase rounded-none"
         >Convidar →</Button>
       </div>
+
+      {/* Edit Form Modal */}
+      {editandoId !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-[oklch(0_0_0/0.7)] flex items-center justify-center"
+          onClick={e => { if (e.target === e.currentTarget) setEditandoId(null) }}
+        >
+          <div className="bg-surface border border-[var(--border-2)] w-[480px] p-8 flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <span className="eyebrow eyebrow--indigo">LOCATÁRIO</span>
+              <h3 className="font-body font-bold text-[20px] text-fg-1 m-0">
+                Editar Locatário
+              </h3>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <Field label="Nome / Razão Social" required>
+                <Input
+                  type="text"
+                  required
+                  value={formEdit.nome_razao_social}
+                  onChange={e => setFormEdit({ ...formEdit, nome_razao_social: e.target.value })}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                />
+              </Field>
+
+              <Field label="Tipo">
+                <Select
+                  value={formEdit.tipo}
+                  onValueChange={val => setFormEdit({ ...formEdit, tipo: val })}
+                >
+                  <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pf">Pessoa Física</SelectItem>
+                    <SelectItem value="pj">Pessoa Jurídica</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+
+              <Field label={formEdit.tipo === "pj" ? "CNPJ" : "CPF"} required>
+                <Input
+                  type="text"
+                  required
+                  value={formEdit.documento}
+                  placeholder={formEdit.tipo === "pj" ? "00.000.000/0000-00" : "000.000.000-00"}
+                  onChange={e => setFormEdit({ ...formEdit, documento: e.target.value.replace(/\D/g, "") })}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                />
+              </Field>
+
+              <Field label="Email" required>
+                <Input
+                  type="email"
+                  required
+                  value={formEdit.email}
+                  onChange={e => setFormEdit({ ...formEdit, email: e.target.value })}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                />
+              </Field>
+
+              <Field label="Telefone" required>
+                <Input
+                  type="tel"
+                  required
+                  value={formEdit.telefone}
+                  onChange={e => setFormEdit({ ...formEdit, telefone: e.target.value })}
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                />
+              </Field>
+
+              {erro && (
+                <span className="font-mono text-[11px] text-danger-fg">{erro}</span>
+              )}
+
+              <div className="flex gap-3 justify-end mt-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => { setEditandoId(null); setErro("") }}
+                  className="text-fg-3 font-mono text-[12px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
+                >Cancelar</Button>
+                <Button
+                  type="button"
+                  disabled={loading}
+                  onClick={handleSalvarLocatario}
+                  className={cn(
+                    "bg-indigo text-fg-1 font-body font-bold text-[11px] tracking-[1.2px] uppercase px-6 py-[10px] rounded-none h-auto",
+                    loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+                  )}
+                >{loading ? "Salvando..." : "Salvar →"}</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Invite Form Modal */}
       {showInviteForm && (

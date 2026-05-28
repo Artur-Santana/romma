@@ -10,11 +10,14 @@ export default function Home() {
 
       <main className="flex flex-col gap-8 md:gap-12 lg:gap-15">
         <section className="relative overflow-hidden px-5 md:px-10 lg:px-30 xl:px-60 bg-black flex-col border">
-          <img
+          <Image
             src="/Detalhe_Arquitetonico.png"
             alt=""
             aria-hidden="true"
-            className="lg:hidden absolute inset-0 w-full h-full object-cover opacity-20"
+            fill
+            className="lg:hidden object-cover opacity-20"
+            sizes="100vw"
+            priority
           />
           <div className="lg:hidden absolute inset-0 bg-black/40 pointer-events-none" />
           <div className="relative z-10 text-highlight font-headline-hanken font-semibold text-xs tracking-[0.2em] px-5 pt-8 md:pt-12 lg:pt-15">
@@ -48,11 +51,13 @@ export default function Home() {
             </div>
 
             <div className="hidden lg:block p-5 basis-5/10">
-              <div className="relative">
-                <img
+              <div className="relative aspect-[4/3]">
+                <Image
                   src="/Detalhe_Arquitetonico.png"
                   alt=""
-                  className="w-full"
+                  fill
+                  className="object-cover"
+                  sizes="40vw"
                 />
                 <div className="absolute inset-0 bg-primary-hover/20"></div>
               </div>
@@ -63,7 +68,7 @@ export default function Home() {
         <section>
           <div className="px-5 md:px-10 lg:px-30 xl:px-60 bg-neutral flex flex-col gap-6 md:gap-8">
             <div className="flex flex-row gap-3 items-center">
-              <img src='/horizontal_divider.svg' alt="" className="hidden sm:block" />
+              <Image src="/horizontal_divider.svg" alt="" width={32} height={1} unoptimized className="hidden sm:block" />
               <div className="text-primary-hover font-headline-hanken font-semibold text-xs md:text-sm tracking-[0.2em] bg-primary-hover/25 p-1">
                 VISÃO GERAL DO SISTEMA // MÉTRICAS EM TEMPO REAL
               </div>
@@ -78,7 +83,7 @@ export default function Home() {
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_qr_01.svg" alt="" className="w-7"></img>
+                      <Image src="/icon_qr_01.svg" alt="" width={28} height={28} unoptimized className="w-7" />
                       <span className="bg-primary-hover/10 p-1">SISTEMA.01</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">LISTAGEM DE UNIDADES</div>
@@ -93,7 +98,7 @@ export default function Home() {
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_doc_02.svg" alt="" className="w-5"></img>
+                      <Image src="/icon_doc_02.svg" alt="" width={20} height={20} unoptimized className="w-5" />
                       <span className="bg-primary-hover/10 p-1">SISTEMA.02</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">CONTRATOS AUTOMATIZADOS</div>
@@ -109,7 +114,7 @@ export default function Home() {
                 <div className="p-8 bg-background border border-neutral/25">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_conect_03.svg" alt="" className="w-7"></img>
+                      <Image src="/icon_conect_03.svg" alt="" width={28} height={28} unoptimized className="w-7" />
                       <span className="bg-primary-hover/10 p-1">SISTEMA.03</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">PORTAL DO LOCATÁRIO</div>
@@ -125,7 +130,7 @@ export default function Home() {
                 <div className="p-8 bg-background">
                   <div className="flex flex-col gap-5">
                     <div className= "text-primary-hover font-headline-hanken font-semibold text-sm tracking-[0.2em] flex gap-5">
-                      <img src="/icon_graph_04.svg" alt="" className="w-7"></img>
+                      <Image src="/icon_graph_04.svg" alt="" width={28} height={28} unoptimized className="w-7" />
                       <span className="bg-primary-hover/10 p-1">SISTEMA.04</span>
                     </div>
                     <div className="text-white font-bold tracking-[-1px] text-xl md:text-2xl">PAINEL DO PROPRIETÁRIO</div>
@@ -162,8 +167,8 @@ export default function Home() {
                       <span className="font-headline-hanken font-medium tracking-[1.5px] text-sm text-white/40">ÍNDICE DE DEMANDA REGIONAL</span>
                       <span className="font-headline-hanken font-bold tracking-[1.5px] text-sm text-primary-hover">+12.4% ESTE MÊS</span>
                     </div>
-                    <div>
-                      <img className="w-full" src="/data_regional_demand_graph.png" alt="Gráfico de demanda regional"></img>
+                    <div className="relative h-32">
+                      <Image fill className="object-contain" src="/data_regional_demand_graph.png" alt="Gráfico de demanda regional" sizes="100vw" />
                     </div>
                   </div>
                 </div>
@@ -202,49 +207,49 @@ export default function Home() {
               <div className="px-4 md:px-6 lg:px-10 py-10 md:py-20 lg:py-40 align-middle">
                 <div className="p-5 md:p-8 bg-background/85">
                   <div className="flex flex-col gap-10">
-                    <span className="text-white font-headline-hanken font-medium traking-[1.5px]">PREVISÃO_FLUXO_2026</span>
+                    <span className="text-white font-headline-hanken font-medium tracking-[1.5px]">PREVISÃO_FLUXO_2026</span>
                     <div className="border-t border-gray-300/15"></div>
                     <div className="lg:pl-2 lg:pr-2 flex flex-col gap-5">
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">ABRIL</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">ABRIL</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[45%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[60%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.2M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 1.2M</span>
                       </div>
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">MAIO</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">MAIO</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[65%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[45%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 1.8M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 1.8M</span>
                       </div>
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">JUNHO</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">JUNHO</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-highlight shadow-[0_0_6px_0px_var(--color-highlight)] self-center h-3 w-[85%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[15%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.4M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 2.4M</span>
                       </div>
                       <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-8 gap-3 md:gap-5 items-center">
-                        <span className="text-white/40 font-normal traking-[1.5px]">JULHO</span>
+                        <span className="text-white/40 font-normal tracking-[1.5px]">JULHO</span>
                         <div className="md:col-span-6 flex min-w-0 overflow-hidden w-full">
                           <div className="bg-primary-hover shadow-[0_0_6px_0px_var(--color-primary-hover)] self-center h-3 w-[77%] shrink-0"></div>
                           <div className="bg-secondary self-center h-3 w-[23%] shrink-0"></div>
                         </div>
-                        <span className="text-white/60 font-normal traking-[1.5px] text-nowrap">R$ 2.1M</span>
+                        <span className="text-white/60 font-normal tracking-[1.5px] text-nowrap">R$ 2.1M</span>
                       </div>
                     </div>
                     <div className="border-t border-gray-300/15"></div>
                     <div className="flex flex-col lg:flex-row lg:justify-between gap-2 lg:gap-0">
                       <div>
-                        <span className="text-white/30 font-headline-hanken font-medium traking-[1.5px]">ID: INSIGHT_#4492</span>
+                        <span className="text-white/30 font-headline-hanken font-medium tracking-[1.5px]">ID: INSIGHT_#4492</span>
                       </div>
                       <div>
-                        <span className="text-highlight font-headline-hanken font-medium traking-[1.5px] ">A ROMMA TRANSFORMOU NOSSA GESTÃO...</span>
+                        <span className="text-highlight font-headline-hanken font-medium tracking-[1.5px] ">A ROMMA TRANSFORMOU NOSSA GESTÃO...</span>
                       </div>
                     </div>
                   </div>
