@@ -1,3 +1,5 @@
+'use client'
+
 import StatusBadge from '@/components/ui/StatusBadge'
 import { fmtBRL } from '@/lib/utils'
 
