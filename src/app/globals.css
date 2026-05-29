@@ -184,6 +184,7 @@
   --color-surface-hi: var(--surface-hi);
   --color-warning: var(--warning);
   --color-warning-bg: var(--warning-bg);
+  --color-border-2: var(--border-2);
   --color-border-3: var(--border-3);
   --color-danger-fg: var(--danger-fg);
   --color-success: var(--success);
