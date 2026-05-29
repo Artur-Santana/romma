@@ -15,7 +15,7 @@
 | 2 | Portal do Locatário | 3/3 | Complete   | 2026-05-23 |
 | 3 | Refatoração e Qualidade | 4/4 | Complete   | 2026-05-25 |
 | 4 | Polimento Visual Público | 4/4 | Complete   | 2026-05-27 |
-| 5 | Testes E2E | Suite Playwright cobre todos os fluxos críticos do Proprietário e Realtime | TEST-01, TEST-02, TEST-04 | mvp |
+| 5 | Testes E2E | 1/4 | In Progress|  |
 | 6 | Deploy Final e Demo | Sistema estável em produção, fluxo de convite validado, demo pronto | DEPL-01, DEPL-02, DEMO-01 | mvp |
 
 ---
@@ -113,10 +113,10 @@ Plans:
 1. Testes Playwright passam para CRUD completo do Proprietário: criar/editar/deletar Edifícios, Unidades, Locatários (convidar/editar), Contratos (criar/encerrar/cancelar)
 2. Testes Playwright cobrem ciclo de Parcelas: geração via Edge Function, marcação como paga e verificação de mudança de status
 3. Teste Playwright cobre o fluxo Realtime: unidade visível na listagem pública desaparece após Proprietário criar contrato ativo
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 Plans:
-- [ ] 05-01-PLAN.md — Wave 0: rota /dashboard/edificios + seed E2E-Sala Disponivel + teardown por prefixo E2E-
+- [x] 05-01-PLAN.md — Wave 0: rota /dashboard/edificios + seed E2E-Sala Disponivel + teardown por prefixo E2E-
 - [ ] 05-02-PLAN.md — Slice TEST-01: crud.spec.js cobrindo Edifícios, Unidades, Locatários (convidar/editar), Contratos (criar/cancelar/encerrar) com regra de unidade
 - [ ] 05-03-PLAN.md — Slice TEST-02: parcelas.spec.js — geração via Edge Function (automática ao criar contrato) + marcar parcela como paga
 - [ ] 05-04-PLAN.md — Slice TEST-04: realtime.spec.js — unidade some da listagem pública /unidades após contrato ativo (estado final via reload)
