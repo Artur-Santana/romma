@@ -21,11 +21,15 @@
 
 **D-05:** TEST-02 testa via UI: criar contrato (sem parcelas pré-existentes) → interagir com botão/ação "Gerar Parcelas" na UI do contrato → verificar que a tabela de parcelas exibe parcelas. Testa o fluxo real do usuário, não a EF isoladamente.
 
+> **CONFLICT VERIFICADO (D-05):** `handleCriarContrato` em `Contratos.js` chama `gerarParcelas` AUTOMATICAMENTE após criar o contrato — não existe botão separado "Gerar Parcelas" na UI. O planner deve reinterpretar D-05: TEST-02 verifica que ao criar um contrato via UI e navegar para `/dashboard/contratos/[id]`, as parcelas já aparecem na tabela (sem etapa intermediária de "gerar"). O teste do fluxo real do usuário está correto — apenas o passo "clicar em Gerar Parcelas" não existe.
+
 **D-06:** O spec de TEST-02 cria sua própria cadeia de dados no `beforeAll` usando o padrão de criação via `supabaseAdmin` já presente em `seed.mjs`. Dados criados pelo spec usam prefixo `"E2E-"`. Independente do seed principal (que cria parcelas manualmente, sem EF).
 
 **D-07:** Estrutura do teste TEST-04: login como Proprietário → abrir `/unidades` (verificar unidade disponível aparece) → criar contrato para essa unidade via dashboard → navegar de volta para `/unidades` → verificar que a unidade não aparece mais na listagem. Testa o estado final, não o evento Realtime em si.
 
 **D-08:** O `seed.mjs` deve ser ampliado com uma segunda unidade: `"Sala E2E Disponivel"`, `status: 'disponivel'`, sem contrato associado. Esta unidade é a que TEST-04 usa.
+
+> **CONFLICT D-08 / D-01 (NOMECLATURA):** `"Sala E2E Disponivel"` não começa com `"E2E-"` — o teardown por `like('nome', 'E2E-%')` não a limpará. A unidade do D-08 é criada pelo seed (global-setup) e destruída pelo global-teardown existente via `.e2e-state.json` (por ID). O planner tem duas opções: (a) renomear para `"E2E-Sala Disponivel"` para consistência com D-01 e garantir que o teardown por prefixo também a cubra, OU (b) manter `"Sala E2E Disponivel"` e garantir que o ID seja salvo no `.e2e-state.json` para destruição via fluxo existente. Recomendação: opção (a) — renomear para `"E2E-Sala Disponivel"` para uniformidade.
 
 ### Claude's Discretion
 
@@ -50,7 +54,7 @@
 | ID | Description | Research Support |
 |----|-------------|------------------|
 | TEST-01 | Testes E2E Playwright cobrindo CRUD completo do Proprietário: Edifícios (criar/editar/deletar), Unidades (criar/editar/deletar), Locatários (convidar/editar), Contratos (criar/encerrar/cancelar) | Seletores mapeados por componente; padrões beforeAll + supabaseAdmin documentados; shadcn Select requer click pattern específico |
-| TEST-02 | Testes E2E cobrindo ciclo de Parcelas: gerar parcelas via Edge Function, marcar como paga, verificar mudança de status | Fluxo UI mapeado: criar contrato → VER → tabela de parcelas aparece; botão "Marcar Paga" identificado |
+| TEST-02 | Testes E2E cobrindo ciclo de Parcelas: gerar parcelas via Edge Function, marcar como paga, verificar mudança de status | VERIFICADO: `handleCriarContrato` chama `gerarParcelas` automaticamente — criar contrato via UI e navegar para `/dashboard/contratos/[id]` verifica parcelas sem passo extra |
 | TEST-04 | Teste E2E cobrindo fluxo Realtime: unidade visível na listagem pública desaparece após Proprietário criar contrato | Limitação RT documentada (disponivel→alugada não propaga via RLS); teste valida estado final via navegação |
 </phase_requirements>
 
@@ -62,9 +66,9 @@ Esta fase amplia a infraestrutura de testes E2E já existente (`e2e/`) para cobr
 
 A infraestrutura já está bem estabelecida: `playwright.config.js` com `workers: 1`, `fullyParallel: false`, `timeout: 30_000`, `globalSetup`/`globalTeardown`, seed com `supabaseAdmin`. Os specs existentes (`dashboard.spec.js`, `portal.spec.js`) estabelecem padrões claros de `beforeEach` + login + `waitForURL`.
 
-O principal trabalho da fase é: (1) mapear seletores reais dos componentes para cada formulário CRUD, (2) estender `global-teardown.js` com limpeza por prefixo `"E2E-"`, (3) ampliar `seed.mjs` com a unidade para TEST-04, e (4) escrever os spec files para TEST-01, TEST-02 e TEST-04.
+O principal trabalho da fase é: (1) mapear seletores reais dos componentes para cada formulário CRUD, (2) estender `global-teardown.js` com limpeza por prefixo `"E2E-"`, (3) ampliar `seed.mjs` com a unidade para TEST-04 (renomeada para `"E2E-Sala Disponivel"`), e (4) escrever os spec files para TEST-01, TEST-02 e TEST-04.
 
-**Primary recommendation:** Organizar em três spec files por requisito (`crud.spec.js`, `parcelas.spec.js`, `realtime.spec.js`), todos usando os padrões já estabelecidos no codebase.
+**Primary recommendation:** Organizar em três spec files por requisito (`crud.spec.js`, `parcelas.spec.js`, `realtime.spec.js`), todos usando os padrões já estabelecidos no codebase. TEST-02 NÃO requer botão "Gerar Parcelas" — geração é automática ao criar contrato.
 
 ---
 
@@ -74,7 +78,7 @@ O principal trabalho da fase é: (1) mapear seletores reais dos componentes para
 |------------|-------------|----------------|-----------|
 | CRUD de Edifícios | Browser (GestaoEdificios.js) | API (Server Actions) | Formulário sem shadcn, botões "Editar"/"Remover" puro HTML |
 | CRUD de Unidades | Browser (Unidades.js + UnidadeCard.js) | API (Server Actions) | Formulário usa shadcn Select + Input — seletor de Edifício precisa de click pattern |
-| Invite de Locatário | Browser (Locatarios.js) | API (convidarLocatario) | Formulário HTML nativo, `<select>` nativo para tipo pf/pj |
+| Invite de Locatário | Browser (Locatarios.js) | API (convidarLocatario) | Formulário HTML nativo, `<select>` nativo para tipo pf/pj; insert em `locatarios` é atômico ao convite |
 | CRUD de Locatários | Browser (Locatarios.js) | API (Server Actions) | Edição inline sem shadcn |
 | Criação de Contrato | Browser (Contratos.js) | API (criarContrato + gerarParcelas) | Shadcn Select para Locatário e Unidade; gerarParcelas chamado automaticamente na criação |
 | Cancelar/Encerrar Contrato | Browser (Contratos.js + ConfirmDialog) | API (cancelarContrato/encerrarContrato) | Botões CANC/ENC na tabela; ConfirmDialog modal de confirmação |
@@ -137,7 +141,7 @@ e2e/
 ├── crud.spec.js          # TEST-01: Edifícios, Unidades, Locatários, Contratos
 ├── parcelas.spec.js      # TEST-02: ciclo de Parcelas + Edge Function
 ├── realtime.spec.js      # TEST-04: unidade some após contrato criado
-├── seed.mjs              # ampliar com "Sala E2E Disponivel"
+├── seed.mjs              # ampliar com "E2E-Sala Disponivel" (D-08, renomeado de D-01)
 ├── global-teardown.js    # ampliar com limpeza por prefixo "E2E-" e emails "e2e-"
 ├── helpers.js            # já existente — login()
 ├── fixtures.js           # já existente — PROPRIETARIO, LOCATARIO
@@ -154,6 +158,8 @@ e2e/
 Esta seção é a mais crítica para o planejamento. Documenta os seletores reais extraídos dos componentes.
 
 ### Edifícios (`GestaoEdificios.js` — HTML nativo, sem shadcn)
+
+> **BLOQUEANTE:** `GestaoEdificios.js` não tem rota ativa no App Router. `src/app/dashboard/` tem apenas `contratos/`, `locatarios/`, `unidades/`. O planner deve criar `src/app/dashboard/edificios/page.js` como tarefa Wave 0.
 
 **Criar:**
 ```js
@@ -182,8 +188,6 @@ await page.getByText('E2E-Edifício Alpha').locator('..').getByRole('button', { 
 await expect(page.getByText('E2E-Edifício Alpha')).toHaveCount(0)
 ```
 
-> Nota: A página de Edifícios não tem título/heading padronizado — o componente renderiza `<main>`. Navegar para `/dashboard` (não há rota dedicada `/dashboard/edificios`). Verificar onde GestaoEdificios.js é renderizado.
-
 ### Unidades (`Unidades.js` + `UnidadeCard.js` — shadcn Select)
 
 **Criar:**
@@ -192,8 +196,6 @@ await expect(page.getByText('E2E-Edifício Alpha')).toHaveCount(0)
 await page.getByRole('button', { name: 'Nova Unidade' }).click()
 
 // shadcn Select para Edifício — clicar no SelectTrigger, depois no SelectItem
-await page.locator('[placeholder="Selecionar edifício..."]').click()
-// Alternativa: clicar no trigger pelo placeholder value
 // SelectTrigger renderiza como button com role="combobox"
 await page.getByRole('combobox').first().click()
 await page.getByRole('option', { name: 'Edifício Teste E2E' }).click()
@@ -236,8 +238,8 @@ const email = `e2e-${Date.now()}@test.romma.local`
 await page.fill('input[type="email"]', email)
 await page.fill('input[placeholder="Telefone "]', '11999999999')  // note: placeholder tem espaço extra
 await page.click('button[type="submit"]')
-// D-03: verificar apenas mensagem de sucesso na UI
-// (após sucesso, form reseta — verificar que inputs ficam vazios ou list atualiza)
+// VERIFICADO: convidarLocatario insere em locatarios atomicamente ao criar auth user
+// Não aguardar aceite de convite — o locatário aparece na lista imediatamente após submit
 await expect(page.getByText('E2E-Locatário Teste')).toBeVisible({ timeout: 10_000 })
 ```
 
@@ -268,7 +270,7 @@ await page.fill('input[type="date"]', '2026-06-01')   // data_inicio
 await page.locator('input[type="date"]').nth(1).fill('2027-06-01')
 
 await page.getByRole('button', { name: 'Criar Contrato' }).click()
-// Criar contrato também chama gerarParcelas internamente — aguardar mais
+// handleCriarContrato chama gerarParcelas automaticamente — aguardar mais (EF call)
 await expect(page.getByText('E2E-Locatário Teste')).toBeVisible({ timeout: 15_000 })
 ```
 
@@ -277,32 +279,32 @@ await expect(page.getByText('E2E-Locatário Teste')).toBeVisible({ timeout: 15_0
 // Botão "CANC" visível apenas para contratos ativos não-vencidos
 await page.getByRole('button', { name: 'CANC' }).first().click()
 // ConfirmDialog aparece — botão "Cancelar Contrato"
+await page.getByText('Cancelar contrato?').waitFor({ timeout: 5_000 })
 await page.getByRole('button', { name: 'Cancelar Contrato' }).click()
-// Verificar status mudou para "cancelado" e unidade volta para "disponivel"
+// Verificar status mudou para "cancelado"
 await expect(page.getByText('cancelado')).toBeVisible({ timeout: 10_000 })
 ```
 
 **Encerrar (TEST-01):**
 ```js
 // Botão "ENC" visível apenas para contratos ativos vencidos (data_fim < hoje)
-// → Criar contrato com data_fim no passado via supabaseAdmin (não via UI, pois data mínima é hoje)
-// Ou usar admin para setar data_fim passada após criar contrato
+// → Criar contrato com data_fim no passado via supabaseAdmin após criar contrato pela UI
+// Ou criar direto via supabaseAdmin com data passada
 await page.getByRole('button', { name: 'ENC' }).first().click()
+await page.getByText('Encerrar contrato?').waitFor({ timeout: 5_000 })
 await page.getByRole('button', { name: 'Encerrar' }).click()
 await expect(page.getByText('encerrado')).toBeVisible({ timeout: 10_000 })
 ```
 
-### Parcelas (Parcelas.js — `/dashboard/contratos/[id]`)
+### Parcelas (`Parcelas.js` — `/dashboard/contratos/[id]`)
 
-**TEST-02 — Verificar parcelas geradas:**
+**TEST-02 — Verificar parcelas geradas automaticamente:**
 ```js
-// Navegar para página de parcelas do contrato criado
+// VERIFICADO: criar contrato via UI já chama gerarParcelas (handleCriarContrato automático)
+// Não existe botão "Gerar Parcelas" separado na UI
+// Navegar para a página do contrato e verificar parcelas já existem
 await page.goto(`/dashboard/contratos/${contratoId}`)
-// A criação do contrato via UI já chama gerarParcelas (handleCriarContrato)
-// Verificar que parcelas aparecem na tabela
 await expect(page.getByText('futura').or(page.getByText('pendente'))).toBeVisible({ timeout: 15_000 })
-// Verificar count > 0
-const linhas = page.locator('[style*="gridTemplateColumns"] > div').filter({ hasText: /\d{2}/ })
 ```
 
 **Marcar como paga:**
@@ -336,16 +338,16 @@ test.describe('TEST-02 — Parcelas', () => {
   let contratoId, edificioId, unidadeId, locatarioId
 
   test.beforeAll(async () => {
-    // Criar cadeia FK: edificio → unidade → locatario → contrato (sem parcelas)
+    // Criar cadeia FK: edificio → unidade → locatario → contrato (sem parcelas pré-criadas)
     const { data: edificio } = await admin.from('edificios')
       .insert({ nome: 'E2E-Edifício Parcelas', endereco: 'Rua E2E, 2' })
       .select().single()
-    // ... etc
+    // ... etc — contrato criado com status ativo, sem parcelas
     contratoId = contrato.id
   })
 
   test.afterAll(async () => {
-    // Teardown específico do spec — ou confiar no global-teardown por prefixo "E2E-"
+    // Teardown específico — ou confiar no global-teardown por prefixo "E2E-"
     if (contratoId) await admin.from('parcelas').delete().eq('contrato_id', contratoId)
     // ...
   })
@@ -354,12 +356,11 @@ test.describe('TEST-02 — Parcelas', () => {
 
 ### Pattern 2: shadcn Select — click pattern
 
-shadcn Select **não** funciona com `page.selectOption()` (que só funciona com `<select>` nativo). Usar clique no `combobox` + clique na opção.
+shadcn Select **não** funciona com `page.selectOption()`. Usar clique no `combobox` + clique na opção.
 
 ```js
-// Source: inferido da estrutura do componente SelectTrigger/SelectContent
 // O SelectTrigger renderiza com role="combobox"
-// O SelectContent renderiza com role="listbox" e options com role="option"
+// O SelectContent renderiza com role="listbox" e options com role="option" [ASSUMED: padrão Radix]
 await page.getByRole('combobox').nth(indexDoSelect).click()
 await page.getByRole('option', { name: 'texto da opção' }).click()
 ```
@@ -367,36 +368,36 @@ await page.getByRole('option', { name: 'texto da opção' }).click()
 ### Pattern 3: ConfirmDialog — aguardar modal
 
 ```js
-// ConfirmDialog usa estado React — aguardar visibilidade antes de interagir
+// ConfirmDialog usa estado React — aguardar texto antes de interagir
 await page.getByRole('button', { name: 'CANC' }).first().click()
-// Modal pode ter role="dialog" ou ser div com título
-await expect(page.getByText('Cancelar contrato?')).toBeVisible({ timeout: 5_000 })
+await page.getByText('Cancelar contrato?').waitFor({ timeout: 5_000 })
 await page.getByRole('button', { name: 'Cancelar Contrato' }).click()
 ```
 
 ### Pattern 4: TEST-04 — verificação de estado final
 
 ```js
-// Abre /unidades e verifica que unidade aparece
+// Abre /unidades e verifica que unidade aparece (seed cria "E2E-Sala Disponivel")
 await page.goto('/unidades')
-await expect(page.getByText('Sala E2E Disponivel')).toBeVisible({ timeout: 10_000 })
+await expect(page.getByText('E2E-Sala Disponivel')).toBeVisible({ timeout: 10_000 })
 
 // Cria contrato via dashboard (página separada)
 await page.goto('/dashboard/contratos')
-// ... criar contrato para "Sala E2E Disponivel"
+// ... criar contrato para "E2E-Sala Disponivel"
 
 // Retorna para /unidades e verifica ausência
 await page.goto('/unidades')
-await expect(page.getByText('Sala E2E Disponivel')).toHaveCount(0)
+await expect(page.getByText('E2E-Sala Disponivel')).toHaveCount(0)
 ```
 
 ### Anti-Patterns to Avoid
 
-- **`page.selectOption()` em shadcn Select:** Não funciona. `Unidades.js` e `Contratos.js` usam shadcn `<Select>` que renderiza com `role="combobox"` — usar click pattern.
+- **`page.selectOption()` em shadcn Select:** Não funciona. `Unidades.js` e `Contratos.js` usam shadcn `<Select>` com `role="combobox"` — usar click pattern.
 - **Depender de ordem de elementos sem âncora:** Sempre usar contexto (`locator('..').getByRole(...)`) para associar botão Editar/Remover ao item correto.
 - **Testes de CRUD dependendo de dados do seed principal:** O seed cria `"Edifício Teste E2E"` e `"Sala 101"` — não criar specs que dependam desses nomes (violação de D-02).
 - **Não aguardar network idle após mutations:** Server Actions são assíncronas — sempre usar `toBeVisible({ timeout: 10_000 })` após submit.
-- **Encerrar contrato pela UI com data futura:** O botão "ENC" só aparece quando `data_fim < hoje`. Para testar encerramento, usar `supabaseAdmin` para setar data_fim no passado após criar contrato.
+- **Encerrar contrato pela UI com data futura:** O botão "ENC" só aparece quando `data_fim < hoje`. Usar `supabaseAdmin` para setar `data_fim` no passado após criar contrato.
+- **Esperar botão "Gerar Parcelas" em TEST-02:** Não existe. `handleCriarContrato` chama `gerarParcelas` automaticamente — navegar para `/dashboard/contratos/[id]` após criar contrato e verificar parcelas já presentes.
 
 ---
 
@@ -406,8 +407,8 @@ await expect(page.getByText('Sala E2E Disponivel')).toHaveCount(0)
 |---------|-------------|-------------|
 | Criar dados de teste | Formulários UI no beforeAll | `supabaseAdmin` diretamente (padrão de `seed.mjs`) |
 | Limpar dados E2E | Queries manuais por ID | Estender `global-teardown.js` com filtro por prefixo `"E2E-"` |
-| Verificar email de convite | SMTP mock / InBucket | D-03: verificar apenas mensagem de sucesso na UI |
-| Testar Edge Function isolada | Chamada HTTP direta | D-05: testar via fluxo UI do contrato |
+| Verificar email de convite | SMTP mock / InBucket | D-03: verificar que locatário aparece na lista (insert atômico confirma sucesso) |
+| Testar Edge Function isolada | Chamada HTTP direta | Criar contrato via UI → navegar para `/dashboard/contratos/[id]` → verificar parcelas |
 
 ---
 
@@ -421,34 +422,39 @@ await expect(page.getByText('Sala E2E Disponivel')).toHaveCount(0)
 
 ### Pitfall 2: Encerrar contrato — botão "ENC" não aparece
 **What goes wrong:** Teste cria contrato com `data_fim` futura e não encontra botão "ENC".
-**Why it happens:** O componente mostra "ENC" apenas quando `contrato.data_fim < hoje` (vencido). Contratos recém-criados têm data futura.
-**How to avoid:** Após criar o contrato via UI, usar `supabaseAdmin` para setar `data_fim = ontem` antes de testar encerramento. Ou criar o contrato direto via `supabaseAdmin` com data passada.
+**Why it happens:** O componente mostra "ENC" apenas quando `contrato.data_fim < hoje` (vencido).
+**How to avoid:** Após criar o contrato via UI, usar `supabaseAdmin` para setar `data_fim = ontem` antes de testar encerramento.
 
 ### Pitfall 3: Edge Function `gerar-parcelas` requer `supabase functions serve`
 **What goes wrong:** TEST-02 falha porque a Edge Function não está rodando.
 **Why it happens:** EF roda em `http://127.0.0.1:54321/functions/v1/gerar-parcelas` — serviço separado do Next.js.
-**How to avoid:** Documentar no plano que `supabase start` + `supabase functions serve` devem estar rodando antes de `npx playwright test`. O planner deve incluir um step de verificação de pré-condições.
-**Warning signs:** Erro 404 ou "Connection refused" ao criar contrato (que chama a EF).
+**How to avoid:** `supabase start` + `supabase functions serve` devem estar rodando antes de `npx playwright test`. O planner deve incluir step de verificação de pré-condições.
+**Warning signs:** Erro 404 ou "Connection refused" ao criar contrato (que chama a EF automaticamente).
 
 ### Pitfall 4: TEST-04 — `disponivel → alugada` não propaga via Realtime
 **What goes wrong:** Teste aguarda evento Realtime de UPDATE que nunca chega.
 **Why it happens:** RLS descarta o evento de UPDATE para clientes anônimos (limitação documentada no CLAUDE.md).
-**How to avoid:** D-07 já endereça isso: o teste não espera evento RT — navega de volta para `/unidades` e verifica estado após reload.
+**How to avoid:** D-07 já endereça isso — navegar de volta para `/unidades` e verificar estado após reload, não esperar evento RT.
 
-### Pitfall 5: Locatário convidado com email dinâmico e teardown
+### Pitfall 5: Usuários `e2e-*` acumulam em auth.users entre execuções
 **What goes wrong:** Usuários `e2e-*@test.romma.local` acumulam em auth.users entre execuções.
 **Why it happens:** `global-teardown.js` atual deleta apenas `locatario@test.romma.local`.
 **How to avoid:** Estender `global-teardown.js` para fazer `listUsers()` e deletar todos com email começando em `"e2e-"`.
 
-### Pitfall 6: `convidarLocatario` cria usuário em `auth.users` mas formulário não cria registro em `locatarios` automaticamente
-**What goes wrong:** Teste de criar Contrato não encontra o Locatário convidado no Select.
-**Why it happens:** O convite (Server Action `convidarLocatario`) cria o usuário no Auth + insere em `locatarios`. Mas o Locatário que aparece no Select de Contrato é de `locatarios`, não `auth.users`.
-**How to avoid:** Para TEST-01 criar Contrato, usar o Locatário já existente do seed (`locatario@test.romma.local` → `"Locatário Teste"`), não o convidado com email dinâmico.
+### Pitfall 6: Esperar aceite de convite para que Locatário apareça na lista
+**What goes wrong:** Teste aguarda interação do Locatário convidado antes de prosseguir.
+**Why it happens:** Confusão sobre quando o locatário fica disponível no sistema.
+**How to avoid:** VERIFICADO (`src/actions/locatarios.js`): `convidarLocatario` chama `inviteUserByEmail` e IMEDIATAMENTE insere em `locatarios`. O locatário aparece na lista e no Select de Contratos sem aguardar aceite do convite. Sem delay necessário.
 
 ### Pitfall 7: Seletores de botão ambíguos quando múltiplos itens na lista
-**What goes wrong:** `page.getByRole('button', { name: 'Editar' }).click()` clica no primeiro item da lista, não no item criado pelo teste.
+**What goes wrong:** `page.getByRole('button', { name: 'Editar' }).click()` clica no item errado.
 **Why it happens:** Múltiplos edifícios/unidades na lista — seed já cria alguns.
 **How to avoid:** Sempre usar `page.getByText('E2E-...').locator('..').getByRole('button', { name: 'Editar' })` para ancorar no elemento pai do item correto.
+
+### Pitfall 8: Nome da unidade TEST-04 não segue prefixo D-01
+**What goes wrong:** `"Sala E2E Disponivel"` não é limpa pelo teardown por prefixo `"E2E-%"`.
+**Why it happens:** D-08 especificou nome sem prefixo `"E2E-"` na frente.
+**How to avoid:** Renomear para `"E2E-Sala Disponivel"` (recomendado) ou garantir que o ID seja salvo no `.e2e-state.json`. O planner deve resolver esta inconsistência.
 
 ---
 
@@ -496,7 +502,7 @@ await expect(page.getByText('Sala E2E Disponivel')).toHaveCount(0)
 | TEST-01 | CRUD Unidades (criar/editar/deletar) | E2E | `npx playwright test crud.spec.js --grep "unidade"` | ❌ Wave 0 |
 | TEST-01 | Invite Locatário + editar | E2E | `npx playwright test crud.spec.js --grep "locatario"` | ❌ Wave 0 |
 | TEST-01 | Contrato criar/cancelar/encerrar | E2E | `npx playwright test crud.spec.js --grep "contrato"` | ❌ Wave 0 |
-| TEST-02 | Parcelas geradas após criar contrato | E2E | `npx playwright test parcelas.spec.js` | ❌ Wave 0 |
+| TEST-02 | Parcelas geradas após criar contrato (automático) | E2E | `npx playwright test parcelas.spec.js` | ❌ Wave 0 |
 | TEST-02 | Marcar parcela como paga | E2E | `npx playwright test parcelas.spec.js --grep "paga"` | ❌ Wave 0 |
 | TEST-04 | Unidade some da listagem após contrato | E2E | `npx playwright test realtime.spec.js` | ❌ Wave 0 |
 
@@ -508,10 +514,11 @@ await expect(page.getByText('Sala E2E Disponivel')).toHaveCount(0)
 
 ### Wave 0 Gaps
 
+- [ ] `src/app/dashboard/edificios/page.js` — rota BLOQUEANTE para TEST-01 Edifícios (componente existe, rota não)
 - [ ] `e2e/crud.spec.js` — cobre TEST-01 (Edifícios, Unidades, Locatários, Contratos)
-- [ ] `e2e/parcelas.spec.js` — cobre TEST-02 (ciclo Parcelas + Edge Function)
+- [ ] `e2e/parcelas.spec.js` — cobre TEST-02 (ciclo Parcelas + Edge Function automática)
 - [ ] `e2e/realtime.spec.js` — cobre TEST-04 (Realtime / estado final)
-- [ ] `e2e/seed.mjs` — adicionar `"Sala E2E Disponivel"` (D-08)
+- [ ] `e2e/seed.mjs` — adicionar `"E2E-Sala Disponivel"` (D-08, renomeado para consistência com D-01)
 - [ ] `e2e/global-teardown.js` — adicionar limpeza por prefixo `"E2E-"` e emails `"e2e-"` (D-01, D-04)
 
 ---
@@ -527,6 +534,7 @@ await expect(page.getByText('Sala E2E Disponivel')).toHaveCount(0)
 | Commits via branch — nunca em main | Planner deve criar branch para esta fase |
 | `erroMessage` (não `errorMessage`) | Não relevante para specs, mas manter se ler responses de Server Actions |
 | `proxy.js` em vez de `middleware.js` | Não cria middleware — não impacta esta fase |
+| Realtime — limitação conhecida: `disponivel → alugada` não propaga | TEST-04 testa estado final via navegação, não evento RT |
 
 ---
 
@@ -545,7 +553,7 @@ const { data: edificiosE2E } = await admin
 const edificioIdsE2E = edificiosE2E?.map(e => e.id) ?? []
 
 if (edificioIdsE2E.length) {
-  // Cascata: parcelas → contratos → locatarios → unidades → edificios
+  // Cascata: parcelas → contratos → unidades → edificios
   const { data: unidadesE2E } = await admin.from('unidades').select('id').in('edificio_id', edificioIdsE2E)
   const unidadeIdsE2E = unidadesE2E?.map(u => u.id) ?? []
   if (unidadeIdsE2E.length) {
@@ -583,15 +591,16 @@ for (const u of e2eUsers) {
 }
 ```
 
-### Adicionar "Sala E2E Disponivel" ao seed.mjs
+### Adicionar "E2E-Sala Disponivel" ao seed.mjs (renomeado de D-08)
 
 ```js
 // Adicionar após criar a unidade "Sala 101" existente:
+// Nome usa prefixo "E2E-" para consistência com D-01 e teardown automático
 const { data: unidadeE2E, error: errUniE2E } = await admin
   .from('unidades')
   .insert({
     edificio_id: edificio.id,
-    nome: 'Sala E2E Disponivel',
+    nome: 'E2E-Sala Disponivel',
     area_m2: 30,
     valor_mensal: 1500,
     valor_visivel: true,
@@ -601,6 +610,7 @@ const { data: unidadeE2E, error: errUniE2E } = await admin
   .select()
   .single()
 if (errUniE2E) throw errUniE2E
+// Salvar ID no .e2e-state.json para teardown por ID (redundante com prefixo, mas safe)
 ```
 
 ---
@@ -611,6 +621,7 @@ if (errUniE2E) throw errUniE2E
 |--------------|------------------|--------|
 | `page.selectOption()` em qualquer select | Distinguir `<select>` nativo vs shadcn Select: `selectOption` para nativo, click+option para shadcn | Seletores corretos na primeira tentativa |
 | Depender de dados seed para testes de mutação | Criar dados com prefixo `"E2E-"` no `beforeAll` via supabaseAdmin | Isolamento real, sem dependência frágil de seed |
+| Botão "Gerar Parcelas" separado | `handleCriarContrato` chama `gerarParcelas` automaticamente | TEST-02 não tem passo "clicar em Gerar" — verificar parcelas ao navegar para a página do contrato |
 
 ---
 
@@ -618,25 +629,30 @@ if (errUniE2E) throw errUniE2E
 
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
-| A1 | `handleCriarContrato` na UI já chama `gerarParcelas` automaticamente — então criar contrato via UI = parcelas geradas | Selector Map (Contratos) | Se não for automático, TEST-02 precisaria de botão extra; investigar antes de escrever o spec |
 | A2 | shadcn Select renderiza `SelectTrigger` com `role="combobox"` e `SelectItem` com `role="option"` | Selector Map (shadcn) | [ASSUMED] — padrão Radix UI; se componente sobrescrever roles, seletores falham |
 | A3 | `ConfirmDialog` renderiza modal com texto do `title` prop visível na página | Selector Map (Contratos) | Se modal usa portal fora da árvore, `page.getByText(...)` ainda funciona; comportamento esperado do Playwright |
-| A4 | **CONFIRMADO BLOQUEANTE:** Não existe rota `/dashboard/edificios` no App Router. `GestaoEdificios.js` não é importado em nenhuma página. `src/app/dashboard/` tem apenas `contratos/`, `locatarios/`, `unidades/` | Selector Map (Edifícios) | Planner deve criar `src/app/dashboard/edificios/page.js` como Wave 0 antes de escrever specs de Edifícios |
-| A5 | `supabase functions serve` deve estar rodando para TEST-02 funcionar | Environment Availability | Bloqueante para TEST-02 se não estiver ativo |
+
+**Verificados durante a pesquisa (removidos das assumptions):**
+- ~~A1~~ VERIFICADO: `handleCriarContrato` em `Contratos.js` (linhas 63-84) chama `gerarParcelas` automaticamente após `criarContrato` — não existe botão separado. [VERIFIED: src/components/features/Contratos.js]
+- ~~A4~~ CONFIRMADO BLOQUEANTE: `GestaoEdificios.js` não importado em nenhuma página. `src/app/dashboard/` tem apenas `contratos/`, `locatarios/`, `unidades/`. [VERIFIED: src/app/dashboard/page.js + listagem de diretório]
+- ~~A6~~ VERIFICADO: `convidarLocatario` em `src/actions/locatarios.js` insere em `locatarios` atomicamente ao criar auth user — locatário aparece na lista sem aguardar aceite. [VERIFIED: src/actions/locatarios.js]
 
 ---
 
 ## Open Questions
 
-1. **Rota de Edifícios no dashboard — CONFIRMADO BLOQUEANTE**
+1. **Rota de Edifícios no dashboard — BLOQUEANTE CONFIRMADO**
    - O que sabemos: `GestaoEdificios.js` não está importado em nenhuma página. O diretório `src/app/dashboard/` tem apenas `contratos/`, `locatarios/`, `unidades/` — sem `edificios/`.
    - Impacto: Sem rota `/dashboard/edificios`, o spec de Edifícios (TEST-01) não pode navegar para testar o CRUD.
-   - Recomendação: O planner deve incluir tarefa de Wave 0 para criar `src/app/dashboard/edificios/page.js` com `import GestaoEdificios`. Esta é uma tarefa de scaffolding de rota, não de feature nova — o componente já existe e funciona.
+   - Recomendação: O planner deve incluir tarefa de Wave 0 para criar `src/app/dashboard/edificios/page.js` com `import GestaoEdificios`. Tarefa de scaffolding de rota — o componente já existe e funciona.
 
-2. **Mensagem de sucesso do convite de Locatário**
-   - O que sabemos: `handleConvidarLocatario` reseta o form após status 200 e recarrega a lista. Não foi encontrada uma mensagem de sucesso explícita (toast/alert).
-   - O que está unclear: O spec de D-03 deve verificar "mensagem de sucesso" — mas o componente pode não exibir uma. A evidência de sucesso seria o nome do locatário aparecer na lista.
-   - Recomendação: Verificar que `E2E-Locatário Teste` aparece na lista após submit (confirmação implícita de sucesso).
+2. **Mensagem de sucesso do convite de Locatário (D-03)**
+   - O que sabemos: `handleConvidarLocatario` reseta o form após status 200 e recarrega a lista. Não há toast/alert de sucesso explícito — a evidência de sucesso é o locatário aparecer na lista.
+   - Recomendação: D-03 deve ser reinterpretado: verificar que `E2E-Locatário Teste` aparece na lista após submit (confirmação implícita). Se o componente não exibe mensagem de sucesso, o planner pode adicionar uma, ou simplesmente verificar presença na lista.
+
+3. **Nome da unidade TEST-04 — D-08 vs D-01**
+   - Decisão recomendada: renomear para `"E2E-Sala Disponivel"` (prefixo `"E2E-"` no início).
+   - O planner deve confirmar e adotar o nome renomeado em todas as referências.
 
 ---
 
@@ -644,6 +660,7 @@ if (errUniE2E) throw errUniE2E
 
 ### Primary (HIGH confidence)
 - Código-fonte dos componentes: `GestaoEdificios.js`, `Unidades.js`, `UnidadeCard.js`, `Contratos.js`, `Locatarios.js`, `Parcelas.js`, `UnidadesPublicas.js` — seletores extraídos diretamente
+- `src/actions/locatarios.js` — comportamento de `convidarLocatario` verificado diretamente
 - `e2e/seed.mjs`, `e2e/global-teardown.js`, `e2e/helpers.js`, `e2e/fixtures.js` — padrões de infraestrutura existentes
 - `playwright.config.js` — config completa verificada
 - `05-CONTEXT.md` — decisões bloqueadas do usuário
@@ -657,9 +674,9 @@ if (errUniE2E) throw errUniE2E
 
 **Confidence breakdown:**
 - Standard stack: HIGH — infraestrutura existente verificada, sem pacotes novos
-- Selector Map: HIGH (Locatários, Contratos, Parcelas, Unidades — componentes verificados) / MEDIUM (shadcn Select — padrão Radix assumido) / CONFIRMADO BLOQUEANTE: rota `/dashboard/edificios` não existe — Wave 0 deve criar antes dos specs
+- Selector Map: HIGH (Locatários, Contratos, Parcelas, Unidades — componentes verificados) / MEDIUM (shadcn Select roles — padrão Radix assumido) / BLOQUEANTE CONFIRMADO: rota `/dashboard/edificios` não existe — Wave 0 deve criar antes dos specs
 - Architecture: HIGH — extraída do código existente
-- Pitfalls: HIGH — baseados em limitações reais documentadas no CLAUDE.md e componentes
+- Pitfalls: HIGH — baseados em limitações reais documentadas no CLAUDE.md e componentes verificados
 
 **Research date:** 2026-05-29
 **Valid until:** 2026-06-18 (banca — código não deve mudar significativamente)
