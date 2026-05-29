@@ -1,6 +1,4 @@
-'use client'
-
-// valor_visivel excluído do modo edição (must_have define apenas 5 campos: nome, descrição, área, valor, status).
+"use client"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
