@@ -55,6 +55,21 @@ export async function seed() {
     .single()
   if (errUnidade) throw errUnidade
 
+  // 2b. Unidade dedicada ao TEST-04 (sempre disponivel — sem contrato)
+  const { data: unidadeE2E, error: errUniE2E } = await admin
+    .from('unidades')
+    .insert({
+      edificio_id: edificio.id,
+      nome: 'E2E-Sala Disponivel',
+      area_m2: 30,
+      valor_mensal: 1500,
+      valor_visivel: true,
+      status: 'disponivel',
+    })
+    .select()
+    .single()
+  if (errUniE2E) throw errUniE2E
+
   // 3. Locatário de teste (tabela locatarios, não auth.users)
   // Limpar locatarios existentes do usuario para garantir idempotência
   // (tabela não tem unique constraint em usuario_id — maybeSingle() falha com > 1 row)
