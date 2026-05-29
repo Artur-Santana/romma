@@ -17,6 +17,8 @@
 
 **D-03:** O teste de convidar Locatário verifica apenas que a UI exibe mensagem de sucesso após preencher o email e submeter o formulário. Não verifica entrega do email (responsabilidade do Supabase/InBucket).
 
+> **CONFLICT VERIFICADO (D-03):** `Locatarios.js` não exibe toast ou mensagem de sucesso após submit do convite — verificado diretamente em `src/components/features/Locatarios.js` e `src/actions/locatarios.js`. `handleConvidarLocatario` recarrega a lista após status 200, sem emitir alerta visual explícito. O planner deve reinterpretar D-03: a "confirmação de sucesso" é a aparição do locatário convidado na lista (`e2e-${Date.now()}@test.romma.local` visível em algum elemento da lista). A restrição de não verificar entrega de email permanece inalterada.
+
 **D-04:** Email do Locatário convidado nos testes: dinâmico com timestamp — `e2e-${Date.now()}@test.romma.local`. O `global-teardown.js` deve deletar usuários cujo email começa com `"e2e-"` via admin API.
 
 **D-05:** TEST-02 testa via UI: criar contrato (sem parcelas pré-existentes) → interagir com botão/ação "Gerar Parcelas" na UI do contrato → verificar que a tabela de parcelas exibe parcelas. Testa o fluxo real do usuário, não a EF isoladamente.
@@ -639,20 +641,20 @@ if (errUniE2E) throw errUniE2E
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Rota de Edifícios no dashboard — BLOQUEANTE CONFIRMADO**
    - O que sabemos: `GestaoEdificios.js` não está importado em nenhuma página. O diretório `src/app/dashboard/` tem apenas `contratos/`, `locatarios/`, `unidades/` — sem `edificios/`.
    - Impacto: Sem rota `/dashboard/edificios`, o spec de Edifícios (TEST-01) não pode navegar para testar o CRUD.
-   - Recomendação: O planner deve incluir tarefa de Wave 0 para criar `src/app/dashboard/edificios/page.js` com `import GestaoEdificios`. Tarefa de scaffolding de rota — o componente já existe e funciona.
+   - RESOLVED: Plano 05-01 Task 1 cria `src/app/dashboard/edificios/page.js` como Wave 0 bloqueante.
 
 2. **Mensagem de sucesso do convite de Locatário (D-03)**
    - O que sabemos: `handleConvidarLocatario` reseta o form após status 200 e recarrega a lista. Não há toast/alert de sucesso explícito — a evidência de sucesso é o locatário aparecer na lista.
-   - Recomendação: D-03 deve ser reinterpretado: verificar que `E2E-Locatário Teste` aparece na lista após submit (confirmação implícita). Se o componente não exibe mensagem de sucesso, o planner pode adicionar uma, ou simplesmente verificar presença na lista.
+   - RESOLVED: CONFLICT VERIFICADO adicionado ao RESEARCH.md. Plano 05-02 Task 2 verifica aparição do locatário na lista (email dinâmico visível) como confirmação implícita de sucesso.
 
 3. **Nome da unidade TEST-04 — D-08 vs D-01**
    - Decisão recomendada: renomear para `"E2E-Sala Disponivel"` (prefixo `"E2E-"` no início).
-   - O planner deve confirmar e adotar o nome renomeado em todas as referências.
+   - RESOLVED: Plano 05-01 Task 2 adiciona `"E2E-Sala Disponivel"` ao seed.mjs; todos os planos usam este nome consistentemente.
 
 ---
 

@@ -38,13 +38,13 @@ created: 2026-05-29
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| seed-teardown | 01 | 0 | TEST-01 | — | N/A | integration | `node e2e/seed.mjs` | ✅ | ⬜ pending |
-| edificios-spec | 01 | 1 | TEST-01 | — | N/A | e2e | `npx playwright test e2e/edificios.spec.js` | ❌ W0 | ⬜ pending |
-| unidades-spec | 01 | 1 | TEST-01 | — | N/A | e2e | `npx playwright test e2e/unidades.spec.js` | ❌ W0 | ⬜ pending |
-| locatarios-spec | 01 | 1 | TEST-01 | — | N/A | e2e | `npx playwright test e2e/locatarios.spec.js` | ❌ W0 | ⬜ pending |
-| contratos-spec | 01 | 2 | TEST-01 | — | N/A | e2e | `npx playwright test e2e/contratos.spec.js` | ❌ W0 | ⬜ pending |
-| parcelas-spec | 02 | 2 | TEST-02 | — | N/A | e2e | `npx playwright test e2e/parcelas.spec.js` | ❌ W0 | ⬜ pending |
-| realtime-spec | 03 | 3 | TEST-04 | — | N/A | e2e | `npx playwright test e2e/realtime.spec.js` | ❌ W0 | ⬜ pending |
+| 05-01-T1 | 01 | 0 | TEST-01 | — | N/A | manual | `ls src/app/dashboard/edificios/page.js` | ❌ W0 | ⬜ pending |
+| 05-01-T2 | 01 | 0 | TEST-01, TEST-04 | — | N/A | integration | `node e2e/seed.mjs` | ✅ | ⬜ pending |
+| 05-01-T3 | 01 | 0 | TEST-01 | — | N/A | integration | `node e2e/global-teardown.js` (dry-run manual) | ✅ | ⬜ pending |
+| 05-02-T1 | 02 | 1 | TEST-01 | — | N/A | e2e | `npx playwright test e2e/crud.spec.js` | ❌ W0 | ⬜ pending |
+| 05-02-T2 | 02 | 1 | TEST-01 | — | N/A | e2e | `npx playwright test e2e/crud.spec.js` | ❌ W0 | ⬜ pending |
+| 05-03-T1 | 03 | 1 | TEST-02 | — | N/A | e2e | `npx playwright test e2e/parcelas.spec.js` | ❌ W0 | ⬜ pending |
+| 05-04-T1 | 04 | 1 | TEST-04 | — | N/A | e2e | `npx playwright test e2e/realtime.spec.js` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -52,15 +52,14 @@ created: 2026-05-29
 
 ## Wave 0 Requirements
 
-- [ ] `e2e/edificios.spec.js` — spec stub para TEST-01 (Edifícios CRUD)
-- [ ] `e2e/unidades.spec.js` — spec stub para TEST-01 (Unidades CRUD)
-- [ ] `e2e/locatarios.spec.js` — spec stub para TEST-01 (Locatários invite/edit)
-- [ ] `e2e/contratos.spec.js` — spec stub para TEST-01 (Contratos criar/encerrar/cancelar)
-- [ ] `e2e/parcelas.spec.js` — spec stub para TEST-02 (Parcelas via EF)
-- [ ] `e2e/realtime.spec.js` — spec stub para TEST-04 (Realtime flow)
-- [ ] Extensão de `e2e/seed.mjs` com unidade "E2E-Sala Disponivel" (D-08)
-- [ ] Extensão de `e2e/global-teardown.js` com limpeza por prefixo "E2E-" (D-01)
-- [ ] Rota `src/app/dashboard/edificios/page.js` criada (bloqueante identificado por researcher)
+- [ ] `src/app/dashboard/edificios/page.js` — rota bloqueante para specs de Edifícios (identificada pelo researcher)
+- [ ] `e2e/seed.mjs` — estendido com `"E2E-Sala Disponivel"` (status: disponivel, sem contrato) para TEST-04
+- [ ] `e2e/global-teardown.js` — estendido com limpeza por prefixo `"E2E-"` (edificios, unidades, locatarios) e emails `"e2e-"` via admin API
+- [ ] `e2e/crud.spec.js` — spec completo TEST-01: Edifícios + Unidades + Locatários + Contratos (Wave 0 stub → Wave 1 implementação)
+- [ ] `e2e/parcelas.spec.js` — spec TEST-02: geração de parcelas + marcar como paga
+- [ ] `e2e/realtime.spec.js` — spec TEST-04: unidade some de /unidades após criar contrato
+
+*Infraestrutura existente cobre: `playwright.config.js`, `e2e/fixtures.js`, `e2e/helpers.js`, `e2e/dashboard.spec.js`, `e2e/portal.spec.js`.*
 
 ---
 
