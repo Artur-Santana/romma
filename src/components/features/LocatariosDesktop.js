@@ -70,6 +70,11 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
     setEditandoId(locatario.id)
   }
 
+  function handleCancelarEdit() {
+    setEditandoId(null)
+    setErro("")
+  }
+
   async function handleSalvarLocatario() {
     setLoading(true)
     setErro("")
@@ -128,7 +133,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
             <div key={l.id} style={{ display: "grid", gridTemplateColumns: GRID }} className={cn("px-5 py-4 items-center", i > 0 ? "border-t border-border-3" : "")}>
               {/* Nome + avatar */}
               <div className="flex items-center gap-3 min-w-0">
-                <div className={cn("w-8 h-8 shrink-0 flex items-center justify-center border font-body font-bold text-[10px] tracking-[1px]", isPendente ? "bg-transparent border-[var(--border-2)] text-fg-4" : "bg-surface border-[var(--border-2)] text-fg-1")}>
+                <div className={cn("w-8 h-8 shrink-0 flex items-center justify-center border font-body font-bold text-[10px] tracking-[1px]", isPendente ? "bg-transparent border-border-2 text-fg-4" : "bg-surface border-border-2 text-fg-1")}>
                   {ini}
                 </div>
                 <span className="font-body font-medium text-[13px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">{l.nome_razao_social}</span>
@@ -206,9 +211,9 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       {editandoId !== null && (
         <div
           className="fixed inset-0 z-50 bg-[oklch(0_0_0/0.7)] flex items-center justify-center"
-          onClick={e => { if (e.target === e.currentTarget) setEditandoId(null) }}
+          onClick={e => { if (e.target === e.currentTarget) handleCancelarEdit() }}
         >
-          <div className="bg-surface border border-[var(--border-2)] w-[480px] p-8 flex flex-col gap-6">
+          <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">LOCATÁRIO</span>
               <h3 className="font-body font-bold text-[20px] text-fg-1 m-0">
@@ -281,7 +286,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                 <Button
                   type="button"
                   variant="ghost"
-                  onClick={() => { setEditandoId(null); setErro("") }}
+                  onClick={handleCancelarEdit}
                   className="text-fg-3 font-mono text-[12px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
                 >Cancelar</Button>
                 <Button
@@ -305,7 +310,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           className="fixed inset-0 z-50 bg-[oklch(0_0_0/0.7)] flex items-center justify-center"
           onClick={e => { if (e.target === e.currentTarget) setShowInviteForm(false) }}
         >
-          <div className="bg-surface border border-[var(--border-2)] w-[480px] p-8 flex flex-col gap-6">
+          <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">NOVO LOCATÁRIO</span>
               <h3 className="font-body font-bold text-[20px] text-fg-1 m-0">

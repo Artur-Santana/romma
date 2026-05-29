@@ -1,11 +1,7 @@
 'use client'
 
 import StatusBadge from '@/components/ui/StatusBadge'
-import { fmtBRL } from '@/lib/utils'
-
-function refOf(u) {
-  return 'UN-' + u.id.slice(0, 6).toUpperCase()
-}
+import { fmtBRL, refOf } from '@/lib/utils'
 
 export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemoving }) {
   return (
