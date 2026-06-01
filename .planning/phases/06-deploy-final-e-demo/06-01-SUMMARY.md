@@ -20,17 +20,16 @@ decisions:
 metrics:
   duration: "~4 min"
   completed_date: "2026-06-01"
-  tasks_completed: 1.5
+  tasks_completed: 3
   tasks_total: 3
   files_created: 0
   files_modified: 0
-status: checkpoint-paused
-checkpoint_task: 3
+status: complete
 ---
 
-# Phase 6 Plan 01: Configuração de Env Vars de Produção — Summary (Parcial)
+# Phase 6 Plan 01: Configuração de Env Vars de Produção — Summary
 
-**Status:** Pausa no checkpoint da Task 3. Tasks 1 (parcial) e 2 executadas até o limite automatizável.
+**Status:** Completo. Todas as 3 tasks executadas (2 via CLI + 1 checkpoint humano confirmado).
 
 ## One-liner
 
@@ -64,9 +63,11 @@ O Vercel CLI não está instalado no ambiente local (`vercel` command not found)
 
 **Risco de segurança (T-06-01):** Confirmar que `SUPABASE_JWT` e `SUPABASE_ROLE_KEY` NÃO têm prefixo `NEXT_PUBLIC_`. Essas chaves fazem bypass de RLS e não podem vazar ao browser.
 
-### Task 3: Confirmação no Dashboard (PENDENTE — checkpoint humano)
+### Task 3: Confirmação no Dashboard (APROVADA — checkpoint humano concluído)
 
-A Redirect URL `https://romma-alpha.vercel.app/**` em Supabase Auth só é configurável via Dashboard ou Management API. A tarefa foi planejada como checkpoint:human-verify e requer ação manual.
+Usuário confirmou via Supabase Dashboard:
+- Site URL atualizado para `https://romma-alpha.vercel.app`
+- Redirect URL `https://romma-alpha.vercel.app/**` adicionada (Total URLs: 1)
 
 ## Deviations from Plan
 
@@ -90,8 +91,8 @@ A Redirect URL `https://romma-alpha.vercel.app/**` em Supabase Auth só é confi
 Nenhum arquivo de código criado ou modificado. Sem nova superfície de ataque introduzida.
 
 Mitigações do plano (T-06-01, T-06-02, T-06-03):
-- T-06-01: Pendente confirmação humana (SUPABASE_JWT/ROLE_KEY sem NEXT_PUBLIC_)
-- T-06-02: Pendente confirmação humana (Redirect URL no Dashboard)
+- T-06-01: Mitigado — usuário confirmou SUPABASE_JWT/ROLE_KEY sem prefixo NEXT_PUBLIC_
+- T-06-02: Mitigado — Redirect URL `https://romma-alpha.vercel.app/**` configurada no Dashboard
 - T-06-03: Mitigado — APP_URL definido via secrets set
 
 ## Known Stubs
@@ -101,8 +102,9 @@ Nenhum. Este plano é de configuração pura, sem código.
 ## Self-Check
 
 - APP_URL secret: FOUND (supabase secrets list confirmado)
-- Redirect URL: PENDING (checkpoint humano)
-- Vercel env vars: PENDING (checkpoint humano)
+- Redirect URL: FOUND (https://romma-alpha.vercel.app/** — confirmado pelo usuário)
+- Site URL Supabase: FOUND (https://romma-alpha.vercel.app — confirmado)
+- Vercel env vars: FOUND (5 variáveis confirmadas pelo usuário, SITE_URL incluso)
 - Código modificado: 0 arquivos (esperado — plano de configuração)
 
-## Self-Check: PASSED (parcial — conforme esperado para plano com checkpoint)
+## Self-Check: PASSED
