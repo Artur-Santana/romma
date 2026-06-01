@@ -2,15 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready_to_plan
-last_updated: 2026-05-27T23:50:47.387Z
+status: executing
+last_updated: "2026-05-29T22:37:50.561Z"
 progress:
   total_phases: 6
-  completed_phases: 3
-  total_plans: 19
+  completed_phases: 4
+  total_plans: 23
   completed_plans: 19
-  percent: 50
-stopped_at: Phase 04 complete (4/4) — ready to discuss Phase 5
+  percent: 67
 ---
 
 # Project State — Romma
@@ -20,7 +19,7 @@ stopped_at: Phase 04 complete (4/4) — ready to discuss Phase 5
 See: .planning/PROJECT.md (updated 2026-05-21)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 5 — testes e2e
+**Current focus:** Phase 05 — testes-e2e
 
 ---
 
@@ -41,7 +40,7 @@ See: .planning/PROJECT.md (updated 2026-05-21)
 
 **Phase 1: Dashboard Completions**
 Goal: Proprietário vê valores financeiros reais (MRR e receita esperada) e alerta de contratos vencendo no dashboard
-Status: Ready to plan
+Status: Executing Phase 05
 Plans: 8 planos em 5 waves
 
 ---
