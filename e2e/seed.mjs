@@ -1,7 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-import { config } from 'dotenv'
-
-config({ path: '.env.test' })
 
 const admin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -153,6 +150,8 @@ export async function seed() {
 
 // executa quando chamado diretamente: node e2e/seed.mjs
 if (import.meta.url === `file://${process.argv[1]}`) {
+  const { config } = await import('dotenv')
+  config({ path: '.env.test' })
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
   if (!url.includes('test') && !url.includes('local') && !url.includes('127.0.0.1')) {
     console.error('ABORT: URL de Supabase não parece ser de teste:', url)
