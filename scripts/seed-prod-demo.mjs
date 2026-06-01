@@ -58,10 +58,22 @@ async function step(label, fn) {
   }
 }
 
+// Busca usuário auth por email com paginação completa (listUsers retorna max 1000 por página).
+async function findUserByEmail(email) {
+  let page = 1
+  while (true) {
+    const { data: list, error } = await admin.auth.admin.listUsers({ page, perPage: 1000 })
+    if (error) throw error
+    const found = list.users.find(u => u.email === email)
+    if (found) return found
+    if (list.users.length < 1000) return null
+    page++
+  }
+}
+
 // Cria usuário auth se não existir. Retorna usuário existente ou recém-criado.
 async function upsertUser(email, password) {
-  const { data: list } = await admin.auth.admin.listUsers()
-  const existing = list.users.find(u => u.email === email)
+  const existing = await findUserByEmail(email)
   if (existing) return existing
   const { data, error } = await admin.auth.admin.createUser({
     email,
@@ -204,16 +216,19 @@ async function main() {
   console.log('\n4. Locatário')
 
   const DEMO_EMAIL    = 'locatario.demo@romma.demo'
-  const DEMO_PASSWORD = 'Demo1234!'
+  const DEMO_PASSWORD = process.env.DEMO_LOCATARIO_PASSWORD
+  if (!DEMO_PASSWORD) {
+    console.error('DEMO_LOCATARIO_PASSWORD ausente em .env.local')
+    process.exit(1)
+  }
 
   await step('upsert auth.user locatario.demo', async () => {
     const u = await upsertUser(DEMO_EMAIL, DEMO_PASSWORD)
     return u.id
   })
 
-  // Buscar o objeto completo do usuário para ter o id
-  const { data: authList } = await admin.auth.admin.listUsers()
-  const locatarioAuthUser = authList.users.find(u => u.email === DEMO_EMAIL)
+  // Buscar o objeto completo do usuário para ter o id (usa paginação via findUserByEmail)
+  const locatarioAuthUser = await findUserByEmail(DEMO_EMAIL)
   if (!locatarioAuthUser) throw new Error('Usuário auth não encontrado após upsert')
 
   // Verificar se já existe registro na tabela locatarios para esse usuario_id
