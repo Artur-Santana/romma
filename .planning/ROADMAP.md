@@ -130,7 +130,12 @@ Plans:
 1. Supabase Auth Redirect URL aceita o domínio romma-alpha.vercel.app — email de convite abre corretamente em produção
 2. Fluxo completo de convite de Locatário testado e funcional no ambiente de produção Vercel de ponta a ponta
 3. Roteiro de demonstração da banca existe com sequência de ações, pontos de destaque e fallback documentado para falha do Realtime
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Configurar env vars de produção na Vercel + Redirect URL Supabase + APP_URL Edge Function (DEPL-01)
+- [ ] 06-02-PLAN.md — seed-prod-demo.mjs: base de demo idempotente em produção (DEMO-01)
+- [ ] 06-03-PLAN.md — Validar convite em prod + DEMO.md + cheat sheet imprimível + .gitignore (DEPL-02, DEMO-01)
 
 ---
 
