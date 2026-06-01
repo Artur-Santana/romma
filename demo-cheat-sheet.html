@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Romma — Cheat Sheet Banca</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 12mm 14mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.35;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 180mm;
+      margin: 0 auto;
+      padding: 6mm;
+    }
+
+    h1 {
+      font-size: 13pt;
+      font-weight: 700;
+      margin-bottom: 2mm;
+      border-bottom: 2px solid #4f46e5;
+      padding-bottom: 2mm;
+      color: #1e1b4b;
+    }
+
+    .subtitle {
+      font-size: 8pt;
+      color: #6b7280;
+      margin-bottom: 4mm;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm;
+    }
+
+    .section {
+      margin-bottom: 3mm;
+    }
+
+    .section-title {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #4f46e5;
+      margin-bottom: 1.5mm;
+      padding-bottom: 0.5mm;
+      border-bottom: 1px solid #e0e7ff;
+    }
+
+    .step {
+      display: flex;
+      gap: 2mm;
+      margin-bottom: 1mm;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      font-weight: 700;
+      color: #4f46e5;
+      min-width: 12pt;
+      font-size: 8.5pt;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      flex: 1;
+    }
+
+    .time-badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #3730a3;
+      font-size: 7.5pt;
+      font-weight: 600;
+      padding: 0.5mm 2mm;
+      border-radius: 2mm;
+      margin-left: 1mm;
+    }
+
+    .fallback-box {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-left: 3px solid #f59e0b;
+      border-radius: 2mm;
+      padding: 2mm 3mm;
+      margin-top: 2mm;
+    }
+
+    .fallback-box .fallback-title {
+      font-weight: 700;
+      color: #92400e;
+      font-size: 8pt;
+      margin-bottom: 1mm;
+    }
+
+    .fallback-box p {
+      font-size: 8pt;
+      color: #78350f;
+    }
+
+    .highlight-box {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-left: 3px solid #22c55e;
+      border-radius: 2mm;
+      padding: 2mm 3mm;
+      margin-top: 2mm;
+    }
+
+    .highlight-box .hl-title {
+      font-weight: 700;
+      color: #14532d;
+      font-size: 8pt;
+      margin-bottom: 1mm;
+    }
+
+    .highlight-box p {
+      font-size: 8pt;
+      color: #166534;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      margin-top: 1.5mm;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 700;
+      padding: 1mm 2mm;
+      text-align: left;
+      border: 1px solid #e5e7eb;
+    }
+
+    td {
+      padding: 1mm 2mm;
+      border: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    .total-row td {
+      font-weight: 700;
+      background: #e0e7ff;
+      color: #1e1b4b;
+    }
+
+    .footer {
+      margin-top: 3mm;
+      font-size: 7.5pt;
+      color: #9ca3af;
+      text-align: center;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 2mm;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        font-size: 9pt;
+      }
+
+      .fallback-box {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .highlight-box {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      th, tr:nth-child(even) td, .total-row td {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Romma — Roteiro Demo Banca</h1>
+  <p class="subtitle">18/06/2026 &nbsp;|&nbsp; romma-alpha.vercel.app &nbsp;|&nbsp; Imprimir este arquivo (sem credenciais)</p>
+
+  <div class="grid">
+
+    <!-- COLUNA ESQUERDA -->
+    <div>
+
+      <div class="section">
+        <div class="section-title">Parte 1 — Listagem Pública <span class="time-badge">~3 min</span></div>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Abrir /unidades em janela anônima</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Mostrar cards: nome, área, valor mensal</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Apontar card "Consulte o Proprietário" (valor oculto)</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">Notar: unidades alugadas NÃO aparecem</span></div>
+        <div class="highlight-box">
+          <p class="hl-title">Destaque</p>
+          <p>Server Component — RLS filtra disponível no servidor, sem JS no cliente.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Parte 2 — Dashboard Proprietário <span class="time-badge">~4 min</span></div>
+        <div class="step"><span class="step-num">5.</span><span class="step-text">Logar como Proprietário → /dashboard</span></div>
+        <div class="step"><span class="step-num">6.</span><span class="step-text">Apontar KPIs: MRR e Receita Esperada</span></div>
+        <div class="step"><span class="step-num">7.</span><span class="step-text">Mostrar alerta DASH-03 (parcela vencida)</span></div>
+        <div class="step"><span class="step-num">8.</span><span class="step-text">Contratos → clicar contrato → ver parcelas</span></div>
+        <div class="step"><span class="step-num">9.</span><span class="step-text">Mostrar status: futura / pendente / paga / vencida</span></div>
+        <div class="highlight-box">
+          <p class="hl-title">Destaque</p>
+          <p>Status calculado por data — sem cronjob. Determinístico e auditável.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Parte 3 — Edge Function Parcelas <span class="time-badge">~3 min</span></div>
+        <div class="step"><span class="step-num">10.</span><span class="step-text">Criar contrato para unidade disponível</span></div>
+        <div class="step"><span class="step-num">11.</span><span class="step-text">Clicar "Gerar Parcelas"</span></div>
+        <div class="step"><span class="step-num">12.</span><span class="step-text">Mostrar parcelas criadas com datas calculadas</span></div>
+        <div class="highlight-box">
+          <p class="hl-title">Destaque</p>
+          <p>Edge Function Deno — transação atômica, autenticada por JWT próprio (não anon key).</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLUNA DIREITA -->
+    <div>
+
+      <div class="section">
+        <div class="section-title">Parte 4 — Realtime <span class="time-badge">~2 min</span></div>
+        <div class="step"><span class="step-num">13.</span><span class="step-text">Abrir /unidades em 2ª aba (sem login)</span></div>
+        <div class="step"><span class="step-num">14.</span><span class="step-text">No dashboard: criar contrato para unidade visível</span></div>
+        <div class="step"><span class="step-num">15.</span><span class="step-text">Voltar para 2ª aba — card deve sumir</span></div>
+
+        <div class="fallback-box">
+          <p class="fallback-title">Fallback — se card NÃO sumir:</p>
+          <p>Pressionar F5 e explicar: <em>"RLS do Supabase filtra eventos UPDATE de disponível→alugada — limitação conhecida, workaround é refresh ou polling."</em></p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Parte 5 — Portal Locatário <span class="time-badge">~3 min</span></div>
+        <div class="step"><span class="step-num">16.</span><span class="step-text">Nova janela anônima → /locatario</span></div>
+        <div class="step"><span class="step-num">17.</span><span class="step-text">Login com conta demo pré-configurada</span></div>
+        <div class="step"><span class="step-num">18.</span><span class="step-text">Mostrar contrato ativo e parcelas</span></div>
+        <div class="highlight-box">
+          <p class="hl-title">Destaque</p>
+          <p>RLS isola locatário — vê apenas seus dados via auth.uid(). Zero acesso ao dashboard.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Parte 6 — Convite (opcional) <span class="time-badge">~2 min</span></div>
+        <div class="step"><span class="step-num">19.</span><span class="step-text">Dashboard → Locatários → Convidar</span></div>
+        <div class="step"><span class="step-num">20.</span><span class="step-text">Inserir email → mostrar confirmação</span></div>
+        <div class="highlight-box">
+          <p class="hl-title">Destaque</p>
+          <p>Admin API Supabase — sem senha temporária exposta, redirect direto para /dashboard em prod.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tempos</div>
+        <table>
+          <thead>
+            <tr><th>Seção</th><th>Tempo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1 — Listagem pública</td><td>~3 min</td></tr>
+            <tr><td>2 — Dashboard</td><td>~4 min</td></tr>
+            <tr><td>3 — Edge Function</td><td>~3 min</td></tr>
+            <tr><td>4 — Realtime</td><td>~2 min</td></tr>
+            <tr><td>5 — Portal Locatário</td><td>~3 min</td></tr>
+            <tr><td>6 — Convite (cortar se necessário)</td><td>~2 min</td></tr>
+            <tr class="total-row"><td>Total</td><td>15–17 min</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Romma TCC · romma-alpha.vercel.app · Cheat sheet sem dados sensíveis — pode ser commitado
+  </div>
+
+</body>
+</html>
