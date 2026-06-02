@@ -19,11 +19,11 @@ Fase de gap-closure: corrigir os 4 itens identificados após a Fase 6 que impact
 ## Implementation Decisions
 
 ### FIX-01: /auth/confirm (invite flow)
-- **D-01:** Criar `src/app/auth/confirm/route.js` como Route Handler (server-side). Usa `supabase.auth.exchangeCodeForSession(code)` para trocar o authorization code do PKCE flow.
-- **D-02:** Após troca bem-sucedida, redireciona para `/portal`. O proxy (`src/proxy.js`) decide o destino final com base no role do usuário autenticado.
+- **D-01:** Criar `src/app/auth/confirm/route.js` como Route Handler (server-side). Usa `supabase.auth.verifyOtp({ token_hash, type: 'invite' })` para trocar o token do email invite. Fallback: se `code` presente em vez de `token_hash`, usar `exchangeCodeForSession(code)`. *(Ratificado 2026-06-02: verifyOtp é o método correto para email invite links com token_hash; exchangeCodeForSession é para PKCE/OAuth)*
+- **D-02:** Após troca bem-sucedida, redireciona para `/portal/dashboard`. *(Ratificado 2026-06-02: /portal/page.js não existe — 404; /portal/dashboard é a rota real do portal do locatário)*
 - **D-03:** Atualizar `redirectTo` em `src/actions/locatarios.js` linha 20: de `${siteUrl}/dashboard` para `${siteUrl}/auth/confirm`.
 - **D-04:** A rota `/auth/confirm` deve ser pública (fora do matcher do proxy). Verificar `src/proxy.js` — o matcher atual inclui `/dashboard/:path*` e `/portal/:path*` mas não `/auth/:path*`, então já é pública por omissão.
-- **D-05:** `/auth/reset-password` — também criar como page cliente em `src/app/auth/reset-password/page.js`. Permite ao locatário definir nova senha após primeiro acesso. Usa `supabase.auth.updateUser({ password })`. Redireciona para `/portal` após sucesso. Estilo visual consistente com `/portal/login`.
+- **D-05:** `/auth/reset-password` — também criar como page cliente em `src/app/auth/reset-password/page.js`. Permite ao locatário definir nova senha após primeiro acesso. Usa `supabase.auth.updateUser({ password })`. Redireciona para `/portal/dashboard` após sucesso. *(Ratificado 2026-06-02: mesma correção de D-02 por consistência)* Estilo visual consistente com `/portal/login`.
 
 ### UX-01: Logout no dashboard do Proprietário
 - **D-06:** Adicionar `LogoutButton` no footer de `src/components/ui/OwnerSidebar.js`, abaixo do email do proprietário. Reutilizar o componente já existente em `src/components/ui/LogoutButton.js` (sem modificações no componente).
