@@ -148,6 +148,13 @@ Plans:
 2. Proprietário tem botão de logout no sidebar do dashboard que redireciona para `/login`
 3. Todas as 4 abas do dashboard e o portal do Locatário exibem skeleton loading durante carregamento de dados
 4. Link "Acessar como Locatário" removido do sidebar — sem links inúteis para proprietário
+**Plans:** 3 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — FIX-01: /auth/confirm (Route Handler troca token) + /auth/reset-password + redirectTo do convite
+- [ ] 07-02-PLAN.md — UX-01 + UX-03: LogoutButton no OwnerSidebar + remover link "Acessar como Locatário"
+- [ ] 07-03-PLAN.md — UX-02: skeleton loading nas 4 abas do dashboard + portal do Locatário
+**UI hint**: yes
 
 ---
 
