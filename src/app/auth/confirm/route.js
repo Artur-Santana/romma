@@ -11,9 +11,13 @@ export async function GET(request) {
 
   if (token_hash && type) {
     // Caminho primário: inviteUserByEmail envia token_hash + type=invite
+    // Também trata type=recovery (reset de senha)
     const { error } = await supabase.auth.verifyOtp({ type, token_hash })
     if (error) {
       return NextResponse.redirect(new URL("/login?error=invite_invalid", request.url))
+    }
+    if (type === "recovery") {
+      return NextResponse.redirect(new URL("/auth/reset-password", request.url))
     }
     return NextResponse.redirect(new URL("/portal/dashboard", request.url))
   }
