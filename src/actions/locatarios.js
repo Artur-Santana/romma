@@ -17,7 +17,7 @@ export async function convidarLocatario(email, nome_razao_social, documento, tel
     if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
     const { data, error} = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-        redirectTo: `${siteUrl}/dashboard`
+        redirectTo: `${siteUrl}/auth/confirm`
     })
     if (!error){
         const {error:errorInsert} = await supabaseAdmin.from('locatarios')
