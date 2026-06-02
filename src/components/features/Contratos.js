@@ -32,6 +32,11 @@ function SkeletonContratos() {
   );
 }
 
+function getTodayLocal() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 function isExpiring(c) {
   if (c.status !== "ativo") return false
   const diff = (new Date(c.data_fim) - new Date()) / 86400000
@@ -311,7 +316,7 @@ export default function Contratos() {
             const edi = edificios.find(e => e.id === uni?.edificio_id)
             const expiring = isExpiring(contrato)
             const isAtivo = contrato.status === "ativo"
-            const vencido = isAtivo && contrato.data_fim < new Date().toISOString().split("T")[0]
+            const vencido = isAtivo && contrato.data_fim < getTodayLocal()
 
             return (
               <div
