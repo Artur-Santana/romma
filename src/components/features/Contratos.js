@@ -405,7 +405,8 @@ export default function Contratos() {
           </span>
           <Button
             variant="ghost"
-            className="font-mono font-bold text-[10px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto"
+            disabled
+            className="font-mono font-bold text-[10px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto opacity-50 cursor-not-allowed"
           >
             Ver Arquivo →
           </Button>
