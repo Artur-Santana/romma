@@ -1,10 +1,11 @@
 ---
 phase: 7
 slug: ajustes-finais-pre-banca
-status: draft
+status: approved
 shadcn_initialized: true
 preset: radix-lyra
 created: 2026-06-02
+reviewed_at: 2026-06-02
 ---
 
 # Phase 7 — UI Design Contract
@@ -64,7 +65,11 @@ Escala 8-point adotada pelo projeto (Obsidian Blueprint):
 | 2xl | 48px | Separadores de seção maior |
 | 3xl | 64px | Espaçamento de nível de página |
 
-Exceções: nenhuma para esta fase.
+**Exceções (valores herdados — fora do escopo da fase 7):**
+
+| Valor | Localização | Justificativa |
+|-------|-------------|---------------|
+| `gap-[10px]` | OwnerSidebar footer (`flex flex-col gap-[10px]`) | Valor herdado do componente existente — fora do escopo de modificação nesta fase. Não introduzir em componentes novos. |
 
 **Espaçamento específico por superfície:**
 - PortalDashboard: `px-12 pt-12 pb-20` (padrão existente — manter)
