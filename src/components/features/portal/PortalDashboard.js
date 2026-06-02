@@ -8,9 +8,8 @@ import ParcelsTable from "./ParcelsTable"
 import LogoutButton from "@/components/ui/LogoutButton"
 import { Skeleton } from "@/components/ui/skeleton"
 
-const supabase = createClient()
-
 export default function PortalDashboard() {
+  const supabase = createClient()
   const [locatario, setLocatario] = useState(null)
   const [contrato, setContrato] = useState(null)
   const [parcelas, setParcelas] = useState([])
