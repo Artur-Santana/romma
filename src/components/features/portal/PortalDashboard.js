@@ -6,6 +6,7 @@ import { getLocatarioByUserId, getContratoAtivoByLocatario, getParcelasPortal } 
 import ContratoCard from "./ContratoCard"
 import ParcelsTable from "./ParcelsTable"
 import LogoutButton from "@/components/ui/LogoutButton"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const supabase = createClient()
 
@@ -52,7 +53,13 @@ export default function PortalDashboard() {
           <strong>Erro ao carregar dados</strong><br />Não foi possível buscar seu contrato. Tente recarregar a página.
         </div>
       ) : loading ? (
-        <div className="mt-8 font-mono text-[12px] text-fg-4">Carregando...</div>
+        <div className="mt-8 flex flex-col gap-4">
+          <Skeleton className="h-32 w-full rounded-none" />
+          <Skeleton className="h-8 w-full rounded-none" />
+          <Skeleton className="h-8 w-full rounded-none" />
+          <Skeleton className="h-8 w-full rounded-none" />
+          <Skeleton className="h-8 w-full rounded-none" />
+        </div>
       ) : !contrato ? (
         <div className="mt-8">
           <h2 className="font-display font-bold text-[28px] text-fg-1">Nenhum contrato ativo</h2>
