@@ -5,10 +5,18 @@ import { createServer } from "@/lib/supabase-server"
 import { isProprietario } from "@/lib/auth"
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const DOCUMENTO_RE = /^\d{11}$|^\d{14}$/
 
 export async function convidarLocatario(email, nome_razao_social, documento, telefone, tipo) {
     if (!email || !nome_razao_social || !documento || !telefone || !tipo) {
         return { status: 400, erroMessage: 'Todos os campos são obrigatórios.' }
+    }
+    if (!EMAIL_RE.test(email)) {
+        return { status: 400, erroMessage: 'E-mail inválido.' }
+    }
+    if (!DOCUMENTO_RE.test(documento)) {
+        return { status: 400, erroMessage: 'Documento inválido. Use apenas dígitos (CPF: 11, CNPJ: 14).' }
     }
     const siteUrl = process.env.SITE_URL
     if (!siteUrl) return { status: 500, erroMessage: 'Configuração de servidor inválida.' }
