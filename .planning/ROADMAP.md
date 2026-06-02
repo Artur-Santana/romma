@@ -17,7 +17,7 @@
 | 4 | Polimento Visual Público | 4/4 | Complete   | 2026-05-27 |
 | 5 | Testes E2E | 4/4 | Complete   | 2026-05-29 |
 | 6 | Deploy Final e Demo | 3/3 | Complete   | 2026-06-01 |
-| 7 | Ajustes Finais Pré-Banca | 4/4 | FIX-01, UX-01, UX-02, UX-03 | mvp |
+| 7 | Ajustes Finais Pré-Banca | 3/3 | Complete   | 2026-06-02 |
 
 ---
 
@@ -148,12 +148,12 @@ Plans:
 2. Proprietário tem botão de logout no sidebar do dashboard que redireciona para `/login`
 3. Todas as 4 abas do dashboard e o portal do Locatário exibem skeleton loading durante carregamento de dados
 4. Link "Acessar como Locatário" removido do sidebar — sem links inúteis para proprietário
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 07-01-PLAN.md — FIX-01: /auth/confirm (Route Handler troca token) + /auth/reset-password + redirectTo do convite
-- [ ] 07-02-PLAN.md — UX-01 + UX-03: LogoutButton no OwnerSidebar + remover link "Acessar como Locatário"
-- [ ] 07-03-PLAN.md — UX-02: skeleton loading nas 4 abas do dashboard + portal do Locatário
+- [x] 07-01-PLAN.md — FIX-01: /auth/confirm (Route Handler troca token) + /auth/reset-password + redirectTo do convite
+- [x] 07-02-PLAN.md — UX-01 + UX-03: LogoutButton no OwnerSidebar + remover link "Acessar como Locatário"
+- [x] 07-03-PLAN.md — UX-02: skeleton loading nas 4 abas do dashboard + portal do Locatário
 **UI hint**: yes
 
 ---
