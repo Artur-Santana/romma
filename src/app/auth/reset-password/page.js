@@ -127,6 +127,11 @@ function ResetPasswordForm() {
     e.preventDefault()
     setErro(null)
 
+    if (!form.password || form.password.length < 6) {
+      setErro("SENHA_CURTA")
+      return
+    }
+
     if (form.password !== form.confirmPassword) {
       setErro("SENHAS_DIVERGENTES")
       return
@@ -173,6 +178,13 @@ function ResetPasswordForm() {
           <ErrorBanner
             title="ERRO_AUTH · TOKEN_INVÁLIDO"
             body="Link expirado ou inválido. Solicite um novo convite ao proprietário."
+          />
+        )}
+
+        {erro === "SENHA_CURTA" && (
+          <ErrorBanner
+            title="ERRO · SENHA_INVÁLIDA"
+            body="A senha deve ter pelo menos 6 caracteres."
           />
         )}
 
