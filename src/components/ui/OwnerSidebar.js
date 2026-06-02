@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import LogoutButton from "@/components/ui/LogoutButton";
 
 const NAV_ITEMS = [
   { href: "/dashboard",            label: "Visão Geral",  code: "VG" },
@@ -75,17 +76,12 @@ export default function OwnerSidebar({ badges = {} }) {
         >
           → Ver Página Pública
         </Link>
-        <Link
-          href="/portal"
-          className="font-mono text-[11px] text-fg-3 no-underline tracking-[0.5px]"
-        >
-          → Acessar como Locatário
-        </Link>
         {email && (
           <span className="font-mono text-[10px] text-fg-5 mt-2 tracking-[0.5px]">
             {email}
           </span>
         )}
+        <LogoutButton />
       </div>
     </div>
   );

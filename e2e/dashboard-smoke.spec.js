@@ -32,4 +32,14 @@ test.describe('Dashboard smoke', () => {
     await page.goto('/dashboard')
     await expect(page.getByText('Visão Geral.')).toBeVisible({ timeout: 10_000 })
   })
+
+  test('UX-01 — sidebar exibe botão "Sair"', async ({ page }) => {
+    await page.goto('/dashboard')
+    await expect(page.getByText('Sair')).toBeVisible({ timeout: 10_000 })
+  })
+
+  test('UX-03 — sidebar não exibe link "Acessar como Locatário"', async ({ page }) => {
+    await page.goto('/dashboard')
+    await expect(page.getByText('Acessar como Locatário')).toHaveCount(0)
+  })
 })
