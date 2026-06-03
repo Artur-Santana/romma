@@ -9,6 +9,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PageHeader from "@/components/ui/PageHeader";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function SkeletonUnidades() {
+  return (
+    <div className="romma-page p-12 bg-background min-h-full">
+      <div className="flex flex-col gap-0 border border-border-3 bg-surface">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className={i > 0 ? "border-t border-border-3 p-5" : "p-5"}>
+            <Skeleton className="h-48 w-full rounded-none" />
+            <Skeleton className="h-4 w-3/4 mt-3 rounded-none" />
+            <Skeleton className="h-3 w-1/2 mt-2 rounded-none" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Unidades({}) {
   const [unidades, setUnidades] = useState([]);
@@ -17,6 +34,7 @@ export default function Unidades({}) {
   const [showForm, setShowForm] = useState(false);
   const [erro, setErro] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [loadingInicial, setLoadingInicial] = useState(true)
   const [form, setForm] = useState({
     nome: "",
     descricao: "",
@@ -86,6 +104,7 @@ export default function Unidades({}) {
     async function fetchDados() {
       setListaEdificios(await getEdificios() ?? []);
       setUnidades(await getUnidades() ?? []);
+      setLoadingInicial(false);
     }
     fetchDados();
   }, []);
@@ -108,6 +127,8 @@ export default function Unidades({}) {
 
   const disponiveis = unidades.filter(u => u.status === "disponivel").length
   const alugadas = unidades.filter(u => u.status === "alugada").length
+
+  if (loadingInicial) return <SkeletonUnidades />;
 
   return (
     <div className="romma-page p-12 bg-background min-h-full">

@@ -2,8 +2,8 @@
 
 **Project:** Romma TCC Finalization
 **Deadline:** 2026-06-18 (28 days)
-**Total phases:** 6
-**Total v1 requirements:** 21
+**Total phases:** 7
+**Total v1 requirements:** 21 (+ 4 gap-closure)
 
 ---
 
@@ -17,6 +17,7 @@
 | 4 | Polimento Visual Público | 4/4 | Complete   | 2026-05-27 |
 | 5 | Testes E2E | 4/4 | Complete   | 2026-05-29 |
 | 6 | Deploy Final e Demo | 3/3 | Complete   | 2026-06-01 |
+| 7 | Ajustes Finais Pré-Banca | 3/3 | Complete   | 2026-06-02 |
 
 ---
 
@@ -137,6 +138,24 @@ Plans:
 - [x] 06-02-PLAN.md — seed-prod-demo.mjs: base de demo idempotente em produção (DEMO-01)
 - [x] 06-03-PLAN.md — Validar convite em prod + DEMO.md + cheat sheet imprimível + .gitignore (DEPL-02, DEMO-01)
 
+### Phase 7: Ajustes Finais Pré-Banca
+**Goal:** Corrigir gaps de auth e UX identificados na Fase 6 — fluxo de convite completo em produção, logout no dashboard, skeleton loading e limpeza do sidebar
+**Mode:** mvp
+**Depends on:** Phase 6
+**Requirements:** FIX-01, UX-01, UX-02, UX-03
+**Success Criteria:**
+1. `/auth/confirm` existe e troca o token do email de convite Supabase — Locatário convidado consegue acessar o portal sem intervenção manual de admin
+2. Proprietário tem botão de logout no sidebar do dashboard que redireciona para `/login`
+3. Todas as 4 abas do dashboard e o portal do Locatário exibem skeleton loading durante carregamento de dados
+4. Link "Acessar como Locatário" removido do sidebar — sem links inúteis para proprietário
+**Plans:** 3/3 plans complete
+
+Plans:
+- [x] 07-01-PLAN.md — FIX-01: /auth/confirm (Route Handler troca token) + /auth/reset-password + redirectTo do convite
+- [x] 07-02-PLAN.md — UX-01 + UX-03: LogoutButton no OwnerSidebar + remover link "Acessar como Locatário"
+- [x] 07-03-PLAN.md — UX-02: skeleton loading nas 4 abas do dashboard + portal do Locatário
+**UI hint**: yes
+
 ---
 
 ## Requirement Coverage
@@ -164,5 +183,9 @@ Plans:
 | DEPL-01 | Phase 6 | Pending |
 | DEPL-02 | Phase 6 | Pending |
 | DEMO-01 | Phase 6 | Pending |
+| FIX-01 | Phase 7 | Pending |
+| UX-01 | Phase 7 | Pending |
+| UX-02 | Phase 7 | Pending |
+| UX-03 | Phase 7 | Pending |
 
-**Coverage:** 21/21 v1 requirements mapped ✓
+**Coverage:** 21/21 v1 requirements mapped ✓ | 4/4 gap-closure requirements mapped ✓
