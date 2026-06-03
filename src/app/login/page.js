@@ -183,7 +183,9 @@ function SignInForm() {
       return
     }
     setStatus("reset_loading")
-    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/confirm`
+    })
     if (error) { setStatus("error"); return }
     setStatus("reset_sent")
   }

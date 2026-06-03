@@ -11,6 +11,31 @@ import StatusBadge from "@/components/ui/StatusBadge"
 import ConfirmDialog from "@/components/ui/ConfirmDialog"
 import PageHeader from "@/components/ui/PageHeader"
 import { gerarParcelas, criarContrato, cancelarContrato, encerrarContrato } from "@/actions/contratos"
+import { Skeleton } from "@/components/ui/skeleton"
+
+function SkeletonContratos() {
+  return (
+    <div className="romma-page px-12 pt-12 pb-20 bg-background min-h-full">
+      <div className="border border-border-3 bg-surface mb-8">
+        <div className="px-5 py-3 bg-[oklch(0.26_0_0)] border-b border-border-3">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-[10px] w-full rounded-none mb-2" />
+          ))}
+        </div>
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className={i > 0 ? "border-t border-border-3 px-5 py-3" : "px-5 py-3"}>
+            <Skeleton className="h-8 w-full rounded-none mt-1" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function getTodayLocal() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
 function isExpiring(c) {
   if (c.status !== "ativo") return false
@@ -40,6 +65,7 @@ export default function Contratos() {
   const [form, setForm] = useState({ data_inicio: "", data_fim: "", observacoes: "", unidade_id: "", locatario_id: "" })
   const [erro, setErro] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [loadingInicial, setLoadingInicial] = useState(true)
   const [confirmDialog, setConfirmDialog] = useState(null)
 
   useEffect(() => {
@@ -49,6 +75,7 @@ export default function Contratos() {
       setLocatarios(l ?? [])
       setContratos(c ?? [])
       setEdificios(e ?? [])
+      setLoadingInicial(false)
     }
     carregar()
   }, [])
@@ -129,6 +156,8 @@ export default function Contratos() {
 
   const ativos = contratos.filter(c => c.status === "ativo").length
   const encerrados = contratos.filter(c => c.status === "encerrado").length
+
+  if (loadingInicial) return <SkeletonContratos />;
 
   return (
     <>
@@ -287,7 +316,7 @@ export default function Contratos() {
             const edi = edificios.find(e => e.id === uni?.edificio_id)
             const expiring = isExpiring(contrato)
             const isAtivo = contrato.status === "ativo"
-            const vencido = isAtivo && contrato.data_fim < new Date().toISOString().split("T")[0]
+            const vencido = isAtivo && contrato.data_fim < getTodayLocal()
 
             return (
               <div
@@ -376,7 +405,8 @@ export default function Contratos() {
           </span>
           <Button
             variant="ghost"
-            className="font-mono font-bold text-[10px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto"
+            disabled
+            className="font-mono font-bold text-[10px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto opacity-50 cursor-not-allowed"
           >
             Ver Arquivo →
           </Button>
