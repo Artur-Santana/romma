@@ -1,26 +1,41 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: milestone_complete
-last_updated: 2026-06-03T13:19:25.608Z
+milestone_name: TCC Finalization
+status: shipped
+last_updated: 2026-06-03T18:10:00.000Z
 progress:
   total_phases: 7
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 29
   completed_plans: 29
-  percent: 86
-stopped_at: Milestone complete (Phase 07 was final phase)
+  percent: 100
+stopped_at: Milestone v1.0 shipped 2026-06-03
 ---
 
 # Project State — Romma
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-05-21)
+See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Milestone complete
+**Current focus:** v1.0 shipped — banca em 18/06/2026
+
+---
+
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-06-03:
+
+| Category | Item | Status |
+|----------|------|--------|
+| uat_gaps | Phase 04: 04-HUMAN-UAT.md — 3 cenários de UI pendentes (polimento visual /unidades) | partial |
+| uat_gaps | Phase 05: 05-HUMAN-UAT.md — 4 cenários de UI pendentes (testes E2E manuais) | partial |
+| verification_gaps | Phase 01: 01-VERIFICATION.md — validações visuais do dashboard precisam de revisão humana | human_needed |
+| verification_gaps | Phase 02: 02-VERIFICATION.md — gaps identificados no portal (já corrigidos nas fases 6-7) | gaps_found |
+| verification_gaps | Phase 04: 04-VERIFICATION.md — validações visuais de /unidades precisam de revisão humana | human_needed |
+| verification_gaps | Phase 05: 05-VERIFICATION.md — validações de E2E precisam de revisão humana pós-deploy | human_needed |
 
 ---
 
@@ -28,21 +43,13 @@ See: .planning/PROJECT.md (updated 2026-05-21)
 
 | # | Phase | Status |
 |---|-------|--------|
-| 1 | Dashboard Completions | Next |
-| 2 | Portal do Locatário | Pending |
-| 3 | Refatoração e Qualidade | Pending |
-| 4 | Polimento Visual Público | Pending |
-| 5 | Testes E2E | Pending |
-| 6 | Deploy Final e Demo | Pending |
-
----
-
-## Current Phase
-
-**Phase 1: Dashboard Completions**
-Goal: Proprietário vê valores financeiros reais (MRR e receita esperada) e alerta de contratos vencendo no dashboard
-Status: Milestone complete
-Plans: 8 planos em 5 waves
+| 1 | Dashboard Completions | ✅ Complete |
+| 2 | Portal do Locatário | ✅ Complete |
+| 3 | Refatoração e Qualidade | ✅ Complete |
+| 4 | Polimento Visual Público | ✅ Complete |
+| 5 | Testes E2E | ✅ Complete |
+| 6 | Deploy Final e Demo | ✅ Complete |
+| 7 | Ajustes Finais Pré-Banca | ✅ Complete |
 
 ---
 
@@ -50,3 +57,4 @@ Plans: 8 planos em 5 waves
 
 - 2026-05-21: Project initialized. 21 v1 requirements defined. Roadmap created. 6 phases mapped.
 - 2026-05-21: Phase 1 planned. 8 planos em 5 waves. Research + Pattern Mapping + Verification completos.
+- 2026-06-03: Milestone v1.0 shipped. 7 fases, 29 planos. Deployed em romma-alpha.vercel.app. Banca em 15 dias.
