@@ -1,7 +1,4 @@
 
-[db.extensions]
-pg_cron = { enabled = true }
-
 [functions.gerar-parcelas]
 enabled = true
 verify_jwt = true

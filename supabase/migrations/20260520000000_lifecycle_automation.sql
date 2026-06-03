@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
 -- Transição de status de parcelas (roda 06:00 UTC diariamente)
 SELECT cron.schedule(
   'atualizar-status-parcelas',
