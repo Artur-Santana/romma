@@ -53,8 +53,17 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ---
 
+## Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260603-o6t | corrija os bugs dos testes agora | 2026-06-03 | 170e6e1 | [260603-o6t-corrija-os-bugs-dos-testes-agora](./quick/260603-o6t-corrija-os-bugs-dos-testes-agora/) |
+
+---
+
 ## Activity Log
 
 - 2026-05-21: Project initialized. 21 v1 requirements defined. Roadmap created. 6 phases mapped.
 - 2026-05-21: Phase 1 planned. 8 planos em 5 waves. Research + Pattern Mapping + Verification completos.
 - 2026-06-03: Milestone v1.0 shipped. 7 fases, 29 planos. Deployed em romma-alpha.vercel.app. Banca em 15 dias.
+- 2026-06-03: Completed quick task 260603-o6t: corrija os bugs dos testes agora
