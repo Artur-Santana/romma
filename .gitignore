@@ -65,3 +65,6 @@ DEMO.md
 .claude/agent-memory/
 .claude/worktrees/
 code-review-2026-05-14.md
+
+# Claude Code internals
+.claude/scheduled_tasks.lock
