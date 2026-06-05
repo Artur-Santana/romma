@@ -178,7 +178,7 @@ const { count } = await supabaseAdmin
   .from('contratos')
   .select('*', { count: 'exact', head: true })
   .eq('locatario_id', id)
-  .not('status', 'eq', 'cancelado') // ou verificar só 'ativo'
+    // Sem filtro de status: FK bloqueia qualquer contrato, independente de status
 
 if (count > 0) return {
   status: 400,
@@ -302,7 +302,7 @@ import Link from 'next/link'
 
 **Por que acontece:** O DELETE em `locatarios` é bloqueado por qualquer contrato vinculado (FK sem ON DELETE CASCADE), independente do status.
 
-**Como evitar:** Verificar se existe qualquer contrato vinculado — `count > 0` sem filtro de status, OU verificar se há ON DELETE CASCADE na migração inicial. Ler `20250101000000_initial_schema.sql` para confirmar.
+**Como evitar:** Verificar se existe qualquer contrato vinculado — `count > 0` **sem filtro de status**. [VERIFIED: migration 20250101000000] A FK `contratos.locatario_id` é `REFERENCES public.locatarios(id)` sem `ON DELETE CASCADE` — qualquer contrato vinculado (independente de status) bloqueia o DELETE.
 
 **Sinais de alerta:** Delete falha mesmo após encerrar contrato.
 
@@ -421,19 +421,19 @@ async function handleSalvarUnidade(id) {
 
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
-| A1 | A FK constraint em `contratos.locatario_id` não tem ON DELETE CASCADE — um delete em `locatarios` falha se houver contratos vinculados | Common Pitfalls 3 | Se tiver CASCADE, a FK não bloqueia e o problema de BUG-01 é só o guard de status. Verificar `20250101000000_initial_schema.sql` antes de implementar. |
+| ~~A1~~ | ~~A FK constraint em `contratos.locatario_id` não tem ON DELETE CASCADE~~  **VERIFICADO** — `REFERENCES public.locatarios(id)` sem CASCADE confirmado em `20250101000000_initial_schema.sql` | Common Pitfalls 3 | N/A — fato confirmado |
 | A2 | `supabase.auth.verifyOtp()` retorna `{ data: { user }, error }` com o user populado no sucesso | Code Examples BUG-03 | Se `data.user` for null, usar fallback por email |
 
-**Se a tabela não estiver vazia:** Apenas A1 e A2 requerem confirmação — verificar o schema de FK antes de implementar BUG-01.
+**Apenas A2 requer atenção em execução** — A1 foi verificado. Se `data.user` for null após verifyOtp, usar fallback por email.
 
 ---
 
 ## Open Questions
 
-1. **FK constraint em contratos.locatario_id tem CASCADE?**
-   - O que sabemos: a migration inicial (`20250101000000_initial_schema.sql`) não foi lida neste research
-   - O que está incerto: se tem `ON DELETE CASCADE` ou `ON DELETE RESTRICT`
-   - Recomendação: O executor deve ler a migration antes de implementar — se tiver CASCADE, o check de count não é necessário para evitar FK violation (mas ainda é boa prática retornar erro descritivo)
+1. **FK constraint em contratos.locatario_id tem CASCADE? — RESOLVIDO**
+   - [VERIFIED: migration 20250101000000_initial_schema.sql linha 51] `locatario_id uuid NOT NULL REFERENCES public.locatarios(id)` — sem `ON DELETE` clause = PostgreSQL padrão `NO ACTION` (equivalente a `RESTRICT`)
+   - Conclusão: qualquer DELETE em `locatarios` com contratos vinculados **falha com FK violation**, independente do status do contrato
+   - O count-check antes do delete é necessário e correto conforme D-02
 
 2. **`supabase.auth.verifyOtp` retorna user no mesmo objeto?**
    - O que sabemos: o código atual desestrutura apenas `{ error }` (linha 15 do route.js)
@@ -449,7 +449,7 @@ Esta fase é puramente de correção de código e configuração — sem depend�
 | Dependency | Required By | Available | Version | Fallback |
 |------------|------------|-----------|---------|----------|
 | @supabase/supabase-js | BUG-03 (supabaseAdmin) | ✓ | ^2.99.2 | — |
-| next/link | BUG-04 | ✓ | ^16.2.4 | — |
+| next/link | BUG-04 | ✓ — [VERIFIED: UnidadesPublicas.js linhas 1-8] import ausente no arquivo, deve ser adicionado | ^16.2.4 | — |
 
 **Missing dependencies with no fallback:** nenhuma
 
@@ -483,9 +483,9 @@ Esta fase é puramente de correção de código e configuração — sem depend�
 
 ### Wave 0 Gaps
 
-Os arquivos E2E existem mas podem não ter testes específicos para estes bugs:
-- [ ] `e2e/crud.spec.js` — verificar se cobre o cenário de revogar convite (BUG-01) e erro de delete/edit separados (BUG-02)
-- [ ] `e2e/auth-confirm.spec.js` — verificar se cobre atualização de status_convite após aceite (BUG-03)
+[VERIFIED: spec files lidos] Status real dos gaps:
+- [ ] `e2e/crud.spec.js` — cobre CRUD de locatários (convidar/editar) mas **não cobre revogar convite (BUG-01)** nem erro de delete/edit separados (BUG-02). Wave 0 deve adicionar esses cenários.
+- [ ] `e2e/auth-confirm.spec.js` — cobre apenas redirecionamentos de erro (token inválido / sem params). **Não cobre atualização de status_convite (BUG-03).** Wave 0 deve adicionar cenário de aceite de convite.
 - [ ] `e2e/dashboard-smoke.spec.js` — adicionar verificação do link ← Voltar em /unidades (BUG-04)
 
 ---
