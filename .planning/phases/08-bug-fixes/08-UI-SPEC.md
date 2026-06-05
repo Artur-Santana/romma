@@ -1,7 +1,7 @@
 ---
 phase: 8
 slug: bug-fixes
-status: draft
+status: approved
 shadcn_initialized: true
 preset: radix-lyra
 created: 2026-06-05
