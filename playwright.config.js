@@ -20,8 +20,8 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   ],
 
-  globalSetup: './e2e/global-setup.js',
-  globalTeardown: './e2e/global-teardown.js',
+  globalSetup: './e2e/global-setup.mjs',
+  globalTeardown: './e2e/global-teardown.mjs',
 
   webServer: {
     // Vars explícitas no comando garantem override de .env.local no build do Next.js
