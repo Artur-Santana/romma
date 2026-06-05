@@ -67,3 +67,4 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-05-21: Phase 1 planned. 8 planos em 5 waves. Research + Pattern Mapping + Verification completos.
 - 2026-06-03: Milestone v1.0 shipped. 7 fases, 29 planos. Deployed em romma-alpha.vercel.app. Banca em 15 dias.
 - 2026-06-03: Completed quick task 260603-o6t: corrija os bugs dos testes agora
+- 2026-06-05: Extracted learnings from quick task 260603-o6t
