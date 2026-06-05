@@ -1,0 +1,117 @@
+# Requirements — Romma v1.1 Polish & Completeness
+
+*Milestone v1.1 | Started: 2026-06-05*
+
+---
+
+## v1 Requirements
+
+### Bug Fixes
+
+- [ ] **BUG-01:** Proprietário consegue revogar acesso de Locatário sem erro (ação completa sem FK violation ou guard incorreto)
+- [ ] **BUG-02:** Editar unidade não exibe erro de FK constraint (separar estado de erro entre edit e delete em Unidades.js)
+- [ ] **BUG-03:** Status de convite do Locatário (pendente/aceito) exibe corretamente no dashboard
+- [ ] **BUG-04:** Página /unidades tem link funcional de volta para home (/)
+
+### Auth
+
+- [ ] **AUTH-01:** Proprietário pode criar conta via tela de signup em `/signup` (email + senha, instância única)
+- [ ] **AUTH-02:** Segunda tentativa de signup é bloqueada com mensagem clara ("Instância já configurada")
+
+### Landing Page
+
+- [ ] **LP-01:** Landing page tem CTA primário funcional "Ver Unidades" → `/unidades`
+- [ ] **LP-02:** Landing page tem CTA secundário funcional "Acessar Dashboard" → `/login`
+- [ ] **LP-03:** Todos os botões existentes na LP têm destinos corretos e funcionam
+
+### Páginas Públicas
+
+- [ ] **PUB-01:** Página /unidades redesenhada (card: nome unidade, edifício, área m², preço ou "Consulte o Proprietário", badge Disponível)
+- [ ] **PUB-02:** Página /unidades tem empty state quando zero unidades disponíveis
+- [ ] **PUB-03:** Página /unidades é mobile-friendly (tap targets ≥44px, sem overflow horizontal)
+
+### UX / Escala Visual
+
+- [ ] **UX-01:** Dashboard desktop tem escala de fontes e espaçamento adequados (body ≥14px, h1 ≥24px, elementos sem excesso de espaço negativo)
+- [ ] **UX-02:** Dashboard mobile tem sidebar colapsável → MobileTopBar + MobileBottomNav (DashboardShell Client Component)
+- [ ] **UX-03:** Todas as 4 abas do dashboard são usáveis em mobile (Unidades, Contratos, Parcelas, Locatários)
+- [ ] **UX-04:** Portal do Locatário é usável em mobile
+
+### Animações & Feedback
+
+- [ ] **ANIM-01:** Ações de encerramento/cancelamento de contrato têm animação de saída do item (fade-out, ~200ms)
+- [ ] **ANIM-02:** Ações de delete/revoke têm animação de saída do item da lista
+- [ ] **ANIM-03:** Toast Sonner confirma sucesso de ações principais (criar, encerrar, cancelar, revogar, pagar parcela)
+
+### Tema
+
+- [ ] **THEME-01:** Sistema de temas via `[data-theme]` + CSS vars implementado e funcional
+- [ ] **THEME-02:** Uma paleta alternativa ao Obsidian Blueprint disponível (paleta definida durante a fase)
+
+### Testes
+
+- [ ] **TEST-01:** Testes unitários para Server Actions críticas (auth signup, revogar acesso, editar/deletar unidade, encerrar/cancelar contrato)
+- [ ] **TEST-02:** Suite E2E expandida cobrindo novos fluxos (signup flow, /unidades redesign, mobile viewport 375px, toast feedback)
+
+### Auditoria por Tela
+
+- [ ] **AUDIT-01:** Cada fase inclui deep-dive isolado das telas trabalhadas — todas as funcionalidades validadas antes de fechar a fase
+
+### Correções Emergentes
+
+- [ ] **FIX-01:** Corrections e ajustes descobertos durante revisão página a página são registrados, priorizados e incorporados no milestone em andamento
+
+---
+
+## Future Requirements
+
+*(Itens identificados mas fora do escopo v1.1)*
+
+- Filter client-side por edifício/preço em /unidades — MEDIUM complexity, defer pós-banca
+- Paleta de tema definida em DB por usuário (toggle persistente) — pós-TCC
+- Dark mode completo (Tailwind v4 dark variant reconfiguration) — pós-TCC
+- PWA / mobile app nativa — pós-TCC
+
+---
+
+## Out of Scope
+
+- Dream scope D1 (multi-usuário Locatário / funcionários)
+- Dream scope D2 (reservas de salas em Realtime)
+- Dream scope D3 (QR Code de acesso)
+- Integração com gateway de pagamento
+- Geração de PDF de contrato
+- Múltiplos Proprietários por instância
+- Cálculo automático de multas/reajustes
+
+---
+
+## Traceability
+
+| REQ-ID | Phase | Plan |
+|--------|-------|------|
+| BUG-01 | Phase 8 | TBD |
+| BUG-02 | Phase 8 | TBD |
+| BUG-03 | Phase 8 | TBD |
+| BUG-04 | Phase 8 | TBD |
+| LP-01 | Phase 9 | TBD |
+| LP-02 | Phase 9 | TBD |
+| LP-03 | Phase 9 | TBD |
+| PUB-01 | Phase 9 | TBD |
+| PUB-02 | Phase 9 | TBD |
+| PUB-03 | Phase 9 | TBD |
+| AUTH-01 | Phase 10 | TBD |
+| AUTH-02 | Phase 10 | TBD |
+| UX-01 | Phase 11 | TBD |
+| THEME-01 | Phase 11 | TBD |
+| THEME-02 | Phase 11 | TBD |
+| UX-02 | Phase 12 | TBD |
+| UX-03 | Phase 12 | TBD |
+| UX-04 | Phase 12 | TBD |
+| ANIM-01 | Phase 13 | TBD |
+| ANIM-02 | Phase 13 | TBD |
+| ANIM-03 | Phase 13 | TBD |
+| TEST-01 | Phase 14 | TBD |
+| TEST-02 | Phase 14 | TBD |
+| AUDIT-01 | All (8-14) — cross-cutting | TBD |
+| FIX-01 | All (8-14) — cross-cutting | TBD |

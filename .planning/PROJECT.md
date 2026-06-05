@@ -103,14 +103,26 @@ Projeto TCC de Artur Santana. Stack: Next.js 16 App Router (JS), Tailwind v4, sh
 | Skeleton loading via shadcn + loading.js | Next.js App Router Suspense boundary + shadcn Skeleton — padrão sem overhead | ✓ Good |
 | getTodayLocal vs toISOString | UTC-3 causava alerta contratos vencendo com 1 dia de atraso — fix necessário | ✓ Good |
 
+## Current Milestone: v1.1 Polish & Completeness
+
+**Goal:** Fechar gaps funcionais e de UX identificados no v1.0 — signup do Proprietário, bugs críticos, redesign das páginas públicas, mobile, escala e animações — com deep-dive por tela em cada fase.
+
+**Target features:**
+- Signup Proprietário — tela de cadastro para primeiro acesso (instância única)
+- Landing Page — CTAs faltando + botões quebrados corrigidos
+- Página /unidades — redesign visual + bug de navegação (voltar para home)
+- Mobile área logada — layout e navegação quebrados
+- Escala desktop — fontes e elementos subdimensionados no dashboard
+- Animações — encerramento de contratos, revogar acesso e outras ações
+- Bug: revogar acesso — não está funcionando
+- Bug: editar unidades — FK constraint error (contratos_unidade_id_fkey)
+- Variações de tema — testar paletas de cores alternativas
+- Deep-dive por tela — cada fase inclui auditoria isolada da(s) tela(s) trabalhadas
+
 ## Evolution
 
 **v1.0 shipped 2026-06-03.** Sistema demonstrável ao vivo para banca em 18/06/2026.
-
-Próximos passos pós-banca:
-1. Requirements deferred (VIS-04, DEMO-02, DEMO-03)
-2. Tech debt: atomicidade criarContrato+gerarParcelas
-3. Dream scope (D1, D2, D3) se projeto continuar
+**v1.1 started 2026-06-05.** Polish & Completeness — fechar gaps identificados pós-banca.
 
 ---
-*Last updated: 2026-06-03 after v1.0 milestone*
+*Last updated: 2026-06-05 after v1.1 milestone start*
