@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: TCC Finalization
-status: shipped
-last_updated: 2026-06-03T18:10:00.000Z
+milestone: v1.1
+milestone_name: Polish & Completeness
+status: planning
+last_updated: "2026-06-05T21:52:39.540Z"
+last_activity: 2026-06-05
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 29
-  completed_plans: 29
-  percent: 100
-stopped_at: Milestone v1.0 shipped 2026-06-03
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State — Romma
@@ -68,3 +68,10 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-03: Milestone v1.0 shipped. 7 fases, 29 planos. Deployed em romma-alpha.vercel.app. Banca em 15 dias.
 - 2026-06-03: Completed quick task 260603-o6t: corrija os bugs dos testes agora
 - 2026-06-05: Extracted learnings from quick task 260603-o6t
+
+## Current Position
+
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-06-05 — Milestone v1.1 started
