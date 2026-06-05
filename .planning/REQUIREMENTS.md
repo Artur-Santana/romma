@@ -88,8 +88,30 @@
 
 ## Traceability
 
-*(Preenchido pelo roadmapper)*
-
 | REQ-ID | Phase | Plan |
 |--------|-------|------|
-| — | — | — |
+| BUG-01 | Phase 8 | TBD |
+| BUG-02 | Phase 8 | TBD |
+| BUG-03 | Phase 8 | TBD |
+| BUG-04 | Phase 8 | TBD |
+| LP-01 | Phase 9 | TBD |
+| LP-02 | Phase 9 | TBD |
+| LP-03 | Phase 9 | TBD |
+| PUB-01 | Phase 9 | TBD |
+| PUB-02 | Phase 9 | TBD |
+| PUB-03 | Phase 9 | TBD |
+| AUTH-01 | Phase 10 | TBD |
+| AUTH-02 | Phase 10 | TBD |
+| UX-01 | Phase 11 | TBD |
+| THEME-01 | Phase 11 | TBD |
+| THEME-02 | Phase 11 | TBD |
+| UX-02 | Phase 12 | TBD |
+| UX-03 | Phase 12 | TBD |
+| UX-04 | Phase 12 | TBD |
+| ANIM-01 | Phase 13 | TBD |
+| ANIM-02 | Phase 13 | TBD |
+| ANIM-03 | Phase 13 | TBD |
+| TEST-01 | Phase 14 | TBD |
+| TEST-02 | Phase 14 | TBD |
+| AUDIT-01 | All (8-14) — cross-cutting | TBD |
+| FIX-01 | All (8-14) — cross-cutting | TBD |
