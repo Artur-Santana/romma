@@ -89,8 +89,8 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     })
 
     test('editar unidade', async ({ page }) => {
-      // Ancorar no card da unidade criada
-      await page.getByText('E2E-Sala 301').locator('..').getByRole('button', { name: 'Editar' }).click()
+      // Ancorar no card da unidade criada — locator('../..') sobe 2 níveis: span → info div → row div
+      await page.getByText('E2E-Sala 301').locator('../..').getByRole('button', { name: 'Editar' }).click()
       // Após clicar Editar, o nome vira input com value preenchido
       await page.fill('input[value="E2E-Sala 301"]', 'E2E-Sala 301 Editada')
       await page.getByRole('button', { name: 'Salvar' }).click()
@@ -98,13 +98,52 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     })
 
     test('deletar unidade', async ({ page }) => {
-      await page.getByText('E2E-Sala 301 Editada').locator('..').getByRole('button', { name: 'Deletar' }).click()
+      await page.getByText('E2E-Sala 301 Editada').locator('../..').getByRole('button', { name: 'Remover' }).click()
       await expect(page.getByText('E2E-Sala 301 Editada')).toHaveCount(0)
     })
   })
 
   // ------------------------------------------------------------------ Locatários
   test.describe('Locatários', () => {
+    let locatarioUserId, locatarioId
+
+    test.beforeAll(async () => {
+      // Criar auth user confirmado para o teste de edição (invite cria status pendente → sem botão Editar)
+      const { data: list } = await admin.auth.admin.listUsers()
+      const existing = list.users.find(u => u.email === 'e2e-edit-loc@test.romma.local')
+      if (existing) {
+        locatarioUserId = existing.id
+      } else {
+        const { data, error } = await admin.auth.admin.createUser({
+          email: 'e2e-edit-loc@test.romma.local',
+          password: 'Test1234!',
+          email_confirm: true,
+        })
+        if (error) throw error
+        locatarioUserId = data.user.id
+      }
+      // Limpar registros stale
+      const { data: stale } = await admin.from('locatarios').select('id').eq('usuario_id', locatarioUserId)
+      if (stale?.length) await admin.from('locatarios').delete().in('id', stale.map(l => l.id))
+      // Criar locatário confirmado (status_convite='aceito' → mostra botão Editar)
+      const { data: loc, error: errL } = await admin.from('locatarios').insert({
+        usuario_id: locatarioUserId,
+        nome_razao_social: 'E2E-Locatário Teste',
+        tipo: 'pf',
+        documento: '12345678901',
+        email: 'e2e-edit-loc@test.romma.local',
+        telefone: '11999999999',
+        status_convite: 'aceito',
+      }).select().single()
+      if (errL) throw errL
+      locatarioId = loc.id
+    })
+
+    test.afterAll(async () => {
+      if (locatarioId) await admin.from('locatarios').delete().eq('id', locatarioId)
+      if (locatarioUserId) await admin.auth.admin.deleteUser(locatarioUserId)
+    })
+
     test.beforeEach(async ({ page }) => {
       await login(page, PROPRIETARIO)
       await page.waitForURL('**/dashboard', { timeout: 15_000 })
@@ -113,21 +152,25 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     })
 
     test('convidar locatário', async ({ page }) => {
-      const email = `e2e-${Date.now()}@test.romma.local`
-      await page.fill('input[placeholder="Nome"]', 'E2E-Locatário Teste')
-      await page.selectOption('select', 'pf')
-      await page.fill('input[placeholder="Documento"]', '12345678901')
-      await page.fill('input[type="email"]', email)
-      await page.fill('input[placeholder="Telefone "]', '11999999999')
-      await page.click('button[type="submit"]')
-      // D-03 reinterpretado: confirmação implícita = locatário aparece na lista
-      await expect(page.getByText('E2E-Locatário Teste')).toBeVisible({ timeout: 10_000 })
+      const email = `e2e-invite-${Date.now()}@test.romma.local`
+      // Abrir modal de convite
+      await page.getByRole('button', { name: 'Convidar →' }).click()
+      // Ordem dos campos no modal: Email → Nome → Tipo → Documento → Telefone
+      await page.locator('input[type="email"]').fill(email)
+      await page.locator('input[type="text"]').first().fill('E2E-Locatário Invite')
+      await page.getByRole('button', { name: 'Pessoa Física' }).click()
+      await page.locator('input[placeholder="000.000.000-00"]').fill('12345678901')
+      await page.locator('input[type="tel"]').fill('11999999999')
+      await page.locator('button[type="submit"]').click()
+      await expect(page.getByText('E2E-Locatário Invite')).toBeVisible({ timeout: 10_000 })
     })
 
     test('editar locatário', async ({ page }) => {
-      await page.getByText('E2E-Locatário Teste').locator('..').getByRole('button', { name: 'Editar' }).click()
-      await page.fill('input[value="E2E-Locatário Teste"]', 'E2E-Locatário Editado')
-      await page.getByRole('button', { name: 'Salvar' }).click()
+      // locator('../..') sobe 2 níveis: span → name+avatar div → grid row
+      await page.getByText('E2E-Locatário Teste').locator('../..').getByRole('button', { name: 'Editar' }).click()
+      // Modal de edição: primeiro input[type="text"] é Nome / Razão Social
+      await page.locator('input[type="text"]').first().fill('E2E-Locatário Editado')
+      await page.getByRole('button', { name: 'Salvar →' }).click()
       await expect(page.getByText('E2E-Locatário Editado')).toBeVisible({ timeout: 10_000 })
     })
   })
@@ -251,7 +294,8 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
 
       await page.getByRole('button', { name: 'Criar Contrato' }).click()
       // handleCriarContrato chama gerarParcelas automaticamente — timeout maior
-      await expect(page.getByText('E2E-Locatário Contratos')).toBeVisible({ timeout: 15_000 })
+      // span.font-medium: escopo à linha da lista, evita match no Select trigger do formulário
+      await expect(page.locator('span.font-medium', { hasText: 'E2E-Locatário Contratos' })).toBeVisible({ timeout: 15_000 })
 
       // Verificar via admin que a unidade ficou alugada
       const { data: uni } = await admin.from('unidades').select('status').eq('id', unidadeId).single()
@@ -259,14 +303,13 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     })
 
     test('cancelar contrato via ConfirmDialog e verificar unidade volta a disponivel', async ({ page }) => {
-      // Localizar linha do contrato E2E-Locatário Contratos e clicar CANC
-      const linhaContrato = page.getByText('E2E-Locatário Contratos').locator('..').locator('..')
-      await linhaContrato.getByRole('button', { name: 'CANC' }).click()
+      // Seed tem contrato ativo (Locatário Teste) — scopar ao row E2E para não ambiguar CANC
+      await page.locator('span.font-medium', { hasText: 'E2E-Locatário Contratos' }).locator('../..').getByRole('button', { name: 'CANC' }).click()
 
       // Aguardar ConfirmDialog
       await page.getByText('Cancelar contrato?').waitFor({ timeout: 5_000 })
       await page.getByRole('button', { name: 'Cancelar Contrato' }).click()
-      await expect(page.getByText('cancelado')).toBeVisible({ timeout: 10_000 })
+      await expect(page.getByText('Cancelado', { exact: true })).toBeVisible({ timeout: 10_000 })
 
       // Verificar via admin que a unidade voltou a disponivel
       const { data: uni } = await admin.from('unidades').select('status').eq('id', unidadeId).single()
@@ -287,7 +330,8 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       await page.locator('input[type="date"]').nth(1).fill('2027-06-01')
 
       await page.getByRole('button', { name: 'Criar Contrato' }).click()
-      await expect(page.getByText('E2E-Locatário Contratos')).toBeVisible({ timeout: 15_000 })
+      // Aguardar form fechar — setShowForm(false) só ocorre após sucesso da Server Action
+      await expect(page.getByRole('button', { name: 'Novo Contrato' })).toBeVisible({ timeout: 15_000 })
 
       // Capturar id do contrato ativo mais recente para E2E-Sala Contrato
       const { data: contratos } = await admin
@@ -308,14 +352,13 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       await page.reload()
       await page.waitForURL('**/dashboard/contratos', { timeout: 10_000 })
 
-      // Clicar ENC na linha do contrato (agora visível por data_fim < hoje)
-      const linhaContrato = page.getByText('E2E-Locatário Contratos').locator('..').locator('..')
-      await linhaContrato.getByRole('button', { name: 'ENC' }).click()
+      // Clicar ENC — único botão ENC visível (só o contrato com data_fim no passado)
+      await page.getByRole('button', { name: 'ENC' }).click()
 
       // Aguardar ConfirmDialog de encerramento
       await page.getByText('Encerrar contrato?').waitFor({ timeout: 5_000 })
       await page.getByRole('button', { name: 'Encerrar' }).click()
-      await expect(page.getByText('encerrado')).toBeVisible({ timeout: 10_000 })
+      await expect(page.getByText('Encerrado', { exact: true })).toBeVisible({ timeout: 10_000 })
 
       // Verificar via admin que a unidade voltou a disponivel
       const { data: uni } = await admin.from('unidades').select('status').eq('id', unidadeId).single()
