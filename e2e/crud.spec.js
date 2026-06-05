@@ -303,13 +303,13 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     })
 
     test('cancelar contrato via ConfirmDialog e verificar unidade volta a disponivel', async ({ page }) => {
-      // Clicar CANC — único botão CANC visível (só um contrato ativo sem vencimento)
-      await page.getByRole('button', { name: 'CANC' }).click()
+      // Seed tem contrato ativo (Locatário Teste) — scopar ao row E2E para não ambiguar CANC
+      await page.locator('span.font-medium', { hasText: 'E2E-Locatário Contratos' }).locator('../..').getByRole('button', { name: 'CANC' }).click()
 
       // Aguardar ConfirmDialog
       await page.getByText('Cancelar contrato?').waitFor({ timeout: 5_000 })
       await page.getByRole('button', { name: 'Cancelar Contrato' }).click()
-      await expect(page.getByText('cancelado')).toBeVisible({ timeout: 10_000 })
+      await expect(page.getByText('Cancelado', { exact: true })).toBeVisible({ timeout: 10_000 })
 
       // Verificar via admin que a unidade voltou a disponivel
       const { data: uni } = await admin.from('unidades').select('status').eq('id', unidadeId).single()
@@ -358,7 +358,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       // Aguardar ConfirmDialog de encerramento
       await page.getByText('Encerrar contrato?').waitFor({ timeout: 5_000 })
       await page.getByRole('button', { name: 'Encerrar' }).click()
-      await expect(page.getByText('encerrado')).toBeVisible({ timeout: 10_000 })
+      await expect(page.getByText('Encerrado', { exact: true })).toBeVisible({ timeout: 10_000 })
 
       // Verificar via admin que a unidade voltou a disponivel
       const { data: uni } = await admin.from('unidades').select('status').eq('id', unidadeId).single()

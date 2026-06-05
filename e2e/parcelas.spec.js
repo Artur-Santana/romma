@@ -138,8 +138,9 @@ test.describe('TEST-02 — Parcelas', () => {
     await page.getByRole('button', { name: 'Criar Contrato' }).click()
 
     // Aguardar com timeout estendido — criação envolve chamada à Edge Function
+    // span.font-medium: escopo à linha da lista, evita match no Select trigger do formulário
     await expect(
-      page.getByText('E2E-Locatário Parcelas')
+      page.locator('span.font-medium', { hasText: 'E2E-Locatário Parcelas' })
     ).toBeVisible({ timeout: 15_000 })
 
     // Capturar o contratoId via admin para navegar para a página de parcelas
