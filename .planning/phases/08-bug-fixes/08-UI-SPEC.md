@@ -47,17 +47,18 @@ Exceções: nenhuma nova exceção nesta fase.
 
 ## Typography
 
-Escala real em uso no codebase — não modificada nesta fase. Executor deve usar os mesmos tokens dos componentes existentes ao inserir novos elementos.
+Escala consolidada em 4 tamanhos e 2 pesos — não modificada nesta fase. Executor deve usar os mesmos tokens dos componentes existentes ao inserir novos elementos.
 
 | Role | Size | Weight | Line Height | Token |
 |------|------|--------|-------------|-------|
-| Eyebrow / Label mono | 10px | 700 | 1.2 | `font-mono text-[10px] tracking-[1px] uppercase` |
-| Body small / status | 11px | 400–700 | 1.4 | `font-mono text-[11px]` |
-| Body | 12–13px | 400–500 | 1.5 | `font-body text-[12px]` / `text-[13px]` |
-| Heading card | 18px | 700 | 1.2 | `font-display font-bold text-[18px] tracking-[-0.6px]` |
-| Display / h1 público | 32px | 700 | 1.0 | `font-body font-bold text-[32px] tracking-[-1.6px]` |
+| label | 11px | 700 | 1.2 | `font-mono text-[11px] tracking-[1px] uppercase font-bold` |
+| body | 13px | 400 | 1.5 | `font-body text-[13px]` |
+| heading-card | 18px | 700 | 1.2 | `font-display font-bold text-[18px] tracking-[-0.6px]` |
+| display | 32px | 700 | 1.0 | `font-body font-bold text-[32px] tracking-[-1.6px]` |
 
-> Fonte: leitura direta de `Unidades.js`, `LocatariosDesktop.js`, `UnidadesPublicas.js`, `UnidadeCard.js`.
+Pesos autorizados: **400** (regular) e **700** (bold). Peso 500 não utilizado nesta fase.
+
+> Fonte: leitura direta de `Unidades.js`, `LocatariosDesktop.js`, `UnidadesPublicas.js`, `UnidadeCard.js`. Tamanhos 10px e 12px consolidados nos roles mais próximos (11px e 13px respectivamente).
 
 ---
 
@@ -87,8 +88,9 @@ Accent reservado para: CTAs primários (bg-indigo), bordas de formulário de con
 **Elemento UI afetado:** Botão "REVOGAR" na coluna Ações, visível apenas quando `isPendente === true`.
 
 **Contrato de interação:**
-- Botão: `variant="ghost"`, `font-mono text-[10px] text-danger-fg uppercase tracking-[0.5px] font-bold`
+- Botão: `variant="ghost"`, `font-mono text-[11px] text-danger-fg uppercase tracking-[0.5px] font-bold`
 - Label: `REVOGAR` (sem alteração de copy)
+- **Confirmação:** ausente — comportamento intencional, mantendo padrão pré-existente do codebase. Ação executada diretamente ao clicar.
 - Estado de sucesso: locatário some da lista (re-fetch via `getLocatarios()`)
 - Estado de erro: substituir `alert()` por `setErro(erroMessage)` renderizado na tabela. Exibir em `font-mono text-[11px] text-danger-fg` logo abaixo do header da tabela.
 
@@ -99,7 +101,7 @@ Accent reservado para: CTAs primários (bg-indigo), bordas de formulário de con
 
 **Slot de erro de delete (nível de lista — Unidades.js):**
 ```
-bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg mb-4
+bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[13px] text-danger-fg mb-4
 ```
 Posição: imediatamente acima da lista de UnidadeCards (`div.flex.flex-col.gap-0.border`).
 Copy: texto da mensagem retornada por `result.erroMessage`.
