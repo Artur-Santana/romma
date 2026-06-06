@@ -175,6 +175,200 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     })
   })
 
+  // --------------------------------------------------------- BUG-01 / BUG-02 Fixes
+  test.describe('BUG-01 — Revogar Acesso de Locatário', () => {
+    let revogarUserId, revogarLocatarioId
+    let comContratoUserId, comContratoLocatarioId, comContratoEdificioId, comContratoUnidadeId, comContratoId
+
+    test.beforeAll(async () => {
+      // --- Locatário pendente SEM contrato (para cenário de revogar sucesso) ---
+      const { data: list } = await admin.auth.admin.listUsers()
+      const existingRevoke = list.users.find(u => u.email === 'e2e-revogar@test.romma.local')
+      if (existingRevoke) {
+        revogarUserId = existingRevoke.id
+      } else {
+        const { data, error } = await admin.auth.admin.createUser({
+          email: 'e2e-revogar@test.romma.local',
+          password: 'Test1234!',
+          email_confirm: true,
+        })
+        if (error) throw error
+        revogarUserId = data.user.id
+      }
+      // Limpar registros stale e criar locatário pendente sem contrato
+      const { data: stale } = await admin.from('locatarios').select('id').eq('usuario_id', revogarUserId)
+      if (stale?.length) {
+        const ids = stale.map(l => l.id)
+        const { data: cExist } = await admin.from('contratos').select('id').in('locatario_id', ids)
+        if (cExist?.length) {
+          await admin.from('parcelas').delete().in('contrato_id', cExist.map(c => c.id))
+          await admin.from('contratos').delete().in('id', cExist.map(c => c.id))
+        }
+        await admin.from('locatarios').delete().in('id', ids)
+      }
+      const { data: loc, error: errL } = await admin.from('locatarios').insert({
+        usuario_id: revogarUserId,
+        nome_razao_social: 'E2E-Locatário Revogar',
+        tipo: 'pf',
+        documento: '98765432100',
+        email: 'e2e-revogar@test.romma.local',
+        telefone: '11777777777',
+        status_convite: 'pendente',
+      }).select().single()
+      if (errL) throw errL
+      revogarLocatarioId = loc.id
+
+      // --- Locatário pendente COM contrato (para cenário de erro FK) ---
+      const existingComContrato = list.users.find(u => u.email === 'e2e-revogar-fk@test.romma.local')
+      if (existingComContrato) {
+        comContratoUserId = existingComContrato.id
+      } else {
+        const { data: d2, error: e2 } = await admin.auth.admin.createUser({
+          email: 'e2e-revogar-fk@test.romma.local',
+          password: 'Test1234!',
+          email_confirm: true,
+        })
+        if (e2) throw e2
+        comContratoUserId = d2.user.id
+      }
+      const { data: stale2 } = await admin.from('locatarios').select('id').eq('usuario_id', comContratoUserId)
+      if (stale2?.length) {
+        const ids2 = stale2.map(l => l.id)
+        const { data: cExist2 } = await admin.from('contratos').select('id').in('locatario_id', ids2)
+        if (cExist2?.length) {
+          await admin.from('parcelas').delete().in('contrato_id', cExist2.map(c => c.id))
+          await admin.from('contratos').delete().in('id', cExist2.map(c => c.id))
+        }
+        await admin.from('locatarios').delete().in('id', ids2)
+      }
+      const { data: loc2, error: errL2 } = await admin.from('locatarios').insert({
+        usuario_id: comContratoUserId,
+        nome_razao_social: 'E2E-Locatário FK',
+        tipo: 'pj',
+        documento: '12345678000111',
+        email: 'e2e-revogar-fk@test.romma.local',
+        telefone: '11666666666',
+        status_convite: 'pendente',
+      }).select().single()
+      if (errL2) throw errL2
+      comContratoLocatarioId = loc2.id
+
+      // Criar edifício + unidade para o contrato
+      const { data: edif, error: errEd } = await admin.from('edificios').insert({
+        nome: 'E2E-Edifício BUG01',
+        endereco: 'Rua BUG01, 1',
+      }).select().single()
+      if (errEd) throw errEd
+      comContratoEdificioId = edif.id
+
+      const { data: uni, error: errUni } = await admin.from('unidades').insert({
+        edificio_id: comContratoEdificioId,
+        nome: 'E2E-Sala BUG01',
+        area_m2: 20,
+        valor_mensal: 1000,
+        valor_visivel: true,
+        status: 'alugada',
+      }).select().single()
+      if (errUni) throw errUni
+      comContratoUnidadeId = uni.id
+
+      const hoje = new Date().toISOString().split('T')[0]
+      const { data: contrato, error: errC } = await admin.from('contratos').insert({
+        unidade_id: comContratoUnidadeId,
+        locatario_id: comContratoLocatarioId,
+        data_inicio: hoje,
+        data_fim: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        status: 'ativo',
+        observacoes: '',
+      }).select().single()
+      if (errC) throw errC
+      comContratoId = contrato.id
+    })
+
+    test.afterAll(async () => {
+      // Limpar locatário sem contrato
+      if (revogarLocatarioId) await admin.from('locatarios').delete().eq('id', revogarLocatarioId)
+      if (revogarUserId) await admin.auth.admin.deleteUser(revogarUserId).catch(() => {})
+
+      // Limpar locatário com contrato
+      if (comContratoId) {
+        await admin.from('parcelas').delete().eq('contrato_id', comContratoId)
+        await admin.from('contratos').delete().eq('id', comContratoId)
+      }
+      if (comContratoLocatarioId) await admin.from('locatarios').delete().eq('id', comContratoLocatarioId)
+      if (comContratoUserId) await admin.auth.admin.deleteUser(comContratoUserId).catch(() => {})
+      if (comContratoUnidadeId) await admin.from('unidades').delete().eq('id', comContratoUnidadeId)
+      if (comContratoEdificioId) await admin.from('edificios').delete().eq('id', comContratoEdificioId)
+    })
+
+    test.beforeEach(async ({ page }) => {
+      await login(page, PROPRIETARIO)
+      await page.waitForURL('**/dashboard', { timeout: 15_000 })
+      await page.goto('/dashboard/locatarios')
+      await page.waitForURL('**/dashboard/locatarios', { timeout: 10_000 })
+    })
+
+    test('BUG-01 — revogar locatário pendente sem contrato remove a linha', async ({ page }) => {
+      // O locatário pendente sem contrato deve ter o botão REVOGAR visível
+      const row = page.locator('*').filter({ hasText: 'E2E-Locatário Revogar' }).first()
+      await expect(row).toBeVisible({ timeout: 10_000 })
+
+      // Clicar REVOGAR — escopo à linha do E2E-Locatário Revogar para evitar ambiguidade com outros pendentes
+      await page.getByText('E2E-Locatário Revogar').locator('../..').getByRole('button', { name: 'REVOGAR' }).click()
+
+      // Após revogar, a linha deve sumir da tabela
+      await expect(page.getByText('E2E-Locatário Revogar')).toHaveCount(0, { timeout: 10_000 })
+    })
+
+    test('BUG-01 — erro inline ao revogar locatário com contrato vinculado', async ({ page }) => {
+      // O locatário com contrato ativo deve ter o botão REVOGAR visível (status_convite='pendente')
+      const row = page.locator('*').filter({ hasText: 'E2E-Locatário FK' }).first()
+      await expect(row).toBeVisible({ timeout: 10_000 })
+
+      // Clicar REVOGAR no locatário com contrato (localiza via ancestral da linha)
+      await page.getByText('E2E-Locatário FK').locator('../..').getByRole('button', { name: 'REVOGAR' }).click()
+
+      // A mensagem de erro deve aparecer inline na tabela (NÃO via alert/dialog do browser)
+      // Este teste estará RED no código atual (usa alert()) — passará após o fix BUG-01
+      await expect(page.getByText('Locatário tem contratos vinculados — encerre-os antes de revogar.')).toBeVisible({ timeout: 10_000 })
+    })
+  })
+
+  test.describe('BUG-02 — Estado de Erro Separado (delete vs edit)', () => {
+    test.beforeEach(async ({ page }) => {
+      await login(page, PROPRIETARIO)
+      await page.waitForURL('**/dashboard', { timeout: 15_000 })
+      await page.goto('/dashboard/unidades')
+      await page.waitForURL('**/dashboard/unidades', { timeout: 10_000 })
+    })
+
+    test('BUG-02 — erro de delete não vaza para o form de edição', async ({ page }) => {
+      // A unidade seedada 'Sala 101' tem status 'alugada' com contrato ativo (FK bloqueia delete)
+      // Localizar o botão Remover da unidade 'Sala 101'
+      const sala101Row = page.getByText('Sala 101').locator('../..')
+      await expect(sala101Row).toBeVisible({ timeout: 10_000 })
+
+      // Tentar deletar Sala 101 (deve falhar por FK)
+      await sala101Row.getByRole('button', { name: 'Remover' }).click()
+
+      // Mensagem de erro de delete deve aparecer no nível da lista (acima dos cards)
+      // No código atual (estado único), a mensagem aparece DENTRO do card via prop erro={erro}
+      // Após o fix BUG-02, o erro de delete aparece no nível da lista com a classe bg-danger-bg2
+      await page.waitForTimeout(2_000) // aguardar resposta da action
+
+      // Abrir o form de edição da unidade 'E2E-Sala Disponivel' (sem contrato)
+      const salaDisponivel = page.getByText('E2E-Sala Disponivel').locator('../..')
+      await expect(salaDisponivel).toBeVisible({ timeout: 10_000 })
+      await salaDisponivel.getByRole('button', { name: 'Editar' }).click()
+
+      // Dentro do card de edição da E2E-Sala Disponivel, NÃO deve aparecer o erro de delete
+      // Este teste estará RED no código atual porque estado único vaza o erro para o card
+      const editCard = page.getByText('E2E-Sala Disponivel').locator('../..')
+      // O erro de delete não deve estar dentro do card em edição
+      await expect(editCard.locator('.text-danger-fg')).toHaveCount(0, { timeout: 5_000 })
+    })
+  })
+
   // ------------------------------------------------------------------ Contratos
   test.describe('Contratos', () => {
     // IDs dos pré-requisitos criados via supabaseAdmin no beforeAll

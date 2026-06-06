@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
 import UnidadePublicaCard from '@/components/features/UnidadePublicaCard'
 import UnidadeDetailSheet from '@/components/features/UnidadeDetailSheet'
+import Link from 'next/link'
 
 function shortenName(nome) {
   if (!nome) return ''
@@ -78,9 +79,7 @@ export default function UnidadesPublicas() {
     <div className="bg-background h-dvh flex flex-col relative overflow-hidden">
       <div className="px-5 pt-5 pb-6 border-b border-border-3 flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <span className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase">
-            Unidades Disponíveis
-          </span>
+          <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors">← Voltar</Link>
           <RealtimeDot />
         </div>
         <h1 className="font-body font-bold text-[32px] tracking-[-1.6px] text-fg-1 leading-none m-0 whitespace-pre-line">
