@@ -325,9 +325,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       const row = page.locator('*').filter({ hasText: 'E2E-Locatário FK' }).first()
       await expect(row).toBeVisible({ timeout: 10_000 })
 
-      // Clicar REVOGAR no locatário com contrato
-      const revogarButtons = page.getByRole('button', { name: 'REVOGAR' })
-      // Encontrar o botão na linha do locatário FK
+      // Clicar REVOGAR no locatário com contrato (localiza via ancestral da linha)
       await page.getByText('E2E-Locatário FK').locator('../..').locator('../..').getByRole('button', { name: 'REVOGAR' }).click()
 
       // A mensagem de erro deve aparecer inline na tabela (NÃO via alert/dialog do browser)
