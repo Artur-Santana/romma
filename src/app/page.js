@@ -41,11 +41,11 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 font-headline-hanken font-semibold tracking-4">
-                <button type="button" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover cursor-pointer">
-                  INICIE GRATUITAMENTE
-                </button>
+                <Link href="/login" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover cursor-pointer text-center">
+                  ACESSAR DASHBOARD
+                </Link>
                 <Link href="/unidades" className="py-4 px-10 bg-background cursor-pointer text-center">
-                  VER PROJETOS
+                  VER UNIDADES
                 </Link>
               </div>
             </div>
@@ -143,9 +143,9 @@ export default function Home() {
                 </div>
                 <div className="hidden lg:block p-8 bg-background"></div>
                 <div className="p-8 bg-background flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
-                  <button type="button" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover font-headline-hanken font-semibold tracking-[0.2em] text-white text-sm cursor-pointer">
-                    ACESSE ANALITYCS
-                  </button>
+                  <Link href="/login" className="py-4 px-10 bg-linear-45 from-primary to-primary-hover font-headline-hanken font-semibold tracking-[0.2em] text-white text-sm cursor-pointer text-center">
+                    ACESSAR PAINEL
+                  </Link>
                 </div>
               </div>
             </div>
