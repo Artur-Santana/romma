@@ -143,7 +143,7 @@
 | 6. Deploy Final e Demo | v1.0 | 3/3 | Complete | 2026-06-01 |
 | 7. Ajustes Finais Pré-Banca | v1.0 | 3/3 | Complete | 2026-06-03 |
 | 8. Bug Fixes | v1.1 | 5/5 | Complete   | 2026-06-06 |
-| 9. Páginas Públicas | v1.1 | 0/? | Not started | — |
+| 9. Páginas Públicas | v1.1 | 1/4 | In Progress|  |
 | 10. Signup Proprietário | v1.1 | 0/? | Not started | — |
 | 11. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
 | 12. Mobile Responsivo | v1.1 | 0/? | Not started | — |
