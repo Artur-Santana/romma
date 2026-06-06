@@ -32,7 +32,8 @@ export default function Unidades({}) {
   const [listaEdificios, setListaEdificios] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [erro, setErro] = useState(null)
+  const [erroDelete, setErroDelete] = useState(null)
+  const [erroEdit, setErroEdit] = useState(null)
   const [loading, setLoading] = useState(false)
   const [loadingInicial, setLoadingInicial] = useState(true)
   const [form, setForm] = useState({
@@ -67,6 +68,7 @@ export default function Unidades({}) {
   }
 
   async function handleEditarUnidade(unidade) {
+    setErroDelete(null)
     setFormEdit({
       nome: unidade.nome ?? "",
       descricao: unidade.descricao ?? "",
@@ -79,24 +81,26 @@ export default function Unidades({}) {
   }
 
   async function handleDeletarUnidade(id) {
+    setErroDelete(null)
+    setErroEdit(null)
     const result = await deletarUnidade(id);
     if (result.status === 200) {
-      setErro(null)
       setUnidades(await getUnidades() ?? []);
     } else {
-      setErro(result.erroMessage)
+      setErroDelete(result.erroMessage)
     }
   }
 
   async function handleSalvarUnidade(id) {
+    setErroDelete(null)
+    setErroEdit(null)
     const result = await editarUnidade(id, formEdit);
     if (result.status === 200) {
-      setErro(null)
       setEditandoId(null)
       resetFormEdit()
       setUnidades(await getUnidades() ?? []);
     } else {
-      setErro(result.erroMessage)
+      setErroEdit(result.erroMessage)
     }
   }
 
@@ -112,15 +116,15 @@ export default function Unidades({}) {
   async function insertUnidade(e) {
     e.preventDefault();
     setLoading(true)
-    setErro(null)
+    setErroDelete(null)
+    setErroEdit(null)
     const result = await criarUnidade(form);
     if (result.status === 200) {
-      setErro(null)
       resetForm()
       setUnidades(await getUnidades() ?? []);
       setShowForm(false)
     } else {
-      setErro(result.erroMessage)
+      setErroEdit(result.erroMessage)
     }
     setLoading(false)
   }
@@ -248,9 +252,9 @@ export default function Unidades({}) {
               <span className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Exibir valor publicamente</span>
             </div>
 
-            {erro && (
+            {erroEdit && (
               <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg mb-4">
-                {erro}
+                {erroEdit}
               </div>
             )}
 
@@ -268,6 +272,10 @@ export default function Unidades({}) {
         </div>
       )}
 
+      {erroDelete && (
+        <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[13px] text-danger-fg mb-4">{erroDelete}</div>
+      )}
+
       <div className="flex flex-col gap-0 border border-border-3 bg-surface">
         {unidades.length === 0 && (
           <p className="px-5 py-4 font-mono text-[12px] text-fg-5">Nenhuma unidade cadastrada.</p>
@@ -283,7 +291,7 @@ export default function Unidades({}) {
             onDeletar={handleDeletarUnidade}
             onFormChange={setFormEdit}
             onCancelar={() => { setEditandoId(null); resetFormEdit() }}
-            erro={erro}
+            erro={erroEdit}
           />
         ))}
       </div>

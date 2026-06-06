@@ -43,3 +43,22 @@ test.describe('Dashboard smoke', () => {
     await expect(page.getByText('Acessar como Locatário')).toHaveCount(0)
   })
 })
+
+// Página pública — sem login necessário
+test.describe('BUG-04 — Link Voltar em /unidades', () => {
+  test('BUG-04 — /unidades tem link "← Voltar" que navega para home', async ({ page }) => {
+    // Navegar para /unidades sem autenticação (página pública)
+    await page.goto('/unidades')
+    await page.waitForURL('**/unidades', { timeout: 10_000 })
+
+    // Deve ter um link com texto "← Voltar" ou "Voltar" no header
+    // No código atual há apenas um <span> sem link — este teste estará RED
+    const voltarLink = page.getByRole('link', { name: /voltar/i })
+    await expect(voltarLink).toBeVisible({ timeout: 5_000 })
+
+    // Clicar no link e verificar que navega para a home "/"
+    await voltarLink.click()
+    await page.waitForURL('/', { timeout: 10_000 })
+    expect(page.url()).toMatch(/\/$/)
+  })
+})
