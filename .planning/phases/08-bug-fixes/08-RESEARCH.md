@@ -33,7 +33,7 @@
 - D-13: `RealtimeDot` permanece no lado direito do mesmo flex row.
 
 ### Claude's Discretion
-- Ordem de fix no BUG-03: se `supabase.auth.getUser()` retornar o user após `verifyOtp`, usar diretamente; se não, fazer query em locatarios por email.
+- Ordem de fix no BUG-03: se `supabase.auth.getUser()` retornar o user após `verifyOtp`, usar diretamente; se não, fazer query em locatarios por email. **[RESOLVIDO em A2/Q2]** — o próprio `verifyOtp` retorna `data.user` no sucesso (não é preciso `getUser()`); o fallback por email é acionado quando o UPDATE por `usuario_id` afeta 0 linhas (linha do locatário existe mas ainda não está vinculada ao `usuario_id`).
 - Estratégia de limpeza de estado em BUG-02: `setErroDelete(null)` pode ser chamado no início de `handleSalvarUnidade` também para evitar exibição de erro antigo.
 
 ### Deferred Ideas (OUT OF SCOPE)
@@ -65,7 +65,7 @@ Esta fase corrige 4 bugs cirúrgicos sem criar nenhuma tela nova. Todo o código
 
 **BUG-02** é o mais simples: `Unidades.js` usa um único estado `erro` (linha 35) para tanto `handleDeletarUnidade` quanto `handleSalvarUnidade`. Quando o delete falha, o `erro` é setado; quando o usuário abre o form de edição de outra unidade, o mesmo `erro` aparece dentro de `UnidadeCard` via prop. O fix é separar em `erroDelete` e `erroEdit`.
 
-**BUG-03** é a causa raiz mais crítica: `src/app/auth/confirm/route.js` chama `supabase.auth.verifyOtp` (linha 15) e redireciona para o portal, mas nunca executa o UPDATE em `locatarios.status_convite`. A coluna existe no schema (migration `20260520100000`) com DEFAULT `'pendente'`. A query `getLocatarios()` já seleciona `status_convite` (linha 16 de `queries-client.js`). O fix é adicionar o UPDATE usando `supabaseAdmin` após o `verifyOtp` bem-sucedido.
+**BUG-03** é a causa raiz mais crítica: `src/app/auth/confirm/route.js` chama `supabase.auth.verifyOtp` (linha 15) e redireciona para o portal, mas nunca executa o UPDATE em `locatarios.status_convite`. A coluna existe no schema (migration `20260520100000`) com DEFAULT `'pendente'`. A query `getLocatarios()` já seleciona `status_convite` (linha 16 de `queries-client.js`). O fix é adicionar o UPDATE usando `supabaseAdmin` após o `verifyOtp` bem-sucedido — usando `data.user.id` retornado diretamente pelo `verifyOtp` (ver Q2/A2 RESOLVIDO).
 
 **BUG-04** é puramente visual: o header de `UnidadesPublicas.js` (linhas 79–88) tem um `<span>` com texto "Unidades Disponíveis" no lado esquerdo do flex row. Esse span deve ser substituído por `<Link href="/">← Voltar</Link>` com as classes CSS especificadas na UI-SPEC.
 
@@ -134,8 +134,9 @@ BUG-02:
 
 BUG-03:
   [/auth/confirm/route.js]
-       ↓ supabase.auth.verifyOtp({ type: 'invite', token_hash })
-       ↓ [MISSING] supabaseAdmin UPDATE locatarios SET status_convite='aceito'
+       ↓ supabase.auth.verifyOtp({ type: 'invite', token_hash }) → { data: { user }, error }
+       ↓ supabaseAdmin UPDATE locatarios SET status_convite='aceito' WHERE usuario_id = data.user.id
+       ↓ se 0 linhas afetadas → fallback UPDATE por email (data.user.email)
        ↓ redirect → /portal/dashboard
 
 BUG-04:
@@ -217,20 +218,29 @@ const [erroEdit, setErroEdit] = useState(null)
 // erroDelete renderiza acima do div.flex.flex-col.gap-0.border
 ```
 
-**Pattern 4: UPDATE status_convite no route handler**
+**Pattern 4: UPDATE status_convite no route handler (com fallback por email)**
 
 ```javascript
 // src/app/auth/confirm/route.js — após verifyOtp bem-sucedido com type === 'invite'
 import supabaseAdmin from "@/lib/supabaseAdmin"
 
-// Após const { error } = await supabase.auth.verifyOtp({ type, token_hash })
-if (!error && type === 'invite') {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (user) {
+// verifyOtp retorna data.user no sucesso (Q2/A2 RESOLVIDO via auth-js line 1125).
+const { data, error } = await supabase.auth.verifyOtp({ type, token_hash })
+// ... guard de erro redireciona ...
+if (type === 'invite' && data?.user) {
+  // Caminho primário: vincular por usuario_id
+  const { data: rows } = await supabaseAdmin
+    .from('locatarios')
+    .update({ status_convite: 'aceito' })
+    .eq('usuario_id', data.user.id)
+    .select('id')
+  // Fallback: se 0 linhas afetadas, a linha do locatário existe mas usuario_id
+  // ainda não foi vinculado — atualizar por email E gravar usuario_id.
+  if (!rows || rows.length === 0) {
     await supabaseAdmin
       .from('locatarios')
-      .update({ status_convite: 'aceito' })
-      .eq('usuario_id', user.id)
+      .update({ status_convite: 'aceito', usuario_id: data.user.id })
+      .eq('email', data.user.email)
   }
 }
 ```
@@ -261,6 +271,7 @@ import Link from 'next/link'
 - **Não criar novo estado `erroRevogar` separado:** Usar o estado `erro` existente em `LocatariosDesktop.js` — já é usado para outros erros do componente (convite, edição). O erro de revogar entra no mesmo state.
 - **Não importar `supabaseAdmin` no route.js via path alternativo:** Usar `@/lib/supabaseAdmin` que já tem `'server-only'` e funciona em route handlers.
 - **Não usar `middleware.js`:** O projeto usa `proxy.js` conforme CLAUDE.md.
+- **Não acionar o fallback por "user null":** quando `data.user` é null, `data.session` também é null e a URL de invite não carrega email — não há email para consultar. O fallback correto é acionado por **0 linhas afetadas no UPDATE por usuario_id** (linha existe mas não vinculada), usando `data.user.email` que SÓ existe quando `data.user` é não-nulo.
 
 ---
 
@@ -292,9 +303,9 @@ import Link from 'next/link'
 
 **Por que acontece:** O `createServer()` usa `@supabase/ssr` que lê cookies do request. O `verifyOtp` pode não escrever o cookie antes de `getUser()` ser chamado.
 
-**Como evitar:** Se `getUser()` retornar `null` após verifyOtp, usar o retorno do próprio `verifyOtp` que inclui `{ data: { user } }` — verificar a assinatura. Fallback: buscar em `locatarios` por email via `supabaseAdmin` (discretion D-39 no CONTEXT.md).
+**Como evitar:** **[RESOLVIDO — Q2/A2]** Não depender de `getUser()`. O próprio `verifyOtp` retorna `{ data: { user, session }, error }` e `exchangeCodeForSession` retorna `{ data: { user, session }, error }` — usar `data.user.id` diretamente, eliminando o problema de timing de cookie. [VERIFIED: auth-js GoTrueClient.js linha 1125 e GoTrueClient.d.ts linha 324]
 
-**Sinais de alerta:** `user` é null após verifyOtp bem-sucedido — usar `const { data: { user }, error } = await supabase.auth.verifyOtp(...)` ao invés de desestruturar só `{ error }`.
+**Sinais de alerta:** `user` é null após verifyOtp bem-sucedido — usar `const { data, error } = await supabase.auth.verifyOtp(...)` e ler `data.user` (não chamar `getUser()`).
 
 ### Pitfall 3: FK em `contratos` — qual status verificar
 
@@ -313,6 +324,16 @@ import Link from 'next/link'
 **Por que acontece:** Os dois fluxos (delete e edit) são independentes mas o erro delete persiste na tela.
 
 **Como evitar:** Limpar `setErroDelete(null)` no início de `handleSalvarUnidade` e `handleEditarUnidade` (conforme Discretion D-39).
+
+### Pitfall 5: Fallback de UPDATE acionado pelo gatilho errado
+
+**O que dá errado:** Acionar o fallback por email em `if (!data.user)` torna o fallback inalcançável e incoerente: quando `data.user` é null, `data.session` também é null e a URL de invite (token_hash + type) não carrega email — `data.user.email` seria `undefined` e `.eq('email', undefined)` não casa nenhuma linha.
+
+**Por que acontece:** O cenário "user null" só ocorre em erro (que já redireciona para /login), então não há email para consultar nesse caminho.
+
+**Como evitar:** O fallback por email deve ser acionado quando o **UPDATE por `usuario_id` afeta 0 linhas** (linha do locatário existe mas `usuario_id` ainda não está vinculado). Nesse momento `data.user` é não-nulo, então `data.user.email` está disponível. O fallback grava `usuario_id` junto com `status_convite`, completando o vínculo. Assim o UPDATE de BUG-03 SEMPRE completa no fluxo real — nunca "fica manual".
+
+**Sinais de alerta:** Código com `if (!data.user) { ...query por email... }` — gatilho incoerente; `.eq('email', undefined)`.
 
 ---
 
@@ -338,10 +359,11 @@ if (count > 0) return {
 // ... continua com delete
 ```
 
-### BUG-03: verifyOtp com captura de user (src/app/auth/confirm/route.js)
+### BUG-03: verifyOtp com captura de user + fallback por email (src/app/auth/confirm/route.js)
 
 ```javascript
 // [VERIFIED: codebase read — route.js linha 12-22]
+// [VERIFIED: auth-js GoTrueClient.js linha 1125 — verifyOtp retorna { data: { user, session }, error }]
 // Modificação do bloco token_hash:
 if (token_hash && type) {
   const { data, error } = await supabase.auth.verifyOtp({ type, token_hash })
@@ -349,10 +371,18 @@ if (token_hash && type) {
     return NextResponse.redirect(new URL("/login?error=invite_invalid", request.url))
   }
   if (type === 'invite' && data?.user) {
-    await supabaseAdmin
+    const { data: rows } = await supabaseAdmin
       .from('locatarios')
       .update({ status_convite: 'aceito' })
       .eq('usuario_id', data.user.id)
+      .select('id')
+    if (!rows || rows.length === 0) {
+      // linha existe mas usuario_id não vinculado — vincular por email
+      await supabaseAdmin
+        .from('locatarios')
+        .update({ status_convite: 'aceito', usuario_id: data.user.id })
+        .eq('email', data.user.email)
+    }
   }
   if (type === "recovery") {
     return NextResponse.redirect(new URL("/auth/reset-password", request.url))
@@ -422,23 +452,24 @@ async function handleSalvarUnidade(id) {
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
 | ~~A1~~ | ~~A FK constraint em `contratos.locatario_id` não tem ON DELETE CASCADE~~  **VERIFICADO** — `REFERENCES public.locatarios(id)` sem CASCADE confirmado em `20250101000000_initial_schema.sql` | Common Pitfalls 3 | N/A — fato confirmado |
-| A2 | `supabase.auth.verifyOtp()` retorna `{ data: { user }, error }` com o user populado no sucesso | Code Examples BUG-03 | Se `data.user` for null, usar fallback por email |
+| ~~A2~~ | ~~`supabase.auth.verifyOtp()` retorna `{ data: { user }, error }` com o user populado no sucesso~~ **VERIFICADO** — [auth-js GoTrueClient.js linha 1125] `verifyOtp` retorna `this._returnResult({ data: { user, session }, error: null })` no sucesso; tipo `AuthResponse` (types.d.ts linha 171) confirma `data: { user: User \| null; session }`. `exchangeCodeForSession` (GoTrueClient.d.ts linha 324) retorna `AuthTokenResponse` com `data.user: User` (não-nulo no sucesso). | Code Examples BUG-03 | N/A — fato confirmado. Usar `data.user.id` direto; fallback por email só quando UPDATE por usuario_id afeta 0 linhas |
 
-**Apenas A2 requer atenção em execução** — A1 foi verificado. Se `data.user` for null após verifyOtp, usar fallback por email.
+**A1 e A2 verificados.** Nenhuma assumption pendente requer atenção em execução.
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **FK constraint em contratos.locatario_id tem CASCADE? — RESOLVIDO**
    - [VERIFIED: migration 20250101000000_initial_schema.sql linha 51] `locatario_id uuid NOT NULL REFERENCES public.locatarios(id)` — sem `ON DELETE` clause = PostgreSQL padrão `NO ACTION` (equivalente a `RESTRICT`)
    - Conclusão: qualquer DELETE em `locatarios` com contratos vinculados **falha com FK violation**, independente do status do contrato
    - O count-check antes do delete é necessário e correto conforme D-02
 
-2. **`supabase.auth.verifyOtp` retorna user no mesmo objeto?**
-   - O que sabemos: o código atual desestrutura apenas `{ error }` (linha 15 do route.js)
-   - O que está incerto: se `data.user` está disponível ou se é necessário chamar `getUser()` separadamente
-   - Recomendação: Usar `const { data, error } = await supabase.auth.verifyOtp(...)` e verificar `data?.user`; se null, fallback para query por email
+2. **`supabase.auth.verifyOtp` retorna user no mesmo objeto? — RESOLVIDO**
+   - [VERIFIED: auth-js GoTrueClient.js linha 1125] No sucesso, `verifyOtp` retorna `this._returnResult({ data: { user, session }, error: null })`, onde `user`/`session` vêm da resposta do endpoint `/verify` via xform `_sessionResponse`. Para `type=invite` bem-sucedido, o endpoint retorna sessão + user, então **`data.user` é populado**.
+   - [VERIFIED: auth-js types.d.ts linha 171] `AuthResponse = { data: { user: User | null; session: Session | null }, error: null } | { data: {...null}, error: AuthError }` — no sucesso `data.user` está disponível; quando há erro, `data.user` e `data.session` são ambos null juntos.
+   - [VERIFIED: auth-js GoTrueClient.d.ts linha 324] `exchangeCodeForSession(authCode): Promise<AuthTokenResponse>` e `AuthTokenResponse` tem `data.user: User` (não-nulo no sucesso) — então o caminho `code` também usa `data.user.id` direto, sem `getUser()` (dispensando o problema de timing de cookie do Pitfall 2).
+   - **Conclusão:** Usar `const { data, error } = await supabase.auth.verifyOtp(...)` e ler `data.user.id` diretamente. Não chamar `getUser()`. O fallback por email NÃO é acionado por "user null" (cenário inalcançável fora de erro, e sem email disponível nesse caso) — é acionado quando o **UPDATE por `usuario_id` afeta 0 linhas** (linha do locatário existe mas não vinculada), usando `data.user.email` (disponível pois `data.user` é não-nulo) para completar o vínculo. Ver Pitfall 5.
 
 ---
 
@@ -509,6 +540,7 @@ Esta fase é puramente de correção de código e configuração — sem depend�
 | Revogar locatário sem autorização | Elevation of Privilege | Guard `isProprietario()` já presente — não remover |
 | UPDATE status_convite sem RLS | Tampering | Usar supabaseAdmin (service role) — RLS bypass intencional para route handler server-side |
 | FK violation expondo info interna | Information Disclosure | Retornar mensagem genérica amigável, não erro raw do Postgres |
+| Fallback por email vinculando usuario_id de terceiro | Spoofing | `data.user.email` vem da sessão verificada por verifyOtp, não de parâmetro de query — o email é do convite que o próprio user aceitou |
 
 ---
 
@@ -538,6 +570,7 @@ Esta fase é puramente de correção de código e configuração — sem depend�
 - Leitura direta de `src/components/ui/StatusBadge.js` — mapa de status com `aceito` e `pendente_convite` confirmado
 - Leitura direta de `src/components/features/UnidadesPublicas.js` — `<span>` "Unidades Disponíveis" confirmado (linha 81-83)
 - Leitura direta de `supabase/migrations/20260520100000_locatarios_status_convite.sql` — coluna `status_convite` com DEFAULT 'pendente' confirmada
+- Leitura direta de `node_modules/@supabase/auth-js/dist/module/GoTrueClient.js` (linha 1097-1133) e `GoTrueClient.d.ts` (linha 324, 374) e `lib/types.d.ts` (linha 171-193) — return shape de `verifyOtp` e `exchangeCodeForSession` confirmado (Q2/A2)
 
 ### Secondary (MEDIUM confidence)
 
@@ -556,7 +589,7 @@ Nenhum item de baixa confiança — todos os claims foram verificados diretament
 - Standard Stack: HIGH — sem novos pacotes; stack verificada via leitura de arquivos
 - Architecture: HIGH — todos os arquivos relevantes lidos, causa raiz confirmada em cada bug
 - Pitfalls: HIGH — pitfalls derivados da leitura real do código, não de training data
-- Assumptions: 2 itens LOW (FK cascade e verifyOtp return shape) — verificáveis antes da implementação
+- Assumptions: A1 e A2 VERIFICADOS via leitura direta (migration + auth-js SDK) — nenhum item pendente
 
 **Research date:** 2026-06-05
 **Valid until:** 2026-06-18 (banca) — código estável, sem risco de drift
