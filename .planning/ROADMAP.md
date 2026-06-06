@@ -29,7 +29,7 @@
 
 ### v1.1 Polish & Completeness
 
-- [ ] **Phase 8: Bug Fixes** — Bugs bloqueadores eliminados, demo pode rodar sem erros
+- [x] **Phase 8: Bug Fixes** — Bugs bloqueadores eliminados, demo pode rodar sem erros (completed 2026-06-06)
 - [ ] **Phase 9: Páginas Públicas** — Landing page e /unidades prontas para banca
 - [ ] **Phase 10: Signup Proprietário** — Primeiro acesso ao sistema configurável via tela
 - [ ] **Phase 11: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa
@@ -59,7 +59,7 @@
 - [x] 08-02-PLAN.md — BUG-01: revogar acesso com checagem de FK + erro inline na tabela
 - [x] 08-03-PLAN.md — BUG-02 + BUG-04: split de erro delete/edit em Unidades + link ← Voltar em /unidades
 - [x] 08-04-PLAN.md — BUG-03: UPDATE status_convite='aceito' após aceite de convite em /auth/confirm
-- [ ] 08-05-PLAN.md — Wave 3: auditoria visual dos 4 fixes (AUDIT-01) + suite E2E completa
+- [x] 08-05-PLAN.md — Wave 3: auditoria visual dos 4 fixes (AUDIT-01) + suite E2E completa
 **UI hint**: yes
 
 ### Phase 9: Páginas Públicas
@@ -142,7 +142,7 @@
 | 5. Testes E2E | v1.0 | 4/4 | Complete | 2026-05-29 |
 | 6. Deploy Final e Demo | v1.0 | 3/3 | Complete | 2026-06-01 |
 | 7. Ajustes Finais Pré-Banca | v1.0 | 3/3 | Complete | 2026-06-03 |
-| 8. Bug Fixes | v1.1 | 4/5 | In Progress|  |
+| 8. Bug Fixes | v1.1 | 5/5 | Complete   | 2026-06-06 |
 | 9. Páginas Públicas | v1.1 | 0/? | Not started | — |
 | 10. Signup Proprietário | v1.1 | 0/? | Not started | — |
 | 11. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
