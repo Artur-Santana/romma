@@ -75,8 +75,12 @@ test.describe('BUG-03 — status_convite atualizado após aceite de convite', ()
   })
 
   test.afterAll(async () => {
-    if (inviteLocatarioId) await admin.from('locatarios').delete().eq('id', inviteLocatarioId).catch(() => {})
-    if (inviteUserId) await admin.auth.admin.deleteUser(inviteUserId).catch(() => {})
+    if (inviteLocatarioId) {
+      try { await admin.from('locatarios').delete().eq('id', inviteLocatarioId) } catch (_) {}
+    }
+    if (inviteUserId) {
+      try { await admin.auth.admin.deleteUser(inviteUserId) } catch (_) {}
+    }
   })
 
   test('BUG-03 — status_convite vira "aceito" após verifyOtp com token real de invite', async ({ page }) => {
