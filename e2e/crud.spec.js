@@ -313,8 +313,8 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       const row = page.locator('*').filter({ hasText: 'E2E-Locatário Revogar' }).first()
       await expect(row).toBeVisible({ timeout: 10_000 })
 
-      // Clicar REVOGAR
-      await page.getByRole('button', { name: 'REVOGAR' }).filter({ hasText: 'REVOGAR' }).first().click()
+      // Clicar REVOGAR — escopo à linha do E2E-Locatário Revogar para evitar ambiguidade com outros pendentes
+      await page.getByText('E2E-Locatário Revogar').locator('../..').getByRole('button', { name: 'REVOGAR' }).click()
 
       // Após revogar, a linha deve sumir da tabela
       await expect(page.getByText('E2E-Locatário Revogar')).toHaveCount(0, { timeout: 10_000 })
@@ -326,7 +326,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       await expect(row).toBeVisible({ timeout: 10_000 })
 
       // Clicar REVOGAR no locatário com contrato (localiza via ancestral da linha)
-      await page.getByText('E2E-Locatário FK').locator('../..').locator('../..').getByRole('button', { name: 'REVOGAR' }).click()
+      await page.getByText('E2E-Locatário FK').locator('../..').getByRole('button', { name: 'REVOGAR' }).click()
 
       // A mensagem de erro deve aparecer inline na tabela (NÃO via alert/dialog do browser)
       // Este teste estará RED no código atual (usa alert()) — passará após o fix BUG-01
