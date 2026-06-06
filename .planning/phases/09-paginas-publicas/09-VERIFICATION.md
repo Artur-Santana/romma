@@ -1,17 +1,19 @@
 ---
 phase: 09-paginas-publicas
 verified: 2026-06-06T23:30:00Z
-status: human_needed
-score: 5/6 must-haves verified (1 requires human decision)
-overrides_applied: 0
+status: passed
+score: 6/6 must-haves verified (UAT 6/6 passed + overrides formalizados)
+overrides_applied: 2
 gaps: []
-human_verification:
-  - test: "Confirmar que o botão ✕ do UnidadeDetailSheet tem tap target ≥44px em 375px"
-    expected: "getBoundingClientRect().height >= 44 e .width >= 44 ao abrir um card em /unidades em 375px"
-    why_human: "Teste PUB-03 do sheet ✕ foi conditionally skipped porque o seed local não renderizou cards (cardCount === 0). A auditoria visual do Plano 04 declarou aprovação, mas o E2E não executou o assert de pixel em tempo de verificação."
-  - test: "Decidir sobre href='#' nos links de nav do Header (CONTRATOS, PORTAIS, DASHBOARD) frente ao SC-3"
-    expected: "SC-3 exige que todos os botões/links da landing page tenham destinos corretos. Os 3 links de nav têm href='#' — scrollam para o topo em vez de navegar para destino real."
-    why_human: "O plano 02 documentou isso como risco aceito A1 ('placeholders aceitáveis para a banca — wiring completo é pós-TCC'). Mas não existe override formal registrado no VERIFICATION.md. Se o avaliador clicar nesses links, eles não retornam 404 mas também não navegam para um destino correto. O proprietário precisa decidir: registrar override formal ou aceitar a verificação como está."
+overrides:
+  - must_have: "Botão ✕ do UnidadeDetailSheet tem tap target ≥44px em 375px"
+    reason: "UAT teste 6 confirmado pelo proprietário: mobile 375px sheet ✕ funcional. Código tem width:44 height:44 inline. E2E skipped por ausência de seed no ambiente de verificação — não é falha de implementação."
+    accepted_by: "artur"
+    accepted_at: "2026-06-06"
+  - must_have: "Todos os outros botões/links da landing page têm destinos corretos e não retornam 404"
+    reason: "Links de nav do Header (CONTRATOS, PORTAIS, DASHBOARD) têm href='#' — placeholders aceitáveis para a banca; wiring real é pós-TCC. Nenhum 404 ocorre. UAT teste 1 confirmado pelo proprietário."
+    accepted_by: "artur"
+    accepted_at: "2026-06-06"
 ---
 
 # Phase 9: Páginas Públicas — Verification Report
