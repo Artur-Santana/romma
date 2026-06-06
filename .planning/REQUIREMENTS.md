@@ -90,10 +90,10 @@
 
 | REQ-ID | Phase | Plan |
 |--------|-------|------|
-| BUG-01 | Phase 8 | TBD |
-| BUG-02 | Phase 8 | TBD |
-| BUG-03 | Phase 8 | TBD |
-| BUG-04 | Phase 8 | TBD |
+| BUG-01 | Phase 8 | 08-02, 08-01, 08-05 |
+| BUG-02 | Phase 8 | 08-03, 08-01, 08-05 |
+| BUG-03 | Phase 8 | 08-04, 08-01, 08-05 |
+| BUG-04 | Phase 8 | 08-03, 08-01, 08-05 |
 | LP-01 | Phase 9 | TBD |
 | LP-02 | Phase 9 | TBD |
 | LP-03 | Phase 9 | TBD |
