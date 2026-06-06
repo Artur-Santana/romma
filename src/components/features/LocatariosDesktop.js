@@ -89,11 +89,12 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   }
 
   async function handleRevogar(id) {
+    setErro("")
     const { status, erroMessage } = await revogarConvite(id)
     if (status === 200) {
       setLocatarios(await getLocatarios() ?? [])
     } else {
-      alert(erroMessage ?? "Erro ao revogar convite.")
+      setErro(erroMessage ?? "Erro ao revogar convite.")
     }
   }
 
@@ -105,7 +106,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
         eyebrow="SISTEMA.03 // PESSOAS"
         title="Locatários."
         subtitle={`${ativos} ativos · ${pendentes} convites pendentes`}
-        cta={{ label: "Convidar Locatário", code: "L+", onClick: () => setShowInviteForm(true) }}
+        cta={{ label: "Convidar Locatário", code: "L+", onClick: () => { setErro(""); setShowInviteForm(true) } }}
       />
 
       {/* Table */}
@@ -116,6 +117,11 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
             <span key={h} className="font-mono text-[9px] font-bold tracking-[1.5px] uppercase text-fg-4">{h}</span>
           ))}
         </div>
+
+        {/* Erro de revogar inline — abaixo do header */}
+        {erro && (
+          <div className="px-5 py-2 font-mono text-[11px] text-danger-fg border-t border-border-3">{erro}</div>
+        )}
 
         {/* Rows */}
         {locatarios.length === 0 && (
@@ -202,7 +208,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           </span>
         </div>
         <Button
-          onClick={() => setShowInviteForm(true)}
+          onClick={() => { setErro(""); setShowInviteForm(true) }}
           className="bg-indigo text-fg-1 font-mono font-bold text-[11px] tracking-[1.4px] uppercase rounded-none"
         >Convidar →</Button>
       </div>

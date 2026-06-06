@@ -98,6 +98,12 @@ export async function revogarConvite(id) {
         .from('locatarios').select('usuario_id, status_convite').eq('id', id).single()
     if (fetchErr || !loc) return { status: 404, erroMessage: 'Locatário não encontrado.' }
     if (loc.status_convite !== 'pendente') return { status: 400, erroMessage: 'Convite não está pendente.' }
+    const { count: contratosCount, error: countErr } = await supabaseAdmin
+        .from('contratos')
+        .select('*', { count: 'exact', head: true })
+        .eq('locatario_id', id)
+    if (countErr) return { status: 500, erroMessage: countErr.message }
+    if (contratosCount > 0) return { status: 400, erroMessage: 'Locatário tem contratos vinculados — encerre-os antes de revogar.' }
     const { error: delErr } = await supabaseAdmin.from('locatarios').delete().eq('id', id)
     if (delErr) return { status: 500, erroMessage: delErr.message }
     const { error: authDelErr } = await supabaseAdmin.auth.admin.deleteUser(loc.usuario_id)
