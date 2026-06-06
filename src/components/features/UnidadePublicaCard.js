@@ -42,7 +42,7 @@ export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemo
             </span>
           ) : (
             <span className="font-mono text-[11px] text-fg-3 tracking-[1px] uppercase">
-              Valor sob consulta
+              Consulte o Proprietário
             </span>
           )}
         </div>
