@@ -56,9 +56,9 @@
   4. Visitante em /unidades clica no link de voltar e navega para a home (/)
 **Plans**: 5 plans
 - [x] 08-01-PLAN.md — Wave 0: cenários RED de teste para os 4 bugs (crud/dashboard-smoke/auth-confirm specs)
-- [ ] 08-02-PLAN.md — BUG-01: revogar acesso com checagem de FK + erro inline na tabela
-- [ ] 08-03-PLAN.md — BUG-02 + BUG-04: split de erro delete/edit em Unidades + link ← Voltar em /unidades
-- [ ] 08-04-PLAN.md — BUG-03: UPDATE status_convite='aceito' após aceite de convite em /auth/confirm
+- [x] 08-02-PLAN.md — BUG-01: revogar acesso com checagem de FK + erro inline na tabela
+- [x] 08-03-PLAN.md — BUG-02 + BUG-04: split de erro delete/edit em Unidades + link ← Voltar em /unidades
+- [x] 08-04-PLAN.md — BUG-03: UPDATE status_convite='aceito' após aceite de convite em /auth/confirm
 - [ ] 08-05-PLAN.md — Wave 3: auditoria visual dos 4 fixes (AUDIT-01) + suite E2E completa
 **UI hint**: yes
 
@@ -142,7 +142,7 @@
 | 5. Testes E2E | v1.0 | 4/4 | Complete | 2026-05-29 |
 | 6. Deploy Final e Demo | v1.0 | 3/3 | Complete | 2026-06-01 |
 | 7. Ajustes Finais Pré-Banca | v1.0 | 3/3 | Complete | 2026-06-03 |
-| 8. Bug Fixes | v1.1 | 1/5 | In Progress|  |
+| 8. Bug Fixes | v1.1 | 4/5 | In Progress|  |
 | 9. Páginas Públicas | v1.1 | 0/? | Not started | — |
 | 10. Signup Proprietário | v1.1 | 0/? | Not started | — |
 | 11. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
