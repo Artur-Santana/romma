@@ -28,7 +28,7 @@ export default function UnidadeDetailSheet({ unidade, edificio, onClose, onSimul
             )}
           </div>
           <button
-            style={{ all: 'unset', cursor: 'pointer', display: 'flex', width: 32, height: 32, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+            style={{ all: 'unset', cursor: 'pointer', display: 'flex', width: 44, height: 44, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
             className="border border-border-3 text-fg-3 text-[14px]"
             onClick={onClose}
           >
@@ -80,15 +80,15 @@ export default function UnidadeDetailSheet({ unidade, edificio, onClose, onSimul
 
         <div className="flex flex-col gap-2">
           <button
-            style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', boxSizing: 'border-box' }}
-            className="py-[14px] px-5 bg-indigo font-body font-bold text-[13px] text-fg-1 text-center tracking-[0.5px]"
+            style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', boxSizing: 'border-box', minHeight: 44 }}
+            className="py-[14px] px-5 bg-indigo font-body font-bold text-[13px] text-fg-1 text-center tracking-[0.5px] min-h-[44px]"
             onClick={() => onSimular(unidade.id)}
           >
             Tenho interesse →
           </button>
           <button
-            style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', boxSizing: 'border-box' }}
-            className="py-[14px] px-5 border border-border-3 font-body font-bold text-[13px] text-fg-3 text-center"
+            style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', boxSizing: 'border-box', minHeight: 44 }}
+            className="py-[14px] px-5 border border-border-3 font-body font-bold text-[13px] text-fg-3 text-center min-h-[44px]"
             onClick={onClose}
           >
             Fechar
