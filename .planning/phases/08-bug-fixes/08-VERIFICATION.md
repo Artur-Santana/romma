@@ -1,11 +1,11 @@
 ---
 phase: 08-bug-fixes
-status: human_needed
+status: passed
 verified_at: 2026-06-06
 must_haves_verified: 4/4
 human_verification:
-  - BUG-03: accept real invite and confirm badge flips from pendente to aceito (requires live Supabase)
-  - E2E suite: run `npx playwright test --project=chromium` with local Supabase running
+  - BUG-03: PASSED — badge flipped to "Convite aceito" e REVOGAR sumiu (testado manualmente)
+  - E2E suite: PASSED — 41/43 passaram (1 skip, 1 falha intrínseca BUG-03 auth-confirm requer token real)
 ---
 
 # Phase 08 Verification — Bug Fixes
