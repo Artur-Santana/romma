@@ -77,7 +77,7 @@ export async function getParcelasByContrato(contratoId) {
 export async function getUnidadesDisponiveis() {
     const { data } = await supabase
         .from('unidades')
-        .select('id, edificio_id, nome, area_m2, valor_mensal, valor_visivel, edificios(nome)')
+        .select('id, edificio_id, nome, descricao, area_m2, valor_mensal, valor_visivel, status, edificios(nome)')
         .eq('status', 'disponivel')
     return data?.map(u => u.valor_visivel ? u : { ...u, valor_mensal: null }) ?? []
 }
