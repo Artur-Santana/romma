@@ -96,7 +96,7 @@ export default function UnidadesPublicas() {
           return (
             <button
               key={tab.id}
-              style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box' }}
+              style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box', minHeight: 44 }}
               className={`px-3.5 py-3 min-h-[44px] inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
                 isActive
                   ? 'border-indigo bg-[oklch(0.339_0.179_301.68/0.20)] text-fg-1'
