@@ -44,12 +44,12 @@ export default function Header() {
           >
             ENTRAR
           </Link>
-          <button
-            type="button"
+          <Link
+            href="/login"
             className="content-center text-white font-semibold tracking-4 bg-linear-45 from-primary to-primary-hover py-4 px-10 cursor-pointer"
           >
             COMEÇAR AGORA
-          </button>
+          </Link>
         </div>
 
         <details className="md:hidden group">
@@ -92,12 +92,12 @@ export default function Header() {
                 >
                   ENTRAR
                 </Link>
-                <button
-                  type="button"
-                  className="w-full text-white font-semibold tracking-4 bg-linear-45 from-primary to-primary-hover py-4 px-10 cursor-pointer"
+                <Link
+                  href="/login"
+                  className="w-full text-white font-semibold tracking-4 bg-linear-45 from-primary to-primary-hover py-4 px-10 cursor-pointer text-center"
                 >
                   COMEÇAR AGORA
-                </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: executing
-last_updated: "2026-06-06T20:00:00.000Z"
-last_activity: 2026-06-06 -- Phase 08 shipped (PR #27)
+status: ready_to_plan
+last_updated: 2026-06-06T23:32:16.833Z
+last_activity: 2026-06-06 -- Phase 09 execution started
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 5
-  completed_plans: 5
+  completed_plans: 9
   percent: 14
+stopped_at: Phase 09 UAT complete (6/6 passed) — ready to plan Phase 10
 ---
 
 # Project State — Romma
@@ -20,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 08 — bug-fixes
+**Current focus:** Phase 10 — signup proprietário
 
 ---
 
@@ -51,7 +52,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 6 | Deploy Final e Demo | v1.0 | ✅ Complete |
 | 7 | Ajustes Finais Pré-Banca | v1.0 | ✅ Complete |
 | 8 | Bug Fixes | v1.1 | ✅ Complete — PR #27 |
-| 9 | Páginas Públicas | v1.1 | Not started |
+| 9 | Páginas Públicas | v1.1 | ✅ Complete — PR #28 |
 | 10 | Signup Proprietário | v1.1 | Not started |
 | 11 | Escala Desktop + Tema | v1.1 | Not started |
 | 12 | Mobile Responsivo | v1.1 | Not started |
@@ -77,9 +78,11 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-05: Extracted learnings from quick task 260603-o6t
 - 2026-06-05: Milestone v1.1 roadmap created. 7 phases (8-14), 25 requirements. Banca em 13 dias.
 - 2026-06-06: Phase 08 complete. 4 bugs eliminados (BUG-01/02/03/04). PR #27 aberto.
+- 2026-06-06: Phase 09 complete. UAT 6/6 passed. LP-01/02/03 + PUB-01/02/03 verificados ao vivo. PR #28 aberto.
 
 ## Current Position
 
-Phase: 09 (paginas-publicas) — Not started
-Status: Phase 08 shipped — PR #27 open
-Last activity: 2026-06-06 -- Phase 08 shipped (PR #27)
+Phase: 10
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-06-06
