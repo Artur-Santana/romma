@@ -79,7 +79,7 @@ export default function UnidadesPublicas() {
     <div className="bg-background h-dvh flex flex-col relative overflow-hidden">
       <div className="px-5 pt-5 pb-6 border-b border-border-3 flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors">← Voltar</Link>
+          <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors py-3 inline-flex items-center min-h-[44px]">← Voltar</Link>
           <RealtimeDot />
         </div>
         <h1 className="font-body font-bold text-[32px] tracking-[-1.6px] text-fg-1 leading-none m-0 whitespace-pre-line">
@@ -96,8 +96,8 @@ export default function UnidadesPublicas() {
           return (
             <button
               key={tab.id}
-              style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box' }}
-              className={`px-3.5 py-2 inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
+              style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box', minHeight: 44 }}
+              className={`px-3.5 py-3 min-h-[44px] inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
                 isActive
                   ? 'border-indigo bg-[oklch(0.339_0.179_301.68/0.20)] text-fg-1'
                   : 'border-border-3 bg-transparent text-fg-3'
