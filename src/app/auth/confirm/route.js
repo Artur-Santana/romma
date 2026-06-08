@@ -64,13 +64,15 @@ export async function GET(request) {
       return NextResponse.redirect(new URL("/auth/reset-password", request.url))
     }
     if (data?.user) {
-      const viroupProprietario = await tentarRegistrarProprietario(data.user.id)
-      if (viroupProprietario) {
-        return NextResponse.redirect(new URL("/dashboard", request.url))
+      // Promoção a Proprietário APENAS em signup — nunca em invite ou outros fluxos (CR-01)
+      if (type === "signup") {
+        const viroupProprietario = await tentarRegistrarProprietario(data.user.id)
+        if (viroupProprietario) {
+          return NextResponse.redirect(new URL("/dashboard", request.url))
+        }
+      } else if (type === "invite") {
+        await atualizarStatusConvite(data.user.id, data.user.email)
       }
-    }
-    if (type === "invite" && data?.user) {
-      await atualizarStatusConvite(data.user.id, data.user.email)
     }
     return NextResponse.redirect(new URL("/portal/dashboard", request.url))
   }
