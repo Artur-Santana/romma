@@ -258,9 +258,9 @@ function SignUpForm() {
 
         {isEmailSent && <EmailSentBanner />}
 
-        {isError && (
+        {isError && !erroLocal && (
           <ErrorBanner
-            header="ERRO_AUTH · 409"
+            header="ERRO_AUTH"
             body="Não foi possível criar a conta. Verifique os dados e tente novamente."
           />
         )}
