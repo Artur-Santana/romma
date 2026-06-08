@@ -2,12 +2,9 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
-import { createClient } from "@/lib/supabase-browser"
-import { checkProprietarioExiste } from "@/actions/auth"
+import { useEffect, useState } from "react"
+import { checkProprietarioExiste, cadastrarProprietario } from "@/actions/auth"
 import { cn } from "@/lib/utils"
-
-const supabase = createClient()
 
 function TopStrip() {
   return (
@@ -207,15 +204,17 @@ function SignUpForm() {
       return
     }
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password: senha,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/confirm`,
-      },
-    })
+    // WR-02: usar Server Action para re-verificar guard de instância no servidor
+    // antes de criar a conta, impedindo bypass via client-side (devtools, JS desativado)
+    const result = await cadastrarProprietario({ email, senha })
 
-    if (error) {
+    if (result.status === 409) {
+      setStatus("locked")
+      return
+    }
+
+    if (result.status !== 200) {
+      setErroLocal(result.erroMessage || "Não foi possível criar a conta.")
       setStatus("error")
       return
     }
