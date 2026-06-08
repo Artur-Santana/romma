@@ -52,13 +52,20 @@ test.describe('Phase 10 — Signup Proprietário', () => {
     })
 
     test.afterAll(async () => {
-      // Restaurar as rows de proprietarios exatamente como estavam
-      if (savedProprietarios.length > 0) {
-        await admin.from('proprietarios').upsert(savedProprietarios, { onConflict: 'usuario_id' })
+      // WR-03: try/finally garante que o restore ocorre mesmo se removeTestUser() falhar.
+      // NOTA: try/finally protege contra erros no afterAll, mas NÃO contra SIGKILL/timeout
+      // de CI que mata o processo antes de afterAll rodar. Para durabilidade total seria
+      // necessário re-derivar o seed via email (como AUTH-02 faz) em vez de depender de
+      // savedProprietarios em memória.
+      try {
+        // Restaurar as rows de proprietarios exatamente como estavam
+        if (savedProprietarios.length > 0) {
+          await admin.from('proprietarios').upsert(savedProprietarios, { onConflict: 'usuario_id' })
+        }
+      } finally {
+        // Remover usuário de teste criado pelo signup (se email confirmação criou entry)
+        await removeTestUser()
       }
-
-      // Remover usuário de teste criado pelo signup (se email confirmação criou entry)
-      await removeTestUser()
     })
 
     test('AUTH-01 — signup com instância limpa exibe estado email_sent', async ({ page }) => {
