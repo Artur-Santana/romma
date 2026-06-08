@@ -27,6 +27,12 @@ export async function proxy(request) {
 
   const onDashboard = request.nextUrl.pathname.startsWith('/dashboard')
   const onPortal = request.nextUrl.pathname.startsWith('/portal')
+  const onSignup = request.nextUrl.pathname === '/signup'
+
+  // Usuário autenticado em /signup → redirecionar para /dashboard
+  if (onSignup && user) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
 
   if ((onDashboard || onPortal) && !user) {
     return NextResponse.redirect(new URL('/login', request.url))
@@ -42,5 +48,5 @@ export async function proxy(request) {
 }
 
 export const config = {
-  matcher: ['/dashboard', '/dashboard/:path*', '/portal', '/portal/:path*'],
+  matcher: ['/dashboard', '/dashboard/:path*', '/portal', '/portal/:path*', '/signup'],
 }
