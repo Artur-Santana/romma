@@ -25,23 +25,34 @@ export async function proxy(request) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
+  // WR-01: getUser() pode atualizar silenciosamente o token de sessão via setAll,
+  // gravando novos cookies no objeto `response`. Redirects criados depois perderiam
+  // esses cookies porque são respostas novas. Esta função copia todos os cookies de
+  // `response` para a resposta de redirect, garantindo que o browser receba as
+  // credenciais atualizadas mesmo quando ocorre um redirect.
+  function redirectWithCookies(target) {
+    const r = NextResponse.redirect(new URL(target, request.url))
+    response.cookies.getAll().forEach(c => r.cookies.set(c))
+    return r
+  }
+
   const onDashboard = request.nextUrl.pathname.startsWith('/dashboard')
   const onPortal = request.nextUrl.pathname.startsWith('/portal')
   const onSignup = request.nextUrl.pathname === '/signup'
 
   // Usuário autenticado em /signup → redirecionar para /dashboard
   if (onSignup && user) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return redirectWithCookies('/dashboard')
   }
 
   if ((onDashboard || onPortal) && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return redirectWithCookies('/login')
   }
 
   if (onDashboard || onPortal) {
     const { data: isProprietario } = await supabase.rpc('is_proprietario')
-    if (onDashboard && !isProprietario) return NextResponse.redirect(new URL('/', request.url))
-    if (onPortal && isProprietario) return NextResponse.redirect(new URL('/dashboard', request.url))
+    if (onDashboard && !isProprietario) return redirectWithCookies('/')
+    if (onPortal && isProprietario) return redirectWithCookies('/dashboard')
   }
 
   return response
