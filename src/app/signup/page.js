@@ -2,8 +2,8 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-import { checkProprietarioExiste, cadastrarProprietario } from "@/actions/auth"
+import { useState } from "react"
+import { cadastrarProprietario } from "@/actions/auth"
 import { cn } from "@/lib/utils"
 
 function TopStrip() {
@@ -166,26 +166,14 @@ function SignUpForm() {
   const [focusedField, setFocusedField] = useState(null)
   const [erroLocal, setErroLocal] = useState(null)
 
-  const isLocked = status === "locked"
   const isLoading = status === "loading"
   const isEmailSent = status === "email_sent"
   const isError = status === "error"
-
-  useEffect(() => {
-    async function checkGuard() {
-      const result = await checkProprietarioExiste()
-      if (result.existe) {
-        setStatus("locked")
-      }
-    }
-    checkGuard()
-  }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
     setErroLocal(null)
 
-    // Validação client-side D-07
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setErroLocal("Informe um e-mail válido.")
       return
@@ -197,21 +185,7 @@ function SignUpForm() {
 
     setStatus("loading")
 
-    // Pre-check defensivo
-    const guardCheck = await checkProprietarioExiste()
-    if (guardCheck.existe) {
-      setStatus("locked")
-      return
-    }
-
-    // WR-02: usar Server Action para re-verificar guard de instância no servidor
-    // antes de criar a conta, impedindo bypass via client-side (devtools, JS desativado)
     const result = await cadastrarProprietario({ email, senha })
-
-    if (result.status === 409) {
-      setStatus("locked")
-      return
-    }
 
     if (result.status !== 200) {
       setErroLocal(result.erroMessage || "Não foi possível criar a conta.")
@@ -241,21 +215,6 @@ function SignUpForm() {
           </h2>
         </div>
 
-        {isLocked && (
-          <ErrorBanner
-            header="INSTANCIA_BLOQUEADA · 409"
-            body="Esta instância já possui um Proprietário configurado. Acesse o sistema normalmente."
-            footer={
-              <Link
-                href="/login"
-                className="font-mono text-xs text-primary-accent mt-2 inline-block hover:underline"
-              >
-                Ir para login →
-              </Link>
-            }
-          />
-        )}
-
         {isEmailSent && <EmailSentBanner />}
 
         {isError && !erroLocal && (
@@ -272,7 +231,7 @@ function SignUpForm() {
           />
         )}
 
-        {!isLocked && !isEmailSent && (
+        {!isEmailSent && (
           <>
             <div className="flex flex-col gap-7">
               <Field

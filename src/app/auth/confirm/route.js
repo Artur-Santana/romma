@@ -19,30 +19,18 @@ async function atualizarStatusConvite(userId, userEmail) {
   }
 }
 
-// AUTH-01: Primeiro usuário confirmado (sem proprietario existente) vira Proprietário.
-// Invariante de segurança: locatários só existem após convite de Proprietário (is_proprietario),
-// portanto count === 0 implica que é inequivocamente o Proprietário.
-// INSERT só após verifyOtp/exchangeCodeForSession bem-sucedidos (evita registro órfão — Pitfall 2).
+// AUTH-01: Todo signup confirmado vira Proprietário.
+// INSERT só após verifyOtp/exchangeCodeForSession bem-sucedidos (evita registro órfão).
+// Se userId já está na tabela (re-confirmação), INSERT falha silenciosamente — ok.
 async function tentarRegistrarProprietario(userId) {
-  const { count, error: countError } = await supabaseAdmin
+  const { error: insertError } = await supabaseAdmin
     .from("proprietarios")
-    .select("*", { count: "exact", head: true })
+    .insert({ usuario_id: userId })
 
-  // Se a query de count falhar, não prosseguir — count seria null
-  if (countError || count === null) return false
+  // UNIQUE violation = usuário já é Proprietário (re-confirmação), tratar como sucesso
+  if (insertError && insertError.code !== "23505") return false
 
-  if (count === 0) {
-    const { error: insertError } = await supabaseAdmin
-      .from("proprietarios")
-      .insert({ usuario_id: userId })
-
-    // Se INSERT falhar por constraint UNIQUE (race), tratar como já-configurado
-    if (insertError) return false
-
-    return true
-  }
-
-  return false
+  return true
 }
 
 export async function GET(request) {
