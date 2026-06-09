@@ -28,7 +28,7 @@ export async function criarEdificio(form) {
 }
 
 export async function editarEdificio(id, form) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
@@ -36,17 +36,17 @@ export async function editarEdificio(id, form) {
   if (!nome?.trim()) return { status: 400, erroMessage: 'Nome é obrigatório.' }
   if (!endereco?.trim()) return { status: 400, erroMessage: 'Endereço é obrigatório.' }
 
-  const { error } = await supabaseAdmin.from('edificios').update({ nome: nome.trim(), endereco: endereco.trim() }).eq('id', id)
+  const { error } = await supabaseAdmin.from('edificios').update({ nome: nome.trim(), endereco: endereco.trim() }).eq('id', id).eq('proprietario_id', user.id)
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
 }
 
 export async function deletarEdificio(id) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-  const { error } = await supabaseAdmin.from('edificios').delete().eq('id', id)
+  const { error } = await supabaseAdmin.from('edificios').delete().eq('id', id).eq('proprietario_id', user.id)
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
 }
