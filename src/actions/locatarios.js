@@ -63,7 +63,7 @@ export async function editarLocatario(id, form) {
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
     if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
     const { nome_razao_social, tipo, documento, email, telefone } = form
-    const { error } = await supabaseAdmin.from('locatarios').update({ nome_razao_social, tipo, documento, email, telefone }).eq('id', id)
+    const { error } = await supabaseAdmin.from('locatarios').update({ nome_razao_social, tipo, documento, email, telefone }).eq('id', id).eq('proprietario_id', user.id)
     if (error) return { status: 500, erroMessage: error.message }
     return { status: 200 }
 }
@@ -77,10 +77,10 @@ export async function deletarLocatario(id) {
 
     // Busca usuario_id antes de deletar a linha
     const { data: loc, error: fetchErr } = await supabaseAdmin
-        .from('locatarios').select('usuario_id').eq('id', id).single()
+        .from('locatarios').select('usuario_id').eq('id', id).eq('proprietario_id', user.id).single()
     if (fetchErr || !loc) return { status: 404, erroMessage: 'Locatário não encontrado.' }
 
-    const { error } = await supabaseAdmin.from('locatarios').delete().eq('id', id)
+    const { error } = await supabaseAdmin.from('locatarios').delete().eq('id', id).eq('proprietario_id', user.id)
     if (error) return { status: 500, erroMessage: error.message }
 
     const { error: authDelErr } = await supabaseAdmin.auth.admin.deleteUser(loc.usuario_id)
@@ -96,7 +96,7 @@ export async function revogarConvite(id) {
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
     if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
     const { data: loc, error: fetchErr } = await supabaseAdmin
-        .from('locatarios').select('usuario_id, status_convite').eq('id', id).single()
+        .from('locatarios').select('usuario_id, status_convite').eq('id', id).eq('proprietario_id', user.id).single()
     if (fetchErr || !loc) return { status: 404, erroMessage: 'Locatário não encontrado.' }
     if (loc.status_convite !== 'pendente') return { status: 400, erroMessage: 'Convite não está pendente.' }
     const { count: contratosCount, error: countErr } = await supabaseAdmin
@@ -105,7 +105,7 @@ export async function revogarConvite(id) {
         .eq('locatario_id', id)
     if (countErr) return { status: 500, erroMessage: countErr.message }
     if (contratosCount > 0) return { status: 400, erroMessage: 'Locatário tem contratos vinculados — encerre-os antes de revogar.' }
-    const { error: delErr } = await supabaseAdmin.from('locatarios').delete().eq('id', id)
+    const { error: delErr } = await supabaseAdmin.from('locatarios').delete().eq('id', id).eq('proprietario_id', user.id)
     if (delErr) return { status: 500, erroMessage: delErr.message }
     const { error: authDelErr } = await supabaseAdmin.auth.admin.deleteUser(loc.usuario_id)
     if (authDelErr) return { status: 500, erroMessage: authDelErr.message }
