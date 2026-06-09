@@ -8,7 +8,7 @@
 ## Milestones
 
 - ✅ **v1.0 TCC Finalization** — Phases 1-7 (shipped 2026-06-03)
-- 🔄 **v1.1 Polish & Completeness** — Phases 8-14 (started 2026-06-05)
+- 🔄 **v1.1 Polish & Completeness** — Phases 8-15 (started 2026-06-05)
 
 ---
 
@@ -32,12 +32,13 @@
 - [x] **Phase 8: Bug Fixes** — Bugs bloqueadores eliminados, demo pode rodar sem erros (completed 2026-06-06)
 - [x] **Phase 9: Páginas Públicas** — Landing page e /unidades prontas para banca (completed 2026-06-06)
 - [x] **Phase 10: Signup Proprietário** — Primeiro acesso ao sistema configurável via tela (completed 2026-06-09)
-- [x] **Phase 11: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa (completed 2026-06-09)
-- [ ] **Phase 12: Mobile Responsivo** — Área logada navegável e utilizável em celular
-- [ ] **Phase 13: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante
-- [ ] **Phase 14: Testes** — Suite de testes cobre novos fluxos e Actions críticas
+- [x] **Phase 11: Multi-Tenant Proprietários** — Isolamento multi-tenant implementado: cada Proprietário só vê e muta seus próprios dados (completed 2026-06-09)
+- [ ] **Phase 12: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa
+- [ ] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular
+- [ ] **Phase 14: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante
+- [ ] **Phase 15: Testes** — Suite de testes cobre novos fluxos e Actions críticas
 
-> **Cross-cutting (todos os planos, Phases 8-14):**
+> **Cross-cutting (todos os planos, Phases 8-15):**
 > - **AUDIT-01**: cada fase inclui deep-dive isolado das telas trabalhadas antes de fechar
 > - **FIX-01**: correções emergentes descobertas durante a fase são registradas e incorporadas
 
@@ -86,9 +87,25 @@
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 11: Escala Desktop + Tema
+### Phase 11: Multi-Tenant Proprietários
+**Goal**: Isolamento multi-tenant implementado — cada Proprietário só vê e muta seus próprios dados (edificios, locatarios, contratos, parcelas, unidades). Todas as Server Actions de escrita escopeadas por proprietario_id.
+**Depends on**: Phase 10
+**Requirements**: MT-01, MT-02
+**Success Criteria** (what must be TRUE):
+  1. RLS policies em todas as tabelas filtram por proprietario_id — Proprietário A não vê dados de Proprietário B
+  2. Server Actions criarEdificio e convidarLocatario gravam proprietario_id no insert
+  3. Server Actions editarEdificio, deletarEdificio, editarLocatario, deletarLocatario e revogarConvite filtram por .eq('proprietario_id', user.id) — IDOR fechado
+  4. Página pública /unidades continua acessível a visitantes anon
+**Plans**: 4 plans
+- [x] 11-01-PLAN.md — Migration multi-tenant: adicionar proprietario_id + RLS policies por Proprietário
+- [x] 11-02-PLAN.md — Server Actions de create escopeadas (criarEdificio, convidarLocatario)
+- [x] 11-03-PLAN.md — Verificação E2E isolamento A↔B
+- [x] 11-04-PLAN.md — Gap closure: IDOR write-path (edit/delete em edificios + locatarios)
+**UI hint**: no
+
+### Phase 12: Escala Desktop + Tema
 **Goal**: Dashboard é visualmente legível em monitores comuns e pode exibir uma paleta de cores alternativa
-**Depends on**: Phase 9
+**Depends on**: Phase 11
 **Requirements**: UX-01, THEME-01, THEME-02
 **Success Criteria** (what must be TRUE):
   1. Em viewport desktop (1280px+), corpo de texto do dashboard tem no mínimo 14px e títulos de seção no mínimo 24px
@@ -97,9 +114,9 @@
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 12: Mobile Responsivo
+### Phase 13: Mobile Responsivo
 **Goal**: Proprietário e Locatário podem usar o sistema em celular sem layout quebrado ou navegação inacessível
-**Depends on**: Phase 11
+**Depends on**: Phase 12
 **Requirements**: UX-02, UX-03, UX-04
 **Success Criteria** (what must be TRUE):
   1. Dashboard em viewport 375px exibe MobileTopBar + MobileBottomNav no lugar da sidebar — sidebar não vaza ou sobrepõe o conteúdo
@@ -108,9 +125,9 @@
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 13: Animações & Feedback
+### Phase 14: Animações & Feedback
 **Goal**: Ações principais têm resposta visual imediata — o usuário sabe que a ação ocorreu sem precisar recarregar a página
-**Depends on**: Phase 12
+**Depends on**: Phase 13
 **Requirements**: ANIM-01, ANIM-02, ANIM-03
 **Success Criteria** (what must be TRUE):
   1. Ao encerrar ou cancelar um contrato, o item sai da lista com animação de fade-out (~200ms) em vez de desaparecer abruptamente
@@ -119,9 +136,9 @@
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 14: Testes
+### Phase 15: Testes
 **Goal**: Novos fluxos do v1.1 têm cobertura automatizada e Server Actions críticas têm testes unitários
-**Depends on**: Phase 13
+**Depends on**: Phase 14
 **Requirements**: TEST-01, TEST-02
 **Success Criteria** (what must be TRUE):
   1. Testes unitários existem e passam para: signup (instância única guard), revogar acesso, editar/deletar unidade, encerrar/cancelar contrato
@@ -145,10 +162,11 @@
 | 8. Bug Fixes | v1.1 | 5/5 | Complete   | 2026-06-06 |
 | 9. Páginas Públicas | v1.1 | 4/4 | Complete   | 2026-06-06 |
 | 10. Signup Proprietário | v1.1 | 3/0 | Complete    | 2026-06-09 |
-| 11. Escala Desktop + Tema | v1.1 | 4/4 | Complete   | 2026-06-09 |
-| 12. Mobile Responsivo | v1.1 | 0/? | Not started | — |
-| 13. Animações & Feedback | v1.1 | 0/? | Not started | — |
-| 14. Testes | v1.1 | 0/? | Not started | — |
+| 11. Multi-Tenant Proprietários | v1.1 | 4/4 | Complete    | 2026-06-09 |
+| 12. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
+| 13. Mobile Responsivo | v1.1 | 0/? | Not started | — |
+| 14. Animações & Feedback | v1.1 | 0/? | Not started | — |
+| 15. Testes | v1.1 | 0/? | Not started | — |
 
 **v1.0 Total:** 29/29 planos completos ✅
 **v1.1 Total:** Em planejamento
