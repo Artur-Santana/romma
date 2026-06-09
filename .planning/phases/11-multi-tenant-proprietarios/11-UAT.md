@@ -27,22 +27,24 @@ result: pass
 ### 4. Dashboard carrega edifícios e locatários do Proprietário
 expected: No dashboard, a aba Unidades/Edifícios mostra os edifícios do Proprietário logado. A aba Locatários mostra os locatários vinculados a este Proprietário. Nenhuma aba aparece vazia quando há dados cadastrados.
 result: pass
-note: "Não existe UI para criar edifícios diretamente — apenas unidades. Documentado como backlog para fase futura."
 
 ### 5. Criar edifício — aparece no dashboard
 expected: No dashboard, clique em "Novo Edifício" (ou equivalente), preencha nome e endereço, salve. O edifício recém-criado deve aparecer na lista imediatamente, sem erro 500.
-result: skipped
-reason: "Não existe UI para criar edifícios — confirmado no teste 4."
+result: issue
+reported: "Não existe UI para criar edifícios no dashboard — funcionalidade ausente"
+severity: major
 
 ### 6. Editar edifício — atualiza sem erro
-expected: Clique em editar em um edifício existente, altere o nome, salve. O nome atualizado deve aparecer na lista sem erro. (Regressão crítica: antes do fix IDOR, editarEdificio não escopava por proprietario_id.)
-result: skipped
-reason: "Não existe UI para visualizar ou editar edifícios."
+expected: Clique em editar em um edifício existente, altere o nome, salve. O nome atualizado deve aparecer na lista sem erro.
+result: issue
+reported: "Não existe UI para visualizar ou editar edifícios no dashboard — funcionalidade ausente"
+severity: major
 
 ### 7. Deletar edifício — some da lista
-expected: Clique em deletar em um edifício sem unidades ativas. O edifício deve sumir da lista sem erro. (Se tiver unidades, deve aparecer mensagem de erro correta — não erro 500 genérico.)
-result: skipped
-reason: "Não existe UI para visualizar ou deletar edifícios."
+expected: Clique em deletar em um edifício sem unidades ativas. O edifício deve sumir da lista sem erro.
+result: issue
+reported: "Não existe UI para visualizar ou deletar edifícios no dashboard — funcionalidade ausente"
+severity: major
 
 ### 8. Convidar Locatário — aparece na lista
 expected: Na aba Locatários, clique em convidar, preencha os dados (nome, email, CPF/CNPJ), salve. O Locatário deve aparecer na lista com status "Convite pendente", sem erro 500.
@@ -61,25 +63,57 @@ severity: blocker
 ## Summary
 
 total: 10
-passed: 5
-issues: 1
+passed: 4
+issues: 4
 pending: 0
-skipped: 3
+skipped: 0
 blocked: 0
 
 ## Gaps
 
+- truth: "Proprietário consegue criar um novo Edifício pelo dashboard"
+  status: failed
+  reason: "User reported: não existe UI para criar edifícios — funcionalidade ausente no dashboard"
+  severity: major
+  test: 5
+  artifacts:
+    - path: "src/components/features/"
+      issue: "Nenhum componente ou formulário de criação de Edifício existe"
+  missing:
+    - "Componente/modal de criação de Edifício (nome + endereço) no dashboard"
+    - "Server Action criarEdificio já existe em src/actions/edificios.js — falta apenas a UI"
+
+- truth: "Proprietário consegue editar um Edifício existente pelo dashboard"
+  status: failed
+  reason: "User reported: não existe UI para visualizar ou editar edifícios — funcionalidade ausente"
+  severity: major
+  test: 6
+  artifacts:
+    - path: "src/components/features/"
+      issue: "Nenhum componente de listagem/edição de Edifícios existe"
+  missing:
+    - "Listagem de Edifícios no dashboard com ação de editar"
+    - "Server Action editarEdificio já existe — falta a UI"
+
+- truth: "Proprietário consegue deletar um Edifício pelo dashboard"
+  status: failed
+  reason: "User reported: não existe UI para deletar edifícios — funcionalidade ausente"
+  severity: major
+  test: 7
+  artifacts:
+    - path: "src/components/features/"
+      issue: "Nenhum componente de listagem/deleção de Edifícios existe"
+  missing:
+    - "Ação de deletar Edifício na listagem"
+    - "Server Action deletarEdificio já existe — falta a UI"
+
 - truth: "Revogar convite de Locatário completa sem erro 500"
   status: failed
-  reason: "User reported: deleteUser(loc.usuario_id) lança 'Expected parameter to be UUID but is not' — loc.usuario_id é null quando convite está pendente (auth user ainda não existe ou usuario_id não foi gravado)"
+  reason: "User reported: deleteUser(loc.usuario_id) lança 'Expected parameter to be UUID but is not' — loc.usuario_id é null quando convite está pendente"
   severity: blocker
   test: 10
   artifacts:
     - path: "src/actions/locatarios.js"
       issue: "revogarConvite linha 110 chama deleteUser sem guard de null — se usuario_id for null, Supabase auth-js lança erro"
   missing:
-    - "Guard null antes de deleteUser: if (!loc.usuario_id) { deletar apenas o row de locatarios e retornar status 200 }"
-
-## Backlog Notes
-
-- UX: Não há interface para criar, visualizar, editar ou deletar Edifícios no dashboard — Proprietário só gerencia Unidades. Edifícios existem apenas via seed/SQL. Agendar para fase futura: CRUD completo de Edifícios (criar, listar, editar, deletar via UI).
+    - "Guard null antes de deleteUser: if (!loc.usuario_id) deletar apenas o row de locatarios e retornar status 200"
