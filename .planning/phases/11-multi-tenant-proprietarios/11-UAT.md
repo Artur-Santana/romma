@@ -72,48 +72,25 @@ blocked: 0
 ## Gaps
 
 - truth: "Proprietário consegue criar um novo Edifício pelo dashboard"
-  status: failed
-  reason: "User reported: não existe UI para criar edifícios — funcionalidade ausente no dashboard"
+  status: fixed
+  fix: "GestaoEdificios.js reescrito com Obsidian Blueprint. OwnerSidebar.js adicionado link /dashboard/edificios. Formulário criar com Input shadcn."
   severity: major
   test: 5
-  artifacts:
-    - path: "src/components/features/"
-      issue: "Nenhum componente ou formulário de criação de Edifício existe"
-  missing:
-    - "Componente/modal de criação de Edifício (nome + endereço) no dashboard"
-    - "Server Action criarEdificio já existe em src/actions/edificios.js — falta apenas a UI"
 
 - truth: "Proprietário consegue editar um Edifício existente pelo dashboard"
-  status: failed
-  reason: "User reported: não existe UI para visualizar ou editar edifícios — funcionalidade ausente"
+  status: fixed
+  fix: "Listagem inline com edição in-place via Input shadcn. Ação Editar/Salvar/Cancelar disponível."
   severity: major
   test: 6
-  artifacts:
-    - path: "src/components/features/"
-      issue: "Nenhum componente de listagem/edição de Edifícios existe"
-  missing:
-    - "Listagem de Edifícios no dashboard com ação de editar"
-    - "Server Action editarEdificio já existe — falta a UI"
 
 - truth: "Proprietário consegue deletar um Edifício pelo dashboard"
-  status: failed
-  reason: "User reported: não existe UI para deletar edifícios — funcionalidade ausente"
+  status: fixed
+  fix: "Ação Remover disponível na listagem de Edifícios."
   severity: major
   test: 7
-  artifacts:
-    - path: "src/components/features/"
-      issue: "Nenhum componente de listagem/deleção de Edifícios existe"
-  missing:
-    - "Ação de deletar Edifício na listagem"
-    - "Server Action deletarEdificio já existe — falta a UI"
 
 - truth: "Revogar convite de Locatário completa sem erro 500"
-  status: failed
-  reason: "User reported: deleteUser(loc.usuario_id) lança 'Expected parameter to be UUID but is not' — loc.usuario_id é null quando convite está pendente"
+  status: fixed
+  fix: "revogarConvite: guard null adicionado antes de deleteUser — se usuario_id for null (convite pendente), row deletado e retorna 200."
   severity: blocker
   test: 10
-  artifacts:
-    - path: "src/actions/locatarios.js"
-      issue: "revogarConvite linha 110 chama deleteUser sem guard de null — se usuario_id for null, Supabase auth-js lança erro"
-  missing:
-    - "Guard null antes de deleteUser: if (!loc.usuario_id) deletar apenas o row de locatarios e retornar status 200"
