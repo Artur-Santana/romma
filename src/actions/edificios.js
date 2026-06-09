@@ -46,6 +46,10 @@ export async function deletarEdificio(id) {
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+  const { count, error: countErr } = await supabaseAdmin
+    .from('unidades').select('*', { count: 'exact', head: true }).eq('edificio_id', id)
+  if (countErr) return { status: 500, erroMessage: countErr.message }
+  if (count > 0) return { status: 400, erroMessage: 'Edifício tem unidades vinculadas — remova-as antes de deletar.' }
   const { error } = await supabaseAdmin.from('edificios').delete().eq('id', id).eq('proprietario_id', user.id)
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
