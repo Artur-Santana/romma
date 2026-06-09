@@ -8,10 +8,11 @@ import { cn } from "@/lib/utils";
 import LogoutButton from "@/components/ui/LogoutButton";
 
 const NAV_ITEMS = [
-  { href: "/dashboard",            label: "Visão Geral",  code: "VG" },
-  { href: "/dashboard/unidades",   label: "Unidades",     code: "UN" },
-  { href: "/dashboard/contratos",  label: "Contratos",    code: "CT" },
-  { href: "/dashboard/locatarios", label: "Locatários",   code: "LC" },
+  { href: "/dashboard",             label: "Visão Geral",  code: "VG" },
+  { href: "/dashboard/edificios",   label: "Edifícios",    code: "ED" },
+  { href: "/dashboard/unidades",    label: "Unidades",     code: "UN" },
+  { href: "/dashboard/contratos",   label: "Contratos",    code: "CT" },
+  { href: "/dashboard/locatarios",  label: "Locatários",   code: "LC" },
 ];
 
 export default function OwnerSidebar({ badges = {} }) {
