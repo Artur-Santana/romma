@@ -31,7 +31,7 @@
 
 - [x] **Phase 8: Bug Fixes** — Bugs bloqueadores eliminados, demo pode rodar sem erros (completed 2026-06-06)
 - [x] **Phase 9: Páginas Públicas** — Landing page e /unidades prontas para banca (completed 2026-06-06)
-- [ ] **Phase 10: Signup Proprietário** — Primeiro acesso ao sistema configurável via tela
+- [x] **Phase 10: Signup Proprietário** — Primeiro acesso ao sistema configurável via tela (completed 2026-06-09)
 - [ ] **Phase 11: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa
 - [ ] **Phase 12: Mobile Responsivo** — Área logada navegável e utilizável em celular
 - [ ] **Phase 13: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante
@@ -144,7 +144,7 @@
 | 7. Ajustes Finais Pré-Banca | v1.0 | 3/3 | Complete | 2026-06-03 |
 | 8. Bug Fixes | v1.1 | 5/5 | Complete   | 2026-06-06 |
 | 9. Páginas Públicas | v1.1 | 4/4 | Complete   | 2026-06-06 |
-| 10. Signup Proprietário | v1.1 | 0/? | Not started | — |
+| 10. Signup Proprietário | v1.1 | 3/0 | Complete    | 2026-06-09 |
 | 11. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
 | 12. Mobile Responsivo | v1.1 | 0/? | Not started | — |
 | 13. Animações & Feedback | v1.1 | 0/? | Not started | — |
