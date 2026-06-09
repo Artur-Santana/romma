@@ -107,6 +107,7 @@ export async function revogarConvite(id) {
     if (contratosCount > 0) return { status: 400, erroMessage: 'Locatário tem contratos vinculados — encerre-os antes de revogar.' }
     const { error: delErr } = await supabaseAdmin.from('locatarios').delete().eq('id', id).eq('proprietario_id', user.id)
     if (delErr) return { status: 500, erroMessage: delErr.message }
+    if (!loc.usuario_id) return { status: 200 }
     const { error: authDelErr } = await supabaseAdmin.auth.admin.deleteUser(loc.usuario_id)
     if (authDelErr) return { status: 500, erroMessage: authDelErr.message }
     return { status: 200 }
