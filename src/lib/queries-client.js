@@ -75,11 +75,18 @@ export async function getParcelasByContrato(contratoId) {
 }
 
 export async function getUnidadesDisponiveis() {
-    const { data } = await supabase
-        .from('unidades')
-        .select('id, edificio_id, nome, descricao, area_m2, valor_mensal, valor_visivel, status, edificios(nome)')
-        .eq('status', 'disponivel')
+    // Usa RPC SECURITY DEFINER para garantir que retorna dados mesmo com usuário
+    // autenticado sem dados próprios (Proprietário B sem edifícios). As policies
+    // TO anon em 'unidades' não se aplicam quando há sessão ativa.
+    const { data } = await supabase.rpc('get_unidades_disponiveis')
     return data?.map(u => u.valor_visivel ? u : { ...u, valor_mensal: null }) ?? []
+}
+
+export async function getEdificiosPublicos() {
+    // Usa RPC SECURITY DEFINER — mesma razão que getUnidadesDisponiveis().
+    // Retorna edifícios com unidades disponíveis para qualquer role.
+    const { data } = await supabase.rpc('get_edificios_publicos')
+    return data ?? []
 }
 
 export async function getLocatarioByUserId(userId) {

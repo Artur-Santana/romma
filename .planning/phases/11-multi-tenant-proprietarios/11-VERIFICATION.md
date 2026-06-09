@@ -138,15 +138,59 @@ USING (EXISTS (
 
 ---
 
-## Verificação Humana Pendente (Task 2 — AUDIT-01)
+## Verificação Humana — Resultados (Task 2 — AUDIT-01)
 
-Os 4 cenários abaixo requerem login humano e validação visual:
+Data de verificação: 2026-06-09
 
-| # | Cenário | Status |
-|---|---------|--------|
-| A | Isolamento entre Proprietários (A vs B) | AGUARDANDO VERIFICAÇÃO HUMANA |
-| B | Página pública /unidades com nome do edifício (anon) | Automaticamente verificado + PASS (após fix) |
-| C | Portal do Locatário (/portal com contrato + parcelas) | AGUARDANDO VERIFICAÇÃO HUMANA |
-| D | Supabase Studio — edificio criado por B tem proprietario_id correto | AGUARDANDO VERIFICAÇÃO HUMANA |
+| # | Cenário | Status | Observações |
+|---|---------|--------|-------------|
+| A | Isolamento entre Proprietários (A vs B) — dashboard vazio | NOT VERIFIED | Bloqueado por ausência de email de confirmação (SMTP não configurado — ver Nota infra). Cenário 4 (proprietario_id correto no DB) PASS. |
+| B | Página pública /unidades com usuário autenticado sem dados | PASS (após fix) | Trigger original: Proprietário B logado via cache (conta não confirmada) não via unidades. Fix aplicado: RPCs SECURITY DEFINER. Após limpar cache ficou OK. |
+| C | Portal do Locatário (/portal com contrato + parcelas) | PASS | Verificado pelo usuário — sem problemas. |
+| D | Supabase Studio — edificio criado por B tem proprietario_id correto | PASS | Verificado pelo usuário — sem problemas. |
 
-> Nota: Cenário B foi verificado automaticamente via API — `7 edificios` visíveis para anon e `edificios(nome)` populado no JOIN. Validação visual no browser também recomendada.
+---
+
+## Bug Detectado e Corrigido: unidades_select_public não cobre usuários autenticados
+
+**Detectado durante:** Task 2 — feedback do usuário (Cenário 2)
+
+**Problema:** A policy `unidades_select_public` em `unidades` é definida com `TO anon`. Quando um usuário autenticado (ex: Proprietário B sem dados próprios) acessa `/unidades`, o Postgres aplica apenas a policy `unidades_select_proprietario` (role `authenticated`), que usa `is_unidade_owner OR is_unidade_do_locatario` — ambas retornam false para quem não tem edifícios nem é Locatário. A página pública ficava vazia para usuários autenticados sem dados.
+
+Adicionalmente, `getEdificios()` (usada em `UnidadesPublicas.js`) também é afetada pela mesma limitação — retorna lista vazia para Proprietário B — fazendo as abas de filtro desaparecerem.
+
+**Raiz do problema:** Design de RLS correto para isolamento do dashboard (policies estritamente `TO authenticated` com filtro por proprietario_id), mas a página pública precisa de acesso não-restrito para qualquer role.
+
+**Fix aplicado:** Migration `20260523000000_fix_unidades_select_public_rpc.sql`:
+- Criada RPC `get_unidades_disponiveis()` com SECURITY DEFINER — retorna unidades disponíveis com JOIN em edificios, acessível a qualquer role (anon + authenticated)
+- Criada RPC `get_edificios_publicos()` com SECURITY DEFINER — retorna edifícios com unidades disponíveis para construir abas de filtro
+- Atualizado `getUnidadesDisponiveis()` e nova função `getEdificiosPublicos()` em `queries-client.js`
+- Atualizado `UnidadesPublicas.js` para usar `getEdificiosPublicos()` em vez de `getEdificios()`
+
+**Por que não adicionar policy `TO authenticated USING (status = 'disponivel')`:**
+Policies para o mesmo role/cmd são combinadas com OR. Uma policy `TO authenticated` com `USING (status = 'disponivel')` vazaria TODAS as unidades disponíveis de todos os tenants para o dashboard de qualquer Proprietário autenticado, quebrando o isolamento multi-tenant (`getUnidades()` no dashboard não filtra explicitamente por proprietario_id — confia no RLS).
+
+**Regra aplicada:** Rule 1 (bug auto-fix) — `must_have truth #2` ("Visitante anon em /unidades vê unidades disponíveis com nome do edifício") estava quebrado para usuários autenticados sem dados.
+
+**Verificação pós-fix:**
+- `supabase db push --linked` aplicado com sucesso
+- `supabase db diff --linked` retorna vazio (banco em sincronia)
+- `npm run build` passa sem erros
+
+---
+
+## Nota: Problema de Email (Não é bug de código)
+
+**Cenário:** Criação de conta de Proprietário B via `/signup` — email de confirmação não chegou.
+
+**Diagnóstico:** O Supabase usa o provider de email configurado em Authentication → Email no projeto. Em projetos sem SMTP customizado configurado, o Supabase usa seu próprio servidor de email com limitações de taxa e às vezes bloqueia envios para domínios não verificados em modo de desenvolvimento.
+
+**Ação necessária (infraestrutura, não código):**
+1. Acesse o Supabase Dashboard → Authentication → Users
+2. Localize o usuário recém criado (email do Proprietário B)
+3. Clique em "Confirm email" para confirmar manualmente a conta
+4. Alternativamente, configure um SMTP provider em Authentication → Email → SMTP Settings
+
+**Não é um gap de código** — o fluxo de signup está correto. A confirmação manual via Supabase Dashboard é suficiente para validação da fase.
+
+**Impacto no isolamento:** O cenário A (isolamento entre A e B) ficou parcialmente bloqueado porque B não pôde fazer login normal. A funcionalidade de RLS está correta conforme verificado automaticamente (Task 1, Cenário 3). O Cenário D (proprietario_id gravado corretamente) foi verificado com PASS.
