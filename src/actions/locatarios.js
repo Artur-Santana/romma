@@ -31,6 +31,7 @@ export async function convidarLocatario(email, nome_razao_social, documento, tel
         const {error:errorInsert} = await supabaseAdmin.from('locatarios')
         .insert({
             usuario_id:data.user.id,
+            proprietario_id: user.id,
             nome_razao_social,
             email:data.user.email,
             telefone,
