@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { getUnidadesDisponiveis, getEdificios } from '@/lib/queries-client'
+import { getUnidadesDisponiveis, getEdificiosPublicos } from '@/lib/queries-client'
 import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
 import UnidadePublicaCard from '@/components/features/UnidadePublicaCard'
@@ -27,7 +27,7 @@ export default function UnidadesPublicas() {
 
   useEffect(() => {
     async function load() {
-      const [u, e] = await Promise.all([getUnidadesDisponiveis(), getEdificios()])
+      const [u, e] = await Promise.all([getUnidadesDisponiveis(), getEdificiosPublicos()])
       setUnidades(u ?? [])
       setEdificios(e ?? [])
     }
