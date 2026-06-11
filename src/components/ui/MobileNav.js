@@ -25,11 +25,11 @@ export function MobileTopBar({ title, subtitle, onBack, onMenu, right }) {
       )}
       <div className="flex-1">
         {subtitle && (
-          <span className="eyebrow eyebrow--indigo text-[14px]">
+          <span className="eyebrow eyebrow--indigo text-[9px]">
             {subtitle}
           </span>
         )}
-        <h1 className="font-display font-bold text-[33px] tracking-[-1px] text-fg-1 m-0 leading-[1.1]">
+        <h1 className="font-display font-bold text-[22px] tracking-[-1px] text-fg-1 m-0 leading-[1.1]">
           {title}
         </h1>
       </div>
@@ -59,7 +59,7 @@ export function MobileBottomNav({ items = [], pathname: pathnameProp }) {
           >
             <span
               className={cn(
-                "font-body font-bold text-[14px] tracking-[1px] uppercase leading-[1.5]",
+                "font-body font-bold text-[9px] tracking-[1px] uppercase leading-[1.5]",
                 isActive ? "text-fg-1" : "text-fg-4"
               )}
             >
@@ -67,7 +67,7 @@ export function MobileBottomNav({ items = [], pathname: pathnameProp }) {
             </span>
             <span
               className={cn(
-                "font-mono text-[14px]",
+                "font-mono text-[9px]",
                 isActive ? "text-indigo" : "text-fg-5"
               )}
             >

@@ -27,7 +27,7 @@ function LogoutButton() {
     <div>
       <button
         style={{ all: "unset", cursor: "pointer" }}
-        className="font-mono text-[15px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors"
+        className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors"
         onClick={handleSair}
         disabled={saindo}
       >
