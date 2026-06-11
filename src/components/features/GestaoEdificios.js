@@ -218,7 +218,7 @@ export default function GestaoEdificios() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="font-body font-bold text-[15px] text-fg-1">{edificio.nome}</p>
-                  <p className="font-mono text-[11px] text-fg-4 mt-0.5 tracking-[0.3px]">{edificio.endereco}</p>
+                  <p className="font-mono text-[14px] text-fg-4 mt-0.5 tracking-[0.3px]">{edificio.endereco}</p>
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <button
