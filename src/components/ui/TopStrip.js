@@ -14,15 +14,15 @@ export default function TopStrip() {
 
   return (
     <div className="h-6 bg-[oklch(0.218_0_0/0.95)] border-b border-border-2 flex items-center justify-between px-8 shrink-0">
-      <span className="font-mono text-[13px] text-fg-3 tracking-[1px]">
+      <span className="font-mono text-[10px] text-fg-3 tracking-[1px]">
         INTEGRATED_SYSTEM_NODE: 0X449F
       </span>
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[13px] text-fg-3 tracking-[0.5px]">
+        <span className="font-mono text-[10px] text-fg-3 tracking-[0.5px]">
           {timestamp}
         </span>
         <div className="w-1.5 h-1.5 bg-success shrink-0" />
-        <span className="font-mono text-[13px] text-fg-3 tracking-[1px]">
+        <span className="font-mono text-[10px] text-fg-3 tracking-[1px]">
           STATUS: SYNCHRONIZED
         </span>
       </div>
