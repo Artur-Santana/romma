@@ -18,6 +18,11 @@
 - [ ] **AUTH-01:** Proprietário pode criar conta via tela de signup em `/signup` (email + senha, instância única)
 - [ ] **AUTH-02:** Segunda tentativa de signup é bloqueada com mensagem clara ("Instância já configurada")
 
+### Multi-Tenant
+
+- [x] **MT-01:** RLS policies em todas as tabelas (edificios, locatarios, unidades, contratos, parcelas) filtram por proprietario_id — Proprietário A não vê dados de Proprietário B
+- [x] **MT-02:** Todas as Server Actions de escrita (create/update/delete) escopeadas por proprietario_id do usuário autenticado — IDOR fechado em editarEdificio, deletarEdificio, editarLocatario, deletarLocatario, revogarConvite
+
 ### Landing Page
 
 - [ ] **LP-01:** Landing page tem CTA primário funcional "Ver Unidades" → `/unidades`
@@ -102,16 +107,18 @@
 | PUB-03 | Phase 9 | TBD |
 | AUTH-01 | Phase 10 | TBD |
 | AUTH-02 | Phase 10 | TBD |
-| UX-01 | Phase 11 | TBD |
-| THEME-01 | Phase 11 | TBD |
-| THEME-02 | Phase 11 | TBD |
-| UX-02 | Phase 12 | TBD |
-| UX-03 | Phase 12 | TBD |
-| UX-04 | Phase 12 | TBD |
-| ANIM-01 | Phase 13 | TBD |
-| ANIM-02 | Phase 13 | TBD |
-| ANIM-03 | Phase 13 | TBD |
-| TEST-01 | Phase 14 | TBD |
-| TEST-02 | Phase 14 | TBD |
-| AUDIT-01 | All (8-14) — cross-cutting | TBD |
-| FIX-01 | All (8-14) — cross-cutting | TBD |
+| MT-01 | Phase 11 | 11-01 |
+| MT-02 | Phase 11 | 11-02, 11-04 |
+| UX-01 | Phase 12 | TBD |
+| THEME-01 | Phase 12 | TBD |
+| THEME-02 | Phase 12 | TBD |
+| UX-02 | Phase 13 | TBD |
+| UX-03 | Phase 13 | TBD |
+| UX-04 | Phase 13 | TBD |
+| ANIM-01 | Phase 14 | TBD |
+| ANIM-02 | Phase 14 | TBD |
+| ANIM-03 | Phase 14 | TBD |
+| TEST-01 | Phase 15 | TBD |
+| TEST-02 | Phase 15 | TBD |
+| AUDIT-01 | All (8-15) — cross-cutting | TBD |
+| FIX-01 | All (8-15) — cross-cutting | TBD |

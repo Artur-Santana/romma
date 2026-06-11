@@ -33,7 +33,7 @@ export async function seed() {
   // 1. Edifício de teste
   const { data: edificio, error: errEdificio } = await admin
     .from('edificios')
-    .insert({ nome: 'Edifício Teste E2E', endereco: 'Rua Teste, 1' })
+    .insert({ nome: 'Edifício Teste E2E', endereco: 'Rua Teste, 1', proprietario_id: proprietario.id })
     .select()
     .single()
   if (errEdificio) throw errEdificio
@@ -89,6 +89,7 @@ export async function seed() {
     .from('locatarios')
     .insert({
       usuario_id: locatarioUser.id,
+      proprietario_id: proprietario.id,
       nome_razao_social: 'Locatário Teste',
       tipo: 'pf',
       documento: '12345678901',

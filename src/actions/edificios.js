@@ -11,24 +11,24 @@ async function authGuard() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { err: { status: 401, erroMessage: 'Não autenticado.' } }
   if (!await isProprietario(supabase)) return { err: { status: 403, erroMessage: 'Sem permissão.' } }
-  return {}
+  return { user }
 }
 
 export async function criarEdificio(form) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   const { nome, endereco } = form
   if (!nome?.trim()) return { status: 400, erroMessage: 'Nome é obrigatório.' }
   if (!endereco?.trim()) return { status: 400, erroMessage: 'Endereço é obrigatório.' }
 
-  const { error } = await supabaseAdmin.from('edificios').insert({ nome: nome.trim(), endereco: endereco.trim() })
+  const { error } = await supabaseAdmin.from('edificios').insert({ nome: nome.trim(), endereco: endereco.trim(), proprietario_id: user.id })
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
 }
 
 export async function editarEdificio(id, form) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
@@ -36,17 +36,21 @@ export async function editarEdificio(id, form) {
   if (!nome?.trim()) return { status: 400, erroMessage: 'Nome é obrigatório.' }
   if (!endereco?.trim()) return { status: 400, erroMessage: 'Endereço é obrigatório.' }
 
-  const { error } = await supabaseAdmin.from('edificios').update({ nome: nome.trim(), endereco: endereco.trim() }).eq('id', id)
+  const { error } = await supabaseAdmin.from('edificios').update({ nome: nome.trim(), endereco: endereco.trim() }).eq('id', id).eq('proprietario_id', user.id)
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
 }
 
 export async function deletarEdificio(id) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-  const { error } = await supabaseAdmin.from('edificios').delete().eq('id', id)
+  const { count, error: countErr } = await supabaseAdmin
+    .from('unidades').select('*', { count: 'exact', head: true }).eq('edificio_id', id)
+  if (countErr) return { status: 500, erroMessage: countErr.message }
+  if (count > 0) return { status: 400, erroMessage: 'Edifício tem unidades vinculadas — remova-as antes de deletar.' }
+  const { error } = await supabaseAdmin.from('edificios').delete().eq('id', id).eq('proprietario_id', user.id)
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
 }
