@@ -139,6 +139,47 @@
   --ds-highlight:  oklch(0.7245 0.0998 82.35);
 }
 
+/* ── PALETAS CANDIDATAS ─────────────────────────────────────────────────────────
+   DEV: Para testar, use o ThemeToggle no dashboard (NODE_ENV=development).
+   Para ativar manualmente: document.documentElement.setAttribute('data-theme', 'pumpkin')
+   Paletas disponíveis: pumpkin | deep-olive | ultra-violet | cloudy-sky
+   Especificidade 0,1,0 (igual ao .dark) — source order pós .dark garante precedência.
+   Apenas os 5 --ds-* são sobrescritos; tokens hardcoded (--fg-1, --surface, --border-*)
+   não precisam override em paletas escuras.
+   ──────────────────────────────────────────────────────────────────────────────── */
+
+[data-theme="pumpkin"] {
+  --ds-primary:    oklch(0.706 0.186 44.5);   /* #FD802E pumpkin orange */
+  --ds-background: oklch(0.264 0.029 216.3);  /* #223D4C charcoal azulado */
+  --ds-surface:    oklch(0.228 0.025 216.3);
+  --ds-secondary:  oklch(0.310 0.025 216.3);
+  --ds-highlight:  oklch(0.600 0.08 55);
+}
+
+[data-theme="deep-olive"] {
+  --ds-primary:    oklch(0.600 0.08 135);
+  --ds-background: oklch(0.189 0.025 136.3);  /* #1A2517 deep olive */
+  --ds-surface:    oklch(0.230 0.025 136.3);
+  --ds-secondary:  oklch(0.270 0.02 136.3);
+  --ds-highlight:  oklch(0.760 0.06 145);     /* #ACC8A2 soft sage */
+}
+
+[data-theme="ultra-violet"] {
+  --ds-primary:    oklch(0.480 0.160 301.0);  /* #5F4A8B ultra-violet */
+  --ds-background: oklch(0.970 0.050 95.0);   /* #FEFACD lemon chiffon */
+  --ds-surface:    oklch(0.940 0.040 95.0);
+  --ds-secondary:  oklch(0.900 0.030 95.0);
+  --ds-highlight:  oklch(0.480 0.160 301.0);
+}
+
+[data-theme="cloudy-sky"] {
+  --ds-primary:    oklch(0.510 0.120 230.0);  /* #2872A1 ocean blue */
+  --ds-background: oklch(0.870 0.040 220.0);  /* #CBDDE9 cloudy sky */
+  --ds-surface:    oklch(0.840 0.035 220.0);
+  --ds-secondary:  oklch(0.800 0.030 220.0);
+  --ds-highlight:  oklch(0.510 0.120 230.0);
+}
+
 @theme inline {
   --font-sans: var(--font-body);
   --font-heading: var(--font-headline-hanken);
