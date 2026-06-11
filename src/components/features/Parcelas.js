@@ -13,7 +13,7 @@ const gridStyle = { gridTemplateColumns: COL }
 
 function HeaderCell({ children }) {
   return (
-    <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">
+    <div className="px-5 py-3 font-mono text-[13px] font-bold tracking-[1.4px] uppercase text-fg-4">
       {children}
     </div>
   )
@@ -66,7 +66,7 @@ export default function Parcelas({ contratoId }) {
       <Button
         variant="outline"
         onClick={() => router.push("/dashboard/contratos")}
-        className="border-border-3 bg-transparent text-fg-3 font-mono text-[10px] uppercase tracking-[1.2px] font-bold rounded-none mb-10 h-auto py-[10px] px-5"
+        className="border-border-3 bg-transparent text-fg-3 font-mono text-[13px] uppercase tracking-[1.2px] font-bold rounded-none mb-10 h-auto py-[10px] px-5"
       >
         ← Contratos
       </Button>
@@ -74,21 +74,21 @@ export default function Parcelas({ contratoId }) {
       {/* Header */}
       <div className="flex flex-col gap-3 mb-12">
         <span className="eyebrow eyebrow--indigo">SISTEMA.02 · PARCELAS</span>
-        <h2 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">
+        <h2 className="font-display font-bold text-[60px] leading-none tracking-[-2.4px] text-fg-1 m-0">
           Parcelas.
         </h2>
         {(locatario || unidade) && (
-          <span className="font-mono text-[18px] text-fg-3">
+          <span className="font-mono text-[23px] text-fg-3">
             {locatario?.nome_razao_social ?? "—"} · {unidade?.nome ?? "—"}
           </span>
         )}
-        <span className="font-mono text-[18px] text-fg-4">
+        <span className="font-mono text-[23px] text-fg-4">
           {pagas} pagas · {pendentes} pendentes · {parcelas.length} total
         </span>
       </div>
 
       {erro && (
-        <div className="px-4 py-[10px] mb-6 bg-[var(--danger-bg2)] border border-danger-fg font-mono text-[12px] text-danger-fg">
+        <div className="px-4 py-[10px] mb-6 bg-[var(--danger-bg2)] border border-danger-fg font-mono text-[15px] text-danger-fg">
           {erro}
         </div>
       )}
@@ -105,7 +105,7 @@ export default function Parcelas({ contratoId }) {
         </div>
 
         {parcelas.length === 0 && (
-          <div className="px-5 py-12 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
+          <div className="px-5 py-12 text-center font-mono text-[15px] text-fg-4 tracking-[0.5px]">
             Nenhuma parcela encontrada.
           </div>
         )}
@@ -117,25 +117,25 @@ export default function Parcelas({ contratoId }) {
             className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
           >
             <div className="px-5 py-4">
-              <span className="font-mono text-[18px] text-fg-2 font-bold">
+              <span className="font-mono text-[23px] text-fg-2 font-bold">
                 {String(parcela.numero).padStart(2, "0")}
               </span>
             </div>
 
             <div className="px-5 py-4">
-              <span className="font-mono text-[18px] text-fg-3">
+              <span className="font-mono text-[23px] text-fg-3">
                 {fmtData(parcela.data_fechamento)}
               </span>
             </div>
 
             <div className="px-5 py-4">
-              <span className={cn("font-mono text-[18px]", parcela.status === "vencida" ? "text-danger-fg" : "text-fg-3")}>
+              <span className={cn("font-mono text-[23px]", parcela.status === "vencida" ? "text-danger-fg" : "text-fg-3")}>
                 {fmtData(parcela.data_vencimento)}
               </span>
             </div>
 
             <div className="px-5 py-4">
-              <span className={cn("font-mono text-[18px]", parcela.data_pagamento ? "text-success" : "text-fg-5")}>
+              <span className={cn("font-mono text-[23px]", parcela.data_pagamento ? "text-success" : "text-fg-5")}>
                 {parcela.data_pagamento ? fmtData(parcela.data_pagamento) : "—"}
               </span>
             </div>
@@ -150,7 +150,7 @@ export default function Parcelas({ contratoId }) {
                   variant="outline"
                   size="sm"
                   onClick={() => marcarComoPaga(parcela)}
-                  className="border-success text-success font-mono text-[12px] uppercase tracking-[1px] font-bold rounded-none h-auto py-3 px-5"
+                  className="border-success text-success font-mono text-[15px] uppercase tracking-[1px] font-bold rounded-none h-auto py-3 px-5"
                 >
                   Marcar Paga
                 </Button>

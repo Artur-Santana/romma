@@ -79,10 +79,10 @@ export default function UnidadesPublicas() {
     <div className="bg-background h-dvh flex flex-col relative overflow-hidden">
       <div className="px-5 pt-5 pb-6 border-b border-border-3 flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors py-3 inline-flex items-center min-h-[44px]">← Voltar</Link>
+          <Link href="/" className="font-mono text-[14px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors py-3 inline-flex items-center min-h-[44px]">← Voltar</Link>
           <RealtimeDot />
         </div>
-        <h1 className="font-body font-bold text-[32px] tracking-[-1.6px] text-fg-1 leading-none m-0 whitespace-pre-line">
+        <h1 className="font-body font-bold text-[40px] tracking-[-1.6px] text-fg-1 leading-none m-0 whitespace-pre-line">
           {'Unidades\nDisponíveis.'}
         </h1>
       </div>
@@ -97,7 +97,7 @@ export default function UnidadesPublicas() {
             <button
               key={tab.id}
               style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box', minHeight: 44 }}
-              className={`px-3.5 py-3 min-h-[44px] inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
+              className={`px-3.5 py-3 min-h-[44px] inline-flex gap-2 font-body font-bold text-[13px] uppercase tracking-[0.5px] items-center border ${
                 isActive
                   ? 'border-indigo bg-[oklch(0.339_0.179_301.68/0.20)] text-fg-1'
                   : 'border-border-3 bg-transparent text-fg-3'
@@ -112,10 +112,10 @@ export default function UnidadesPublicas() {
       </div>
 
       <div className="px-5 py-4 border-b border-border-3 flex justify-between items-baseline">
-        <span className="font-mono text-[11px] text-fg-4 tracking-[0.5px] opacity-50">
+        <span className="font-mono text-[14px] text-fg-4 tracking-[0.5px] opacity-50">
           {filtered.length} {filtered.length === 1 ? 'UNIDADE' : 'UNIDADES'}
         </span>
-        <span className="font-mono text-[11px] text-fg-4 tracking-[0.5px] opacity-50">
+        <span className="font-mono text-[14px] text-fg-4 tracking-[0.5px] opacity-50">
           SYNC · {new Date().toISOString().slice(0, 10)}
         </span>
       </div>
@@ -123,13 +123,13 @@ export default function UnidadesPublicas() {
       <div className="flex-1 overflow-auto">
         {filtered.length === 0 ? (
           <div className="py-20 px-8 text-center flex flex-col gap-3 items-center">
-            <div className="w-12 h-12 border border-border-3 flex items-center justify-center text-[18px] text-fg-4">
+            <div className="w-12 h-12 border border-border-3 flex items-center justify-center text-[23px] text-fg-4">
               —
             </div>
-            <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-2 block">
+            <span className="font-body font-bold text-[28px] tracking-[-0.8px] text-fg-2 block">
               Nenhuma unidade disponível
             </span>
-            <p className="text-[12px] text-fg-4 leading-[1.5] max-w-[240px] m-0">
+            <p className="text-[15px] text-fg-4 leading-[1.5] max-w-[240px] m-0">
               Todas as unidades estão ocupadas no momento. Volte em breve.
             </p>
           </div>
@@ -149,7 +149,7 @@ export default function UnidadesPublicas() {
         )}
 
         <div className="py-8 px-5 text-center border-t border-border-3">
-          <span className="font-mono text-[11px] text-fg-5 tracking-[1.5px]">
+          <span className="font-mono text-[14px] text-fg-5 tracking-[1.5px]">
             POWERED BY ROMMA · GRID.OS
           </span>
         </div>

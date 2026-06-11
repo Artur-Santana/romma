@@ -12,19 +12,19 @@ export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemo
     >
       <div className="flex justify-between items-start gap-3 mb-2">
         <div className="flex flex-col gap-0.5">
-          <span className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase">
+          <span className="font-mono text-[14px] text-fg-5 tracking-[1px] uppercase">
             {refOf(unidade)}
           </span>
-          <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-1 leading-tight">
+          <span className="font-body font-bold text-[28px] tracking-[-0.8px] text-fg-1 leading-tight">
             {unidade.nome}
           </span>
           {edificio && (
-            <span className="text-[12px] text-fg-3 mt-0.5">{edificio.nome}</span>
+            <span className="text-[15px] text-fg-3 mt-0.5">{edificio.nome}</span>
           )}
         </div>
         <div className="flex flex-col items-end gap-1 shrink-0">
           {unidade.area_m2 != null && (
-            <span className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase whitespace-nowrap">
+            <span className="font-mono text-[14px] text-fg-5 tracking-[1px] uppercase whitespace-nowrap">
               {unidade.area_m2}m²
             </span>
           )}
@@ -35,18 +35,18 @@ export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemo
         <div>
           {unidade.valor_visivel ? (
             <span>
-              <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-1">
+              <span className="font-body font-bold text-[28px] tracking-[-0.8px] text-fg-1">
                 {fmtBRL(unidade.valor_mensal)}
               </span>
-              <span className="font-mono text-[11px] text-fg-4 ml-1.5">/mês</span>
+              <span className="font-mono text-[14px] text-fg-4 ml-1.5">/mês</span>
             </span>
           ) : (
-            <span className="font-mono text-[11px] text-fg-3 tracking-[1px] uppercase">
+            <span className="font-mono text-[14px] text-fg-3 tracking-[1px] uppercase">
               Consulte o Proprietário
             </span>
           )}
         </div>
-        <span className="font-body font-bold text-[11px] text-indigo uppercase tracking-[1px]">
+        <span className="font-body font-bold text-[14px] text-indigo uppercase tracking-[1px]">
           Detalhes →
         </span>
       </div>

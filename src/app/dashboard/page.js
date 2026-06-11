@@ -40,7 +40,7 @@ export default async function Dashboard() {
 
   if (erro) {
     return (
-      <div className="p-12 text-danger-fg font-mono text-[13px]">
+      <div className="p-12 text-danger-fg font-mono text-[16px]">
         Erro ao carregar dashboard. Tente novamente.
       </div>
     )
@@ -88,16 +88,16 @@ export default async function Dashboard() {
           <div className="romma-page p-12 bg-background min-h-full">
             <div className="flex flex-col gap-3 mb-12">
               <span className="eyebrow eyebrow--indigo">CONSOLE.OS // VISÃO DO PROPRIETÁRIO</span>
-              <h2 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Visão Geral.</h2>
+              <h2 className="font-display font-bold text-[60px] leading-none tracking-[-2.4px] text-fg-1 m-0">Visão Geral.</h2>
             </div>
 
             {/* Métricas ghosted */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }} className="border border-border-3 mb-12">
               {metricas.map((m, i) => (
                 <div key={m.idx} className={cn("p-7 relative", i < 3 ? "border-r border-border-3" : "")}>
-                  <span className="font-mono absolute top-4 right-4 text-[9px] text-fg-5">{m.idx}</span>
-                  <div className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase mb-3">{m.label}</div>
-                  <div className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-5">—</div>
+                  <span className="font-mono absolute top-4 right-4 text-[11px] text-fg-5">{m.idx}</span>
+                  <div className="font-mono text-[14px] text-fg-5 tracking-[1px] uppercase mb-3">{m.label}</div>
+                  <div className="font-display font-bold text-[60px] leading-none tracking-[-2.4px] text-fg-5">—</div>
                 </div>
               ))}
             </div>
@@ -105,8 +105,8 @@ export default async function Dashboard() {
             {/* Setup wizard */}
             <div className="border border-indigo p-16 max-w-[720px]">
               <span className="eyebrow eyebrow--indigo mb-4">SETUP.SEQUENCE</span>
-              <h3 className="font-display font-bold text-[32px] tracking-[-1.5px] text-fg-1 m-0 mb-2">Construa seu sistema.</h3>
-              <p className="text-[18px] text-fg-4 m-0 mb-10">Quatro etapas, zero atalhos. Configure o Romma para começar a gerir suas unidades.</p>
+              <h3 className="font-display font-bold text-[40px] tracking-[-1.5px] text-fg-1 m-0 mb-2">Construa seu sistema.</h3>
+              <p className="text-[23px] text-fg-4 m-0 mb-10">Quatro etapas, zero atalhos. Configure o Romma para começar a gerir suas unidades.</p>
               <div className="border border-border-3">
                 {[
                   { num: "01", label: "Cadastrar primeiro Edifício", href: "/dashboard/unidades", active: true },
@@ -117,10 +117,10 @@ export default async function Dashboard() {
                   const inner = (
                     <>
                       <div className="flex items-center gap-5">
-                        <span className={cn("font-mono text-[10px]", step.active ? "text-indigo" : "text-fg-5")}>{step.num}</span>
-                        <span className={cn("font-bold text-[18px] tracking-[0.5px] uppercase", step.active ? "text-fg-1" : "text-fg-5")}>{step.label}</span>
+                        <span className={cn("font-mono text-[13px]", step.active ? "text-indigo" : "text-fg-5")}>{step.num}</span>
+                        <span className={cn("font-bold text-[23px] tracking-[0.5px] uppercase", step.active ? "text-fg-1" : "text-fg-5")}>{step.label}</span>
                       </div>
-                      <span className={cn("font-mono text-[12px]", step.active ? "text-indigo" : "text-fg-5")}>{step.active ? "→" : "—"}</span>
+                      <span className={cn("font-mono text-[15px]", step.active ? "text-indigo" : "text-fg-5")}>{step.active ? "→" : "—"}</span>
                     </>
                   )
                   const rowCn = cn("flex items-center justify-between px-6 py-5 no-underline", i > 0 ? "border-t border-border-3" : "")
@@ -140,11 +140,11 @@ export default async function Dashboard() {
           <div className="romma-mobile-pane flex-1 overflow-auto p-5">
             <div className="border border-indigo p-6">
               <span className="eyebrow eyebrow--indigo mb-3">SETUP.SEQUENCE</span>
-              <h3 className="font-display font-bold text-[28px] tracking-[-1.4px] text-fg-1 m-0 mb-2 leading-[1.1]">Construa seu sistema.</h3>
-              <p className="text-[13px] text-fg-3 m-0 mb-6">Configure o Romma para começar a gerir suas unidades.</p>
+              <h3 className="font-display font-bold text-[35px] tracking-[-1.4px] text-fg-1 m-0 mb-2 leading-[1.1]">Construa seu sistema.</h3>
+              <p className="text-[16px] text-fg-3 m-0 mb-6">Configure o Romma para começar a gerir suas unidades.</p>
               <Link
                 href="/dashboard/unidades"
-                className="block bg-indigo py-[18px] px-6 no-underline font-mono text-[14px] text-white tracking-[1px] uppercase text-center"
+                className="block bg-indigo py-[18px] px-6 no-underline font-mono text-[18px] text-white tracking-[1px] uppercase text-center"
               >
                 Cadastrar Edifício →
               </Link>
@@ -169,11 +169,11 @@ export default async function Dashboard() {
           <div className="flex justify-between items-end mb-12">
             <div className="flex flex-col gap-3">
               <span className="eyebrow eyebrow--indigo">CONSOLE.OS // VISÃO DO PROPRIETÁRIO</span>
-              <h2 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Visão Geral.</h2>
+              <h2 className="font-display font-bold text-[60px] leading-none tracking-[-2.4px] text-fg-1 m-0">Visão Geral.</h2>
               <div className="flex items-center gap-4 mt-1">
-                <span className="font-mono text-[12px] text-fg-3">OPERADOR · {proprietarioNome}</span>
+                <span className="font-mono text-[15px] text-fg-3">OPERADOR · {proprietarioNome}</span>
                 <span className="w-px h-3 bg-[var(--border-2)]" />
-                <span className="font-mono text-[12px] text-fg-3">{edificios.length} EDIFÍCIOS · {unidades.length} UNIDADES</span>
+                <span className="font-mono text-[15px] text-fg-3">{edificios.length} EDIFÍCIOS · {unidades.length} UNIDADES</span>
               </div>
             </div>
             <RealtimeDot label="REALTIME · GRID.OS.ALPHA" />
@@ -187,10 +187,10 @@ export default async function Dashboard() {
                 i < 3 ? "border-r border-border-3" : "",
                 m.warn ? "bg-warning-bg" : "bg-transparent"
               )}>
-                <span className="font-mono absolute top-4 right-4 text-[9px] text-fg-5">{m.idx}</span>
-                <div className={cn("font-mono text-[11px] tracking-[1px] uppercase", m.warn ? "text-warning" : "text-fg-4")}>{m.label}</div>
-                <div className={cn("font-display font-bold text-[48px] leading-none tracking-[-2.4px]", m.warn ? "text-warning" : "text-fg-1")}>{m.value}</div>
-                <div className={cn("font-mono text-[11px]", m.warn ? "text-warning" : "text-fg-4")}>{m.sub}</div>
+                <span className="font-mono absolute top-4 right-4 text-[11px] text-fg-5">{m.idx}</span>
+                <div className={cn("font-mono text-[14px] tracking-[1px] uppercase", m.warn ? "text-warning" : "text-fg-4")}>{m.label}</div>
+                <div className={cn("font-display font-bold text-[60px] leading-none tracking-[-2.4px]", m.warn ? "text-warning" : "text-fg-1")}>{m.value}</div>
+                <div className={cn("font-mono text-[14px]", m.warn ? "text-warning" : "text-fg-4")}>{m.sub}</div>
               </div>
             ))}
           </div>
@@ -200,7 +200,7 @@ export default async function Dashboard() {
             <div className="bg-warning-bg border-l-2 border-warning px-6 py-4 mb-8 flex justify-between items-center">
               <div>
                 <span className="eyebrow eyebrow--warning mb-1">ATENÇÃO · CONTRATOS A VENCER</span>
-                <span className="text-[13px] text-warning block">
+                <span className="text-[16px] text-warning block">
                   {vencendoContratos.map(c => {
                     const loc  = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
                     const uni  = c.unidades?.nome ?? unidades.find(u => u.id === c.unidade_id)?.nome ?? "—"
@@ -211,7 +211,7 @@ export default async function Dashboard() {
               </div>
               <Link
                 href="/dashboard/contratos"
-                className="font-mono text-[12px] text-warning border border-warning px-4 py-2 tracking-[0.5px] shrink-0 ml-6 no-underline"
+                className="font-mono text-[15px] text-warning border border-warning px-4 py-2 tracking-[0.5px] shrink-0 ml-6 no-underline"
               >
                 Renovar →
               </Link>
@@ -226,18 +226,18 @@ export default async function Dashboard() {
               <div className="flex justify-between items-end mb-5">
                 <div>
                   <span className="eyebrow eyebrow--indigo mb-1.5">SISTEMA.01</span>
-                  <h5 className="font-display font-bold text-[30px] tracking-[-0.5px] text-fg-1 m-0">Contratos Recentes</h5>
+                  <h5 className="font-display font-bold text-[38px] tracking-[-0.5px] text-fg-1 m-0">Contratos Recentes</h5>
                 </div>
-                <Link href="/dashboard/contratos" className="font-mono text-[12px] text-indigo no-underline tracking-[0.5px]">Ver todos →</Link>
+                <Link href="/dashboard/contratos" className="font-mono text-[15px] text-indigo no-underline tracking-[0.5px]">Ver todos →</Link>
               </div>
               <div className="bg-surface border border-border-3">
                 <div style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-3 bg-[var(--surface-hi)]">
                   {["Locatário · Unidade", "Valor mensal", "Término", "Status"].map(col => (
-                    <span key={col} className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">{col}</span>
+                    <span key={col} className="font-mono text-[13px] text-fg-4 tracking-[1px] uppercase">{col}</span>
                   ))}
                 </div>
                 {contratosRecentes.length === 0 && (
-                  <div className="font-mono px-5 py-6 text-[12px] text-fg-5">Nenhum contrato ativo.</div>
+                  <div className="font-mono px-5 py-6 text-[15px] text-fg-5">Nenhum contrato ativo.</div>
                 )}
                 {contratosRecentes.map(c => {
                   const locNome = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
@@ -251,15 +251,15 @@ export default async function Dashboard() {
                     <div key={c.id} style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-4 border-t border-border-3 items-center">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-surface-hi flex items-center justify-center shrink-0">
-                          <span className="font-mono text-[10px] text-fg-2 font-bold">{getInitials(locNome)}</span>
+                          <span className="font-mono text-[13px] text-fg-2 font-bold">{getInitials(locNome)}</span>
                         </div>
                         <div>
-                          <div className="text-[18px] text-fg-1 font-semibold">{locNome}</div>
-                          <div className="font-mono text-[10px] text-fg-4">{uniNome} · {ediNome}</div>
+                          <div className="text-[23px] text-fg-1 font-semibold">{locNome}</div>
+                          <div className="font-mono text-[13px] text-fg-4">{uniNome} · {ediNome}</div>
                         </div>
                       </div>
-                      <span className="font-mono text-[18px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
-                      <span className={cn("font-mono text-[18px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
+                      <span className="font-mono text-[23px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
+                      <span className={cn("font-mono text-[23px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
                       <StatusBadge status={isExpiring ? "vencendo" : c.status} />
                     </div>
                   )
@@ -271,11 +271,11 @@ export default async function Dashboard() {
             <div>
               <div className="mb-5">
                 <span className="eyebrow eyebrow--indigo mb-1.5">SISTEMA.02</span>
-                <h5 className="font-display font-bold text-[30px] tracking-[-0.5px] text-fg-1 m-0">Parcelas</h5>
+                <h5 className="font-display font-bold text-[38px] tracking-[-0.5px] text-fg-1 m-0">Parcelas</h5>
               </div>
               <div className="bg-surface border border-border-3">
                 {parcelasRecentes.length === 0 && (
-                  <div className="font-mono px-5 py-6 text-[12px] text-fg-5">Sem parcelas pendentes.</div>
+                  <div className="font-mono px-5 py-6 text-[15px] text-fg-5">Sem parcelas pendentes.</div>
                 )}
                 {parcelasRecentes.map((p, i) => {
                   const contrato      = contratos.find(c => c.id === p.contrato_id)
@@ -287,12 +287,12 @@ export default async function Dashboard() {
                   return (
                     <div key={p.id} className={cn("px-5 py-4 flex justify-between items-center", i > 0 ? "border-t border-border-3" : "")}>
                       <div>
-                        <div className="text-[18px] text-fg-1 font-semibold">{loc?.nome_razao_social ?? "—"}</div>
-                        <div className="font-mono text-[10px] text-fg-4">{uni?.nome ?? "—"} · {edi?.nome ?? "—"}</div>
+                        <div className="text-[23px] text-fg-1 font-semibold">{loc?.nome_razao_social ?? "—"}</div>
+                        <div className="font-mono text-[13px] text-fg-4">{uni?.nome ?? "—"} · {edi?.nome ?? "—"}</div>
                       </div>
                       <div className="text-right">
-                        <div className="font-mono text-[18px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
-                        <div className={cn("font-mono text-[10px]", isVencida ? "text-warning" : "text-fg-4")}>
+                        <div className="font-mono text-[23px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
+                        <div className={cn("font-mono text-[13px]", isVencida ? "text-warning" : "text-fg-4")}>
                           {isVencida ? `${Math.abs(diasRestantes)}d atraso` : `${diasRestantes}d restantes`}
                         </div>
                       </div>
@@ -320,10 +320,10 @@ export default async function Dashboard() {
                 )}
               >
                 <div className="flex items-center gap-4">
-                  <span className="font-mono text-[11px] text-indigo tracking-[1px]">{action.code}</span>
-                  <span className="font-semibold text-[18px] text-fg-2 tracking-[0.5px] uppercase">{action.label}</span>
+                  <span className="font-mono text-[14px] text-indigo tracking-[1px]">{action.code}</span>
+                  <span className="font-semibold text-[23px] text-fg-2 tracking-[0.5px] uppercase">{action.label}</span>
                 </div>
-                <span className="font-mono text-[12px] text-fg-4">→</span>
+                <span className="font-mono text-[15px] text-fg-4">→</span>
               </Link>
             ))}
           </div>
@@ -339,30 +339,30 @@ export default async function Dashboard() {
           {/* Stats row 1: Ocupação + Contratos */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="mx-5 mt-5 border border-border-3 border-b-0">
             <div className="p-5 flex flex-col gap-1 border-r border-border-3">
-              <div className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Ocupação</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1">{pctOcupacao}%</div>
-              <div className="font-mono text-[10px] text-fg-4">{alugadas}/{unidades.length} unidades</div>
+              <div className="font-mono text-[13px] text-fg-4 tracking-[1px] uppercase">Ocupação</div>
+              <div className="font-display font-bold text-[45px] leading-none tracking-[-1.8px] text-fg-1">{pctOcupacao}%</div>
+              <div className="font-mono text-[13px] text-fg-4">{alugadas}/{unidades.length} unidades</div>
             </div>
             <div className="p-5 flex flex-col gap-1">
-              <div className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Contratos</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1">{ativos}</div>
-              <div className="font-mono text-[10px] text-fg-4">ativos</div>
+              <div className="font-mono text-[13px] text-fg-4 tracking-[1px] uppercase">Contratos</div>
+              <div className="font-display font-bold text-[45px] leading-none tracking-[-1.8px] text-fg-1">{ativos}</div>
+              <div className="font-mono text-[13px] text-fg-4">ativos</div>
             </div>
           </div>
 
           {/* Stats row 2: MRR + Receita Esperada */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="mx-5 mb-6 border border-border-3">
             <div className="p-5 flex flex-col gap-1 border-r border-border-3">
-              <div className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">MRR</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1">
+              <div className="font-mono text-[13px] text-fg-4 tracking-[1px] uppercase">MRR</div>
+              <div className="font-display font-bold text-[45px] leading-none tracking-[-1.8px] text-fg-1">
                 {mrr >= 1000 ? `R$${(mrr / 1000).toFixed(1)}k` : fmtBRL(mrr)}
               </div>
-              <div className="font-mono text-[10px] text-fg-4">/ mês</div>
+              <div className="font-mono text-[13px] text-fg-4">/ mês</div>
             </div>
             <div className="p-5 flex flex-col gap-1">
-              <div className="font-mono text-[10px] text-warning tracking-[1px] uppercase">Receita Esperada</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-warning">{fmtBRL(totalPendente)}</div>
-              <div className="font-mono text-[10px] text-warning">{parcelas.length} parcela(s) em aberto</div>
+              <div className="font-mono text-[13px] text-warning tracking-[1px] uppercase">Receita Esperada</div>
+              <div className="font-display font-bold text-[45px] leading-none tracking-[-1.8px] text-warning">{fmtBRL(totalPendente)}</div>
+              <div className="font-mono text-[13px] text-warning">{parcelas.length} parcela(s) em aberto</div>
             </div>
           </div>
 
@@ -370,7 +370,7 @@ export default async function Dashboard() {
           {vencendoContratos.length > 0 && (
             <div className="bg-warning-bg border-l-2 border-warning px-5 py-[14px] mx-5 mb-6">
               <span className="eyebrow eyebrow--warning mb-1">ALERTA · VENCIMENTO PRÓXIMO</span>
-              <span className="text-[12px] text-warning block">
+              <span className="text-[15px] text-warning block">
                 {(() => {
                   const c = vencendoContratos[0]
                   const loc  = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
@@ -386,11 +386,11 @@ export default async function Dashboard() {
           <div className="mx-5 mb-6">
             <div className="flex justify-between items-center mb-3">
               <span className="eyebrow eyebrow--indigo">SISTEMA.01 · CONTRATOS</span>
-              <Link href="/dashboard/contratos" className="font-mono text-[11px] text-indigo no-underline">Todos →</Link>
+              <Link href="/dashboard/contratos" className="font-mono text-[14px] text-indigo no-underline">Todos →</Link>
             </div>
             <div className="bg-surface border border-border-3">
               {contratosRecentesMobile.length === 0 && (
-                <div className="font-mono px-4 py-5 text-[11px] text-fg-5">Nenhum contrato ativo.</div>
+                <div className="font-mono px-4 py-5 text-[14px] text-fg-5">Nenhum contrato ativo.</div>
               )}
               {contratosRecentesMobile.map((c, i) => {
                 const locNome = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
@@ -399,11 +399,11 @@ export default async function Dashboard() {
                 return (
                   <div key={c.id} className={cn("p-4 flex flex-col gap-1.5", i > 0 ? "border-t border-border-3" : "")}>
                     <div className="flex justify-between items-center">
-                      <span className="text-[13px] text-fg-1 font-medium">{locNome}</span>
-                      <span className="font-mono text-[12px] text-fg-1">{fmtBRL(uni?.valor_mensal)}</span>
+                      <span className="text-[16px] text-fg-1 font-medium">{locNome}</span>
+                      <span className="font-mono text-[15px] text-fg-1">{fmtBRL(uni?.valor_mensal)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="font-mono text-[10px] text-fg-4">{uniNome} · {fmtData(c.data_fim)}</span>
+                      <span className="font-mono text-[13px] text-fg-4">{uniNome} · {fmtData(c.data_fim)}</span>
                       <StatusBadge status={c.status} />
                     </div>
                   </div>
@@ -431,8 +431,8 @@ export default async function Dashboard() {
                     i >= 2 ? "border-t border-border-3" : ""
                   )}
                 >
-                  <span className="font-mono text-[9px] text-indigo">{action.code}</span>
-                  <span className="font-bold text-[11px] text-fg-1 tracking-[0.5px] uppercase leading-[1.2]">{action.label}</span>
+                  <span className="font-mono text-[11px] text-indigo">{action.code}</span>
+                  <span className="font-bold text-[14px] text-fg-1 tracking-[0.5px] uppercase leading-[1.2]">{action.label}</span>
                 </Link>
               ))}
             </div>

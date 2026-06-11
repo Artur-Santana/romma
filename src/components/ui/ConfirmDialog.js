@@ -30,23 +30,23 @@ export default function ConfirmDialog({
         )}
       >
         <span className={`eyebrow ${eyebrowMod}`}>{eyebrowText}</span>
-        <div className="font-display font-bold text-[28px] tracking-[-1.2px] text-fg-1 leading-[1.1]">
+        <div className="font-display font-bold text-[35px] tracking-[-1.2px] text-fg-1 leading-[1.1]">
           {title}
         </div>
-        <div className="text-[14px] leading-[1.5] text-fg-2">
+        <div className="text-[18px] leading-[1.5] text-fg-2">
           {body}
         </div>
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 border border-border-3 bg-transparent py-[14px] font-body font-bold text-[12px] tracking-[1.2px] uppercase text-fg-2 cursor-pointer"
+            className="flex-1 border border-border-3 bg-transparent py-[14px] font-body font-bold text-[15px] tracking-[1.2px] uppercase text-fg-2 cursor-pointer"
           >
             {cancelLabel}
           </button>
           <button
             onClick={onConfirm}
             className={cn(
-              "flex-1 border-none py-[14px] font-body font-bold text-[12px] tracking-[1.2px] uppercase cursor-pointer",
+              "flex-1 border-none py-[14px] font-body font-bold text-[15px] tracking-[1.2px] uppercase cursor-pointer",
               danger ? "bg-[var(--danger-bg)] text-danger-fg" : "bg-indigo text-fg-1"
             )}
           >
