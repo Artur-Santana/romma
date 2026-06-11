@@ -8,7 +8,7 @@ import StatusBadge from "@/components/ui/StatusBadge"
 import { Button } from "@/components/ui/button"
 import { marcarParcelaComoPaga } from "@/actions/parcelas"
 
-const COL = "60px 1fr 1fr 1fr 1.2fr 120px"
+const COL = "72px 1fr 1fr 1fr 1.2fr 120px"
 const gridStyle = { gridTemplateColumns: COL }
 
 function HeaderCell({ children }) {
@@ -78,11 +78,11 @@ export default function Parcelas({ contratoId }) {
           Parcelas.
         </h2>
         {(locatario || unidade) && (
-          <span className="font-mono text-[12px] text-fg-3">
+          <span className="font-mono text-[14px] text-fg-3">
             {locatario?.nome_razao_social ?? "—"} · {unidade?.nome ?? "—"}
           </span>
         )}
-        <span className="font-mono text-[12px] text-fg-4">
+        <span className="font-mono text-[14px] text-fg-4">
           {pagas} pagas · {pendentes} pendentes · {parcelas.length} total
         </span>
       </div>
@@ -95,7 +95,7 @@ export default function Parcelas({ contratoId }) {
 
       {/* Table */}
       <div className="border border-border-3 bg-surface mb-8">
-        <div style={gridStyle} className="grid bg-[oklch(0.26_0_0)] border-b border-border-3">
+        <div style={gridStyle} className="grid bg-[var(--surface-hi)] border-b border-border-3">
           <HeaderCell>#</HeaderCell>
           <HeaderCell>Fechamento</HeaderCell>
           <HeaderCell>Vencimento</HeaderCell>
@@ -116,35 +116,35 @@ export default function Parcelas({ contratoId }) {
             style={gridStyle}
             className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
           >
-            <div className="px-5 py-[14px]">
-              <span className="font-mono text-[12px] text-fg-2 font-bold">
+            <div className="px-5 py-4">
+              <span className="font-mono text-[14px] text-fg-2 font-bold">
                 {String(parcela.numero).padStart(2, "0")}
               </span>
             </div>
 
-            <div className="px-5 py-[14px]">
-              <span className="font-mono text-[11px] text-fg-3">
+            <div className="px-5 py-4">
+              <span className="font-mono text-[14px] text-fg-3">
                 {fmtData(parcela.data_fechamento)}
               </span>
             </div>
 
-            <div className="px-5 py-[14px]">
-              <span className={cn("font-mono text-[11px]", parcela.status === "vencida" ? "text-danger-fg" : "text-fg-3")}>
+            <div className="px-5 py-4">
+              <span className={cn("font-mono text-[14px]", parcela.status === "vencida" ? "text-danger-fg" : "text-fg-3")}>
                 {fmtData(parcela.data_vencimento)}
               </span>
             </div>
 
-            <div className="px-5 py-[14px]">
-              <span className={cn("font-mono text-[11px]", parcela.data_pagamento ? "text-success" : "text-fg-5")}>
+            <div className="px-5 py-4">
+              <span className={cn("font-mono text-[14px]", parcela.data_pagamento ? "text-success" : "text-fg-5")}>
                 {parcela.data_pagamento ? fmtData(parcela.data_pagamento) : "—"}
               </span>
             </div>
 
-            <div className="px-5 py-[14px]">
+            <div className="px-5 py-4">
               <StatusBadge status={parcela.status} />
             </div>
 
-            <div className="px-5 py-[14px]">
+            <div className="px-5 py-4">
               {(parcela.status === "pendente" || parcela.status === "vencida") && (
                 <Button
                   variant="outline"
