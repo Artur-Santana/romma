@@ -123,7 +123,7 @@ export default function UnidadeCard({
             {unidade.nome}
           </span>
           {unidade.descricao && (
-            <span className="font-body text-[12px] text-fg-3 mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap">
+            <span className="font-body text-[14px] text-fg-3 mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap">
               {unidade.descricao}
             </span>
           )}
