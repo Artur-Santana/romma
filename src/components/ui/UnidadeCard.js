@@ -95,7 +95,7 @@ export default function UnidadeCard({
             variant="default"
             size="sm"
             onClick={() => onSalvar(unidade.id)}
-            className="bg-indigo text-fg-1 font-mono font-bold text-[11px] tracking-[1px] uppercase rounded-none px-5 h-9"
+            className="bg-indigo text-fg-1 font-mono font-bold text-[13px] tracking-[1px] uppercase rounded-none px-5 h-9"
           >
             Salvar
           </Button>
@@ -123,7 +123,7 @@ export default function UnidadeCard({
             {unidade.nome}
           </span>
           {unidade.descricao && (
-            <span className="font-body text-[14px] text-fg-3 mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap">
+            <span className="font-body text-[18px] text-fg-3 mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap">
               {unidade.descricao}
             </span>
           )}
