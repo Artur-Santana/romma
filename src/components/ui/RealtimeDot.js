@@ -11,7 +11,7 @@ export default function RealtimeDot({ label, compact = false }) {
         <span
           className={cn(
             "font-mono uppercase text-fg-2",
-            compact ? "text-[9px] tracking-[0.5px]" : "text-[10px] tracking-[1px]"
+            compact ? "text-[11px] tracking-[0.5px]" : "text-[13px] tracking-[1px]"
           )}
         >
           {label}
