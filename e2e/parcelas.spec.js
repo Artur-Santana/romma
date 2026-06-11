@@ -37,10 +37,13 @@ test.describe('TEST-02 — Parcelas', () => {
   let contratoId
 
   test.beforeAll(async () => {
+    const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
+    const proprietarioId = prop.usuario_id
+
     // 1. Edifício
     const { data: edificio, error: errEdificio } = await admin
       .from('edificios')
-      .insert({ nome: 'E2E-Edifício Parcelas', endereco: 'Rua E2E Parcelas, 2' })
+      .insert({ nome: 'E2E-Edifício Parcelas', endereco: 'Rua E2E Parcelas, 2', proprietario_id: proprietarioId })
       .select()
       .single()
     if (errEdificio) throw errEdificio
@@ -76,6 +79,7 @@ test.describe('TEST-02 — Parcelas', () => {
       .from('locatarios')
       .insert({
         usuario_id: authUserId,
+        proprietario_id: proprietarioId,
         nome_razao_social: 'E2E-Locatário Parcelas',
         tipo: 'pf',
         documento: '98765432100',

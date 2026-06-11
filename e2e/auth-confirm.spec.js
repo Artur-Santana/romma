@@ -61,8 +61,10 @@ test.describe('BUG-03 — status_convite atualizado após aceite de convite', ()
     inviteUserId = inviteData.user.id
 
     // Criar linha locatarios com status_convite='pendente'
+    const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
     const { data: loc, error: errL } = await admin.from('locatarios').insert({
       usuario_id: inviteUserId,
+      proprietario_id: prop.usuario_id,
       nome_razao_social: 'E2E-Locatário BUG03',
       tipo: 'pf',
       documento: '11122233344',
