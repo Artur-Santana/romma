@@ -44,11 +44,11 @@ export default function PortalDashboard() {
         <span className="eyebrow eyebrow--indigo">PORTAL DO LOCATÁRIO</span>
         <LogoutButton />
       </div>
-      <h1 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Seu Contrato.</h1>
-      <p className="font-mono text-[11px] text-fg-4 mt-2">Acesso restrito — contrato e histórico de parcelas.</p>
+      <h1 className="font-display font-bold text-[72px] leading-none tracking-[-2.4px] text-fg-1 m-0">Seu Contrato.</h1>
+      <p className="font-mono text-[17px] text-fg-4 mt-2">Acesso restrito — contrato e histórico de parcelas.</p>
 
       {erro ? (
-        <div className="px-4 py-[10px] mt-8 bg-[var(--danger-bg2)] border border-danger-fg font-mono text-[12px] text-danger-fg">
+        <div className="px-4 py-[10px] mt-8 bg-[var(--danger-bg2)] border border-danger-fg font-mono text-[18px] text-danger-fg">
           <strong>Erro ao carregar dados</strong><br />Não foi possível buscar seu contrato. Tente recarregar a página.
         </div>
       ) : loading ? (
@@ -61,8 +61,8 @@ export default function PortalDashboard() {
         </div>
       ) : !contrato ? (
         <div className="mt-8">
-          <h2 className="font-display font-bold text-[28px] text-fg-1">Nenhum contrato ativo</h2>
-          <p className="font-mono text-[12px] text-fg-4 mt-2">Você não possui contrato ativo. Entre em contato com o proprietário.</p>
+          <h2 className="font-display font-bold text-[42px] text-fg-1">Nenhum contrato ativo</h2>
+          <p className="font-mono text-[18px] text-fg-4 mt-2">Você não possui contrato ativo. Entre em contato com o proprietário.</p>
         </div>
       ) : (
         <>
