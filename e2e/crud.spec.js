@@ -108,6 +108,9 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     let locatarioUserId, locatarioId
 
     test.beforeAll(async () => {
+      const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
+      const proprietarioId = prop.usuario_id
+
       // Criar auth user confirmado para o teste de edição (invite cria status pendente → sem botão Editar)
       const { data: list } = await admin.auth.admin.listUsers()
       const existing = list.users.find(u => u.email === 'e2e-edit-loc@test.romma.local')
@@ -128,6 +131,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       // Criar locatário confirmado (status_convite='aceito' → mostra botão Editar)
       const { data: loc, error: errL } = await admin.from('locatarios').insert({
         usuario_id: locatarioUserId,
+        proprietario_id: proprietarioId,
         nome_razao_social: 'E2E-Locatário Teste',
         tipo: 'pf',
         documento: '12345678901',
@@ -181,6 +185,9 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     let comContratoUserId, comContratoLocatarioId, comContratoEdificioId, comContratoUnidadeId, comContratoId
 
     test.beforeAll(async () => {
+      const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
+      const proprietarioId = prop.usuario_id
+
       // --- Locatário pendente SEM contrato (para cenário de revogar sucesso) ---
       const { data: list } = await admin.auth.admin.listUsers()
       const existingRevoke = list.users.find(u => u.email === 'e2e-revogar@test.romma.local')
@@ -208,6 +215,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       }
       const { data: loc, error: errL } = await admin.from('locatarios').insert({
         usuario_id: revogarUserId,
+        proprietario_id: proprietarioId,
         nome_razao_social: 'E2E-Locatário Revogar',
         tipo: 'pf',
         documento: '98765432100',
@@ -243,6 +251,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       }
       const { data: loc2, error: errL2 } = await admin.from('locatarios').insert({
         usuario_id: comContratoUserId,
+        proprietario_id: proprietarioId,
         nome_razao_social: 'E2E-Locatário FK',
         tipo: 'pj',
         documento: '12345678000111',
@@ -257,6 +266,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       const { data: edif, error: errEd } = await admin.from('edificios').insert({
         nome: 'E2E-Edifício BUG01',
         endereco: 'Rua BUG01, 1',
+        proprietario_id: proprietarioId,
       }).select().single()
       if (errEd) throw errEd
       comContratoEdificioId = edif.id
@@ -375,6 +385,9 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     let edificioId, unidadeId, locatarioId, locatarioUserId
 
     test.beforeAll(async () => {
+      const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
+      const proprietarioId = prop.usuario_id
+
       // Criar auth user para o locatário de contratos
       const { data: list } = await admin.auth.admin.listUsers()
       const existing = list.users.find(u => u.email === 'e2e-contratos@test.romma.local')
@@ -393,7 +406,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
       // Criar edifício
       const { data: edificio, error: errE } = await admin
         .from('edificios')
-        .insert({ nome: 'E2E-Edifício Contratos', endereco: 'Rua E2E Contratos, 1' })
+        .insert({ nome: 'E2E-Edifício Contratos', endereco: 'Rua E2E Contratos, 1', proprietario_id: proprietarioId })
         .select()
         .single()
       if (errE) throw errE
@@ -435,6 +448,7 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
         .from('locatarios')
         .insert({
           usuario_id: locatarioUserId,
+          proprietario_id: proprietarioId,
           nome_razao_social: 'E2E-Locatário Contratos',
           tipo: 'pj',
           documento: '12345678000195',
