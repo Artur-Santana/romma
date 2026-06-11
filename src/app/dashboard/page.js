@@ -118,7 +118,7 @@ export default async function Dashboard() {
                     <>
                       <div className="flex items-center gap-5">
                         <span className={cn("font-mono text-[10px]", step.active ? "text-indigo" : "text-fg-5")}>{step.num}</span>
-                        <span className={cn("font-bold text-[13px] tracking-[0.5px] uppercase", step.active ? "text-fg-1" : "text-fg-5")}>{step.label}</span>
+                        <span className={cn("font-bold text-[14px] tracking-[0.5px] uppercase", step.active ? "text-fg-1" : "text-fg-5")}>{step.label}</span>
                       </div>
                       <span className={cn("font-mono text-[12px]", step.active ? "text-indigo" : "text-fg-5")}>{step.active ? "→" : "—"}</span>
                     </>
@@ -231,7 +231,7 @@ export default async function Dashboard() {
                 <Link href="/dashboard/contratos" className="font-mono text-[12px] text-indigo no-underline tracking-[0.5px]">Ver todos →</Link>
               </div>
               <div className="bg-surface border border-border-3">
-                <div style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-3 bg-[oklch(0.26_0_0)]">
+                <div style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-3 bg-[var(--surface-hi)]">
                   {["Locatário · Unidade", "Valor mensal", "Término", "Status"].map(col => (
                     <span key={col} className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">{col}</span>
                   ))}
@@ -254,12 +254,12 @@ export default async function Dashboard() {
                           <span className="font-mono text-[10px] text-fg-2 font-bold">{getInitials(locNome)}</span>
                         </div>
                         <div>
-                          <div className="text-[13px] text-fg-1 font-semibold">{locNome}</div>
+                          <div className="text-[14px] text-fg-1 font-semibold">{locNome}</div>
                           <div className="font-mono text-[10px] text-fg-4">{uniNome} · {ediNome}</div>
                         </div>
                       </div>
-                      <span className="font-mono text-[13px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
-                      <span className={cn("font-mono text-[12px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
+                      <span className="font-mono text-[14px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
+                      <span className={cn("font-mono text-[14px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
                       <StatusBadge status={isExpiring ? "vencendo" : c.status} />
                     </div>
                   )
@@ -287,11 +287,11 @@ export default async function Dashboard() {
                   return (
                     <div key={p.id} className={cn("px-5 py-4 flex justify-between items-center", i > 0 ? "border-t border-border-3" : "")}>
                       <div>
-                        <div className="text-[13px] text-fg-1 font-semibold">{loc?.nome_razao_social ?? "—"}</div>
+                        <div className="text-[14px] text-fg-1 font-semibold">{loc?.nome_razao_social ?? "—"}</div>
                         <div className="font-mono text-[10px] text-fg-4">{uni?.nome ?? "—"} · {edi?.nome ?? "—"}</div>
                       </div>
                       <div className="text-right">
-                        <div className="font-mono text-[13px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
+                        <div className="font-mono text-[14px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
                         <div className={cn("font-mono text-[10px]", isVencida ? "text-warning" : "text-fg-4")}>
                           {isVencida ? `${Math.abs(diasRestantes)}d atraso` : `${diasRestantes}d restantes`}
                         </div>
@@ -321,7 +321,7 @@ export default async function Dashboard() {
               >
                 <div className="flex items-center gap-4">
                   <span className="font-mono text-[11px] text-indigo tracking-[1px]">{action.code}</span>
-                  <span className="font-semibold text-[13px] text-fg-2 tracking-[0.5px] uppercase">{action.label}</span>
+                  <span className="font-semibold text-[14px] text-fg-2 tracking-[0.5px] uppercase">{action.label}</span>
                 </div>
                 <span className="font-mono text-[12px] text-fg-4">→</span>
               </Link>
