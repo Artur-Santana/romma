@@ -1,5 +1,6 @@
 import TopStrip from "@/components/ui/TopStrip"
 import OwnerSidebar from "@/components/ui/OwnerSidebar"
+import ThemeToggle from "@/components/ui/ThemeToggle"
 
 export default function DashboardLayout({ children }) {
   return (
@@ -10,9 +11,12 @@ export default function DashboardLayout({ children }) {
           <OwnerSidebar badges={{}} />
         </div>
         <main style={{ flex: 1, overflow: "auto", background: "var(--background)" }}>
-          {children}
+          <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 24px" }}>
+            {children}
+          </div>
         </main>
       </div>
+      {process.env.NODE_ENV === "development" && <ThemeToggle />}
     </div>
   )
 }
