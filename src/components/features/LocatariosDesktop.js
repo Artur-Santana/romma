@@ -112,7 +112,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       {/* Table */}
       <div className="bg-surface border border-border-3">
         {/* Header */}
-        <div style={{ display: "grid", gridTemplateColumns: GRID }} className="px-5 py-3 bg-[oklch(0.26_0_0)]">
+        <div style={{ display: "grid", gridTemplateColumns: GRID }} className="px-5 py-3 bg-[var(--surface-hi)]">
           {["Nome", "Tipo", "Documento", "Email", "Contratos", "Status", "Ações"].map(h => (
             <span key={h} className="font-mono text-[9px] font-bold tracking-[1.5px] uppercase text-fg-4">{h}</span>
           ))}
@@ -142,7 +142,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                 <div className={cn("w-8 h-8 shrink-0 flex items-center justify-center border font-body font-bold text-[10px] tracking-[1px]", isPendente ? "bg-transparent border-border-2 text-fg-4" : "bg-surface border-border-2 text-fg-1")}>
                   {ini}
                 </div>
-                <span className="font-body font-medium text-[13px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">{l.nome_razao_social}</span>
+                <span className="font-body font-medium text-[14px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">{l.nome_razao_social}</span>
               </div>
 
               {/* Tipo */}
@@ -151,15 +151,15 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
               </span>
 
               {/* Documento */}
-              <span className="font-mono text-[11px] text-fg-2">
+              <span className="font-mono text-[14px] text-fg-2">
                 {fmtDoc(l.tipo, l.documento)}
               </span>
 
               {/* Email */}
-              <span className="font-mono text-[11px] text-fg-3 overflow-hidden text-ellipsis whitespace-nowrap">{l.email}</span>
+              <span className="font-mono text-[14px] text-fg-3 overflow-hidden text-ellipsis whitespace-nowrap">{l.email}</span>
 
               {/* Contratos */}
-              <span className="font-mono text-[12px] text-fg-2">
+              <span className="font-mono text-[14px] text-fg-2">
                 {ativosCount}/{cs.length}
               </span>
 
@@ -222,7 +222,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">LOCATÁRIO</span>
-              <h3 className="font-body font-bold text-[20px] text-fg-1 m-0">
+              <h3 className="font-body font-bold text-[24px] text-fg-1 m-0">
                 Editar Locatário
               </h3>
             </div>
@@ -319,7 +319,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">NOVO LOCATÁRIO</span>
-              <h3 className="font-body font-bold text-[20px] text-fg-1 m-0">
+              <h3 className="font-body font-bold text-[24px] text-fg-1 m-0">
                 Enviar Convite
               </h3>
             </div>
