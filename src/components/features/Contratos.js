@@ -17,7 +17,7 @@ function SkeletonContratos() {
   return (
     <div className="romma-page px-12 pt-12 pb-20 bg-background min-h-full">
       <div className="border border-border-3 bg-surface mb-8">
-        <div className="px-5 py-3 bg-[oklch(0.26_0_0)] border-b border-border-3">
+        <div className="px-5 py-3 bg-[var(--surface-hi)] border-b border-border-3">
           {[0, 1, 2, 3, 4].map((i) => (
             <Skeleton key={i} className="h-[10px] w-full rounded-none mb-2" />
           ))}
@@ -43,7 +43,7 @@ function isExpiring(c) {
   return diff >= 0 && diff <= 7
 }
 
-const COL = "100px 1.6fr 1.6fr 1fr 1fr 1.2fr 80px"
+const COL = "116px 1.6fr 1.6fr 1fr 1fr 1.2fr 96px"
 const COL_STYLE = { gridTemplateColumns: COL }
 
 function HeaderCell({ children }) {
@@ -294,7 +294,7 @@ export default function Contratos() {
 
         {/* Contracts table */}
         <div className="border border-border-3 bg-surface mb-8">
-          <div style={COL_STYLE} className="grid bg-[oklch(0.26_0_0)] border-b border-border-3">
+          <div style={COL_STYLE} className="grid bg-[var(--surface-hi)] border-b border-border-3">
             <HeaderCell>ID</HeaderCell>
             <HeaderCell>Locatário</HeaderCell>
             <HeaderCell>Unidade</HeaderCell>
@@ -324,20 +324,20 @@ export default function Contratos() {
                 style={COL_STYLE}
                 className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
               >
-                <div className="px-5 py-3.5">
-                  <span className="font-mono text-[11px] text-fg-4 tracking-[0.3px]">
+                <div className="px-5 py-4">
+                  <span className="font-mono text-[14px] text-fg-4 tracking-[0.3px]">
                     REF_C_{String(i + 1).padStart(3, "0")}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5 overflow-hidden">
-                  <span className="text-[13px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="px-5 py-4 overflow-hidden">
+                  <span className="text-[14px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
                     {loc?.nome_razao_social ?? "—"}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5 overflow-hidden flex flex-col gap-0.5">
-                  <span className="text-[12px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="px-5 py-4 overflow-hidden flex flex-col gap-0.5">
+                  <span className="text-[14px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
                     {uni?.nome ?? "—"}
                   </span>
                   {edi && (
@@ -347,23 +347,23 @@ export default function Contratos() {
                   )}
                 </div>
 
-                <div className="px-5 py-3.5">
-                  <span className="font-mono text-[11px] text-fg-3">
+                <div className="px-5 py-4">
+                  <span className="font-mono text-[14px] text-fg-3">
                     {fmtData(contrato.data_inicio)}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5">
-                  <span className={cn("font-mono text-[11px]", expiring ? "text-warning" : "text-fg-3")}>
+                <div className="px-5 py-4">
+                  <span className={cn("font-mono text-[14px]", expiring ? "text-warning" : "text-fg-3")}>
                     {fmtData(contrato.data_fim)}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5">
+                <div className="px-5 py-4">
                   <StatusBadge status={expiring ? "vencendo" : contrato.status} />
                 </div>
 
-                <div className="px-3 py-3.5 flex flex-col gap-1.5 items-start">
+                <div className="px-3 py-4 flex flex-col gap-1.5 items-start">
                   <Button
                     variant="ghost"
                     size="sm"
