@@ -42,23 +42,24 @@ test.describe('TEST-01 — CRUD Proprietário', () => {
     })
 
     test('criar edifício', async ({ page }) => {
-      await page.fill('input[placeholder="Nome do edificio"]', 'E2E-Edifício Alpha')
+      await page.getByRole('button', { name: 'Novo Edifício' }).click()
+      await page.fill('input[placeholder="Nome do edifício"]', 'E2E-Edifício Alpha')
       await page.fill('input[placeholder="Endereço"]', 'Rua E2E, 1')
       await page.click('button[type="submit"]')
       await expect(page.getByText('E2E-Edifício Alpha')).toBeVisible({ timeout: 10_000 })
     })
 
     test('editar edifício', async ({ page }) => {
-      // Ancorar no card do edifício criado no teste anterior
-      await page.getByText('E2E-Edifício Alpha').locator('..').getByRole('button', { name: 'Editar' }).click()
-      // Após clicar Editar, o texto some e vira um input — usar value para localizar
+      // Ancorar no card do edifício — locator('../..') sobe até o flex row que contém text + buttons
+      await page.getByText('E2E-Edifício Alpha').locator('../..').getByRole('button', { name: 'Editar' }).click()
+      // Após clicar Editar, o texto vira input com value preenchido
       await page.fill('input[value="E2E-Edifício Alpha"]', 'E2E-Edifício Alpha Editado')
       await page.getByRole('button', { name: 'Salvar' }).click()
       await expect(page.getByText('E2E-Edifício Alpha Editado')).toBeVisible({ timeout: 10_000 })
     })
 
     test('deletar edifício', async ({ page }) => {
-      await page.getByText('E2E-Edifício Alpha Editado').locator('..').getByRole('button', { name: 'Remover' }).click()
+      await page.getByText('E2E-Edifício Alpha Editado').locator('../..').getByRole('button', { name: 'Remover' }).click()
       await expect(page.getByText('E2E-Edifício Alpha Editado')).toHaveCount(0)
     })
   })
