@@ -142,7 +142,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                 <div className={cn("w-8 h-8 shrink-0 flex items-center justify-center border font-body font-bold text-[10px] tracking-[1px]", isPendente ? "bg-transparent border-border-2 text-fg-4" : "bg-surface border-border-2 text-fg-1")}>
                   {ini}
                 </div>
-                <span className="font-body font-medium text-[14px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">{l.nome_razao_social}</span>
+                <span className="font-body font-medium text-[18px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">{l.nome_razao_social}</span>
               </div>
 
               {/* Tipo */}
@@ -151,15 +151,15 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
               </span>
 
               {/* Documento */}
-              <span className="font-mono text-[14px] text-fg-2">
+              <span className="font-mono text-[18px] text-fg-2">
                 {fmtDoc(l.tipo, l.documento)}
               </span>
 
               {/* Email */}
-              <span className="font-mono text-[14px] text-fg-3 overflow-hidden text-ellipsis whitespace-nowrap">{l.email}</span>
+              <span className="font-mono text-[18px] text-fg-3 overflow-hidden text-ellipsis whitespace-nowrap">{l.email}</span>
 
               {/* Contratos */}
-              <span className="font-mono text-[14px] text-fg-2">
+              <span className="font-mono text-[18px] text-fg-2">
                 {ativosCount}/{cs.length}
               </span>
 
@@ -222,7 +222,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">LOCATÁRIO</span>
-              <h3 className="font-body font-bold text-[24px] text-fg-1 m-0">
+              <h3 className="font-body font-bold text-[30px] text-fg-1 m-0">
                 Editar Locatário
               </h3>
             </div>
@@ -234,7 +234,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   required
                   value={formEdit.nome_razao_social}
                   onChange={e => setFormEdit({ ...formEdit, nome_razao_social: e.target.value })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -243,7 +243,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   value={formEdit.tipo}
                   onValueChange={val => setFormEdit({ ...formEdit, tipo: val })}
                 >
-                  <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none">
+                  <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -260,7 +260,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   value={formEdit.documento}
                   placeholder={formEdit.tipo === "pj" ? "00.000.000/0000-00" : "000.000.000-00"}
                   onChange={e => setFormEdit({ ...formEdit, documento: e.target.value.replace(/\D/g, "") })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -270,7 +270,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   required
                   value={formEdit.email}
                   onChange={e => setFormEdit({ ...formEdit, email: e.target.value })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -280,7 +280,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   required
                   value={formEdit.telefone}
                   onChange={e => setFormEdit({ ...formEdit, telefone: e.target.value })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -293,14 +293,14 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   type="button"
                   variant="ghost"
                   onClick={handleCancelarEdit}
-                  className="text-fg-3 font-mono text-[12px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
+                  className="text-fg-3 font-mono text-[14px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
                 >Cancelar</Button>
                 <Button
                   type="button"
                   disabled={loading}
                   onClick={handleSalvarLocatario}
                   className={cn(
-                    "bg-indigo text-fg-1 font-body font-bold text-[11px] tracking-[1.2px] uppercase px-6 py-[10px] rounded-none h-auto",
+                    "bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none h-auto",
                     loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
                   )}
                 >{loading ? "Salvando..." : "Salvar →"}</Button>
@@ -319,7 +319,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">NOVO LOCATÁRIO</span>
-              <h3 className="font-body font-bold text-[24px] text-fg-1 m-0">
+              <h3 className="font-body font-bold text-[30px] text-fg-1 m-0">
                 Enviar Convite
               </h3>
             </div>
@@ -331,7 +331,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   required
                   value={form.email}
                   onChange={e => setForm({ ...form, email: e.target.value })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -341,7 +341,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   required
                   value={form.nome_razao_social}
                   onChange={e => setForm({ ...form, nome_razao_social: e.target.value })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -368,7 +368,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   value={form.documento}
                   placeholder={form.tipo === "pj" ? "00.000.000/0000-00" : "000.000.000-00"}
                   onChange={e => setForm({ ...form, documento: e.target.value.replace(/\D/g, "") })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -378,7 +378,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   required
                   value={form.telefone}
                   onChange={e => setForm({ ...form, telefone: e.target.value })}
-                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                  className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                 />
               </Field>
 
@@ -391,13 +391,13 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                   type="button"
                   variant="ghost"
                   onClick={() => { setShowInviteForm(false); setErro("") }}
-                  className="text-fg-3 font-mono text-[12px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
+                  className="text-fg-3 font-mono text-[14px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
                 >Cancelar</Button>
                 <Button
                   type="submit"
                   disabled={loading}
                   className={cn(
-                    "bg-indigo text-fg-1 font-body font-bold text-[11px] tracking-[1.2px] uppercase px-6 py-[10px] rounded-none h-auto",
+                    "bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none h-auto",
                     loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
                   )}
                 >{loading ? "Enviando..." : "Enviar Convite →"}</Button>
