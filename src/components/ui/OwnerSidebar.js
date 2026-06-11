@@ -31,7 +31,7 @@ export default function OwnerSidebar({ badges = {} }) {
       {/* Wordmark */}
       <div className="px-8 pt-8 pb-6">
         <span className="eyebrow eyebrow--indigo">Console · Proprietário</span>
-        <div className="font-display font-bold text-[35px] tracking-[-1px] text-fg-1 mt-2">
+        <div className="font-display font-bold text-[28px] tracking-[-1px] text-fg-1 mt-2">
           ROMMA
         </div>
       </div>
@@ -53,14 +53,14 @@ export default function OwnerSidebar({ badges = {} }) {
             >
               <span
                 className={cn(
-                  "font-body font-bold text-[15px] tracking-[1.2px] uppercase",
+                  "font-body font-bold text-[12px] tracking-[1.2px] uppercase",
                   isActive ? "text-fg-1" : "text-fg-3"
                 )}
               >
                 {item.label}
               </span>
               {badges[item.code] != null && (
-                <span className="font-mono text-[13px] text-indigo">
+                <span className="font-mono text-[10px] text-indigo">
                   {badges[item.code]}
                 </span>
               )}
@@ -73,12 +73,12 @@ export default function OwnerSidebar({ badges = {} }) {
       <div className="border-t border-[var(--border-1)] px-8 pt-6 pb-8 flex flex-col gap-[10px]">
         <Link
           href="/"
-          className="font-mono text-[14px] text-fg-3 no-underline tracking-[0.5px]"
+          className="font-mono text-[11px] text-fg-3 no-underline tracking-[0.5px]"
         >
           → Ver Página Pública
         </Link>
         {email && (
-          <span className="font-mono text-[13px] text-fg-5 mt-2 tracking-[0.5px]">
+          <span className="font-mono text-[10px] text-fg-5 mt-2 tracking-[0.5px]">
             {email}
           </span>
         )}

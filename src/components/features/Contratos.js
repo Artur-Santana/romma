@@ -48,7 +48,7 @@ const COL_STYLE = { gridTemplateColumns: COL }
 
 function HeaderCell({ children }) {
   return (
-    <div className="px-5 py-3 font-mono text-[13px] font-bold tracking-[1.4px] uppercase text-fg-4">
+    <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">
       {children}
     </div>
   )
@@ -187,13 +187,13 @@ export default function Contratos() {
             <form onSubmit={handleCriarContrato}>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[13px] tracking-[1px] text-fg-4 uppercase">Locatário</span>
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Locatário</span>
                   <Select
                     required
                     value={form.locatario_id}
                     onValueChange={v => setForm({ ...form, locatario_id: v })}
                   >
-                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[20px] rounded-none">
+                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none">
                       <SelectValue placeholder="Selecionar locatário..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -204,13 +204,13 @@ export default function Contratos() {
                   </Select>
                 </label>
                 <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[13px] tracking-[1px] text-fg-4 uppercase">Unidade (disponíveis)</span>
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Unidade (disponíveis)</span>
                   <Select
                     required
                     value={form.unidade_id}
                     onValueChange={v => setForm({ ...form, unidade_id: v })}
                   >
-                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[20px] rounded-none">
+                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none">
                       <SelectValue placeholder="Selecionar unidade..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -221,49 +221,49 @@ export default function Contratos() {
                   </Select>
                 </label>
                 <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[13px] tracking-[1px] text-fg-4 uppercase">Data de Início</span>
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Data de Início</span>
                   <Input
                     required
                     type="date"
                     value={form.data_inicio}
                     onChange={e => setForm({ ...form, data_inicio: e.target.value })}
-                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[20px] rounded-none"
+                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                   />
                 </label>
                 <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[13px] tracking-[1px] text-fg-4 uppercase">Data de Término</span>
+                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Data de Término</span>
                   <Input
                     required
                     type="date"
                     value={form.data_fim}
                     onChange={e => setForm({ ...form, data_fim: e.target.value })}
-                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[20px] rounded-none"
+                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                   />
                 </label>
               </div>
 
               {unidadeSelecionada && (
                 <div className="px-4 py-3 mb-4 border border-border-3 bg-surface-hi flex items-center gap-4">
-                  <span className="font-mono text-[13px] text-fg-4 tracking-[1px] uppercase">Valor Mensal</span>
-                  <span className="font-mono text-[23px] text-fg-1 font-bold">
+                  <span className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Valor Mensal</span>
+                  <span className="font-mono text-[18px] text-fg-1 font-bold">
                     {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(unidadeSelecionada.valor_mensal ?? 0)}
                   </span>
                 </div>
               )}
 
               <label className="flex flex-col gap-1.5 mb-5">
-                <span className="font-mono text-[13px] tracking-[1px] text-fg-4 uppercase">Observações</span>
+                <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Observações</span>
                 <textarea
                   rows={3}
                   value={form.observacoes}
                   onChange={e => setForm({ ...form, observacoes: e.target.value })}
                   placeholder="Opcional"
-                  className="bg-surface-hi border border-border-3 text-fg-1 font-body text-[20px] px-3.5 py-2.5 w-full resize-y focus:outline-none"
+                  className="bg-surface-hi border border-border-3 text-fg-1 font-body text-[16px] px-3.5 py-2.5 w-full resize-y focus:outline-none"
                 />
               </label>
 
               {erro && (
-                <div className="bg-[var(--danger-bg2)] border border-[var(--danger-bg)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[15px] text-danger-fg mb-4">
+                <div className="bg-[var(--danger-bg2)] border border-[var(--danger-bg)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg mb-4">
                   {erro}
                 </div>
               )}
@@ -273,7 +273,7 @@ export default function Contratos() {
                   type="submit"
                   disabled={loading}
                   className={cn(
-                    "bg-indigo text-fg-1 font-body font-bold text-[18px] tracking-[1.2px] uppercase px-10 py-[18px] rounded-none",
+                    "bg-indigo text-fg-1 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-10 py-[18px] rounded-none",
                     loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
                   )}
                 >
@@ -283,7 +283,7 @@ export default function Contratos() {
                   type="button"
                   variant="ghost"
                   onClick={() => { resetForm(); setShowForm(false); setErro(null) }}
-                  className="border border-border-3 bg-transparent text-fg-3 font-body font-bold text-[18px] tracking-[1.2px] uppercase px-8 py-[18px] rounded-none cursor-pointer"
+                  className="border border-border-3 bg-transparent text-fg-3 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-8 py-[18px] rounded-none cursor-pointer"
                 >
                   Cancelar
                 </Button>
@@ -305,7 +305,7 @@ export default function Contratos() {
           </div>
 
           {contratos.length === 0 && (
-            <div className="py-12 px-5 text-center font-mono text-[15px] text-fg-4 tracking-[0.5px]">
+            <div className="py-12 px-5 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
               Nenhum contrato cadastrado.
             </div>
           )}
@@ -325,36 +325,36 @@ export default function Contratos() {
                 className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
               >
                 <div className="px-5 py-4">
-                  <span className="font-mono text-[23px] text-fg-4 tracking-[0.3px]">
+                  <span className="font-mono text-[18px] text-fg-4 tracking-[0.3px]">
                     REF_C_{String(i + 1).padStart(3, "0")}
                   </span>
                 </div>
 
                 <div className="px-5 py-4 overflow-hidden">
-                  <span className="text-[23px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
+                  <span className="text-[18px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
                     {loc?.nome_razao_social ?? "—"}
                   </span>
                 </div>
 
                 <div className="px-5 py-4 overflow-hidden flex flex-col gap-0.5">
-                  <span className="text-[23px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                  <span className="text-[18px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
                     {uni?.nome ?? "—"}
                   </span>
                   {edi && (
-                    <span className="font-mono text-[13px] text-fg-4 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="font-mono text-[10px] text-fg-4 overflow-hidden text-ellipsis whitespace-nowrap">
                       {edi.nome.replace(/Edifício\s*/i, "")}
                     </span>
                   )}
                 </div>
 
                 <div className="px-5 py-4">
-                  <span className="font-mono text-[23px] text-fg-3">
+                  <span className="font-mono text-[18px] text-fg-3">
                     {fmtData(contrato.data_inicio)}
                   </span>
                 </div>
 
                 <div className="px-5 py-4">
-                  <span className={cn("font-mono text-[23px]", expiring ? "text-warning" : "text-fg-3")}>
+                  <span className={cn("font-mono text-[18px]", expiring ? "text-warning" : "text-fg-3")}>
                     {fmtData(contrato.data_fim)}
                   </span>
                 </div>
@@ -368,7 +368,7 @@ export default function Contratos() {
                     variant="ghost"
                     size="sm"
                     onClick={() => router.push(`/dashboard/contratos/${contrato.id}`)}
-                    className="font-mono text-[13px] text-fg-3 uppercase tracking-[1px] font-bold p-0 h-auto"
+                    className="font-mono text-[10px] text-fg-3 uppercase tracking-[1px] font-bold p-0 h-auto"
                   >
                     VER →
                   </Button>
@@ -377,7 +377,7 @@ export default function Contratos() {
                       variant="ghost"
                       size="sm"
                       onClick={() => askCancelar(contrato)}
-                      className="font-mono text-[13px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
+                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
                     >
                       CANC
                     </Button>
@@ -387,7 +387,7 @@ export default function Contratos() {
                       variant="ghost"
                       size="sm"
                       onClick={() => askEncerrar(contrato)}
-                      className="font-mono text-[13px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
+                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
                     >
                       ENC
                     </Button>
@@ -400,13 +400,13 @@ export default function Contratos() {
 
         {/* Archive callout */}
         <div className="flex justify-between items-center px-6 py-4 border border-border-3 text-fg-3">
-          <span className="font-mono text-[14px] tracking-[0.5px]">
+          <span className="font-mono text-[11px] tracking-[0.5px]">
             Contratos encerrados são preservados como histórico imutável.
           </span>
           <Button
             variant="ghost"
             disabled
-            className="font-mono font-bold text-[13px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto opacity-50 cursor-not-allowed"
+            className="font-mono font-bold text-[10px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto opacity-50 cursor-not-allowed"
           >
             Ver Arquivo →
           </Button>
