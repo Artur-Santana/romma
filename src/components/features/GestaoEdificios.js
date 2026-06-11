@@ -114,7 +114,7 @@ export default function GestaoEdificios() {
           <form onSubmit={handleCriar}>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Nome</span>
+                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Nome</span>
                 <Input
                   type="text"
                   placeholder="Nome do edifício"
@@ -125,7 +125,7 @@ export default function GestaoEdificios() {
                 />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Endereço</span>
+                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Endereço</span>
                 <Input
                   type="text"
                   placeholder="Endereço"
@@ -138,7 +138,7 @@ export default function GestaoEdificios() {
             </div>
 
             {erro && (
-              <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[18px] text-danger-fg mb-4">
+              <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg mb-4">
                 {erro}
               </div>
             )}
@@ -147,7 +147,7 @@ export default function GestaoEdificios() {
               type="submit"
               disabled={loading}
               className={cn(
-                "bg-indigo text-fg-1 font-body font-bold text-[21px] tracking-[1.2px] uppercase px-10 py-[18px] rounded-none mt-2",
+                "bg-indigo text-fg-1 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-10 py-[18px] rounded-none mt-2",
                 loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
               )}
             >
@@ -158,14 +158,14 @@ export default function GestaoEdificios() {
       )}
 
       {erro && !showForm && (
-        <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[20px] text-danger-fg mb-4">
+        <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[13px] text-danger-fg mb-4">
           {erro}
         </div>
       )}
 
       <div className="flex flex-col gap-0 border border-border-3 bg-surface">
         {edificios.length === 0 && (
-          <p className="px-5 py-4 font-mono text-[18px] text-fg-5">Nenhum edifício cadastrado.</p>
+          <p className="px-5 py-4 font-mono text-[12px] text-fg-5">Nenhum edifício cadastrado.</p>
         )}
         {edificios.map((edificio, i) => (
           <div
@@ -176,7 +176,7 @@ export default function GestaoEdificios() {
               <div className="flex flex-col gap-3">
                 <div className="grid grid-cols-2 gap-4">
                   <label className="flex flex-col gap-1.5">
-                    <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Nome</span>
+                    <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Nome</span>
                     <Input
                       value={formEdit.nome}
                       onChange={(e) => setFormEdit({ ...formEdit, nome: e.target.value })}
@@ -184,7 +184,7 @@ export default function GestaoEdificios() {
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Endereço</span>
+                    <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Endereço</span>
                     <Input
                       value={formEdit.endereco}
                       onChange={(e) => setFormEdit({ ...formEdit, endereco: e.target.value })}
@@ -193,7 +193,7 @@ export default function GestaoEdificios() {
                   </label>
                 </div>
                 {erroEdit && (
-                  <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[18px] text-danger-fg">
+                  <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg">
                     {erroEdit}
                   </div>
                 )}
@@ -201,14 +201,14 @@ export default function GestaoEdificios() {
                   <Button
                     onClick={handleSalvar}
                     disabled={loading}
-                    className="bg-indigo text-fg-1 font-body font-bold text-[20px] tracking-[1.2px] uppercase px-7 py-3 rounded-none cursor-pointer"
+                    className="bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-7 py-3 rounded-none cursor-pointer"
                   >
                     {loading ? "Salvando..." : "Salvar"}
                   </Button>
                   <button
                     onClick={() => { setEditandoId(null); setErroEdit(null); }}
                     style={{ all: "unset", cursor: "pointer" }}
-                    className="font-mono text-[17px] text-fg-4 px-4 py-2 border border-border-3 hover:text-fg-1"
+                    className="font-mono text-[11px] text-fg-4 px-4 py-2 border border-border-3 hover:text-fg-1"
                   >
                     Cancelar
                   </button>
@@ -217,21 +217,21 @@ export default function GestaoEdificios() {
             ) : (
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-body font-bold text-[30px] text-fg-1">{edificio.nome}</p>
-                  <p className="font-mono text-[27px] text-fg-4 mt-0.5 tracking-[0.3px]">{edificio.endereco}</p>
+                  <p className="font-body font-bold text-[20px] text-fg-1">{edificio.nome}</p>
+                  <p className="font-mono text-[18px] text-fg-4 mt-0.5 tracking-[0.3px]">{edificio.endereco}</p>
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <button
                     onClick={() => handleEditar(edificio)}
                     style={{ all: "unset", cursor: "pointer" }}
-                    className="font-mono text-[17px] text-fg-3 px-3 py-1.5 border border-border-3 hover:text-fg-1 hover:border-border-1"
+                    className="font-mono text-[11px] text-fg-3 px-3 py-1.5 border border-border-3 hover:text-fg-1 hover:border-border-1"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => handleDeletar(edificio.id)}
                     style={{ all: "unset", cursor: "pointer" }}
-                    className="font-mono text-[17px] text-danger-fg px-3 py-1.5 border border-danger-fg hover:bg-[var(--danger-bg2)]"
+                    className="font-mono text-[11px] text-danger-fg px-3 py-1.5 border border-danger-fg hover:bg-[var(--danger-bg2)]"
                   >
                     Remover
                   </button>
