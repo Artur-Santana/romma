@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }) {
           <OwnerSidebar badges={{}} />
         </div>
         <main style={{ flex: 1, overflow: "auto", background: "var(--background)" }}>
-          <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 24px" }}>
+          <div style={{ maxWidth: "1570px", margin: "0 auto", padding: "0 24px" }}>
             {children}
           </div>
         </main>
