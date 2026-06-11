@@ -60,8 +60,8 @@ test.describe('LP-03 — CTAs do Header e SISTEMA.04 apontam para /login', () =>
 // =============================================================================
 test.describe('PUB-01 — Card valor_visivel e badge Disponível', () => {
   test('PUB-01 — "Consulte o Proprietário" exibido via mock valor_visivel=false', async ({ page }) => {
-    // Mock: intercept Supabase REST — retornar unidade disponível com valor_visivel=false
-    await page.route('**/rest/v1/unidades**', route =>
+    // Phase 11 migrou getUnidadesDisponiveis para RPC — intercept o endpoint RPC
+    await page.route('**/rest/v1/rpc/get_unidades_disponiveis**', route =>
       route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -74,6 +74,7 @@ test.describe('PUB-01 — Card valor_visivel e badge Disponível', () => {
             valor_visivel: false,
             status: 'disponivel',
             edificio_id: '00000000-0000-0000-0000-000000000002',
+            edificio_nome: 'Edifício Mock',
           },
         ]),
       })
