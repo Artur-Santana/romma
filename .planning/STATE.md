@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "Phase 11 shipped — PR #30"
-last_updated: "2026-06-09T13:34:34.377Z"
-last_activity: 2026-06-09
+status: executing
+last_updated: "2026-06-11T21:40:34.416Z"
+last_activity: 2026-06-11 -- Phase 12 execution started
 progress:
-  total_phases: 7
+  total_phases: 8
   completed_phases: 3
   total_plans: 13
   completed_plans: 16
-  percent: 43
+  percent: 38
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 12 — escala desktop + tema
+**Current focus:** Phase 12 — escala-desktop-tema
 
 ---
 
@@ -81,7 +81,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 12
-Plan: Not started
-Status: Phase 11 shipped — PR #30
-Last activity: 2026-06-09
+Phase: 12 (escala-desktop-tema) — EXECUTING
+Plan: 1 of 6
+Status: Executing Phase 12
+Last activity: 2026-06-11 -- Phase 12 execution started

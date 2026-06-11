@@ -150,7 +150,7 @@ export default function Unidades({}) {
             <div className="grid grid-cols-2 gap-4 mb-4">
 
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Edifício</span>
+                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Edifício</span>
                 <Select
                   value={form.edificio_id}
                   onValueChange={(v) => setForm({ ...form, edificio_id: v })}
@@ -169,7 +169,7 @@ export default function Unidades({}) {
               </label>
 
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Nome da unidade</span>
+                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Nome da unidade</span>
                 <Input
                   type="text"
                   placeholder="Nome da unidade"
@@ -181,7 +181,7 @@ export default function Unidades({}) {
               </label>
 
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Descrição</span>
+                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Descrição</span>
                 <Input
                   type="text"
                   placeholder="Descrição"
@@ -192,7 +192,7 @@ export default function Unidades({}) {
               </label>
 
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Área (m²)</span>
+                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Área (m²)</span>
                 <Input
                   type="number"
                   placeholder="Área (m²)"
@@ -203,7 +203,7 @@ export default function Unidades({}) {
               </label>
 
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Valor mensal (R$)</span>
+                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Valor mensal (R$)</span>
                 <Input
                   type="number"
                   placeholder="Valor mensal (R$)"
@@ -214,7 +214,7 @@ export default function Unidades({}) {
               </label>
 
               <label className="flex flex-col gap-1.5">
-                <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Status</span>
+                <span className="font-mono text-[15px] tracking-[1px] uppercase text-fg-4">Status</span>
                 <Select
                   value={form.status}
                   onValueChange={(v) => setForm({ ...form, status: v })}
@@ -249,11 +249,11 @@ export default function Unidades({}) {
                   </svg>
                 )}
               </div>
-              <span className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Exibir valor publicamente</span>
+              <span className="font-mono text-[15px] text-fg-4 tracking-[1px] uppercase">Exibir valor publicamente</span>
             </div>
 
             {erroEdit && (
-              <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg mb-4">
+              <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[18px] text-danger-fg mb-4">
                 {erroEdit}
               </div>
             )}
@@ -262,7 +262,7 @@ export default function Unidades({}) {
               type="submit"
               disabled={loading}
               className={cn(
-                "bg-indigo text-fg-1 font-body font-bold text-[12px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none mt-2",
+                "bg-indigo text-fg-1 font-body font-bold text-[18px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none mt-2",
                 loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
               )}
             >
@@ -273,12 +273,12 @@ export default function Unidades({}) {
       )}
 
       {erroDelete && (
-        <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[13px] text-danger-fg mb-4">{erroDelete}</div>
+        <div className="bg-[var(--danger-bg2)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[20px] text-danger-fg mb-4">{erroDelete}</div>
       )}
 
       <div className="flex flex-col gap-0 border border-border-3 bg-surface">
         {unidades.length === 0 && (
-          <p className="px-5 py-4 font-mono text-[12px] text-fg-5">Nenhuma unidade cadastrada.</p>
+          <p className="px-5 py-4 font-mono text-[18px] text-fg-5">Nenhuma unidade cadastrada.</p>
         )}
         {unidades.map((unidade) => (
           <UnidadeCard

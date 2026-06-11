@@ -36,7 +36,7 @@ export default function ThemeToggle() {
     }}>
       <button
         style={{ all: "unset", cursor: "pointer" }}
-        className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors bg-surface border border-border-3 px-3 py-2"
+        className="font-mono text-[15px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors bg-surface border border-border-3 px-3 py-2"
         onClick={handleNext}
         data-testid="theme-toggle"
       >
