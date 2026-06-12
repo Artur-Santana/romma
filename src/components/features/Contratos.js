@@ -11,6 +11,7 @@ import StatusBadge from "@/components/ui/StatusBadge"
 import ConfirmDialog from "@/components/ui/ConfirmDialog"
 import PageHeader from "@/components/ui/PageHeader"
 import { gerarParcelas, criarContrato, cancelarContrato, encerrarContrato } from "@/actions/contratos"
+import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function SkeletonContratos() {
@@ -67,6 +68,7 @@ export default function Contratos() {
   const [loading, setLoading] = useState(false)
   const [loadingInicial, setLoadingInicial] = useState(true)
   const [confirmDialog, setConfirmDialog] = useState(null)
+  const [removingIds, setRemovingIds] = useState(new Set())
 
   useEffect(() => {
     async function carregar() {
@@ -104,6 +106,7 @@ export default function Contratos() {
       setUnidades(u ?? [])
       resetForm()
       setShowForm(false)
+      toast.success("Contrato criado")
     } else {
       setErro(result.erroMessage)
     }
@@ -136,22 +139,38 @@ export default function Contratos() {
 
   async function confirmarCancelamento(contrato) {
     setConfirmDialog(null)
+    setRemovingIds(prev => new Set([...prev, contrato.id]))
     const result = await cancelarContrato(contrato.id)
-    if (result.status !== 200) { setErro(result.erroMessage); return }
+    if (result.status !== 200) {
+      setErro(result.erroMessage)
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+      return
+    }
     setErro(null)
-    const [c, u] = await Promise.all([getContratos(), getUnidades()])
-    setContratos(c ?? [])
-    setUnidades(u ?? [])
+    toast.success("Contrato cancelado")
+    setTimeout(() => {
+      setContratos(prev => prev.filter(c => c.id !== contrato.id))
+      getUnidades().then(u => setUnidades(u ?? []))
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+    }, 200)
   }
 
   async function confirmarEncerramento(contrato) {
     setConfirmDialog(null)
-    const res = await encerrarContrato(contrato.id)
-    if (res.status !== 200) { setErro(res.erroMessage); return }
+    setRemovingIds(prev => new Set([...prev, contrato.id]))
+    const result = await encerrarContrato(contrato.id)
+    if (result.status !== 200) {
+      setErro(result.erroMessage)
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+      return
+    }
     setErro(null)
-    const [c, u] = await Promise.all([getContratos(), getUnidades()])
-    setContratos(c ?? [])
-    setUnidades(u ?? [])
+    toast.success("Contrato encerrado")
+    setTimeout(() => {
+      setContratos(prev => prev.filter(c => c.id !== contrato.id))
+      getUnidades().then(u => setUnidades(u ?? []))
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+    }, 200)
   }
 
   const ativos = contratos.filter(c => c.status === "ativo").length
