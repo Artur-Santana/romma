@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
 status: executing
-last_updated: "2026-06-12T21:10:51.761Z"
+last_updated: "2026-06-12T21:16:09.119Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 27
-  completed_plans: 33
+  completed_plans: 34
   percent: 63
 ---
 
@@ -86,10 +86,11 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 14 plan 02 complete. Unidades.js: exit animation (opacity+scale 200ms) + toast "Unidade removida" + re-fetch-after-timeout; Parcelas.js: toast "Parcela marcada como paga" (no animation). Commits 461a1ff+58b8d4d.
 - 2026-06-12: Phase 15 plan 05 complete. E2E audit+gap-fill (TEST-02 D-09): AUTH-02 second-signup guard test added to signup.spec.js; complete mobile 375px interactive journey added to mobile-responsive.spec.js. D-10 split: crud.spec.js → 4 domain files (14/14 tests), toast-feedback.spec.js → 4 domain files (5/5 tests). 74 tests discoverable via --list; live run pending CI. Commits 71dfb5b+cf78b5f+ad681e5.
 - 2026-06-12: Phase 15 plan 02 complete. IDOR fix (T-15-01): authGuard() returns { user } in unidades.js + contratos.js; editarUnidade/deletarUnidade add edificio_id ownership pre-check; cancelarContrato/encerrarContrato add 3-hop chain (unidade_id → edificio_id → proprietario_id). Commits db637de+b72e904.
+- 2026-06-12: Phase 15 plan 03 complete. Unit tests for auth.js (cadastrarProprietario, 3 cases D-06/D-07) and locatarios.js (revogarConvite, 4 cases D-06/D-07/D-08). D-08 asserts .eq('proprietario_id', user.id) regression guard. 7 tests, exit 0. Commits 5aa8283+e3ee878.
 
 ## Current Position
 
 Phase: 15 (Testes) — EXECUTING
-Plan: 4 of 6
+Plan: 5 of 6
 Status: Ready to execute
 Last activity: 2026-06-12
