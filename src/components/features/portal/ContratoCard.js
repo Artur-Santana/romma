@@ -5,7 +5,7 @@ export default function ContratoCard({ contrato }) {
   return (
     <section className="border border-border-3 bg-surface p-7">
       <span className="eyebrow eyebrow--indigo">CONTRATO ATIVO</span>
-      <div className="grid grid-cols-2 gap-6 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
         <div>
           <span className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase block">
             UNIDADE
