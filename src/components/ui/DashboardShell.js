@@ -29,8 +29,9 @@ export default function DashboardShell({ children }) {
 
   return (
     <>
-      {/* Desktop chrome — romma-desktop-only hidden at ≤768px via !important in globals.css */}
-      <div className="romma-desktop-only" style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      {/* Desktop chrome — romma-desktop-only hidden at ≤768px via globals.css media query */}
+      <div className="romma-desktop-only">
+        <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <TopStrip />
         <div style={{ display: "flex", height: "calc(100vh - 24px)" }}>
           <div className="romma-sidebar-wrapper">
@@ -41,6 +42,7 @@ export default function DashboardShell({ children }) {
               {children}
             </div>
           </main>
+        </div>
         </div>
       </div>
 
