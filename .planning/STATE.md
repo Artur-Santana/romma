@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: verifying
-last_updated: "2026-06-12T21:40:07.054Z"
+status: "v1.1 COMPLETE — Phase 15 merged (PR #34). 15/15 fases. Banca 18/06."
+last_updated: "2026-06-12T22:00:00.000Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
-  completed_phases: 6
+  completed_phases: 8
   total_plans: 27
   completed_plans: 36
-  percent: 75
+  percent: 100
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 15 — Testes
+**Current focus:** v1.1 completo — pronto pra banca (18/06)
 
 ---
 
@@ -58,7 +58,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 12 | Escala Desktop + Tema | v1.1 | ✅ Complete — commit 82460a5 |
 | 13 | Mobile Responsivo | v1.1 | ✅ Complete |
 | 14 | Animações & Feedback | v1.1 | ✅ Complete — PR #33 merged |
-| 15 | Testes | v1.1 | Not started |
+| 15 | Testes | v1.1 | ✅ Complete — PR #34 merged |
 
 ---
 
