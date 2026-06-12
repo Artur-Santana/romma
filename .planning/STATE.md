@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "Phase 14 PR #33 aberto — UAT pendente, não mergear até passar"
-last_updated: "2026-06-12T16:21:40.950Z"
+status: "Phase 14 merged (PR #33). Phase 15 (Testes) — única fase v1.1 restante"
+last_updated: "2026-06-12T17:00:00.000Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
-  completed_phases: 5
+  completed_phases: 7
   total_plans: 21
   completed_plans: 30
-  percent: 63
+  percent: 88
 ---
 
 # Project State — Romma
@@ -52,11 +52,12 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 7 | Ajustes Finais Pré-Banca | v1.0 | ✅ Complete |
 | 8 | Bug Fixes | v1.1 | ✅ Complete — PR #27 |
 | 9 | Páginas Públicas | v1.1 | ✅ Complete — PR #28 |
-| 10 | Signup Proprietário | v1.1 | Not started |
-| 11 | Escala Desktop + Tema | v1.1 | ✅ Complete — PR pending |
-| 12 | Mobile Responsivo | v1.1 | ✅ Complete — PR pending |
-| 13 | Animações & Feedback | v1.1 | Not started |
-| 14 | Testes | v1.1 | Not started |
+| 10 | Signup Proprietário | v1.1 | ✅ Complete |
+| 11 | Multi-Tenant Proprietários | v1.1 | ✅ Complete |
+| 12 | Escala Desktop + Tema | v1.1 | ✅ Complete — commit 82460a5 |
+| 13 | Mobile Responsivo | v1.1 | ✅ Complete |
+| 14 | Animações & Feedback | v1.1 | ✅ Complete — PR #33 merged |
+| 15 | Testes | v1.1 | Not started |
 
 ---
 
@@ -86,7 +87,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 14 (Animações & Feedback) — EXECUTING
-Plan: 4 of 4
-Status: Phase 14 PR #33 aberto — UAT pendente, não mergear até passar
+Phase: 15 (Testes) — NOT STARTED (próxima e última fase v1.1)
+Plan: —
+Status: Phase 14 merged (PR #33, E2E pass). Phase 15 é a única fase restante antes da banca (18/06).
 Last activity: 2026-06-12

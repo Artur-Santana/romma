@@ -33,8 +33,8 @@
 - [x] **Phase 9: Páginas Públicas** — Landing page e /unidades prontas para banca (completed 2026-06-06)
 - [x] **Phase 10: Signup Proprietário** — Primeiro acesso ao sistema configurável via tela (completed 2026-06-09)
 - [x] **Phase 11: Multi-Tenant Proprietários** — Isolamento multi-tenant implementado: cada Proprietário só vê e muta seus próprios dados (completed 2026-06-09)
-- [ ] **Phase 12: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa
-- [ ] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular
+- [x] **Phase 12: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa (completed 2026-06-12)
+- [x] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular (completed 2026-06-12)
 - [x] **Phase 14: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante (completed 2026-06-12)
 - [ ] **Phase 15: Testes** — Suite de testes cobre novos fluxos e Actions críticas
 
