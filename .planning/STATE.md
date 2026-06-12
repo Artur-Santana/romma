@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: Phase 12 shipped — PR pending
-last_updated: "2026-06-12T02:53:16.146Z"
+status: "Phase 12 shipped — PR #31"
+last_updated: "2026-06-12T03:15:48.972Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
@@ -84,5 +84,5 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 Phase: 12
 Plan: Complete
-Status: Phase 12 shipped — PR pending
+Status: Phase 12 shipped — PR #31
 Last activity: 2026-06-12
