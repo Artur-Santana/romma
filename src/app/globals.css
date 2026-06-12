@@ -201,11 +201,38 @@
 }
 
 [data-theme="cloudy-sky"] {
-  --ds-primary:    oklch(0.510 0.120 230.0);  /* #2872A1 ocean blue */
-  --ds-background: oklch(0.870 0.040 220.0);  /* #CBDDE9 cloudy sky */
-  --ds-surface:    oklch(0.840 0.035 220.0);
-  --ds-secondary:  oklch(0.800 0.030 220.0);
-  --ds-highlight:  oklch(0.510 0.120 230.0);
+  /* ── Source tokens ── */
+  --ds-primary:    oklch(0.500 0.10 245);     /* #2872A1 ocean blue */
+  --ds-background: oklch(0.880 0.03 240);     /* #CBDDE9 cloudy sky — bg claro */
+  --ds-surface:    oklch(0.850 0.028 240);    /* levemente mais escuro que bg */
+  --ds-secondary:  oklch(0.820 0.022 240);
+  --ds-highlight:  oklch(0.700 0.06 65);      /* warm sand complement */
+
+  /* ── OVERRIDES OBRIGATÓRIOS — tokens hardcoded que NÃO derivam de --ds-*
+     Mesmos overrides que ultra-violet: bg claro exige inversão dos tokens hardcoded.
+     --ds-background L≈0.88 (mais escuro que lemon chiffon) — foreground escuro ok ── */
+
+  /* Foreground derivados que clampam para branco em bg claro */
+  --foreground:         oklch(0.10 0 0);
+  --card-foreground:    oklch(0.10 0 0);
+  --muted-foreground:   oklch(0.45 0 0);
+  --popover-foreground: oklch(0.10 0 0);
+
+  /* fg scale — era oklch(1 0 0) branco puro */
+  --fg-1:        oklch(0.10 0 0);
+  --fg-2:        oklch(0.25 0 0);
+  --fg-3:        oklch(0.40 0 0);
+  --fg-4:        oklch(0.55 0 0);
+  --fg-5:        oklch(0.70 0 0);
+
+  /* Surface levels — era quase preto (0.182 / 0.218) */
+  --surface:     oklch(0.840 0.022 240);
+  --surface-hi:  oklch(0.810 0.020 240);
+
+  /* Border scale — era branco-alfa (invisível sobre claro) */
+  --border-1:    oklch(0 0 0 / 0.05);
+  --border-2:    oklch(0 0 0 / 0.10);
+  --border-3:    oklch(0 0 0 / 0.15);
 }
 
 @theme inline {
