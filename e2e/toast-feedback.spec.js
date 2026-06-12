@@ -43,6 +43,20 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
     const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
     const proprietarioId = prop.usuario_id
 
+    // Idempotência: limpar artefatos E2E-Toast stale (worker restart, cleanup falho de run anterior)
+    const { data: staleUnidades } = await admin.from('unidades').select('id').in('nome', ['E2E-Toast Sala Contrato', 'E2E-Toast Sala Deletar'])
+    if (staleUnidades?.length) {
+      const uids = staleUnidades.map(u => u.id)
+      const { data: staleContratos } = await admin.from('contratos').select('id').in('unidade_id', uids)
+      if (staleContratos?.length) {
+        const cids = staleContratos.map(c => c.id)
+        await admin.from('parcelas').delete().in('contrato_id', cids)
+        await admin.from('contratos').delete().in('id', cids)
+      }
+      await admin.from('unidades').delete().in('id', uids)
+    }
+    await admin.from('edificios').delete().eq('nome', 'E2E-Toast Edifício')
+
     // Criar edifício de suporte
     const { data: edif } = await admin.from('edificios').insert({
       nome: 'E2E-Toast Edifício',
@@ -136,17 +150,19 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
   })
 
   test.afterAll(async () => {
-    // Limpar parcelas e contratos
-    const { data: contratos } = await admin.from('contratos').select('id').eq('unidade_id', unidadeParaContratoId)
-    if (contratos?.length) {
-      await admin.from('parcelas').delete().in('contrato_id', contratos.map(c => c.id))
-      await admin.from('contratos').delete().in('id', contratos.map(c => c.id))
-    }
-    if (locatarioId) await admin.from('locatarios').delete().eq('id', locatarioId).catch(() => {})
-    if (locatarioUserId) await admin.auth.admin.deleteUser(locatarioUserId).catch(() => {})
-    if (unidadeParaContratoId) await admin.from('unidades').delete().eq('id', unidadeParaContratoId).catch(() => {})
-    if (unidadeParaDeletarId) await admin.from('unidades').delete().eq('id', unidadeParaDeletarId).catch(() => {})
-    if (edificioId) await admin.from('edificios').delete().eq('id', edificioId).catch(() => {})
+    try {
+      // Limpar parcelas e contratos
+      const { data: contratos } = await admin.from('contratos').select('id').eq('unidade_id', unidadeParaContratoId)
+      if (contratos?.length) {
+        await admin.from('parcelas').delete().in('contrato_id', contratos.map(c => c.id))
+        await admin.from('contratos').delete().in('id', contratos.map(c => c.id))
+      }
+      if (locatarioId) await admin.from('locatarios').delete().eq('id', locatarioId)
+      if (locatarioUserId) await admin.auth.admin.deleteUser(locatarioUserId)
+      if (unidadeParaContratoId) await admin.from('unidades').delete().eq('id', unidadeParaContratoId)
+      if (unidadeParaDeletarId) await admin.from('unidades').delete().eq('id', unidadeParaDeletarId)
+      if (edificioId) await admin.from('edificios').delete().eq('id', edificioId)
+    } catch { /* cleanup best-effort */ }
   })
 
   // ─── Toast: Criar contrato ────────────────────────────────────────────────────
@@ -173,7 +189,7 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
       })
       u2id = data.user.id
     }
-    await admin.from('locatarios').delete().eq('usuario_id', u2id).catch(() => {})
+    await admin.from('locatarios').delete().eq('usuario_id', u2id)
     await admin.from('locatarios').insert({
       usuario_id: u2id,
       proprietario_id: prop.usuario_id,
@@ -203,8 +219,10 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
     await expect(page.getByText('Contrato criado')).toBeVisible({ timeout: 10_000 })
 
     // Cleanup extra locatário
-    await admin.from('locatarios').delete().eq('usuario_id', u2id).catch(() => {})
-    await admin.auth.admin.deleteUser(u2id).catch(() => {})
+    try {
+      await admin.from('locatarios').delete().eq('usuario_id', u2id)
+      await admin.auth.admin.deleteUser(u2id)
+    } catch { /* cleanup best-effort */ }
   })
 
   // ─── Toast: Cancelar contrato ─────────────────────────────────────────────────
