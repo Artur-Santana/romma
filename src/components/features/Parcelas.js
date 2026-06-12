@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { getParcelasByContrato, getContratos, getLocatarios, getUnidades } from "@/lib/queries-client"
 import { cn, fmtData } from "@/lib/utils"
@@ -50,7 +51,8 @@ export default function Parcelas({ contratoId }) {
     const result = await marcarParcelaComoPaga(parcela.id)
     if (result.status === 200) {
       setErro(null)
-      setParcelas(await getParcelasByContrato(contratoId))
+      toast.success("Parcela marcada como paga")
+      setParcelas(await getParcelasByContrato(contratoId) ?? [])
     } else {
       setErro(result.erroMessage)
     }

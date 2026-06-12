@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "Phase 13 shipped — PR #32"
-last_updated: "2026-06-12T09:48:24.762Z"
+status: "Phase 14 PR #33 aberto — UAT pendente, não mergear até passar"
+last_updated: "2026-06-12T16:21:40.950Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
-  completed_phases: 4
-  total_plans: 17
-  completed_plans: 26
-  percent: 50
+  completed_phases: 5
+  total_plans: 21
+  completed_plans: 30
+  percent: 63
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 13 complete — mobile responsivo
+**Current focus:** Phase 14 — Animações & Feedback
 
 ---
 
@@ -81,10 +81,12 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 12 complete. 6 planos, escala desktop UX-01 pass, tema Obsidian hardcoded, ThemeToggle removido. Commit 82460a5.
 - 2026-06-12: Phase 13 plan 04 complete. Portal do Locatario responsivo em 375px: PortalDashboard padding/tipografia responsivos, ParcelsTable overflow-x-auto, ContratoCard grid-cols-1 sm:grid-cols-2. Commit 1373979.
 - 2026-06-12: Phase 13 complete. UX-02/03/04 verificados. 7/7 E2E passed. DashboardShell implementado, 4 abas sem overflow, portal responsivo.
+- 2026-06-12: Phase 14 plan 01 complete. Contratos.js: removingIds exit animation, sonner toasts (criado/encerrado/cancelado), optimistic filter, ativo-only main listing. Commits 225ec08+0fd3a12.
+- 2026-06-12: Phase 14 plan 02 complete. Unidades.js: exit animation (opacity+scale 200ms) + toast "Unidade removida" + re-fetch-after-timeout; Parcelas.js: toast "Parcela marcada como paga" (no animation). Commits 461a1ff+58b8d4d.
 
 ## Current Position
 
-Phase: 13
-Plan: All complete (13-01 → 13-04)
-Status: Phase 13 shipped — PR #32
+Phase: 14 (Animações & Feedback) — EXECUTING
+Plan: 4 of 4
+Status: Phase 14 PR #33 aberto — UAT pendente, não mergear até passar
 Last activity: 2026-06-12

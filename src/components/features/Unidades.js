@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { getEdificios, getUnidades } from "@/lib/queries-client";
 import UnidadeCard from "@/components/ui/UnidadeCard";
 import { criarUnidade, editarUnidade, deletarUnidade } from "@/actions/unidades";
@@ -34,6 +35,7 @@ export default function Unidades({}) {
   const [showForm, setShowForm] = useState(false);
   const [erroDelete, setErroDelete] = useState(null)
   const [erroEdit, setErroEdit] = useState(null)
+  const [removingIds, setRemovingIds] = useState(new Set())
   const [loading, setLoading] = useState(false)
   const [loadingInicial, setLoadingInicial] = useState(true)
   const [form, setForm] = useState({
@@ -83,12 +85,18 @@ export default function Unidades({}) {
   async function handleDeletarUnidade(id) {
     setErroDelete(null)
     setErroEdit(null)
-    const result = await deletarUnidade(id);
-    if (result.status === 200) {
-      setUnidades(await getUnidades() ?? []);
-    } else {
+    setRemovingIds(prev => new Set([...prev, id]))
+    const result = await deletarUnidade(id)
+    if (result.status !== 200) {
       setErroDelete(result.erroMessage)
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(id); return n })
+      return
     }
+    toast.success("Unidade removida")
+    setTimeout(() => {
+      getUnidades().then(u => setUnidades(u ?? []))
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(id); return n })
+    }, 200)
   }
 
   async function handleSalvarUnidade(id) {
@@ -280,20 +288,31 @@ export default function Unidades({}) {
         {unidades.length === 0 && (
           <p className="px-5 py-4 font-mono text-[12px] text-fg-5">Nenhuma unidade cadastrada.</p>
         )}
-        {unidades.map((unidade) => (
-          <UnidadeCard
-            key={unidade.id}
-            unidade={unidade}
-            editandoId={editandoId}
-            formEdit={formEdit}
-            onEditar={handleEditarUnidade}
-            onSalvar={handleSalvarUnidade}
-            onDeletar={handleDeletarUnidade}
-            onFormChange={setFormEdit}
-            onCancelar={() => { setEditandoId(null); resetFormEdit() }}
-            erro={erroEdit}
-          />
-        ))}
+        {unidades.map((unidade) => {
+          const isRemoving = removingIds.has(unidade.id)
+          return (
+            <div
+              key={unidade.id}
+              style={{
+                opacity: isRemoving ? 0 : 1,
+                transform: isRemoving ? "scale(0.97)" : "scale(1)",
+                transition: "opacity 200ms ease, transform 200ms ease",
+              }}
+            >
+              <UnidadeCard
+                unidade={unidade}
+                editandoId={editandoId}
+                formEdit={formEdit}
+                onEditar={handleEditarUnidade}
+                onSalvar={handleSalvarUnidade}
+                onDeletar={handleDeletarUnidade}
+                onFormChange={setFormEdit}
+                onCancelar={() => { setEditandoId(null); resetFormEdit() }}
+                erro={erroEdit}
+              />
+            </div>
+          )
+        })}
       </div>
     </div>
   );
