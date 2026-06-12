@@ -200,7 +200,7 @@ export default async function Dashboard() {
             <div className="bg-warning-bg border-l-2 border-warning px-6 py-4 mb-8 flex justify-between items-center">
               <div>
                 <span className="eyebrow eyebrow--warning mb-1">ATENÇÃO · CONTRATOS A VENCER</span>
-                <span className="text-[13px] text-warning block">
+                <span className="text-[14px] text-warning block">
                   {vencendoContratos.map(c => {
                     const loc  = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
                     const uni  = c.unidades?.nome ?? unidades.find(u => u.id === c.unidade_id)?.nome ?? "—"
