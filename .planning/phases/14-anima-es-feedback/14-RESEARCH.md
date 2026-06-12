@@ -634,7 +634,9 @@ async function marcarComoPaga(parcela) {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+> Todas resolvidas durante discuss/plan: Q1 → D-08 + UI-SPEC ("Unidade removida"); Q2 → UI-SPEC `mobileOffset={{ bottom: "80px" }}`; Q3 → D-07 (listagem ativo-only).
 
 1. **Q1: Mensagem de toast para deletarUnidade — conflito D-03 vs D-05**
    - What we know: D-05 marca Toast ✅ para `Unidades.js`/deletarUnidade. D-03 lista apenas 5 mensagens específicas e NÃO inclui deletarUnidade.
