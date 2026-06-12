@@ -36,6 +36,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | verification_gaps | Phase 02: 02-VERIFICATION.md — gaps identificados no portal (já corrigidos nas fases 6-7) | gaps_found |
 | verification_gaps | Phase 04: 04-VERIFICATION.md — validações visuais de /unidades precisam de revisão humana | human_needed |
 | verification_gaps | Phase 05: 05-VERIFICATION.md — validações de E2E precisam de revisão humana pós-deploy | human_needed |
+| feature_gap | Phase 10 SC2 (AUTH-02): segundo signup NÃO exibe "Instância já configurada" no formulário — guard é só DB-side (no /auth/confirm). Descoberto na Phase 15. Fix (guard JS em cadastrarProprietario) deferido pós-banca | deferred |
 
 ---
 
