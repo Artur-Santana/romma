@@ -35,7 +35,7 @@
 - [x] **Phase 11: Multi-Tenant Proprietários** — Isolamento multi-tenant implementado: cada Proprietário só vê e muta seus próprios dados (completed 2026-06-09)
 - [ ] **Phase 12: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa
 - [ ] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular
-- [ ] **Phase 14: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante
+- [x] **Phase 14: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante (completed 2026-06-12)
 - [ ] **Phase 15: Testes** — Suite de testes cobre novos fluxos e Actions críticas
 
 > **Cross-cutting (todos os planos, Phases 8-15):**
@@ -141,7 +141,7 @@
 - [x] 14-00-PLAN.md — Wave 0: install sonner + mount Toaster (root layout) + RED toast-feedback.spec.js (ANIM-03)
 - [x] 14-01-PLAN.md — Wave 1: Contratos exit anim (optimistic filter) + 3 toasts + D-07 ativo-only listing (ANIM-01/03)
 - [x] 14-02-PLAN.md — Wave 1: Unidades exit anim (wrapper div) + "Unidade removida" toast; Parcelas toast-only (ANIM-02/03)
-- [ ] 14-03-PLAN.md — Wave 1: LocatariosDesktop + Locatarios exit anim + "Acesso revogado" toast (ANIM-02/03)
+- [x] 14-03-PLAN.md — Wave 1: LocatariosDesktop + Locatarios exit anim + "Acesso revogado" toast (ANIM-02/03)
 **UI hint**: yes
 
 ### Phase 15: Testes
@@ -173,7 +173,7 @@
 | 11. Multi-Tenant Proprietários | v1.1 | 4/4 | Complete    | 2026-06-09 |
 | 12. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
 | 13. Mobile Responsivo | v1.1 | 0/? | Not started | — |
-| 14. Animações & Feedback | v1.1 | 3/4 | In Progress|  |
+| 14. Animações & Feedback | v1.1 | 4/4 | Complete   | 2026-06-12 |
 | 15. Testes | v1.1 | 0/? | Not started | — |
 
 **v1.0 Total:** 29/29 planos completos ✅
