@@ -7,6 +7,7 @@ import StatusBadge from "@/components/ui/StatusBadge"
 import { convidarLocatario, revogarConvite, editarLocatario } from "@/actions/locatarios"
 import { getLocatarios } from "@/lib/queries-client"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -33,6 +34,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   const [form, setForm] = useState(resetForm())
   const [erro, setErro] = useState("")
   const [loading, setLoading] = useState(false)
+  const [removingIds, setRemovingIds] = useState(new Set())
   const [editandoId, setEditandoId] = useState(null)
   const [formEdit, setFormEdit] = useState({
     nome_razao_social: "", tipo: "pf", documento: "", email: "", telefone: ""
@@ -90,12 +92,18 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
 
   async function handleRevogar(id) {
     setErro("")
+    setRemovingIds(prev => new Set([...prev, id]))
     const { status, erroMessage } = await revogarConvite(id)
-    if (status === 200) {
-      setLocatarios(await getLocatarios() ?? [])
-    } else {
+    if (status !== 200) {
       setErro(erroMessage ?? "Erro ao revogar convite.")
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(id); return n })
+      return
     }
+    toast.success("Acesso revogado")
+    setTimeout(() => {
+      getLocatarios().then(l => setLocatarios(l ?? []))
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(id); return n })
+    }, 200)
   }
 
   const GRID = "1.8fr 0.5fr 1.2fr 1.2fr 0.8fr 1.4fr 80px"
@@ -135,9 +143,20 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           const cs = contratos.filter(c => c.locatario_id === l.id)
           const ativosCount = cs.filter(c => c.status === "ativo").length
           const isPendente = l.status_convite === "pendente"
+          const isRemoving = removingIds.has(l.id)
 
           return (
-            <div key={l.id} style={{ display: "grid", gridTemplateColumns: GRID }} className={cn("px-5 py-4 items-center", i > 0 ? "border-t border-border-3" : "")}>
+            <div
+              key={l.id}
+              style={{
+                display: "grid",
+                gridTemplateColumns: GRID,
+                opacity: isRemoving ? 0 : 1,
+                transform: isRemoving ? "scale(0.97)" : "scale(1)",
+                transition: "opacity 200ms ease, transform 200ms ease",
+              }}
+              className={cn("px-5 py-4 items-center", i > 0 ? "border-t border-border-3" : "")}
+            >
               {/* Nome + avatar */}
               <div className="flex items-center gap-3 min-w-0">
                 <div className={cn("w-8 h-8 shrink-0 flex items-center justify-center border font-body font-bold text-[10px] tracking-[1px]", isPendente ? "bg-transparent border-border-2 text-fg-4" : "bg-surface border-border-2 text-fg-1")}>

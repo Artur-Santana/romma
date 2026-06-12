@@ -11,6 +11,7 @@ import StatusBadge from "@/components/ui/StatusBadge"
 import ConfirmDialog from "@/components/ui/ConfirmDialog"
 import PageHeader from "@/components/ui/PageHeader"
 import { gerarParcelas, criarContrato, cancelarContrato, encerrarContrato } from "@/actions/contratos"
+import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function SkeletonContratos() {
@@ -67,6 +68,7 @@ export default function Contratos() {
   const [loading, setLoading] = useState(false)
   const [loadingInicial, setLoadingInicial] = useState(true)
   const [confirmDialog, setConfirmDialog] = useState(null)
+  const [removingIds, setRemovingIds] = useState(new Set())
 
   useEffect(() => {
     async function carregar() {
@@ -104,6 +106,7 @@ export default function Contratos() {
       setUnidades(u ?? [])
       resetForm()
       setShowForm(false)
+      toast.success("Contrato criado")
     } else {
       setErro(result.erroMessage)
     }
@@ -136,26 +139,47 @@ export default function Contratos() {
 
   async function confirmarCancelamento(contrato) {
     setConfirmDialog(null)
+    setRemovingIds(prev => new Set([...prev, contrato.id]))
     const result = await cancelarContrato(contrato.id)
-    if (result.status !== 200) { setErro(result.erroMessage); return }
+    if (result.status !== 200) {
+      setErro(result.erroMessage)
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+      return
+    }
     setErro(null)
-    const [c, u] = await Promise.all([getContratos(), getUnidades()])
-    setContratos(c ?? [])
-    setUnidades(u ?? [])
+    toast.success("Contrato cancelado")
+    setTimeout(() => {
+      setContratos(prev => prev.filter(c => c.id !== contrato.id))
+      getUnidades().then(u => setUnidades(u ?? []))
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+    }, 200)
   }
 
   async function confirmarEncerramento(contrato) {
     setConfirmDialog(null)
-    const res = await encerrarContrato(contrato.id)
-    if (res.status !== 200) { setErro(res.erroMessage); return }
+    setRemovingIds(prev => new Set([...prev, contrato.id]))
+    const result = await encerrarContrato(contrato.id)
+    if (result.status !== 200) {
+      setErro(result.erroMessage)
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+      return
+    }
     setErro(null)
-    const [c, u] = await Promise.all([getContratos(), getUnidades()])
-    setContratos(c ?? [])
-    setUnidades(u ?? [])
+    toast.success("Contrato encerrado")
+    setTimeout(() => {
+      // Re-fetch em vez de filter otimista: a row encerrada reaparece nos dados
+      // (atualiza a contagem "encerrados" no subtítulo) mas contratosAtivos a filtra da lista.
+      Promise.all([getContratos(), getUnidades()]).then(([c, u]) => {
+        setContratos(c ?? [])
+        setUnidades(u ?? [])
+      })
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
+    }, 200)
   }
 
   const ativos = contratos.filter(c => c.status === "ativo").length
   const encerrados = contratos.filter(c => c.status === "encerrado").length
+  const contratosAtivos = contratos.filter(c => c.status === "ativo")
 
   if (loadingInicial) return <SkeletonContratos />;
 
@@ -305,13 +329,13 @@ export default function Contratos() {
             <HeaderCell>Ações</HeaderCell>
           </div>
 
-          {contratos.length === 0 && (
+          {contratosAtivos.length === 0 && (
             <div className="py-12 px-5 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
               Nenhum contrato cadastrado.
             </div>
           )}
 
-          {contratos.map((contrato, i) => {
+          {contratosAtivos.map((contrato, i) => {
             const loc = locatarios.find(l => l.id === contrato.locatario_id) ?? contrato.locatarios
             const uni = unidades.find(u => u.id === contrato.unidade_id) ?? contrato.unidades
             const edi = edificios.find(e => e.id === uni?.edificio_id)
@@ -319,10 +343,16 @@ export default function Contratos() {
             const isAtivo = contrato.status === "ativo"
             const vencido = isAtivo && contrato.data_fim < getTodayLocal()
 
+            const isRemoving = removingIds.has(contrato.id)
             return (
               <div
                 key={contrato.id}
-                style={COL_STYLE}
+                style={{
+                  ...COL_STYLE,
+                  opacity: isRemoving ? 0 : 1,
+                  transform: isRemoving ? "scale(0.97)" : "scale(1)",
+                  transition: "opacity 200ms ease, transform 200ms ease",
+                }}
                 className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
               >
                 <div className="px-5 py-4">
