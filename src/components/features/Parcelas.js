@@ -52,7 +52,7 @@ export default function Parcelas({ contratoId }) {
     if (result.status === 200) {
       setErro(null)
       toast.success("Parcela marcada como paga")
-      setParcelas(await getParcelasByContrato(contratoId))
+      setParcelas(await getParcelasByContrato(contratoId) ?? [])
     } else {
       setErro(result.erroMessage)
     }

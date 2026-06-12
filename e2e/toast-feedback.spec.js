@@ -330,8 +330,8 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
     await page.goto(`/dashboard/contratos/${cId}`)
     await page.waitForURL(`**/dashboard/contratos/${cId}`, { timeout: 10_000 })
 
-    // Click the "Pagar" button on the first pendente parcela
-    const pagarBtn = page.getByRole('button', { name: 'Pagar' }).first()
+    // Click the "Marcar Paga" button on the first pendente parcela
+    const pagarBtn = page.getByRole('button', { name: 'Marcar Paga' }).first()
     await expect(pagarBtn).toBeVisible({ timeout: 10_000 })
     await pagarBtn.click()
 

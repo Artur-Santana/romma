@@ -167,8 +167,12 @@ export default function Contratos() {
     setErro(null)
     toast.success("Contrato encerrado")
     setTimeout(() => {
-      setContratos(prev => prev.filter(c => c.id !== contrato.id))
-      getUnidades().then(u => setUnidades(u ?? []))
+      // Re-fetch em vez de filter otimista: a row encerrada reaparece nos dados
+      // (atualiza a contagem "encerrados" no subtítulo) mas contratosAtivos a filtra da lista.
+      Promise.all([getContratos(), getUnidades()]).then(([c, u]) => {
+        setContratos(c ?? [])
+        setUnidades(u ?? [])
+      })
       setRemovingIds(prev => { const n = new Set(prev); n.delete(contrato.id); return n })
     }, 200)
   }
