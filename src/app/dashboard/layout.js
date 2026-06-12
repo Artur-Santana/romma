@@ -1,6 +1,5 @@
 import TopStrip from "@/components/ui/TopStrip"
 import OwnerSidebar from "@/components/ui/OwnerSidebar"
-import ThemeToggle from "@/components/ui/ThemeToggle"
 
 export default function DashboardLayout({ children }) {
   return (
@@ -16,7 +15,6 @@ export default function DashboardLayout({ children }) {
           </div>
         </main>
       </div>
-      {process.env.NODE_ENV === "development" && <ThemeToggle />}
     </div>
   )
 }
