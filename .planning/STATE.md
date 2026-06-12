@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "Phase 11 shipped — PR #30"
-last_updated: "2026-06-09T13:34:34.377Z"
-last_activity: 2026-06-09
+status: "Phase 12 shipped — PR pending"
+last_updated: "2026-06-12T01:50:00.000Z"
+last_activity: 2026-06-12
 progress:
   total_phases: 7
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 13
-  completed_plans: 16
-  percent: 43
+  completed_plans: 22
+  percent: 57
 ---
 
 # Project State — Romma
@@ -53,7 +53,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 8 | Bug Fixes | v1.1 | ✅ Complete — PR #27 |
 | 9 | Páginas Públicas | v1.1 | ✅ Complete — PR #28 |
 | 10 | Signup Proprietário | v1.1 | Not started |
-| 11 | Escala Desktop + Tema | v1.1 | Not started |
+| 11 | Escala Desktop + Tema | v1.1 | ✅ Complete — PR pending |
 | 12 | Mobile Responsivo | v1.1 | Not started |
 | 13 | Animações & Feedback | v1.1 | Not started |
 | 14 | Testes | v1.1 | Not started |
@@ -78,10 +78,11 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-05: Milestone v1.1 roadmap created. 7 phases (8-14), 25 requirements. Banca em 13 dias.
 - 2026-06-06: Phase 08 complete. 4 bugs eliminados (BUG-01/02/03/04). PR #27 aberto.
 - 2026-06-06: Phase 09 complete. UAT 6/6 passed. LP-01/02/03 + PUB-01/02/03 verificados ao vivo. PR #28 aberto.
+- 2026-06-12: Phase 12 complete. 6 planos, escala desktop UX-01 pass, tema Obsidian hardcoded, ThemeToggle removido. Commit 82460a5.
 
 ## Current Position
 
 Phase: 12
-Plan: Not started
-Status: Phase 11 shipped — PR #30
-Last activity: 2026-06-09
+Plan: Complete
+Status: Phase 12 shipped — PR pending
+Last activity: 2026-06-12
