@@ -122,7 +122,11 @@
   1. Dashboard em viewport 375px exibe MobileTopBar + MobileBottomNav no lugar da sidebar — sidebar não vaza ou sobrepõe o conteúdo
   2. As 4 abas do dashboard (Unidades, Contratos, Parcelas, Locatários) são utilizáveis em 375px — sem overflow horizontal, scroll funciona, botões clicáveis
   3. Portal do Locatário em 375px exibe contrato ativo e histórico de parcelas sem overflow horizontal
-**Plans**: TBD
+**Plans**: 4 plans
+- [ ] 13-01-PLAN.md — Wave 0: spec E2E RED (UX-02/03/04) em viewport 375px
+- [ ] 13-02-PLAN.md — Wave 1: DashboardShell + data-testid + fix double-chrome (UX-02)
+- [ ] 13-03-PLAN.md — Wave 2: fix overflow/tap targets nas 4 abas do dashboard (UX-03)
+- [ ] 13-04-PLAN.md — Wave 3: fix responsivo do Portal do Locatário (UX-04)
 **UI hint**: yes
 
 ### Phase 14: Animações & Feedback
