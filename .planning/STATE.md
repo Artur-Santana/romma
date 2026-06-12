@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: executing
-last_updated: "2026-06-12T09:06:31.987Z"
-last_activity: 2026-06-12 -- Phase 13 planning complete
+status: "Phase 13 shipped — PR #32"
+last_updated: "2026-06-12T09:48:24.762Z"
+last_activity: 2026-06-12
 progress:
   total_phases: 8
   completed_phases: 4
@@ -86,5 +86,5 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 Phase: 13
 Plan: All complete (13-01 → 13-04)
-Status: Phase 13 complete — UX-02/03/04 verified, 7/7 E2E passed
+Status: Phase 13 shipped — PR #32
 Last activity: 2026-06-12
