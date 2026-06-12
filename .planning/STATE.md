@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "v1.1 COMPLETE — Phase 15 merged (PR #34). 15/15 fases. Banca 18/06."
-last_updated: "2026-06-12T22:00:00.000Z"
-last_activity: 2026-06-12
+status: executing
+last_updated: "2026-06-12T22:30:17.192Z"
+last_activity: 2026-06-12 -- Phase 16 execution started
 progress:
-  total_phases: 8
-  completed_phases: 8
-  total_plans: 27
+  total_phases: 9
+  completed_phases: 6
+  total_plans: 30
   completed_plans: 36
-  percent: 100
+  percent: 67
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** v1.1 completo — pronto pra banca (18/06)
+**Current focus:** Phase 16 — Fechamento IDOR MT-02
 
 ---
 
@@ -91,7 +91,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 15 — COMPLETE
-Plan: 6 of 6
-Status: Phase 15 shipped — PR #34 (CI verifica SC3)
-Last activity: 2026-06-12
+Phase: 16 (Fechamento IDOR MT-02) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 16
+Last activity: 2026-06-12 -- Phase 16 execution started
