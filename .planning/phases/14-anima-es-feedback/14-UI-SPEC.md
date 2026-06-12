@@ -60,8 +60,9 @@ The toast contract below maps project CSS vars to sonner's CSS variables explici
 ```jsx
 <Toaster
   theme="dark"
-  richColors={false}
+  richColors
   position="bottom-right"
+  mobileOffset={{ bottom: "80px" }}
   style={{
     "--normal-bg": "var(--surface)",
     "--normal-text": "var(--fg-1)",
@@ -78,15 +79,15 @@ The toast contract below maps project CSS vars to sonner's CSS variables explici
 
 | Decision | Value | Rationale |
 |----------|-------|-----------|
-| `richColors` | `false` | `richColors=true` overrides vars with sonner's saturated greens — incompatible with Obsidian's muted dark palette. Manual `--success-border` with `var(--success)` provides the semantic signal without over-saturating. |
+| `richColors` | `true` | Sonner only reads `--success-bg/-text/-border` when `richColors` is active (`[data-rich-colors="true"]`). Setting `richColors={false}` would make those three overrides dead code and yield only the default green checkmark icon with no border contrast. `richColors={true}` + explicit `--success-*` overrides applies the tamed muted-dark appearance instead of sonner's default saturated green. |
 | `theme` | `"dark"` | Prevents sonner's light-mode defaults from flashing before CSS var overrides apply |
 | `--border-radius` | `"0px"` | Design system uses `--radius: 0` (sharp corners). Sonner default is `8px` — must override explicitly |
 | `--normal-bg` | `var(--surface)` | `oklch(0.182 0 0)` — matches dashboard card/surface tone |
 | `--normal-text` | `var(--fg-1)` | `oklch(1 0 0)` — full white, matches primary text |
 | `--normal-border` | `var(--border-2)` | `oklch(1 0 0 / 0.10)` — subtle border consistent with existing dashboard borders |
-| `--success-bg` | `var(--surface)` | Same surface, not bright green — consistent with muted dark theme |
-| `--success-text` | `var(--fg-1)` | Same text — success signaled by border only |
-| `--success-border` | `var(--success)` | `oklch(0.696 0.17 162.5)` — the existing project success green token |
+| `--success-bg` | `var(--surface)` | Same dark surface, not saturated green — consistent with Obsidian muted theme |
+| `--success-text` | `var(--fg-1)` | Same white text — success is signaled by the border accent |
+| `--success-border` | `var(--success)` | `oklch(0.696 0.17 162.5)` — the existing project success green token, tames sonner's default |
 
 ### Toast Messages (locked from D-08)
 
@@ -99,7 +100,7 @@ The toast contract below maps project CSS vars to sonner's CSS variables explici
 | Revogar acesso (success) | `toast.success("Acesso revogado")` | "Acesso revogado" |
 | Marcar parcela como paga (success) | `toast.success("Parcela marcada como paga")` | "Parcela marcada como paga" |
 
-Note: Q1 from RESEARCH is resolved. "Unidade removida" is the message for `deletarUnidade`, consistent with D-05 (Toast ✅) and D-08 (full message list).
+Note: RESEARCH Open Question Q1 is resolved. "Unidade removida" is the message for `deletarUnidade`, consistent with D-05 (Toast ✅) and D-08 (full message list).
 
 **Scope:** `toast.success()` only. No `toast.error()` in this phase — errors stay on inline `erro` state. Toast fires only after `result.status === 200`.
 
@@ -109,19 +110,9 @@ Default sonner duration (4000ms). No override — no `duration` prop on `<Toaste
 
 ### Mobile Offset
 
-The MobileBottomNav occupies approximately 62px at the bottom of the viewport on screens <640px (`pt-[14px]` + `pb-4` = 30px vertical padding + ~16px text label + ~16px code label = ~62px rendered height).
+The MobileBottomNav occupies approximately 62px at the bottom of the viewport on screens <640px (`pt-[14px]` + `pb-4` = 30px vertical padding + ~26px for label + code text rows = ~62px rendered height).
 
-**Resolved (not deferred):** Use `mobileOffset={{ bottom: "80px" }}` on `<Toaster>`. This provides the 62px nav height + 18px clearance gap. Toast position remains `bottom-right` on all viewports; the offset prevents overlap with MobileBottomNav.
-
-```jsx
-<Toaster
-  theme="dark"
-  richColors={false}
-  position="bottom-right"
-  mobileOffset={{ bottom: "80px" }}
-  style={{ ... }}
-/>
-```
+**Resolved (not deferred):** `mobileOffset={{ bottom: "80px" }}` on `<Toaster>`. This provides the 62px nav height + 18px clearance gap. Toast position remains `bottom-right` on all viewports; the offset clears MobileBottomNav on mobile without requiring a separate position prop.
 
 ---
 
@@ -203,7 +194,7 @@ This phase introduces no new screen copy, empty states, or error messages. All c
 | Registry | Blocks Used | Safety Gate |
 |----------|-------------|-------------|
 | shadcn official | none (no new shadcn components in this phase) | not required |
-| npm — sonner | `sonner` package (Toaster + toast function) | Package audit: Emil Kowalski — public maintainer, ~3M weekly downloads, 10k+ GitHub stars, `'use client'` internal — approved. No third-party shadcn registry blocks. |
+| npm — sonner | `sonner` package (Toaster + toast function) | Package audit: Emil Kowalski — public maintainer, ~3M weekly downloads, 10k+ GitHub stars, `'use client'` internal — approved 2026-06-12. No third-party shadcn registry blocks. |
 
 ---
 
