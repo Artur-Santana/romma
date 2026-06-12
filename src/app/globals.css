@@ -139,6 +139,102 @@
   --ds-highlight:  oklch(0.7245 0.0998 82.35);
 }
 
+/* ── PALETAS CANDIDATAS ─────────────────────────────────────────────────────────
+   DEV: Para testar, use o ThemeToggle no dashboard (NODE_ENV=development).
+   Para ativar manualmente: document.documentElement.setAttribute('data-theme', 'pumpkin')
+   Paletas disponíveis: pumpkin | deep-olive | ultra-violet | cloudy-sky
+   Especificidade 0,1,0 (igual ao .dark) — source order pós .dark garante precedência.
+   Apenas os 5 --ds-* são sobrescritos; tokens hardcoded (--fg-1, --surface, --border-*)
+   não precisam override em paletas escuras.
+   ──────────────────────────────────────────────────────────────────────────────── */
+
+[data-theme="pumpkin"] {
+  --ds-primary:    oklch(0.706 0.186 44.5);   /* #FD802E pumpkin orange */
+  --ds-background: oklch(0.264 0.029 216.3);  /* #223D4C charcoal azulado */
+  --ds-surface:    oklch(0.228 0.025 216.3);
+  --ds-secondary:  oklch(0.310 0.025 216.3);
+  --ds-highlight:  oklch(0.600 0.08 55);
+}
+
+[data-theme="deep-olive"] {
+  --ds-primary:    oklch(0.600 0.08 135);
+  --ds-background: oklch(0.189 0.025 136.3);  /* #1A2517 deep olive */
+  --ds-surface:    oklch(0.230 0.025 136.3);
+  --ds-secondary:  oklch(0.270 0.02 136.3);
+  --ds-highlight:  oklch(0.760 0.06 145);     /* #ACC8A2 soft sage */
+}
+
+[data-theme="ultra-violet"] {
+  /* ── Source tokens ── */
+  --ds-primary:    oklch(0.380 0.13 293);     /* #5F4A8B deep violet/purple */
+  --ds-background: oklch(0.975 0.025 97);     /* #FEFACD lemon chiffon — bg claro */
+  --ds-surface:    oklch(0.940 0.025 97);     /* levemente mais escuro que bg */
+  --ds-secondary:  oklch(0.910 0.02 97);
+  --ds-highlight:  oklch(0.800 0.08 55);      /* warm amber complement */
+
+  /* ── OVERRIDES OBRIGATÓRIOS — tokens hardcoded que NÃO derivam de --ds-*
+     Sem estes, bg claro causa: texto branco invisível (--fg-1) e cards pretos (--surface)
+     Pitfall 1: --foreground usa calc(l+0.7) → L=1.67 → clamps para branco
+     Pitfall 2: --fg-1, --surface, --surface-hi, --border-* são hardcoded literais ──  */
+
+  /* Foreground derivados que clampam para branco em bg claro */
+  --foreground:         oklch(0.10 0 0);
+  --card-foreground:    oklch(0.10 0 0);
+  --muted-foreground:   oklch(0.45 0 0);
+  --popover-foreground: oklch(0.10 0 0);
+
+  /* fg scale — era oklch(1 0 0) branco puro */
+  --fg-1:        oklch(0.10 0 0);
+  --fg-2:        oklch(0.25 0 0);
+  --fg-3:        oklch(0.40 0 0);
+  --fg-4:        oklch(0.55 0 0);
+  --fg-5:        oklch(0.70 0 0);
+
+  /* Surface levels — era quase preto (0.182 / 0.218) */
+  --surface:     oklch(0.920 0.02 97);
+  --surface-hi:  oklch(0.890 0.02 97);
+
+  /* Border scale — era branco-alfa (invisível sobre claro) */
+  --border-1:    oklch(0 0 0 / 0.05);
+  --border-2:    oklch(0 0 0 / 0.10);
+  --border-3:    oklch(0 0 0 / 0.15);
+}
+
+[data-theme="cloudy-sky"] {
+  /* ── Source tokens ── */
+  --ds-primary:    oklch(0.500 0.10 245);     /* #2872A1 ocean blue */
+  --ds-background: oklch(0.880 0.03 240);     /* #CBDDE9 cloudy sky — bg claro */
+  --ds-surface:    oklch(0.850 0.028 240);    /* levemente mais escuro que bg */
+  --ds-secondary:  oklch(0.820 0.022 240);
+  --ds-highlight:  oklch(0.700 0.06 65);      /* warm sand complement */
+
+  /* ── OVERRIDES OBRIGATÓRIOS — tokens hardcoded que NÃO derivam de --ds-*
+     Mesmos overrides que ultra-violet: bg claro exige inversão dos tokens hardcoded.
+     --ds-background L≈0.88 (mais escuro que lemon chiffon) — foreground escuro ok ── */
+
+  /* Foreground derivados que clampam para branco em bg claro */
+  --foreground:         oklch(0.10 0 0);
+  --card-foreground:    oklch(0.10 0 0);
+  --muted-foreground:   oklch(0.45 0 0);
+  --popover-foreground: oklch(0.10 0 0);
+
+  /* fg scale — era oklch(1 0 0) branco puro */
+  --fg-1:        oklch(0.10 0 0);
+  --fg-2:        oklch(0.25 0 0);
+  --fg-3:        oklch(0.40 0 0);
+  --fg-4:        oklch(0.55 0 0);
+  --fg-5:        oklch(0.70 0 0);
+
+  /* Surface levels — era quase preto (0.182 / 0.218) */
+  --surface:     oklch(0.840 0.022 240);
+  --surface-hi:  oklch(0.810 0.020 240);
+
+  /* Border scale — era branco-alfa (invisível sobre claro) */
+  --border-1:    oklch(0 0 0 / 0.05);
+  --border-2:    oklch(0 0 0 / 0.10);
+  --border-3:    oklch(0 0 0 / 0.15);
+}
+
 @theme inline {
   --font-sans: var(--font-body);
   --font-heading: var(--font-headline-hanken);

@@ -17,7 +17,7 @@ function SkeletonContratos() {
   return (
     <div className="romma-page px-12 pt-12 pb-20 bg-background min-h-full">
       <div className="border border-border-3 bg-surface mb-8">
-        <div className="px-5 py-3 bg-[oklch(0.26_0_0)] border-b border-border-3">
+        <div className="px-5 py-3 bg-[var(--surface-hi)] border-b border-border-3">
           {[0, 1, 2, 3, 4].map((i) => (
             <Skeleton key={i} className="h-[10px] w-full rounded-none mb-2" />
           ))}
@@ -43,7 +43,7 @@ function isExpiring(c) {
   return diff >= 0 && diff <= 7
 }
 
-const COL = "100px 1.6fr 1.6fr 1fr 1fr 1.2fr 80px"
+const COL = "116px 1.6fr 1.6fr 1fr 1fr 1.2fr 96px"
 const COL_STYLE = { gridTemplateColumns: COL }
 
 function HeaderCell({ children }) {
@@ -193,7 +193,7 @@ export default function Contratos() {
                     value={form.locatario_id}
                     onValueChange={v => setForm({ ...form, locatario_id: v })}
                   >
-                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none">
+                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none">
                       <SelectValue placeholder="Selecionar locatário..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -210,7 +210,7 @@ export default function Contratos() {
                     value={form.unidade_id}
                     onValueChange={v => setForm({ ...form, unidade_id: v })}
                   >
-                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none">
+                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none">
                       <SelectValue placeholder="Selecionar unidade..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -227,7 +227,7 @@ export default function Contratos() {
                     type="date"
                     value={form.data_inicio}
                     onChange={e => setForm({ ...form, data_inicio: e.target.value })}
-                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                   />
                 </label>
                 <label className="flex flex-col gap-1.5">
@@ -237,7 +237,7 @@ export default function Contratos() {
                     type="date"
                     value={form.data_fim}
                     onChange={e => setForm({ ...form, data_fim: e.target.value })}
-                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none"
+                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
                   />
                 </label>
               </div>
@@ -245,7 +245,7 @@ export default function Contratos() {
               {unidadeSelecionada && (
                 <div className="px-4 py-3 mb-4 border border-border-3 bg-surface-hi flex items-center gap-4">
                   <span className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Valor Mensal</span>
-                  <span className="font-mono text-[14px] text-fg-1 font-bold">
+                  <span className="font-mono text-[18px] text-fg-1 font-bold">
                     {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(unidadeSelecionada.valor_mensal ?? 0)}
                   </span>
                 </div>
@@ -258,7 +258,7 @@ export default function Contratos() {
                   value={form.observacoes}
                   onChange={e => setForm({ ...form, observacoes: e.target.value })}
                   placeholder="Opcional"
-                  className="bg-surface-hi border border-border-3 text-fg-1 font-body text-[13px] px-3.5 py-2.5 w-full resize-y focus:outline-none"
+                  className="bg-surface-hi border border-border-3 text-fg-1 font-body text-[16px] px-3.5 py-2.5 w-full resize-y focus:outline-none"
                 />
               </label>
 
@@ -273,7 +273,7 @@ export default function Contratos() {
                   type="submit"
                   disabled={loading}
                   className={cn(
-                    "bg-indigo text-fg-1 font-body font-bold text-[12px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none",
+                    "bg-indigo text-fg-1 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-10 py-[18px] rounded-none",
                     loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
                   )}
                 >
@@ -283,7 +283,7 @@ export default function Contratos() {
                   type="button"
                   variant="ghost"
                   onClick={() => { resetForm(); setShowForm(false); setErro(null) }}
-                  className="border border-border-3 bg-transparent text-fg-3 font-body font-bold text-[12px] tracking-[1.2px] uppercase px-6 py-[14px] rounded-none cursor-pointer"
+                  className="border border-border-3 bg-transparent text-fg-3 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-8 py-[18px] rounded-none cursor-pointer"
                 >
                   Cancelar
                 </Button>
@@ -294,7 +294,7 @@ export default function Contratos() {
 
         {/* Contracts table */}
         <div className="border border-border-3 bg-surface mb-8">
-          <div style={COL_STYLE} className="grid bg-[oklch(0.26_0_0)] border-b border-border-3">
+          <div style={COL_STYLE} className="grid bg-[var(--surface-hi)] border-b border-border-3">
             <HeaderCell>ID</HeaderCell>
             <HeaderCell>Locatário</HeaderCell>
             <HeaderCell>Unidade</HeaderCell>
@@ -324,20 +324,20 @@ export default function Contratos() {
                 style={COL_STYLE}
                 className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
               >
-                <div className="px-5 py-3.5">
-                  <span className="font-mono text-[11px] text-fg-4 tracking-[0.3px]">
+                <div className="px-5 py-4">
+                  <span className="font-mono text-[18px] text-fg-4 tracking-[0.3px]">
                     REF_C_{String(i + 1).padStart(3, "0")}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5 overflow-hidden">
-                  <span className="text-[13px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="px-5 py-4 overflow-hidden">
+                  <span className="text-[18px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
                     {loc?.nome_razao_social ?? "—"}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5 overflow-hidden flex flex-col gap-0.5">
-                  <span className="text-[12px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="px-5 py-4 overflow-hidden flex flex-col gap-0.5">
+                  <span className="text-[18px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
                     {uni?.nome ?? "—"}
                   </span>
                   {edi && (
@@ -347,23 +347,23 @@ export default function Contratos() {
                   )}
                 </div>
 
-                <div className="px-5 py-3.5">
-                  <span className="font-mono text-[11px] text-fg-3">
+                <div className="px-5 py-4">
+                  <span className="font-mono text-[18px] text-fg-3">
                     {fmtData(contrato.data_inicio)}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5">
-                  <span className={cn("font-mono text-[11px]", expiring ? "text-warning" : "text-fg-3")}>
+                <div className="px-5 py-4">
+                  <span className={cn("font-mono text-[18px]", expiring ? "text-warning" : "text-fg-3")}>
                     {fmtData(contrato.data_fim)}
                   </span>
                 </div>
 
-                <div className="px-5 py-3.5">
+                <div className="px-5 py-4">
                   <StatusBadge status={expiring ? "vencendo" : contrato.status} />
                 </div>
 
-                <div className="px-3 py-3.5 flex flex-col gap-1.5 items-start">
+                <div className="px-3 py-4 flex flex-col gap-1.5 items-start">
                   <Button
                     variant="ghost"
                     size="sm"
