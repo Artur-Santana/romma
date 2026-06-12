@@ -147,7 +147,7 @@ export default function GestaoEdificios() {
               type="submit"
               disabled={loading}
               className={cn(
-                "bg-indigo text-fg-1 font-body font-bold text-[12px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none mt-2",
+                "bg-indigo text-fg-1 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-10 py-[18px] rounded-none mt-2",
                 loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
               )}
             >
@@ -201,7 +201,7 @@ export default function GestaoEdificios() {
                   <Button
                     onClick={handleSalvar}
                     disabled={loading}
-                    className="bg-indigo text-fg-1 font-body font-bold text-[11px] tracking-[1.2px] uppercase px-5 py-2 rounded-none cursor-pointer"
+                    className="bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-7 py-3 rounded-none cursor-pointer"
                   >
                     {loading ? "Salvando..." : "Salvar"}
                   </Button>
@@ -217,8 +217,8 @@ export default function GestaoEdificios() {
             ) : (
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-body font-bold text-[15px] text-fg-1">{edificio.nome}</p>
-                  <p className="font-mono text-[11px] text-fg-4 mt-0.5 tracking-[0.3px]">{edificio.endereco}</p>
+                  <p className="font-body font-bold text-[20px] text-fg-1">{edificio.nome}</p>
+                  <p className="font-mono text-[18px] text-fg-4 mt-0.5 tracking-[0.3px]">{edificio.endereco}</p>
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <button

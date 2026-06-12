@@ -106,7 +106,7 @@ export default async function Dashboard() {
             <div className="border border-indigo p-16 max-w-[720px]">
               <span className="eyebrow eyebrow--indigo mb-4">SETUP.SEQUENCE</span>
               <h3 className="font-display font-bold text-[32px] tracking-[-1.5px] text-fg-1 m-0 mb-2">Construa seu sistema.</h3>
-              <p className="text-[14px] text-fg-4 m-0 mb-10">Quatro etapas, zero atalhos. Configure o Romma para começar a gerir suas unidades.</p>
+              <p className="text-[18px] text-fg-4 m-0 mb-10">Quatro etapas, zero atalhos. Configure o Romma para começar a gerir suas unidades.</p>
               <div className="border border-border-3">
                 {[
                   { num: "01", label: "Cadastrar primeiro Edifício", href: "/dashboard/unidades", active: true },
@@ -118,7 +118,7 @@ export default async function Dashboard() {
                     <>
                       <div className="flex items-center gap-5">
                         <span className={cn("font-mono text-[10px]", step.active ? "text-indigo" : "text-fg-5")}>{step.num}</span>
-                        <span className={cn("font-bold text-[13px] tracking-[0.5px] uppercase", step.active ? "text-fg-1" : "text-fg-5")}>{step.label}</span>
+                        <span className={cn("font-bold text-[18px] tracking-[0.5px] uppercase", step.active ? "text-fg-1" : "text-fg-5")}>{step.label}</span>
                       </div>
                       <span className={cn("font-mono text-[12px]", step.active ? "text-indigo" : "text-fg-5")}>{step.active ? "→" : "—"}</span>
                     </>
@@ -144,7 +144,7 @@ export default async function Dashboard() {
               <p className="text-[13px] text-fg-3 m-0 mb-6">Configure o Romma para começar a gerir suas unidades.</p>
               <Link
                 href="/dashboard/unidades"
-                className="block bg-indigo py-[14px] px-5 no-underline font-mono text-[11px] text-white tracking-[1px] uppercase text-center"
+                className="block bg-indigo py-[18px] px-6 no-underline font-mono text-[14px] text-white tracking-[1px] uppercase text-center"
               >
                 Cadastrar Edifício →
               </Link>
@@ -200,7 +200,7 @@ export default async function Dashboard() {
             <div className="bg-warning-bg border-l-2 border-warning px-6 py-4 mb-8 flex justify-between items-center">
               <div>
                 <span className="eyebrow eyebrow--warning mb-1">ATENÇÃO · CONTRATOS A VENCER</span>
-                <span className="text-[13px] text-warning block">
+                <span className="text-[14px] text-warning block">
                   {vencendoContratos.map(c => {
                     const loc  = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
                     const uni  = c.unidades?.nome ?? unidades.find(u => u.id === c.unidade_id)?.nome ?? "—"
@@ -226,12 +226,12 @@ export default async function Dashboard() {
               <div className="flex justify-between items-end mb-5">
                 <div>
                   <span className="eyebrow eyebrow--indigo mb-1.5">SISTEMA.01</span>
-                  <h5 className="font-display font-bold text-[24px] tracking-[-0.5px] text-fg-1 m-0">Contratos Recentes</h5>
+                  <h5 className="font-display font-bold text-[30px] tracking-[-0.5px] text-fg-1 m-0">Contratos Recentes</h5>
                 </div>
                 <Link href="/dashboard/contratos" className="font-mono text-[12px] text-indigo no-underline tracking-[0.5px]">Ver todos →</Link>
               </div>
               <div className="bg-surface border border-border-3">
-                <div style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-3 bg-[oklch(0.26_0_0)]">
+                <div style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-3 bg-[var(--surface-hi)]">
                   {["Locatário · Unidade", "Valor mensal", "Término", "Status"].map(col => (
                     <span key={col} className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">{col}</span>
                   ))}
@@ -254,12 +254,12 @@ export default async function Dashboard() {
                           <span className="font-mono text-[10px] text-fg-2 font-bold">{getInitials(locNome)}</span>
                         </div>
                         <div>
-                          <div className="text-[13px] text-fg-1 font-semibold">{locNome}</div>
+                          <div className="text-[18px] text-fg-1 font-semibold">{locNome}</div>
                           <div className="font-mono text-[10px] text-fg-4">{uniNome} · {ediNome}</div>
                         </div>
                       </div>
-                      <span className="font-mono text-[13px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
-                      <span className={cn("font-mono text-[12px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
+                      <span className="font-mono text-[18px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
+                      <span className={cn("font-mono text-[18px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
                       <StatusBadge status={isExpiring ? "vencendo" : c.status} />
                     </div>
                   )
@@ -271,7 +271,7 @@ export default async function Dashboard() {
             <div>
               <div className="mb-5">
                 <span className="eyebrow eyebrow--indigo mb-1.5">SISTEMA.02</span>
-                <h5 className="font-display font-bold text-[24px] tracking-[-0.5px] text-fg-1 m-0">Parcelas</h5>
+                <h5 className="font-display font-bold text-[30px] tracking-[-0.5px] text-fg-1 m-0">Parcelas</h5>
               </div>
               <div className="bg-surface border border-border-3">
                 {parcelasRecentes.length === 0 && (
@@ -287,11 +287,11 @@ export default async function Dashboard() {
                   return (
                     <div key={p.id} className={cn("px-5 py-4 flex justify-between items-center", i > 0 ? "border-t border-border-3" : "")}>
                       <div>
-                        <div className="text-[13px] text-fg-1 font-semibold">{loc?.nome_razao_social ?? "—"}</div>
+                        <div className="text-[18px] text-fg-1 font-semibold">{loc?.nome_razao_social ?? "—"}</div>
                         <div className="font-mono text-[10px] text-fg-4">{uni?.nome ?? "—"} · {edi?.nome ?? "—"}</div>
                       </div>
                       <div className="text-right">
-                        <div className="font-mono text-[13px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
+                        <div className="font-mono text-[18px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
                         <div className={cn("font-mono text-[10px]", isVencida ? "text-warning" : "text-fg-4")}>
                           {isVencida ? `${Math.abs(diasRestantes)}d atraso` : `${diasRestantes}d restantes`}
                         </div>
@@ -321,7 +321,7 @@ export default async function Dashboard() {
               >
                 <div className="flex items-center gap-4">
                   <span className="font-mono text-[11px] text-indigo tracking-[1px]">{action.code}</span>
-                  <span className="font-semibold text-[13px] text-fg-2 tracking-[0.5px] uppercase">{action.label}</span>
+                  <span className="font-semibold text-[18px] text-fg-2 tracking-[0.5px] uppercase">{action.label}</span>
                 </div>
                 <span className="font-mono text-[12px] text-fg-4">→</span>
               </Link>
