@@ -137,7 +137,11 @@
   1. Ao encerrar ou cancelar um contrato, o item sai da lista com animação de fade-out (~200ms) em vez de desaparecer abruptamente
   2. Ao deletar uma unidade ou revogar acesso de Locatário, o item sai da lista com animação de saída visível
   3. Toast Sonner aparece na tela confirmando sucesso após: criar contrato, encerrar/cancelar contrato, revogar acesso, pagar parcela
-**Plans**: TBD
+**Plans**: 4 plans
+- [ ] 14-00-PLAN.md — Wave 0: install sonner + mount Toaster (root layout) + RED toast-feedback.spec.js (ANIM-03)
+- [ ] 14-01-PLAN.md — Wave 1: Contratos exit anim (optimistic filter) + 3 toasts + D-07 ativo-only listing (ANIM-01/03)
+- [ ] 14-02-PLAN.md — Wave 1: Unidades exit anim (wrapper div) + "Unidade removida" toast; Parcelas toast-only (ANIM-02/03)
+- [ ] 14-03-PLAN.md — Wave 1: LocatariosDesktop + Locatarios exit anim + "Acesso revogado" toast (ANIM-02/03)
 **UI hint**: yes
 
 ### Phase 15: Testes
