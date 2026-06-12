@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 function SkeletonContratos() {
   return (
-    <div className="romma-page px-12 pt-12 pb-20 bg-background min-h-full">
+    <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
       <div className="border border-border-3 bg-surface mb-8">
         <div className="px-5 py-3 bg-[var(--surface-hi)] border-b border-border-3">
           {[0, 1, 2, 3, 4].map((i) => (
@@ -171,7 +171,7 @@ export default function Contratos() {
         onCancel={() => setConfirmDialog(null)}
       />
 
-      <div className="romma-page px-12 pt-12 pb-20 bg-background min-h-full">
+      <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
 
         <PageHeader
           eyebrow="SISTEMA.02 // VÍNCULOS"
@@ -185,7 +185,7 @@ export default function Contratos() {
           <div className="border border-indigo p-8 mb-8 bg-surface">
             <span className="eyebrow eyebrow--indigo mb-5 block">NOVO CONTRATO</span>
             <form onSubmit={handleCriarContrato}>
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <label className="flex flex-col gap-1.5">
                   <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Locatário</span>
                   <Select
@@ -293,7 +293,8 @@ export default function Contratos() {
         )}
 
         {/* Contracts table */}
-        <div className="border border-border-3 bg-surface mb-8">
+        <div style={{ overflowX: "auto" }}>
+        <div className="border border-border-3 bg-surface mb-8" style={{ minWidth: "680px" }}>
           <div style={COL_STYLE} className="grid bg-[var(--surface-hi)] border-b border-border-3">
             <HeaderCell>ID</HeaderCell>
             <HeaderCell>Locatário</HeaderCell>
@@ -368,7 +369,7 @@ export default function Contratos() {
                     variant="ghost"
                     size="sm"
                     onClick={() => router.push(`/dashboard/contratos/${contrato.id}`)}
-                    className="font-mono text-[10px] text-fg-3 uppercase tracking-[1px] font-bold p-0 h-auto"
+                    className="font-mono text-[10px] text-fg-3 uppercase tracking-[1px] font-bold py-[10px] px-3 h-auto"
                   >
                     VER →
                   </Button>
@@ -377,7 +378,7 @@ export default function Contratos() {
                       variant="ghost"
                       size="sm"
                       onClick={() => askCancelar(contrato)}
-                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
+                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold py-[10px] px-3 h-auto"
                     >
                       CANC
                     </Button>
@@ -387,7 +388,7 @@ export default function Contratos() {
                       variant="ghost"
                       size="sm"
                       onClick={() => askEncerrar(contrato)}
-                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold p-0 h-auto"
+                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold py-[10px] px-3 h-auto"
                     >
                       ENC
                     </Button>
@@ -396,6 +397,7 @@ export default function Contratos() {
               </div>
             )
           })}
+        </div>
         </div>
 
         {/* Archive callout */}

@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 function SkeletonUnidades() {
   return (
-    <div className="romma-page p-12 bg-background min-h-full">
+    <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
       <div className="flex flex-col gap-0 border border-border-3 bg-surface">
         {[0, 1, 2].map((i) => (
           <div key={i} className={i > 0 ? "border-t border-border-3 p-5" : "p-5"}>
@@ -135,7 +135,7 @@ export default function Unidades({}) {
   if (loadingInicial) return <SkeletonUnidades />;
 
   return (
-    <div className="romma-page p-12 bg-background min-h-full">
+    <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
       <PageHeader
         eyebrow="U.LIST · UNIDADES"
         title="Unidades."
@@ -147,7 +147,7 @@ export default function Unidades({}) {
         <div className="border border-indigo p-8 mb-8 bg-surface">
           <span className="eyebrow eyebrow--indigo mb-5 block">NOVA UNIDADE</span>
           <form onSubmit={insertUnidade}>
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
 
               <label className="flex flex-col gap-1.5">
                 <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Edifício</span>

@@ -20,7 +20,7 @@ test.describe('@smoke Dashboard tiles — DASH-01/02/03', () => {
     await page.goto('/dashboard')
     await page.waitForURL('**/dashboard', { timeout: 10_000 })
     // Aguardar carregamento do grid de métricas desktop
-    await page.locator('.romma-desktop-only').waitFor({ state: 'visible', timeout: 10_000 })
+    await page.locator('.romma-desktop-only').first().waitFor({ state: 'visible', timeout: 10_000 })
   })
 
   test('DASH-01 @smoke — tile 02 exibe "MRR" como label e valor em R$', async ({ page }) => {
