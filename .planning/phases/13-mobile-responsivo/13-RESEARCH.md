@@ -491,18 +491,21 @@ const NAV_ITEMS = [
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`Unidades.js` — overflow em 375px?**
+   - RESOLVED: tratado pelo fix de UX-03 (inspeção + fix do form `grid-cols-2 → grid-cols-1 sm:grid-cols-2`), plano 13-02.
    - O que sabemos: usa `UnidadeCard` (cards, não tabela grid). Pode ser naturalmente responsivo.
    - O que é incerto: `UnidadeCard` não foi inspecionado; form de nova unidade usa `grid-cols-2`.
    - Recomendação: o plano deve incluir inspeção e fix mínimo do form `grid-cols-2`.
 
 2. **`ContratoCard.js` — overflow?**
+   - RESOLVED: tratado pelo fix de UX-04 (verificação + fix de overflow no portal), plano 13-03.
    - O que sabemos: usado no PortalDashboard, não foi inspecionado nesta pesquisa.
    - Recomendação: tarefa de verificação + fix se necessário.
 
 3. **`.romma-desktop-only` sem `!important` em media query**
+   - RESOLVED: tratado pelo fix de UX-02 (adicionar `!important` à regra mobile em globals.css ou usar `hidden` do Tailwind no DashboardShell), plano 13-02.
    - O que sabemos: a regra mobile é `display: none` sem `!important`. O DashboardShell usará `style={{ display: "flex" }}` inline, que tem maior especificidade que uma classe CSS.
    - Risco: o bloco desktop pode vazar em mobile quando inline style estiver presente.
    - Recomendação: o plano deve adicionar `!important` à regra `.romma-desktop-only { display: none; }` em globals.css, ou usar `hidden` do Tailwind que usa `!important`.
