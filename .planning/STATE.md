@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "Phase 14 merged (PR #33). Phase 15 (Testes) — única fase v1.1 restante"
-last_updated: "2026-06-12T17:00:00.000Z"
+status: "Phase 14 merged (PR #33, E2E pass). Phase 15 é a única fase restante antes da banca (18/06)."
+last_updated: "2026-06-12T17:20:53.885Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
-  completed_phases: 7
+  completed_phases: 5
   total_plans: 21
   completed_plans: 30
-  percent: 88
+  percent: 63
 ---
 
 # Project State — Romma
