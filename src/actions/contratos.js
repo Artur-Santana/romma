@@ -13,7 +13,7 @@ async function authGuard() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { err: { status: 401, erroMessage: 'Não autenticado.' } }
   if (!await isProprietario(supabase)) return { err: { status: 403, erroMessage: 'Sem permissão.' } }
-  return {}
+  return { user }
 }
 
 export async function criarContrato(form) {
@@ -56,7 +56,7 @@ export async function editarContrato(id, form) {
 }
 
 export async function cancelarContrato(id) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
@@ -67,6 +67,14 @@ export async function cancelarContrato(id) {
     .eq('id', id)
     .single()
   if (fetchErr || !contrato) return { status: 404, erroMessage: 'Contrato não encontrado.' }
+
+  const { data: unidade, error: fetchUnidadeErr } = await supabaseAdmin
+    .from('unidades').select('edificio_id').eq('id', contrato.unidade_id).single()
+  if (fetchUnidadeErr || !unidade) return { status: 404, erroMessage: 'Contrato não encontrado.' }
+
+  const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
+    .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
+  if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Contrato não encontrado.' }
 
   const { error } = await supabaseAdmin
     .from('contratos')
@@ -91,7 +99,7 @@ export async function cancelarContrato(id) {
 }
 
 export async function encerrarContrato(id) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
@@ -102,6 +110,14 @@ export async function encerrarContrato(id) {
     .eq('id', id)
     .single()
   if (fetchErr || !contrato) return { status: 404, erroMessage: 'Contrato não encontrado.' }
+
+  const { data: unidade, error: fetchUnidadeErr } = await supabaseAdmin
+    .from('unidades').select('edificio_id').eq('id', contrato.unidade_id).single()
+  if (fetchUnidadeErr || !unidade) return { status: 404, erroMessage: 'Contrato não encontrado.' }
+
+  const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
+    .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
+  if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Contrato não encontrado.' }
 
   const { error } = await supabaseAdmin
     .from('contratos')

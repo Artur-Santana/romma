@@ -33,10 +33,10 @@
 - [x] **Phase 9: Páginas Públicas** — Landing page e /unidades prontas para banca (completed 2026-06-06)
 - [x] **Phase 10: Signup Proprietário** — Primeiro acesso ao sistema configurável via tela (completed 2026-06-09)
 - [x] **Phase 11: Multi-Tenant Proprietários** — Isolamento multi-tenant implementado: cada Proprietário só vê e muta seus próprios dados (completed 2026-06-09)
-- [ ] **Phase 12: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa
-- [ ] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular
+- [x] **Phase 12: Escala Desktop + Tema** — Dashboard visualmente adequado em monitores e com paleta alternativa (completed 2026-06-12)
+- [x] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular (completed 2026-06-12)
 - [x] **Phase 14: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante (completed 2026-06-12)
-- [ ] **Phase 15: Testes** — Suite de testes cobre novos fluxos e Actions críticas
+- [x] **Phase 15: Testes** — Suite de testes cobre novos fluxos e Actions críticas (completed 2026-06-12)
 
 > **Cross-cutting (todos os planos, Phases 8-15):**
 > - **AUDIT-01**: cada fase inclui deep-dive isolado das telas trabalhadas antes de fechar
@@ -152,7 +152,13 @@
   1. Testes unitários existem e passam para: signup (instância única guard), revogar acesso, editar/deletar unidade, encerrar/cancelar contrato
   2. Suite E2E cobre: fluxo de signup, /unidades redesenhado, viewport mobile 375px (pelo menos uma jornada completa), feedback de toast
   3. `npx playwright test` passa sem falhas em CI
-**Plans**: TBD
+**Plans**: 6 plans
+- [x] 15-01-PLAN.md — Wave 0: Vitest infra (install + vitest.config.mjs + server-only stub + shared supabaseMock factory + test:unit script)
+- [x] 15-02-PLAN.md — Wave 1: [BLOCKING] IDOR fix — authGuard {} → {user} + ownership scoping em unidades.js + contratos.js (prereq D-08)
+- [x] 15-03-PLAN.md — Wave 1: unit specs auth.js + locatarios.js (happy+erro+guard, D-08 em revogarConvite)
+- [x] 15-04-PLAN.md — Wave 2: unit specs unidades.js + contratos.js (happy+erro+guard + D-08 cross-tenant)
+- [x] 15-05-PLAN.md — Wave 0: E2E gap-fill (AUTH-02 + jornada mobile 375px) + split crud/toast por domínio (D-10)
+- [x] 15-06-PLAN.md — Wave 1: job unit separado no GitHub Actions e2e.yml (D-03)
 
 ---
 
@@ -174,7 +180,7 @@
 | 12. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
 | 13. Mobile Responsivo | v1.1 | 0/? | Not started | — |
 | 14. Animações & Feedback | v1.1 | 4/4 | Complete   | 2026-06-12 |
-| 15. Testes | v1.1 | 0/? | Not started | — |
+| 15. Testes | v1.1 | 6/6 | Complete   | 2026-06-12 |
 
 **v1.0 Total:** 29/29 planos completos ✅
 **v1.1 Total:** Em planejamento

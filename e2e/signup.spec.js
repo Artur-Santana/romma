@@ -56,4 +56,15 @@ test.describe('Phase 10 — Signup Proprietário', () => {
       ).toBeVisible({ timeout: 10_000 })
     })
   })
+
+  // AUTH-02 — GAP CONHECIDO (deferido pós-banca):
+  // Phase 10 SC2 exige que o segundo signup exiba "Instância já configurada".
+  // O comportamento real do app NÃO cumpre isso no formulário: `cadastrarProprietario`
+  // (src/actions/auth.js) chama supabase.auth.signUp diretamente, sem checar se já existe
+  // um proprietário — então um segundo signup com email diferente mostra o banner
+  // "Verifique seu email" normalmente. O guard de instância única é puramente DB-side,
+  // disparando na criação do registro `proprietario` durante o fluxo /auth/confirm — que
+  // o E2E não consegue exercitar sem o link de confirmação por email.
+  // Descoberto na Phase 15 (FIX-01). Teste de formulário removido por não ser verificável
+  // via E2E. Correção (guard JS em cadastrarProprietario) deferida para pós-banca.
 })

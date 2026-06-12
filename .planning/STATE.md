@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "Phase 14 PR #33 aberto — UAT pendente, não mergear até passar"
-last_updated: "2026-06-12T16:21:40.950Z"
+status: verifying
+last_updated: "2026-06-12T21:40:07.054Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
-  completed_phases: 5
-  total_plans: 21
-  completed_plans: 30
-  percent: 63
+  completed_phases: 6
+  total_plans: 27
+  completed_plans: 36
+  percent: 75
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 14 — Animações & Feedback
+**Current focus:** Phase 15 — Testes
 
 ---
 
@@ -36,6 +36,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | verification_gaps | Phase 02: 02-VERIFICATION.md — gaps identificados no portal (já corrigidos nas fases 6-7) | gaps_found |
 | verification_gaps | Phase 04: 04-VERIFICATION.md — validações visuais de /unidades precisam de revisão humana | human_needed |
 | verification_gaps | Phase 05: 05-VERIFICATION.md — validações de E2E precisam de revisão humana pós-deploy | human_needed |
+| feature_gap | Phase 10 SC2 (AUTH-02): segundo signup NÃO exibe "Instância já configurada" no formulário — guard é só DB-side (no /auth/confirm). Descoberto na Phase 15. Fix (guard JS em cadastrarProprietario) deferido pós-banca | deferred |
 
 ---
 
@@ -52,11 +53,12 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 7 | Ajustes Finais Pré-Banca | v1.0 | ✅ Complete |
 | 8 | Bug Fixes | v1.1 | ✅ Complete — PR #27 |
 | 9 | Páginas Públicas | v1.1 | ✅ Complete — PR #28 |
-| 10 | Signup Proprietário | v1.1 | Not started |
-| 11 | Escala Desktop + Tema | v1.1 | ✅ Complete — PR pending |
-| 12 | Mobile Responsivo | v1.1 | ✅ Complete — PR pending |
-| 13 | Animações & Feedback | v1.1 | Not started |
-| 14 | Testes | v1.1 | Not started |
+| 10 | Signup Proprietário | v1.1 | ✅ Complete |
+| 11 | Multi-Tenant Proprietários | v1.1 | ✅ Complete |
+| 12 | Escala Desktop + Tema | v1.1 | ✅ Complete — commit 82460a5 |
+| 13 | Mobile Responsivo | v1.1 | ✅ Complete |
+| 14 | Animações & Feedback | v1.1 | ✅ Complete — PR #33 merged |
+| 15 | Testes | v1.1 | Not started |
 
 ---
 
@@ -83,10 +85,13 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 13 complete. UX-02/03/04 verificados. 7/7 E2E passed. DashboardShell implementado, 4 abas sem overflow, portal responsivo.
 - 2026-06-12: Phase 14 plan 01 complete. Contratos.js: removingIds exit animation, sonner toasts (criado/encerrado/cancelado), optimistic filter, ativo-only main listing. Commits 225ec08+0fd3a12.
 - 2026-06-12: Phase 14 plan 02 complete. Unidades.js: exit animation (opacity+scale 200ms) + toast "Unidade removida" + re-fetch-after-timeout; Parcelas.js: toast "Parcela marcada como paga" (no animation). Commits 461a1ff+58b8d4d.
+- 2026-06-12: Phase 15 plan 05 complete. E2E audit+gap-fill (TEST-02 D-09): AUTH-02 second-signup guard test added to signup.spec.js; complete mobile 375px interactive journey added to mobile-responsive.spec.js. D-10 split: crud.spec.js → 4 domain files (14/14 tests), toast-feedback.spec.js → 4 domain files (5/5 tests). 74 tests discoverable via --list; live run pending CI. Commits 71dfb5b+cf78b5f+ad681e5.
+- 2026-06-12: Phase 15 plan 02 complete. IDOR fix (T-15-01): authGuard() returns { user } in unidades.js + contratos.js; editarUnidade/deletarUnidade add edificio_id ownership pre-check; cancelarContrato/encerrarContrato add 3-hop chain (unidade_id → edificio_id → proprietario_id). Commits db637de+b72e904.
+- 2026-06-12: Phase 15 plan 03 complete. Unit tests for auth.js (cadastrarProprietario, 3 cases D-06/D-07) and locatarios.js (revogarConvite, 4 cases D-06/D-07/D-08). D-08 asserts .eq('proprietario_id', user.id) regression guard. 7 tests, exit 0. Commits 5aa8283+e3ee878.
 
 ## Current Position
 
-Phase: 14 (Animações & Feedback) — EXECUTING
-Plan: 4 of 4
-Status: Phase 14 PR #33 aberto — UAT pendente, não mergear até passar
+Phase: 15 — COMPLETE
+Plan: 6 of 6
+Status: Phase 15 shipped — PR #34 (CI verifica SC3)
 Last activity: 2026-06-12
