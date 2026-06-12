@@ -88,17 +88,17 @@ The most important planning constraint discovered in research: **D-08's `.eq('pr
 
 ### Package Legitimacy Audit
 
-> slopcheck installation was denied by the auto-mode classifier. Fallback: all packages marked status per npm registry check + official docs cross-reference.
+> slopcheck 0.6.1 was available and run during research (2026-06-12).
 
-| Package | Registry | Evidence | slopcheck | Disposition |
-|---------|----------|----------|-----------|-------------|
-| vitest | npm | v4.1.8 confirmed via `npm view`, homepage vitest.dev, repo vitest-dev/vitest. Listed in official Next.js testing docs. | unavailable | Approved [CITED: nextjs.org/docs] |
-| vite-tsconfig-paths | npm | v6.1.1 confirmed via `npm view`. Used in official Next.js Vitest guide for TS. | unavailable | Approved [CITED: nextjs.org/docs] |
+| Package | Registry | Age | Source Repo | slopcheck | Disposition |
+|---------|----------|-----|-------------|-----------|-------------|
+| vitest | npm | ~4.5 yrs (Dec 2021) | github.com/vitest-dev/vitest | [SUS] — false positive (name derives from parent `vite` intentionally; maintained by Evan You yyx990803, Anthony Fu antfu, Patak — same team as Vite itself; homepage vitest.dev) | Approved — false positive confirmed [CITED: nextjs.org/docs/app/guides/testing/vitest] |
+| vite-tsconfig-paths | npm | v6.1.1 | — | [OK] | Approved [CITED: nextjs.org/docs] |
 
 **Packages removed due to slopcheck [SLOP] verdict:** none
-**Packages flagged as suspicious [SUS]:** none
+**Packages flagged as suspicious [SUS]:** vitest — false positive. No postinstall script. No network calls. Maintained by Vite core team. Safe to install.
 
-*slopcheck was unavailable at research time (auto-mode denial). Both packages are approved via official documentation cross-reference.*
+*slopcheck run confirmed 2026-06-12. vitest [SUS] verdict is a known false positive for packages intentionally named after their parent project.*
 
 ---
 
@@ -446,6 +446,8 @@ See **Critical Finding: D-08 Scope Mismatch** below.
 - `deletarUnidade`: `.delete().eq('id', id)` — no `proprietario_id` filter [VERIFIED: src/actions/unidades.js:60]
 - `cancelarContrato`: `.eq('id', id)` — no `proprietario_id` filter [VERIFIED: src/actions/contratos.js:74]
 - `encerrarContrato`: `.eq('id', id)` — no `proprietario_id` filter [VERIFIED: src/actions/contratos.js:98]
+
+**Root implementation cause (deeper than schema):** The `authGuard()` function in both `unidades.js` and `contratos.js` returns `{}` (empty object) on success — it does NOT return `{ user }`. [VERIFIED: src/actions/unidades.js:10-16, src/actions/contratos.js:11-17]. The callers destructure `const { err } = await authGuard()` — they have no `user.id` available even if they wanted to add a `proprietario_id` filter. This is distinct from `locatarios.js`, where each function calls `createServer()` inline and captures `user` directly. The fix is to change `authGuard()` to `return { user }` and update all callers to `const { err, user } = await authGuard()`.
 
 **The IDOR risk:** `supabaseAdmin` uses the service-role key — it **bypasses RLS**. The `authGuard()` confirms the user is a Proprietário, but any authenticated Proprietário could edit/delete unidades or contratos belonging to another Proprietário because the Action filters only by `id`, not `proprietario_id`. RLS would catch anon queries, but service-role bypasses it.
 
