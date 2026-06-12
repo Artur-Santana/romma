@@ -154,7 +154,7 @@
   3. `npx playwright test` passa sem falhas em CI
 **Plans**: 6 plans
 - [x] 15-01-PLAN.md — Wave 0: Vitest infra (install + vitest.config.mjs + server-only stub + shared supabaseMock factory + test:unit script)
-- [ ] 15-02-PLAN.md — Wave 1: [BLOCKING] IDOR fix — authGuard {} → {user} + ownership scoping em unidades.js + contratos.js (prereq D-08)
+- [x] 15-02-PLAN.md — Wave 1: [BLOCKING] IDOR fix — authGuard {} → {user} + ownership scoping em unidades.js + contratos.js (prereq D-08)
 - [ ] 15-03-PLAN.md — Wave 1: unit specs auth.js + locatarios.js (happy+erro+guard, D-08 em revogarConvite)
 - [ ] 15-04-PLAN.md — Wave 2: unit specs unidades.js + contratos.js (happy+erro+guard + D-08 cross-tenant)
 - [x] 15-05-PLAN.md — Wave 0: E2E gap-fill (AUTH-02 + jornada mobile 375px) + split crud/toast por domínio (D-10)
@@ -180,7 +180,7 @@
 | 12. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
 | 13. Mobile Responsivo | v1.1 | 0/? | Not started | — |
 | 14. Animações & Feedback | v1.1 | 4/4 | Complete   | 2026-06-12 |
-| 15. Testes | v1.1 | 2/6 | In Progress|  |
+| 15. Testes | v1.1 | 3/6 | In Progress|  |
 
 **v1.0 Total:** 29/29 planos completos ✅
 **v1.1 Total:** Em planejamento
