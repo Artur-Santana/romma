@@ -59,6 +59,27 @@ O que NÃO é escopo: animações de entrada, skeleton loaders, loading spinners
 - 200ms duration — conforme especificado em ANIM-01 ("~200ms")
 - Toast aparece imediatamente após ação bem-sucedida, não espera a animação terminar
 
+### D-07: Lista de contratos pós-encerrar/cancelar (resolve Q3 do RESEARCH)
+- `cancelarContrato`/`encerrarContrato` usam `.update()` — a row persiste no DB e `getContratos()` não filtra por status, então sem mudança o contrato reaparece no reload
+- **Decisão:** item some permanente. Após a animação de fade-out (200ms), remover do estado local E garantir que a listagem de contratos exiba apenas `status = 'ativo'`
+- Implementação: filtrar por `status === 'ativo'` na listagem (via query `getContratos` ou filtro client-side no componente que renderiza os cards) — o planner escolhe o ponto mais limpo, mas o resultado deve ser: contrato encerrado/cancelado NÃO reaparece no reload
+- Aplica-se apenas à listagem principal de Contratos; não remove dados do banco
+
+### D-08: Toast de deletar Unidade (resolve Q1 do RESEARCH)
+- `deletarUnidade` dispara `toast.success("Unidade removida")` após `status === 200`
+- Resolve a inconsistência D-03/D-05 a favor de exibir toast (consistente com as demais ações destrutivas)
+- Mensagens completas (consolidando D-03):
+  - Criar contrato → "Contrato criado"
+  - Encerrar contrato → "Contrato encerrado"
+  - Cancelar contrato → "Contrato cancelado"
+  - Deletar unidade → "Unidade removida"
+  - Revogar acesso → "Acesso revogado"
+  - Pagar parcela → "Parcela marcada como paga"
+
+### D-09: Rollback de removingIds em erro (do RESEARCH — pitfall)
+- Handlers que iniciam a animação ANTES do `await` da Server Action (unidades, locatários) devem remover o ID de `removingIds` se a action retornar erro (`status !== 200`) — senão o item fica invisível mas presente
+- Alternativa mais segura: só adicionar a `removingIds` APÓS confirmar `status === 200`, então animar, então remover do array no setTimeout. O planner escolhe, mas o estado de erro NÃO pode deixar item invisível-mas-presente
+
 ### Claude's Discretion
 - Se `ConfirmDialog` é usado antes da ação, o toast deve aparecer após a confirmação E o sucesso da Server Action (não antes)
 - Verificar se `Locatarios.js` (mobile) e `LocatariosDesktop.js` usam arrays distintos em estado — aplicar `removingIds` no componente que gerencia a lista visível
