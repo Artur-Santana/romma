@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { convidarLocatario, editarLocatario, deletarLocatario } from "@/actions/locatarios";
 import { getLocatarios } from "@/lib/queries-client";
 
@@ -17,6 +18,7 @@ export default function Locatarios({}) {
   const [form, setForm] = useState(resetForm())
   const [editandoId, setEditandoId] = useState(null);
   const [locatarios, setlocatarios] = useState([]);
+  const [removingIds, setRemovingIds] = useState(new Set());
   const [editForm, setEditForm] = useState({});
   const [erroConvite, setErroConvite] = useState("");
 
@@ -64,10 +66,17 @@ export default function Locatarios({}) {
   }
 
   async function handleDeletarLocatario(id) {
+    setRemovingIds(prev => new Set([...prev, id]));
     const { status } = await deletarLocatario(id);
-    if (status === 200) {
-      setlocatarios(await getLocatarios());
+    if (status !== 200) {
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(id); return n });
+      return;
     }
+    toast.success("Acesso revogado");
+    setTimeout(() => {
+      getLocatarios().then(l => setlocatarios(l ?? []));
+      setRemovingIds(prev => { const n = new Set(prev); n.delete(id); return n });
+    }, 200);
   }
 
   return (
@@ -109,8 +118,17 @@ export default function Locatarios({}) {
         <button type="submit">Enviar</button>
       </form>
       {erroConvite && <p>{erroConvite}</p>}
-      {locatarios.map((locatario) => (
-        <div key={locatario.id}>
+      {locatarios.map((locatario) => {
+        const isRemoving = removingIds.has(locatario.id);
+        return (
+        <div
+          key={locatario.id}
+          style={{
+            opacity: isRemoving ? 0 : 1,
+            transform: isRemoving ? "scale(0.97)" : "scale(1)",
+            transition: "opacity 200ms ease, transform 200ms ease",
+          }}
+        >
           {editandoId === locatario.id ? (
             <div>
               <input
@@ -165,7 +183,8 @@ export default function Locatarios({}) {
             </div>
           )}
         </div>
-      ))}
+        )
+      })}
     </main>
   );
 }
