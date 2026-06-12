@@ -12,7 +12,7 @@ async function authGuard() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { err: { status: 401, erroMessage: 'Não autenticado.' } }
   if (!await isProprietario(supabase)) return { err: { status: 403, erroMessage: 'Sem permissão.' } }
-  return {}
+  return { user }
 }
 
 export async function criarUnidade(form) {
@@ -35,10 +35,19 @@ export async function criarUnidade(form) {
 }
 
 export async function editarUnidade(id, form) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+
+  const { data: unidade, error: fetchUnidadeErr } = await supabaseAdmin
+    .from('unidades').select('edificio_id').eq('id', id).single()
+  if (fetchUnidadeErr || !unidade) return { status: 404, erroMessage: 'Unidade não encontrada.' }
+
+  const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
+    .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
+  if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Unidade não encontrada.' }
+
   const { nome, descricao, area_m2, valor_mensal, status, valor_visivel } = form
   if (nome !== undefined && !nome?.trim()) return { status: 400, erroMessage: 'Nome é obrigatório.' }
   if (status !== undefined && !STATUS_UNIDADE.includes(status)) return { status: 400, erroMessage: 'Status inválido.' }
@@ -53,10 +62,19 @@ export async function editarUnidade(id, form) {
 }
 
 export async function deletarUnidade(id) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+
+  const { data: unidade, error: fetchUnidadeErr } = await supabaseAdmin
+    .from('unidades').select('edificio_id').eq('id', id).single()
+  if (fetchUnidadeErr || !unidade) return { status: 404, erroMessage: 'Unidade não encontrada.' }
+
+  const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
+    .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
+  if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Unidade não encontrada.' }
+
   const { error } = await supabaseAdmin.from('unidades').delete().eq('id', id)
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
