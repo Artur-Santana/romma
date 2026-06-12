@@ -172,7 +172,10 @@
   4. marcarParcelaComoPaga: authGuard retorna {user} + valida ownership (parcela→contrato→unidade→edificio→proprietario_id)
   5. Testes unitários cobrem cada Action: happy + erro + cross-tenant block (espelha 15-04)
   6. `npx vitest run` e `npx playwright test --list` passam
-**Plans**: TBD (closure — espelha padrão 15-02 + 15-04)
+**Plans**: 3 plans
+- [ ] 16-01-PLAN.md — Owner pre-checks: criarUnidade + criarContrato + editarContrato (mirror 15-02)
+- [ ] 16-02-PLAN.md — parcelas.js authGuard {user} + marcarParcelaComoPaga 4-hop ownership
+- [ ] 16-03-PLAN.md — Unit tests for all 4 fixed Actions + full vitest/playwright gate (mirror 15-04)
 
 ---
 
