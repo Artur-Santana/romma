@@ -39,12 +39,12 @@ export default function PortalDashboard() {
   }, [])
 
   return (
-    <div className="romma-page bg-background min-h-full px-12 pt-12 pb-20">
+    <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
       <div className="flex justify-between items-center">
         <span className="eyebrow eyebrow--indigo">PORTAL DO LOCATÁRIO</span>
         <LogoutButton />
       </div>
-      <h1 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Seu Contrato.</h1>
+      <h1 className="font-display font-bold text-[28px] sm:text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Seu Contrato.</h1>
       <p className="font-mono text-[11px] text-fg-4 mt-2">Acesso restrito — contrato e histórico de parcelas.</p>
 
       {erro ? (
