@@ -12,6 +12,8 @@
     "lint": "eslint",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
     "db:test:reset": "supabase db reset",
     "db:test:seed": "node e2e/seed.mjs"
   },
