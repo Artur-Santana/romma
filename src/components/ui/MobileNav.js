@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export function MobileTopBar({ title, subtitle, onBack, onMenu, right }) {
   return (
-    <div className="bg-background border-b border-[var(--border-2)] px-5 pt-5 pb-4 flex items-center gap-3 shrink-0">
+    <div data-testid="mobile-top-bar" className="bg-background border-b border-[var(--border-2)] px-5 pt-5 pb-4 flex items-center gap-3 shrink-0">
       {(onBack || onMenu) && (
         <button
           onClick={onBack || onMenu}
@@ -43,7 +43,7 @@ export function MobileBottomNav({ items = [], pathname: pathnameProp }) {
   const pathname = pathnameProp ?? routerPathname;
 
   return (
-    <div className="bg-background border-t border-[var(--border-2)] flex shrink-0">
+    <div data-testid="mobile-bottom-nav" className="bg-background border-t border-[var(--border-2)] flex shrink-0">
       {items.map((item) => {
         const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
         return (
