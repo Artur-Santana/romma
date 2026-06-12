@@ -175,6 +175,7 @@ export default function Contratos() {
 
   const ativos = contratos.filter(c => c.status === "ativo").length
   const encerrados = contratos.filter(c => c.status === "encerrado").length
+  const contratosAtivos = contratos.filter(c => c.status === "ativo")
 
   if (loadingInicial) return <SkeletonContratos />;
 
@@ -324,13 +325,13 @@ export default function Contratos() {
             <HeaderCell>Ações</HeaderCell>
           </div>
 
-          {contratos.length === 0 && (
+          {contratosAtivos.length === 0 && (
             <div className="py-12 px-5 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
               Nenhum contrato cadastrado.
             </div>
           )}
 
-          {contratos.map((contrato, i) => {
+          {contratosAtivos.map((contrato, i) => {
             const loc = locatarios.find(l => l.id === contrato.locatario_id) ?? contrato.locatarios
             const uni = unidades.find(u => u.id === contrato.unidade_id) ?? contrato.unidades
             const edi = edificios.find(e => e.id === uni?.edificio_id)
@@ -338,10 +339,16 @@ export default function Contratos() {
             const isAtivo = contrato.status === "ativo"
             const vencido = isAtivo && contrato.data_fim < getTodayLocal()
 
+            const isRemoving = removingIds.has(contrato.id)
             return (
               <div
                 key={contrato.id}
-                style={COL_STYLE}
+                style={{
+                  ...COL_STYLE,
+                  opacity: isRemoving ? 0 : 1,
+                  transform: isRemoving ? "scale(0.97)" : "scale(1)",
+                  transition: "opacity 200ms ease, transform 200ms ease",
+                }}
                 className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
               >
                 <div className="px-5 py-4">
