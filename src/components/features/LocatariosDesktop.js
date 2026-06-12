@@ -203,7 +203,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       <div className="mt-8 p-6 border border-indigo flex justify-between items-center bg-[oklch(0.339_0.179_301.68_/_0.06)]">
         <div className="flex flex-col gap-1.5">
           <span className="eyebrow eyebrow--indigo">FLUXO DE CONVITE</span>
-          <span className="text-[13px] text-fg-2 leading-relaxed max-w-[540px]">
+          <span className="text-[14px] text-fg-2 leading-relaxed max-w-[540px]">
             Convide um locatário pelo email. Ele recebe um token único, define a senha e o vínculo é selado. Você pode revogar antes do aceite.
           </span>
         </div>
