@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
 status: executing
-last_updated: "2026-06-12T20:56:27.725Z"
+last_updated: "2026-06-12T21:06:04.175Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 27
-  completed_plans: 31
+  completed_plans: 32
   percent: 63
 ---
 
@@ -84,10 +84,11 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 13 complete. UX-02/03/04 verificados. 7/7 E2E passed. DashboardShell implementado, 4 abas sem overflow, portal responsivo.
 - 2026-06-12: Phase 14 plan 01 complete. Contratos.js: removingIds exit animation, sonner toasts (criado/encerrado/cancelado), optimistic filter, ativo-only main listing. Commits 225ec08+0fd3a12.
 - 2026-06-12: Phase 14 plan 02 complete. Unidades.js: exit animation (opacity+scale 200ms) + toast "Unidade removida" + re-fetch-after-timeout; Parcelas.js: toast "Parcela marcada como paga" (no animation). Commits 461a1ff+58b8d4d.
+- 2026-06-12: Phase 15 plan 05 complete. E2E audit+gap-fill (TEST-02 D-09): AUTH-02 second-signup guard test added to signup.spec.js; complete mobile 375px interactive journey added to mobile-responsive.spec.js. D-10 split: crud.spec.js → 4 domain files (14/14 tests), toast-feedback.spec.js → 4 domain files (5/5 tests). 74 tests discoverable via --list; live run pending CI. Commits 71dfb5b+cf78b5f+ad681e5.
 
 ## Current Position
 
 Phase: 15 (Testes) — EXECUTING
-Plan: 2 of 6
+Plan: 3 of 6
 Status: Ready to execute
 Last activity: 2026-06-12
