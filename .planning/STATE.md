@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: verifying
-last_updated: "2026-06-12T13:29:31.280Z"
+status: "Phase 14 PR #33 aberto — UAT pendente, não mergear até passar"
+last_updated: "2026-06-12T16:21:40.950Z"
 last_activity: 2026-06-12
 progress:
   total_phases: 8
@@ -88,5 +88,5 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 Phase: 14 (Animações & Feedback) — EXECUTING
 Plan: 4 of 4
-Status: Phase complete — ready for verification
+Status: Phase 14 PR #33 aberto — UAT pendente, não mergear até passar
 Last activity: 2026-06-12
