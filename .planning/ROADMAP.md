@@ -138,7 +138,7 @@
   2. Ao deletar uma unidade ou revogar acesso de Locatário, o item sai da lista com animação de saída visível
   3. Toast Sonner aparece na tela confirmando sucesso após: criar contrato, encerrar/cancelar contrato, revogar acesso, pagar parcela
 **Plans**: 4 plans
-- [ ] 14-00-PLAN.md — Wave 0: install sonner + mount Toaster (root layout) + RED toast-feedback.spec.js (ANIM-03)
+- [x] 14-00-PLAN.md — Wave 0: install sonner + mount Toaster (root layout) + RED toast-feedback.spec.js (ANIM-03)
 - [ ] 14-01-PLAN.md — Wave 1: Contratos exit anim (optimistic filter) + 3 toasts + D-07 ativo-only listing (ANIM-01/03)
 - [ ] 14-02-PLAN.md — Wave 1: Unidades exit anim (wrapper div) + "Unidade removida" toast; Parcelas toast-only (ANIM-02/03)
 - [ ] 14-03-PLAN.md — Wave 1: LocatariosDesktop + Locatarios exit anim + "Acesso revogado" toast (ANIM-02/03)
@@ -173,7 +173,7 @@
 | 11. Multi-Tenant Proprietários | v1.1 | 4/4 | Complete    | 2026-06-09 |
 | 12. Escala Desktop + Tema | v1.1 | 0/? | Not started | — |
 | 13. Mobile Responsivo | v1.1 | 0/? | Not started | — |
-| 14. Animações & Feedback | v1.1 | 0/? | Not started | — |
+| 14. Animações & Feedback | v1.1 | 1/4 | In Progress|  |
 | 15. Testes | v1.1 | 0/? | Not started | — |
 
 **v1.0 Total:** 29/29 planos completos ✅
