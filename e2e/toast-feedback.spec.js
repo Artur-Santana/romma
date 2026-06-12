@@ -162,6 +162,15 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
       if (unidadeParaContratoId) await admin.from('unidades').delete().eq('id', unidadeParaContratoId)
       if (unidadeParaDeletarId) await admin.from('unidades').delete().eq('id', unidadeParaDeletarId)
       if (edificioId) await admin.from('edificios').delete().eq('id', edificioId)
+      // Locatários auxiliares (03.1 / 03.4) — best-effort por email
+      for (const email of ['e2e-toast2@test.romma.local', 'e2e-toast-revogar@test.romma.local']) {
+        const { data: u } = await admin.auth.admin.listUsers()
+        const found = u?.users?.find(x => x.email === email)
+        if (found) {
+          await admin.from('locatarios').delete().eq('usuario_id', found.id)
+          await admin.auth.admin.deleteUser(found.id)
+        }
+      }
     } catch { /* cleanup best-effort */ }
   })
 
@@ -228,16 +237,19 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
   // ─── Toast: Cancelar contrato ─────────────────────────────────────────────────
 
   test('ANIM-03.2 — toast "Contrato cancelado" após cancelar contrato', async ({ page }) => {
-    // Ensure we have an ativo contrato to cancel — recreate if needed
-    const { data: existing } = await admin.from('contratos')
-      .select('id, status')
+    // Garantir contrato ativo para E2E-Toast Locatário especificamente.
+    // 03.1 pode deixar a unidade ocupada por OUTRO locatário ('Criar Contrato'),
+    // então checar "qualquer ativo" não basta — o row clicado é o de E2E-Toast Locatário.
+    const { data: ativoLoc } = await admin.from('contratos')
+      .select('id')
       .eq('unidade_id', unidadeParaContratoId)
+      .eq('locatario_id', locatarioId)
       .eq('status', 'ativo')
       .limit(1)
 
-    if (!existing?.length) {
-      // Need to create one via admin
-      const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
+    if (!ativoLoc?.length) {
+      // Libera a unidade (cancela qualquer ativo de outro locatário — constraint: máx 1 ativo/unidade)
+      await admin.from('contratos').update({ status: 'cancelado' }).eq('unidade_id', unidadeParaContratoId).eq('status', 'ativo')
       await admin.from('unidades').update({ status: 'disponivel' }).eq('id', unidadeParaContratoId)
       const hoje = new Date().toISOString().split('T')[0]
       await admin.from('contratos').insert({
@@ -285,25 +297,49 @@ test.describe('ANIM-03 — Toast Sonner confirma sucesso das ações principais'
   // ─── Toast: Revogar acesso ─────────────────────────────────────────────────────
 
   test('ANIM-03.4 — toast "Acesso revogado" após revogar locatário', async ({ page }) => {
-    // Re-create locatário if already consumed by a prior test
-    const { data: existing } = await admin.from('locatarios').select('id').eq('id', locatarioId)
-    if (!existing?.length) {
-      // locatario was deleted — skip (handled by test isolation; this check prevents cascade failure)
-      test.skip()
-      return
+    // Locatário DEDICADO sem contrato: revogarConvite retorna 400 se houver contratos
+    // vinculados (qualquer status). E2E-Toast Locatário carrega contratos da fixture,
+    // então criamos um fresh pendente sem contrato para revogar.
+    const { data: prop } = await admin.from('proprietarios').select('usuario_id').limit(1).single()
+    const revEmail = 'e2e-toast-revogar@test.romma.local'
+    const { data: list } = await admin.auth.admin.listUsers()
+    const existingRev = list.users.find(u => u.email === revEmail)
+    let revUserId
+    if (existingRev) {
+      revUserId = existingRev.id
+    } else {
+      const { data } = await admin.auth.admin.createUser({ email: revEmail, password: 'Test1234!', email_confirm: true })
+      revUserId = data.user.id
     }
+    await admin.from('locatarios').delete().eq('usuario_id', revUserId)
+    await admin.from('locatarios').insert({
+      usuario_id: revUserId,
+      proprietario_id: prop.usuario_id,
+      nome_razao_social: 'E2E-Toast Revogar',
+      tipo: 'pf',
+      documento: '99988877766',
+      email: revEmail,
+      telefone: '11222222222',
+      status_convite: 'pendente',
+    })
 
     await login(page, PROPRIETARIO)
     await page.waitForURL('**/dashboard', { timeout: 15_000 })
     await page.goto('/dashboard/locatarios')
     await page.waitForURL('**/dashboard/locatarios', { timeout: 10_000 })
 
-    const row = page.getByText('E2E-Toast Locatário').locator('../..')
+    const row = page.getByText('E2E-Toast Revogar').locator('../..')
     await expect(row).toBeVisible({ timeout: 10_000 })
     await row.getByRole('button', { name: 'REVOGAR' }).click()
 
-    // ANIM-03: toast must be visible — RED until Wave 1 wires toast.success("Acesso revogado")
+    // ANIM-03: toast.success("Acesso revogado") wired no LocatariosDesktop
     await expect(page.getByText('Acesso revogado')).toBeVisible({ timeout: 10_000 })
+
+    // Cleanup — revogarConvite já deletou se sucesso; best-effort caso falhe
+    try {
+      await admin.from('locatarios').delete().eq('usuario_id', revUserId)
+      await admin.auth.admin.deleteUser(revUserId)
+    } catch { /* cleanup best-effort */ }
   })
 
   // ─── Toast: Marcar parcela como paga ──────────────────────────────────────────
