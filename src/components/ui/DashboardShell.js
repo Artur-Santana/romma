@@ -28,32 +28,31 @@ export default function DashboardShell({ children }) {
   const onBack = isParcelasRoute ? () => router.back() : undefined
 
   return (
-    <>
-      {/* Desktop chrome — romma-desktop-only hidden at ≤768px via globals.css media query */}
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      {/* Desktop TopStrip / Mobile TopBar — toggled via CSS */}
       <div className="romma-desktop-only">
-        <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <TopStrip />
-        <div style={{ display: "flex", height: "calc(100vh - 24px)" }}>
-          <div className="romma-sidebar-wrapper">
-            <OwnerSidebar badges={{}} />
-          </div>
-          <main style={{ flex: 1, overflow: "auto", background: "var(--background)" }}>
-            <div style={{ maxWidth: "1570px", margin: "0 auto", padding: "0 24px" }}>
-              {children}
-            </div>
-          </main>
-        </div>
-        </div>
       </div>
-
-      {/* Mobile chrome — romma-mobile-only shown at ≤768px via globals.css */}
       <div className="romma-mobile-only">
         <MobileTopBar title={title} onBack={onBack} />
+      </div>
+
+      {/* Content row — sidebar hidden on mobile via CSS */}
+      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+        <div className="romma-sidebar-wrapper">
+          <OwnerSidebar badges={{}} />
+        </div>
         <main style={{ flex: 1, overflow: "auto", background: "var(--background)" }}>
-          {children}
+          <div style={{ maxWidth: "1570px", margin: "0 auto", padding: "0 24px" }}>
+            {children}
+          </div>
         </main>
+      </div>
+
+      {/* Mobile BottomNav — hidden on desktop via CSS */}
+      <div className="romma-mobile-only">
         <MobileBottomNav items={NAV_ITEMS} />
       </div>
-    </>
+    </div>
   )
 }
