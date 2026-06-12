@@ -101,7 +101,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   const GRID = "1.8fr 0.5fr 1.2fr 1.2fr 0.8fr 1.4fr 80px"
 
   return (
-    <div className="romma-desktop-only romma-page p-12 bg-background min-h-full">
+    <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
       <PageHeader
         eyebrow="SISTEMA.03 // PESSOAS"
         title="Locatários."
@@ -110,7 +110,8 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       />
 
       {/* Table */}
-      <div className="bg-surface border border-border-3">
+      <div style={{ overflowX: "auto" }}>
+      <div className="bg-surface border border-border-3" style={{ minWidth: "700px" }}>
         {/* Header */}
         <div style={{ display: "grid", gridTemplateColumns: GRID }} className="px-5 py-3 bg-[var(--surface-hi)]">
           {["Nome", "Tipo", "Documento", "Email", "Contratos", "Status", "Ações"].map(h => (
@@ -175,7 +176,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleRevogar(l.id)}
-                    className="font-mono text-[10px] text-danger-fg uppercase tracking-[0.5px] font-bold p-0 h-auto"
+                    className="font-mono text-[10px] text-danger-fg uppercase tracking-[0.5px] font-bold py-[10px] px-3 h-auto"
                   >REVOGAR</Button>
                 ) : (
                   <>
@@ -183,13 +184,13 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEditarLocatario(l)}
-                      className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold p-0 h-auto"
+                      className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold py-[10px] px-3 h-auto"
                     >Editar</Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => router.push(`/dashboard/locatarios/${l.id}`)}
-                      className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold p-0 h-auto"
+                      className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold py-[10px] px-3 h-auto"
                     >VER →</Button>
                   </>
                 )}
@@ -197,6 +198,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
             </div>
           )
         })}
+      </div>
       </div>
 
       {/* Invite Callout */}
