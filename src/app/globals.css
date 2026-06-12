@@ -357,6 +357,6 @@
 
 @media (max-width: 768px) {
   .romma-sidebar-wrapper { display: none !important; }
-  .romma-desktop-only    { display: none; }
-  .romma-mobile-only     { display: flex; flex-direction: column; height: 100vh; }
+  .romma-desktop-only    { display: none !important; }
+  .romma-mobile-only     { display: block; }
 }
