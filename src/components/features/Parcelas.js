@@ -60,7 +60,7 @@ export default function Parcelas({ contratoId }) {
   const pendentes = parcelas.filter(p => p.status === "pendente" || p.status === "vencida").length
 
   return (
-    <div className="romma-page bg-background min-h-full px-12 pt-12 pb-20">
+    <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
 
       {/* Back */}
       <Button
@@ -74,7 +74,7 @@ export default function Parcelas({ contratoId }) {
       {/* Header */}
       <div className="flex flex-col gap-3 mb-12">
         <span className="eyebrow eyebrow--indigo">SISTEMA.02 · PARCELAS</span>
-        <h2 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">
+        <h2 className="font-display font-bold text-[28px] sm:text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">
           Parcelas.
         </h2>
         {(locatario || unidade) && (
@@ -94,7 +94,7 @@ export default function Parcelas({ contratoId }) {
       )}
 
       {/* Table */}
-      <div className="border border-border-3 bg-surface mb-8">
+      <div style={{ overflowX: "auto" }}><div className="border border-border-3 bg-surface mb-8" style={{ minWidth: "580px" }}>
         <div style={gridStyle} className="grid bg-[var(--surface-hi)] border-b border-border-3">
           <HeaderCell>#</HeaderCell>
           <HeaderCell>Fechamento</HeaderCell>
@@ -158,7 +158,7 @@ export default function Parcelas({ contratoId }) {
             </div>
           </div>
         ))}
-      </div>
+      </div></div>
 
     </div>
   )
