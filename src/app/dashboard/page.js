@@ -10,7 +10,6 @@ import { createServer } from "@/lib/supabase-server"
 import { cn, fmtBRL, fmtData } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
 import RealtimeDot from "@/components/ui/RealtimeDot"
-import { MobileTopBar, MobileBottomNav } from "@/components/ui/MobileNav"
 
 const MS_POR_DIA = 86_400_000
 
@@ -66,13 +65,6 @@ export default async function Dashboard() {
   const pctOcupacao = unidades.length ? Math.round((alugadas / unidades.length) * 100) : 0
 
   const isEmpty = edificios.length === 0
-
-  const navItems = [
-    { href: "/dashboard",            label: "Visão",      code: "DASH"   },
-    { href: "/dashboard/unidades",   label: "Unidades",   code: "U.LIST" },
-    { href: "/dashboard/contratos",  label: "Contratos",  code: "C.LIST" },
-    { href: "/dashboard/locatarios", label: "Locatários", code: "L.LIST" },
-  ]
 
   const metricas = [
     { idx: "01", label: "Ocupação",           value: `${pctOcupacao}%`,                                           sub: `${alugadas} de ${unidades.length} unidades` },
@@ -135,8 +127,7 @@ export default async function Dashboard() {
           </div>
         </div>
 
-        <div className="flex flex-col h-screen md:hidden">
-          <MobileTopBar title="Visão Geral" subtitle="CONSOLE.OS" />
+        <div className="flex flex-col md:hidden">
           <div className="romma-mobile-pane flex-1 overflow-auto p-5">
             <div className="border border-indigo p-6">
               <span className="eyebrow eyebrow--indigo mb-3">SETUP.SEQUENCE</span>
@@ -150,7 +141,6 @@ export default async function Dashboard() {
               </Link>
             </div>
           </div>
-          <MobileBottomNav items={navItems} />
         </div>
       </>
     )
@@ -332,8 +322,7 @@ export default async function Dashboard() {
       </div>
 
       {/* Mobile layout */}
-      <div className="flex flex-col h-screen md:hidden">
-        <MobileTopBar title="Visão Geral" subtitle="CONSOLE.OS" right={<RealtimeDot label="" />} />
+      <div className="flex flex-col md:hidden">
         <div className="romma-mobile-pane flex-1 overflow-auto">
 
           {/* Stats row 1: Ocupação + Contratos */}
@@ -439,7 +428,6 @@ export default async function Dashboard() {
           </div>
 
         </div>
-        <MobileBottomNav items={navItems} />
       </div>
     </>
   )
