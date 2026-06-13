@@ -8,7 +8,7 @@
 ## Milestones
 
 - ✅ **v1.0 TCC Finalization** — Phases 1-7 (shipped 2026-06-03)
-- 🔄 **v1.1 Polish & Completeness** — Phases 8-15 (started 2026-06-05)
+- 🔄 **v1.1 Polish & Completeness** — Phases 8-16 (started 2026-06-05)
 
 ---
 
@@ -37,8 +37,9 @@
 - [x] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular (completed 2026-06-12)
 - [x] **Phase 14: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante (completed 2026-06-12)
 - [x] **Phase 15: Testes** — Suite de testes cobre novos fluxos e Actions críticas (completed 2026-06-12)
+- [x] **Phase 16: Fechamento IDOR MT-02** — Closure: escopar criarUnidade/criarContrato/editarContrato/marcarParcelaComoPaga por proprietario_id (gap achado no milestone audit) (completed 2026-06-13)
 
-> **Cross-cutting (todos os planos, Phases 8-15):**
+> **Cross-cutting (todos os planos, Phases 8-16):**
 > - **AUDIT-01**: cada fase inclui deep-dive isolado das telas trabalhadas antes de fechar
 > - **FIX-01**: correções emergentes descobertas durante a fase são registradas e incorporadas
 
@@ -159,6 +160,22 @@
 - [x] 15-04-PLAN.md — Wave 2: unit specs unidades.js + contratos.js (happy+erro+guard + D-08 cross-tenant)
 - [x] 15-05-PLAN.md — Wave 0: E2E gap-fill (AUTH-02 + jornada mobile 375px) + split crud/toast por domínio (D-10)
 - [x] 15-06-PLAN.md — Wave 1: job unit separado no GitHub Actions e2e.yml (D-03)
+
+### Phase 16: Fechamento IDOR MT-02
+**Goal**: TODAS as Server Actions de escrita escopeadas por proprietario_id — fechar os 4 vetores IDOR restantes achados no milestone audit v1.1
+**Depends on**: Phase 15
+**Requirements**: MT-03
+**Success Criteria** (what must be TRUE):
+  1. criarUnidade valida que edificio_id pertence ao Proprietário autenticado antes do insert
+  2. criarContrato valida ownership da unidade (unidade→edificio→proprietario_id) antes do insert
+  3. editarContrato valida ownership do contrato antes do update (pré-check 3-hop como cancelar/encerrar)
+  4. marcarParcelaComoPaga: authGuard retorna {user} + valida ownership (parcela→contrato→unidade→edificio→proprietario_id)
+  5. Testes unitários cobrem cada Action: happy + erro + cross-tenant block (espelha 15-04)
+  6. `npx vitest run` e `npx playwright test --list` passam
+**Plans**: 3 plans
+- [x] 16-01-PLAN.md — Owner pre-checks: criarUnidade + criarContrato + editarContrato (mirror 15-02)
+- [x] 16-02-PLAN.md — parcelas.js authGuard {user} + marcarParcelaComoPaga 4-hop ownership
+- [x] 16-03-PLAN.md — Unit tests for all 4 fixed Actions + full vitest/playwright gate (mirror 15-04)
 
 ---
 

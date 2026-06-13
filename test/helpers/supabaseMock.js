@@ -33,6 +33,7 @@ export function createSupabaseMock() {
     update: vi.fn(),
     delete: vi.fn(),
     eq: vi.fn(),
+    in: vi.fn(),
     single: vi.fn(),
     auth: {
       admin: {
@@ -54,6 +55,7 @@ export function createSupabaseMock() {
   builder.update.mockReturnValue(builder)
   builder.delete.mockReturnValue(builder)
   builder.eq.mockReturnValue(builder)
+  builder.in.mockReturnValue(builder)
   // .single() is terminal — resolves immediately with configured result
   builder.single.mockImplementation(() => Promise.resolve(_resolve))
 
@@ -72,6 +74,7 @@ export function createSupabaseMock() {
     builder.update.mockReturnValue(builder)
     builder.delete.mockReturnValue(builder)
     builder.eq.mockReturnValue(builder)
+    builder.in.mockReturnValue(builder)
     builder.single.mockImplementation(() => Promise.resolve(_resolve))
   }
 

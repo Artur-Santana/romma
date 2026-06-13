@@ -28,7 +28,7 @@ vi.mock('@/lib/auth', () => ({
 
 vi.mock('@/lib/supabaseAdmin', () => ({ default: mockAdmin }))
 
-import { editarUnidade, deletarUnidade } from '@/actions/unidades'
+import { criarUnidade, editarUnidade, deletarUnidade } from '@/actions/unidades'
 
 const validId = '00000000-0000-0000-0000-000000000001'
 const validForm = { nome: 'Sala Teste', area_m2: 50, valor_mensal: 1000, status: 'disponivel' }
@@ -156,6 +156,75 @@ describe('deletarUnidade', () => {
     )
 
     await deletarUnidade(validId)
+
+    // D-08: assert the ownership filter was applied with the authenticated user's id
+    expect(mockAdmin.eq).toHaveBeenCalledWith('proprietario_id', mockUser.id)
+  })
+})
+
+const validEdificioId = '00000000-0000-0000-0000-000000000002'
+const validCriarForm = {
+  nome: 'Sala Nova',
+  descricao: 'Descrição da sala',
+  area_m2: 40,
+  valor_mensal: 1500,
+  status: 'disponivel',
+  valor_visivel: true,
+  edificio_id: validEdificioId,
+}
+
+describe('criarUnidade', () => {
+  beforeEach(() => {
+    resetAll()
+    mockGetUser.mockResolvedValue({ data: { user: mockUser } })
+    mockIsProprietario.mockResolvedValue(true)
+  })
+
+  it('happy path — dono do edifício, cria unidade com sucesso', async () => {
+    // Step 1: edificios ownership fetch → returns row (owner match)
+    mockAdmin.single.mockResolvedValueOnce({ data: { id: validEdificioId }, error: null })
+    // Step 2: insert thenable → { error: null }
+    const thenMock = vi.fn()
+    mockAdmin.then = thenMock
+    thenMock.mockImplementationOnce((resolve) =>
+      Promise.resolve({ error: null }).then(resolve)
+    )
+
+    const result = await criarUnidade(validCriarForm)
+    expect(result).toEqual({ status: 200 })
+  })
+
+  it('cross-tenant — edificios ownership retorna nulo → 404, insert não executado', async () => {
+    // edificios ownership fetch → no row (cross-tenant)
+    mockAdmin.single.mockResolvedValueOnce({ data: null, error: null })
+
+    const result = await criarUnidade(validCriarForm)
+    expect(result).toEqual({ status: 404, erroMessage: 'Edifício não encontrado.' })
+    expect(mockAdmin.insert).not.toHaveBeenCalled()
+  })
+
+  it('erro de validação — edificio_id UUID inválido retorna 400', async () => {
+    const result = await criarUnidade({ ...validCriarForm, edificio_id: 'not-a-uuid' })
+    expect(result).toEqual({ status: 400, erroMessage: 'Edifício inválido.' })
+  })
+
+  it('guard de autorização — não autenticado retorna 401', async () => {
+    mockGetUser.mockResolvedValue({ data: { user: null } })
+    const result = await criarUnidade(validCriarForm)
+    expect(result.status).toBe(401)
+  })
+
+  it('D-08 — proprietario_id do usuário é usado no filtro do edificios ownership check', async () => {
+    // edificios ownership fetch → returns row (owner match)
+    mockAdmin.single.mockResolvedValueOnce({ data: { id: validEdificioId }, error: null })
+    // insert thenable → { error: null }
+    const thenMock = vi.fn()
+    mockAdmin.then = thenMock
+    thenMock.mockImplementationOnce((resolve) =>
+      Promise.resolve({ error: null }).then(resolve)
+    )
+
+    await criarUnidade(validCriarForm)
 
     // D-08: assert the ownership filter was applied with the authenticated user's id
     expect(mockAdmin.eq).toHaveBeenCalledWith('proprietario_id', mockUser.id)

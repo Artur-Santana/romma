@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Completeness
-status: "v1.1 COMPLETE — Phase 15 merged (PR #34). 15/15 fases. Banca 18/06."
-last_updated: "2026-06-12T22:00:00.000Z"
-last_activity: 2026-06-12
+status: executing
+last_updated: "2026-06-13T00:52:02.032Z"
+last_activity: 2026-06-13
 progress:
-  total_phases: 8
-  completed_phases: 8
-  total_plans: 27
-  completed_plans: 36
-  percent: 100
+  total_phases: 9
+  completed_phases: 7
+  total_plans: 30
+  completed_plans: 39
+  percent: 78
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** v1.1 completo — pronto pra banca (18/06)
+**Current focus:** Phase 16 — Fechamento IDOR MT-02
 
 ---
 
@@ -88,10 +88,11 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 15 plan 05 complete. E2E audit+gap-fill (TEST-02 D-09): AUTH-02 second-signup guard test added to signup.spec.js; complete mobile 375px interactive journey added to mobile-responsive.spec.js. D-10 split: crud.spec.js → 4 domain files (14/14 tests), toast-feedback.spec.js → 4 domain files (5/5 tests). 74 tests discoverable via --list; live run pending CI. Commits 71dfb5b+cf78b5f+ad681e5.
 - 2026-06-12: Phase 15 plan 02 complete. IDOR fix (T-15-01): authGuard() returns { user } in unidades.js + contratos.js; editarUnidade/deletarUnidade add edificio_id ownership pre-check; cancelarContrato/encerrarContrato add 3-hop chain (unidade_id → edificio_id → proprietario_id). Commits db637de+b72e904.
 - 2026-06-12: Phase 15 plan 03 complete. Unit tests for auth.js (cadastrarProprietario, 3 cases D-06/D-07) and locatarios.js (revogarConvite, 4 cases D-06/D-07/D-08). D-08 asserts .eq('proprietario_id', user.id) regression guard. 7 tests, exit 0. Commits 5aa8283+e3ee878.
+- 2026-06-12: Phase 16 plan 02 complete. MT-03 IDOR closed: authGuard in parcelas.js returns { user }; marcarParcelaComoPaga adds 4-hop ownership pre-check (parcela→contrato→unidade→edificio→proprietario_id); cross-tenant → 404 before update. ESLint clean. Commit 3df8a4c.
 
 ## Current Position
 
-Phase: 15 — COMPLETE
-Plan: 6 of 6
-Status: Phase 15 shipped — PR #34 (CI verifica SC3)
-Last activity: 2026-06-12
+Phase: 16 (Fechamento IDOR MT-02) — EXECUTING
+Plan: 3 of 3
+Status: Ready to execute
+Last activity: 2026-06-13
