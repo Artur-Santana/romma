@@ -45,10 +45,21 @@ Proprietário gerencia edifícios, contratos e pagamentos em um único painel �
 - ✓ Logout no sidebar do dashboard — v1.0 Phase 7
 - ✓ Skeleton loading nas 4 abas do dashboard + portal — v1.0 Phase 7
 - ✓ Sidebar limpo (link "Acessar como Locatário" removido) — v1.0 Phase 7
+- ✓ Bugs bloqueadores eliminados (revogar acesso, FK edit/delete, status convite, link /unidades) — v1.1 Phase 8
+- ✓ Landing page + /unidades com CTAs funcionais e cards informativos — v1.1 Phase 9
+- ✓ Signup do Proprietário via tela (/signup, AUTH-01) — v1.1 Phase 10
+- ✓ Multi-tenant: RLS por proprietario_id + Server Actions de escrita escopeadas (MT-01, MT-02) — v1.1 Phase 11
+- ✓ Dashboard escalável em desktop + sistema de temas data-theme (UX-01, THEME-01/02) — v1.1 Phase 12
+- ✓ Área logada responsiva em mobile 375px (UX-02/03/04) — v1.1 Phase 13
+- ✓ Animações de saída + toasts de feedback (ANIM-01/02/03) — v1.1 Phase 14
+- ✓ Suite de testes: 47 unit (Vitest) + 73 E2E (Playwright) + CI job unit (TEST-01, TEST-02) — v1.1 Phase 15
+- ✓ IDOR multi-tenant 100% fechado — todos os vetores de escrita escopeados por proprietario_id (MT-03) — v1.1 Phase 16
 
 ### Active
 
-*(Sem requirements ativos — v1.0 shipped. Próximo milestone após banca.)*
+*(Sem requirements ativos — v1.1 shipped. Próximo milestone após banca 18/06.)*
+
+**Deferido:** AUTH-02 (guard de instância única no form /signup — atualmente só DB-side, aceito p/ single-instance).
 
 ### Out of Scope
 
@@ -126,4 +137,4 @@ Projeto TCC de Artur Santana. Stack: Next.js 16 App Router (JS), Tailwind v4, sh
 **v1.1 started 2026-06-05.** Polish & Completeness — fechar gaps identificados pós-banca.
 
 ---
-*Last updated: 2026-06-09 after Phase 11 multi-tenant completion*
+*Last updated: 2026-06-13 after v1.1 Polish & Completeness milestone*
