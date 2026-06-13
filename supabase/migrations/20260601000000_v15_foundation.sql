@@ -82,7 +82,7 @@ USING (
   AND public.storage_unidade_owned_by_auth(storage.objects.name)
 );
 
--- ── Table grants ──────────────────────────────────────────────────────────
--- Pattern from: 20260524000000_grant_table_privileges.sql
-GRANT ALL ON public.proprietarios TO service_role, authenticated;
-GRANT ALL ON public.unidades      TO service_role, authenticated;
+-- Table grants intentionally omitted: proprietarios + unidades already have
+-- GRANT ALL TO service_role, authenticated from 20260524000000_grant_table_privileges.sql.
+-- Re-granting here was redundant (CR-01). RLS default-deny still gates writes
+-- (proprietarios has only a SELECT policy); mutations go through supabaseAdmin (service_role).
