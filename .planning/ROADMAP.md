@@ -37,7 +37,7 @@
 - [x] **Phase 13: Mobile Responsivo** — Área logada navegável e utilizável em celular (completed 2026-06-12)
 - [x] **Phase 14: Animações & Feedback** — Ações têm resposta visual clara e não-bloqueante (completed 2026-06-12)
 - [x] **Phase 15: Testes** — Suite de testes cobre novos fluxos e Actions críticas (completed 2026-06-12)
-- [ ] **Phase 16: Fechamento IDOR MT-02** — Closure: escopar criarUnidade/criarContrato/editarContrato/marcarParcelaComoPaga por proprietario_id (gap achado no milestone audit)
+- [x] **Phase 16: Fechamento IDOR MT-02** — Closure: escopar criarUnidade/criarContrato/editarContrato/marcarParcelaComoPaga por proprietario_id (gap achado no milestone audit) (completed 2026-06-13)
 
 > **Cross-cutting (todos os planos, Phases 8-16):**
 > - **AUDIT-01**: cada fase inclui deep-dive isolado das telas trabalhadas antes de fechar
@@ -175,7 +175,7 @@
 **Plans**: 3 plans
 - [x] 16-01-PLAN.md — Owner pre-checks: criarUnidade + criarContrato + editarContrato (mirror 15-02)
 - [x] 16-02-PLAN.md — parcelas.js authGuard {user} + marcarParcelaComoPaga 4-hop ownership
-- [ ] 16-03-PLAN.md — Unit tests for all 4 fixed Actions + full vitest/playwright gate (mirror 15-04)
+- [x] 16-03-PLAN.md — Unit tests for all 4 fixed Actions + full vitest/playwright gate (mirror 15-04)
 
 ---
 
