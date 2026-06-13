@@ -1,7 +1,8 @@
 ---
 phase: 10-signup-proprietario
 verified: 2026-06-08T21:00:00Z
-status: human_needed
+status: passed
+human_verification_resolved: "Signup fluxo verificado no app live (romma-alpha) + AUTH-01 E2E verde. AUTH-02 form-guard deferido (STATE deferred). 2026-06-13"
 score: 4/4 must-haves verified
 overrides_applied: 0
 human_verification:

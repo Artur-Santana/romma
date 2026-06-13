@@ -1,7 +1,8 @@
 ---
 phase: 15-testes
 verified: 2026-06-12T18:35:00Z
-status: human_needed
+status: passed
+human_verification_resolved: "CI E2E verde (PR #34
 score: 3/3 must-haves verified
 overrides_applied: 0
 human_verification:
