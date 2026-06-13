@@ -25,7 +25,7 @@ export default function ConfirmDialog({
       <div
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          "w-[480px] bg-background border flex flex-col gap-5 p-8",
+          "w-full max-w-[480px] bg-background border flex flex-col gap-5 p-8",
           danger ? "border-danger-fg" : "border-indigo"
         )}
       >

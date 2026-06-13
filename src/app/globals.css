@@ -366,6 +366,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px;
 }
 
 @media (max-width: 768px) {
