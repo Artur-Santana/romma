@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
-status: verifying
-last_updated: "2026-06-13T22:20:29.519Z"
-last_activity: 2026-06-13
+status: completed
+last_updated: "2026-06-13T22:51:15.434Z"
+last_activity: 2026-06-13 -- Phase 17 marked complete
 progress:
   total_phases: 9
   completed_phases: 1
@@ -109,10 +109,10 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 17 (funda-o-tokens-mobile-modal-fixes-infra) — EXECUTING
+Phase: 17 — COMPLETE
 Plan: 3 of 3 (plan 03 complete)
-Status: Phase complete — ready for verification
-Last activity: 2026-06-13
+Status: Phase 17 complete
+Last activity: 2026-06-13 -- Phase 17 marked complete
 Last session: 2026-06-13T22:20:29.508Z
 
 ## Operator Next Steps
