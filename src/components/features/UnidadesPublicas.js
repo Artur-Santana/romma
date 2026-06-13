@@ -120,7 +120,7 @@ export default function UnidadesPublicas() {
         </span>
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto min-h-0">
         {filtered.length === 0 ? (
           <div className="py-20 px-8 text-center flex flex-col gap-3 items-center">
             <div className="w-12 h-12 border border-border-3 flex items-center justify-center text-[18px] text-fg-4">
