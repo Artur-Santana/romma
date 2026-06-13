@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Polish & Completeness
-status: Awaiting next milestone
-last_updated: "2026-06-13T05:01:54.752Z"
-last_activity: 2026-06-13 — Milestone v1.1 completed and archived
+milestone: v1.5
+milestone_name: System Improvement & Design Augmentation
+status: planning
+last_updated: "2026-06-13T17:56:48.407Z"
+last_activity: 2026-06-13
 progress:
-  total_phases: 9
-  completed_phases: 7
-  total_plans: 30
-  completed_plans: 39
-  percent: 78
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State — Romma
@@ -92,10 +92,10 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: Milestone v1.1 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-06-13 — Milestone v1.1 completed and archived
+Status: Defining requirements
+Last activity: 2026-06-13 — Milestone v1.5 started
 
 ## Operator Next Steps
 

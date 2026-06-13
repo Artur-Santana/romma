@@ -1,0 +1,123 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Romma — Refinement layer
+   Sits on TOP of the bound design-system tokens. Two jobs, per the brief:
+   (1) a single, strict TYPE SCALE so font sizes stop fighting each other, and
+   (2) a DENSITY system that removes the excess negative space.
+   Sharp corners, borders-as-structure, accent rationing — all preserved.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Refined type scale (px) — every screen pulls from these ──────────── */
+  --rt-metric:   40px;  /* the one oversized dashboard numeral             */
+  --rt-title:    32px;  /* page H1 (Visão Geral., Unidades.)               */
+  --rt-title-sm: 24px;  /* page H1 on mobile + big portal values           */
+  --rt-section:  20px;  /* panel / section heading                         */
+  --rt-subhead:  16px;  /* card titles, primary row name                   */
+  --rt-body:     14px;  /* default product body + table data               */
+  --rt-data:     14px;  /* mono numbers in tables (was 18 → aligned)       */
+  --rt-label:    11px;  /* mono uppercase field labels / column headers    */
+  --rt-meta:     10px;  /* mono sub-captions, ref codes, eyebrow           */
+
+  /* ── Density scale (the negative-space fix) ───────────────────────────── */
+  --rd-gutter:   32px;  /* page horizontal padding (desktop)               */
+  --rd-gutter-m: 20px;  /* page horizontal padding (mobile)                */
+  --rd-page-y:   28px;  /* page top padding                                */
+  --rd-block:    24px;  /* gap between major blocks (was 48)               */
+  --rd-block-sm: 16px;  /* gap between minor blocks                        */
+  --rd-panel:    20px;  /* panel inner padding (was 28)                    */
+  --rd-cell:     20px;  /* metric cell padding (was 28)                    */
+  --rd-row-y:    12px;  /* table row vertical padding (was 16)             */
+  --rd-row-x:    16px;  /* table row horizontal padding (was 20)           */
+}
+
+/* Compact density variant (Tweaks) — squeezes everything one notch tighter */
+[data-density="compact"] {
+  --rd-gutter:   24px;
+  --rd-page-y:   20px;
+  --rd-block:    18px;
+  --rd-block-sm: 12px;
+  --rd-panel:    16px;
+  --rd-cell:     16px;
+  --rd-row-y:    9px;
+  --rd-row-x:    14px;
+}
+/* Comfortable density variant — closer to the original airy spacing */
+[data-density="comfy"] {
+  --rd-gutter:   44px;
+  --rd-page-y:   40px;
+  --rd-block:    36px;
+  --rd-block-sm: 24px;
+  --rd-panel:    26px;
+  --rd-cell:     26px;
+  --rd-row-y:    16px;
+  --rd-row-x:    20px;
+}
+
+/* ── Reset for the prototype frame ─────────────────────────────────────── */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+#root { height: 100%; }
+body {
+  background: var(--neutral);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ── Reusable type helpers (all reference the scale) ───────────────────── */
+.r-metric  { font-family: var(--font-display); font-weight: 700; font-size: var(--rt-metric);  line-height: 1; letter-spacing: -2px;  color: var(--fg-1); margin: 0; }
+.r-title   { font-family: var(--font-display); font-weight: 700; font-size: var(--rt-title);   line-height: 1; letter-spacing: -1.6px; color: var(--fg-1); margin: 0; }
+.r-section { font-family: var(--font-display); font-weight: 700; font-size: var(--rt-section); line-height: 1.05; letter-spacing: -0.6px; color: var(--fg-1); margin: 0; }
+.r-subhead { font-family: var(--font-body); font-weight: 600; font-size: var(--rt-subhead); line-height: 1.2; color: var(--fg-1); margin: 0; }
+.r-body    { font-family: var(--font-body); font-weight: 400; font-size: var(--rt-body); line-height: 1.5; color: var(--fg-3); }
+.r-data    { font-family: var(--font-mono); font-size: var(--rt-data); color: var(--fg-2); }
+.r-label   { font-family: var(--font-mono); font-weight: 700; font-size: var(--rt-label); letter-spacing: 1px; text-transform: uppercase; color: var(--fg-4); }
+.r-meta    { font-family: var(--font-mono); font-size: var(--rt-meta); letter-spacing: 0.5px; color: var(--fg-4); }
+.r-eyebrow { font-family: var(--font-body); font-weight: 700; font-size: var(--rt-meta); letter-spacing: 1.5px; text-transform: uppercase; color: var(--fg-4); display: block; }
+.r-eyebrow.indigo  { color: var(--indigo); }
+.r-eyebrow.warning { color: var(--warning); }
+.r-eyebrow.gold    { color: var(--highlight); }
+
+/* Structural panel + grid divider shorthands */
+.r-panel  { background: var(--surface); border: 1px solid var(--border-3); }
+.r-divtop { border-top: 1px solid var(--border-3); }
+.r-divrt  { border-right: 1px solid var(--border-3); }
+
+/* ── Accent rationing toggle — when off, gold highlight reverts to indigo ─ */
+[data-accent="indigo"] { --highlight: var(--primary-hover); --chart-2: var(--primary-hover); }
+
+/* ── Motion ────────────────────────────────────────────────────────────── */
+@keyframes rFade { from { transform: translateY(8px); } to { transform: translateY(0); } }
+@keyframes rPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.2; transform: scale(2); } }
+@keyframes rUnitOut { to { opacity: 0; transform: translateX(40px); filter: blur(4px); } }
+@keyframes rBar { 0% { transform: translateX(-100%); } 100% { transform: translateX(260%); } }
+@keyframes rSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes rGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* Entrance fade — base state is VISIBLE; the animation only plays in (no `both`
+   fill) so a paused/reduced-motion/print render always shows content. */
+.r-fade { animation: rFade var(--dur-base) var(--ease-crisp); }
+@media (prefers-reduced-motion: reduce) { .r-fade { animation: none; } }
+
+/* Scrollbars — thin obsidian, hidden where noted */
+.r-scroll::-webkit-scrollbar { width: 9px; height: 9px; }
+.r-scroll::-webkit-scrollbar-track { background: var(--neutral); }
+.r-scroll::-webkit-scrollbar-thumb { background: var(--border-3); }
+.r-scroll::-webkit-scrollbar-thumb:hover { background: var(--fg-5); }
+.r-noscroll::-webkit-scrollbar { display: none; }
+.r-noscroll { scrollbar-width: none; }
+
+/* Hover affordances */
+.r-rowlink { transition: background var(--dur-fast) var(--ease-crisp); cursor: pointer; }
+.r-rowlink:hover { background: var(--surface-hi); }
+.r-cell { transition: background var(--dur-fast) var(--ease-crisp); cursor: pointer; }
+.r-cell:hover { background: var(--surface-hi); }
+.r-ghostbtn { transition: color var(--dur-fast), border-color var(--dur-fast), background var(--dur-fast); cursor: pointer; }
+.r-ghostbtn:hover { color: var(--fg-1); border-color: var(--fg-4); }
+
+/* Realtime dot */
+.r-dot { position: relative; width: 6px; height: 6px; display: inline-block; flex-shrink: 0; }
+.r-dot i { position: absolute; inset: 0; background: var(--success); display: block; }
+.r-dot i:last-child { animation: rPulse 2s var(--ease-crisp) infinite; }

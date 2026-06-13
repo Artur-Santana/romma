@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Romma — Protótipo Refinado</title>
+
+  <!-- Design-system tokens + entry -->
+  <link rel="stylesheet" href="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/tokens/fonts.css" />
+  <link rel="stylesheet" href="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/tokens/colors.css" />
+  <link rel="stylesheet" href="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/tokens/typography.css" />
+  <link rel="stylesheet" href="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/tokens/spacing.css" />
+  <link rel="stylesheet" href="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/tokens/animations.css" />
+  <link rel="stylesheet" href="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/tokens/base.css" />
+  <link rel="stylesheet" href="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/styles.css" />
+
+  <!-- Refinement layer (type scale + density) -->
+  <link rel="stylesheet" href="styles/app.css" />
+
+  <!-- React + Babel (pinned) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Design-system component bundle (plain JS) -->
+  <script src="_ds/romma-design-system-c050896f-ec81-4aa6-918c-866dafcc03f8/_ds_bundle.js"></script>
+
+  <!-- Mock data (plain JS) -->
+  <script src="js/data.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Tweaks shell + app scripts (babel) -->
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="js/shared.jsx"></script>
+  <script type="text/babel" src="js/auth.jsx"></script>
+  <script type="text/babel" src="js/overview.jsx"></script>
+  <script type="text/babel" src="js/console2.jsx"></script>
+  <script type="text/babel" src="js/console3.jsx"></script>
+  <script type="text/babel" src="js/public.jsx"></script>
+  <script type="text/babel" src="js/portal.jsx"></script>
+  <script type="text/babel" src="js/app.jsx"></script>
+</body>
+</html>
