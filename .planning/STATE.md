@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Polish & Completeness
-status: Awaiting next milestone
-last_updated: "2026-06-13T05:01:54.752Z"
-last_activity: 2026-06-13 — Milestone v1.1 completed and archived
+milestone: v1.5
+milestone_name: System Improvement & Design Augmentation
+status: roadmapped
+last_updated: "2026-06-13T18:30:00.000Z"
+last_activity: 2026-06-13
 progress:
   total_phases: 9
-  completed_phases: 7
-  total_plans: 30
-  completed_plans: 39
-  percent: 78
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 16 — Fechamento IDOR MT-02
+**Current focus:** Phase 17 — Fundação (Tokens, Mobile/Modal Fixes & Infra) — não iniciada
 
 ---
 
@@ -59,6 +59,16 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 13 | Mobile Responsivo | v1.1 | ✅ Complete |
 | 14 | Animações & Feedback | v1.1 | ✅ Complete — PR #33 merged |
 | 15 | Testes | v1.1 | ✅ Complete — PR #34 merged |
+| 16 | Fechamento IDOR MT-02 | v1.1 | ✅ Complete |
+| 17 | Fundação — Tokens, Mobile/Modal Fixes & Infra | v1.5 | ⬜ Not started |
+| 18 | Acesso — Login / Cadastro / Redefinir | v1.5 | ⬜ Not started |
+| 19 | Unidades — Modal Unificado & Foto de Capa | v1.5 | ⬜ Not started |
+| 20 | Edifícios — Cards & Drill-in | v1.5 | ⬜ Not started |
+| 21 | Dashboard — Visão Geral Editorial | v1.5 | ⬜ Not started |
+| 22 | Contratos & Parcelas — Renovação | v1.5 | ⬜ Not started |
+| 23 | Locatários — Busca & Máscaras | v1.5 | ⬜ Not started |
+| 24 | Público — Unidades Disponíveis | v1.5 | ⬜ Not started |
+| 25 | Portal do Locatário — PIX & Recibo | v1.5 | ⬜ Not started |
 
 ---
 
@@ -89,14 +99,15 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 15 plan 02 complete. IDOR fix (T-15-01): authGuard() returns { user } in unidades.js + contratos.js; editarUnidade/deletarUnidade add edificio_id ownership pre-check; cancelarContrato/encerrarContrato add 3-hop chain (unidade_id → edificio_id → proprietario_id). Commits db637de+b72e904.
 - 2026-06-12: Phase 15 plan 03 complete. Unit tests for auth.js (cadastrarProprietario, 3 cases D-06/D-07) and locatarios.js (revogarConvite, 4 cases D-06/D-07/D-08). D-08 asserts .eq('proprietario_id', user.id) regression guard. 7 tests, exit 0. Commits 5aa8283+e3ee878.
 - 2026-06-12: Phase 16 plan 02 complete. MT-03 IDOR closed: authGuard in parcelas.js returns { user }; marcarParcelaComoPaga adds 4-hop ownership pre-check (parcela→contrato→unidade→edificio→proprietario_id); cross-tenant → 404 before update. ESLint clean. Commit 3df8a4c.
+- 2026-06-13: Milestone v1.5 roadmap criado. 9 fases (17-25), 42 requirements mapeados 100% (sem órfãos). Ordem dependency-aware: tokens+infra primeiro (Phase 17), depois passes por área de tela. Novos write paths (foto capa, renovar contrato, portal PIX) com cadeia de propriedade.
 
 ## Current Position
 
-Phase: Milestone v1.1 complete
+Phase: 17 — Fundação (Tokens, Mobile/Modal Fixes & Infra) — não iniciada
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-06-13 — Milestone v1.1 completed and archived
+Status: Roadmapped (aguardando planejamento da Phase 17)
+Last activity: 2026-06-13 — Roadmap v1.5 criado (9 fases, 42 reqs)
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Planejar a primeira fase com /gsd-plan-phase 17
