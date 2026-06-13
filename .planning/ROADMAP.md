@@ -174,7 +174,7 @@
   6. `npx vitest run` e `npx playwright test --list` passam
 **Plans**: 3 plans
 - [x] 16-01-PLAN.md — Owner pre-checks: criarUnidade + criarContrato + editarContrato (mirror 15-02)
-- [ ] 16-02-PLAN.md — parcelas.js authGuard {user} + marcarParcelaComoPaga 4-hop ownership
+- [x] 16-02-PLAN.md — parcelas.js authGuard {user} + marcarParcelaComoPaga 4-hop ownership
 - [ ] 16-03-PLAN.md — Unit tests for all 4 fixed Actions + full vitest/playwright gate (mirror 15-04)
 
 ---
