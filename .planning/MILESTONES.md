@@ -1,5 +1,48 @@
 # Milestones — Romma
 
+## v1.1 Polish & Completeness (Shipped: 2026-06-13)
+
+**Phases completed:** 9 phases, 30 plans, 24 tasks
+
+**Key accomplishments:**
+
+- Escrita atômica (Tasks 1+2 em um commit)
+- Task 1 — page.js (D-01, D-02, D-04):
+- One-liner:
+- Task 1 — Suite E2E:
+- One-liner:
+- One-liner:
+- One-liner:
+- One-liner:
+- One-liner:
+- One-liner:
+- Commit:
+- One-liner:
+- 1. [Rule 2 - Missing critical functionality] Elevação de h3 "Enviar Convite" para 24px
+- One-liner:
+- One-liner:
+- One-liner:
+- One-liner:
+- Playwright E2E spec with 7 RED tests covering UX-02/03/04 at 375px viewport, establishing objective done-criteria before any production code is touched
+- DashboardShell Client Component with CSS render-both pattern wires dashboard layout to mobile chrome (MobileTopBar + MobileBottomNav) via globals.css visibility classes, eliminating double chrome from dashboard/page.js
+- Responsive overflow fix across all 4 dashboard tabs — table grids wrapped in overflowX:auto containers, romma-desktop-only removed from Locatarios, forms collapsed for 375px
+- Padding, tipografia e overflow corrigidos nos 3 componentes do portal — 375px sem overflow horizontal
+- One-liner:
+- One-liner:
+- Task 1 — Unidades.js:
+- One-liner:
+- One-liner:
+- One-liner:
+- One-liner:
+- One-liner:
+- 1. [Rule 2 - Pattern] Fixture names namespaced per split file
+- One-liner:
+- Fechado IDOR em criarUnidade (1-hop), criarContrato (2-hop), editarContrato (3-hop) via ownership pre-check por proprietario_id
+- marcarParcelaComoPaga gains 4-hop ownership pre-check (parcela→contrato→unidade→edificio→proprietario_id) and authGuard now returns { user }, closing MT-03 cross-tenant IDOR write vector
+- Commit:
+
+---
+
 ---
 
 ## v1.0 — TCC Finalization ✅
