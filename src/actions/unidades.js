@@ -16,7 +16,7 @@ async function authGuard() {
 }
 
 export async function criarUnidade(form) {
-  const { err } = await authGuard()
+  const { err, user } = await authGuard()
   if (err) return err
 
   const { nome, descricao, area_m2, valor_mensal, status, valor_visivel, edificio_id } = form
@@ -25,6 +25,10 @@ export async function criarUnidade(form) {
   if (isNaN(parseFloat(area_m2)) || parseFloat(area_m2) <= 0) return { status: 400, erroMessage: 'Área inválida.' }
   if (isNaN(parseFloat(valor_mensal)) || parseFloat(valor_mensal) < 0) return { status: 400, erroMessage: 'Valor mensal inválido.' }
   if (!STATUS_UNIDADE.includes(status)) return { status: 400, erroMessage: 'Status inválido.' }
+
+  const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
+    .from('edificios').select('id').eq('id', edificio_id).eq('proprietario_id', user.id).single()
+  if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Edifício não encontrado.' }
 
   const { error } = await supabaseAdmin.from('unidades').insert({
     nome: nome.trim(), descricao, area_m2, valor_mensal,
