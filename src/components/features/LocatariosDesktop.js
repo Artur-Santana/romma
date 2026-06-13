@@ -309,19 +309,19 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                 <span className="font-mono text-[11px] text-danger-fg">{erro}</span>
               )}
 
-              <div className="flex flex-wrap gap-3 justify-end mt-2">
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end mt-2">
                 <Button
                   type="button"
                   variant="ghost"
                   onClick={handleCancelarEdit}
-                  className="text-fg-3 font-mono text-[14px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
+                  className="w-full sm:w-auto text-fg-3 font-mono text-[14px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
                 >Cancelar</Button>
                 <Button
                   type="button"
                   disabled={loading}
                   onClick={handleSalvarLocatario}
                   className={cn(
-                    "bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none h-auto",
+                    "w-full sm:w-auto bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none h-auto",
                     loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
                   )}
                 >{loading ? "Salvando..." : "Salvar →"}</Button>
@@ -407,18 +407,18 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                 <span className="font-mono text-[11px] text-danger-fg">{erro}</span>
               )}
 
-              <div className="flex flex-wrap gap-3 justify-end mt-2">
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end mt-2">
                 <Button
                   type="button"
                   variant="ghost"
                   onClick={() => { setShowInviteForm(false); setErro("") }}
-                  className="text-fg-3 font-mono text-[14px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
+                  className="w-full sm:w-auto text-fg-3 font-mono text-[14px] border border-border-3 rounded-none px-5 py-[10px] h-auto"
                 >Cancelar</Button>
                 <Button
                   type="submit"
                   disabled={loading}
                   className={cn(
-                    "bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none h-auto",
+                    "w-full sm:w-auto bg-indigo text-fg-1 font-body font-bold text-[13px] tracking-[1.2px] uppercase px-8 py-[14px] rounded-none h-auto",
                     loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
                   )}
                 >{loading ? "Enviando..." : "Enviar Convite →"}</Button>
