@@ -237,7 +237,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       {/* Edit Form Modal */}
       {editandoId !== null && (
         <div
-          className="fixed inset-0 z-50 bg-[oklch(0_0_0/0.7)] flex items-center justify-center"
+          className="romma-modal-backdrop"
           onClick={e => { if (e.target === e.currentTarget) handleCancelarEdit() }}
         >
           <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
@@ -334,7 +334,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
       {/* Invite Form Modal */}
       {showInviteForm && (
         <div
-          className="fixed inset-0 z-50 bg-[oklch(0_0_0/0.7)] flex items-center justify-center"
+          className="romma-modal-backdrop"
           onClick={e => { if (e.target === e.currentTarget) setShowInviteForm(false) }}
         >
           <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">

@@ -20,7 +20,7 @@ export default function ConfirmDialog({
   return (
     <div
       onClick={onCancel}
-      className="fixed inset-0 bg-[oklch(0_0_0/0.7)] flex items-center justify-center z-[100]"
+      className="romma-modal-backdrop z-[100]"
     >
       <div
         onClick={(e) => e.stopPropagation()}
