@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
-status: roadmapped
-last_updated: "2026-06-13T18:30:00.000Z"
+status: executing
+last_updated: "2026-06-13T22:10:45.338Z"
 last_activity: 2026-06-13
 progress:
   total_phases: 9
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
   percent: 0
 ---
 
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 17 — Fundação (Tokens, Mobile/Modal Fixes & Infra) — não iniciada
+**Current focus:** Phase 17 — funda-o-tokens-mobile-modal-fixes-infra
 
 ---
 
@@ -103,10 +103,10 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 17 — Fundação (Tokens, Mobile/Modal Fixes & Infra) — não iniciada
-Plan: —
-Status: Roadmapped (aguardando planejamento da Phase 17)
-Last activity: 2026-06-13 — Roadmap v1.5 criado (9 fases, 42 reqs)
+Phase: 17 (funda-o-tokens-mobile-modal-fixes-infra) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
+Last activity: 2026-06-13
 
 ## Operator Next Steps
 

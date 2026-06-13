@@ -10,11 +10,11 @@
 
 ### Refino Global (todas as telas)
 
-- [ ] **REFINO-01**: Escala tipográfica única aplicada em todo o sistema via tokens CSS (8 níveis: metric 40 / title 32→24 mobile / section 20 / subhead 16 / body 14 / data-mono 14 / label-mono-caps 11 / meta-mono 10) — fim dos tamanhos de fonte desalinhados
-- [ ] **REFINO-02**: Sistema de densidade aplicado via tokens CSS no nível "regular" como padrão (gutter, page-y, block, panel, cell, row-y etc.), reduzindo o excesso de espaço negativo
+- [x] **REFINO-01**: Escala tipográfica única aplicada em todo o sistema via tokens CSS (8 níveis: metric 40 / title 32→24 mobile / section 20 / subhead 16 / body 14 / data-mono 14 / label-mono-caps 11 / meta-mono 10) — fim dos tamanhos de fonte desalinhados
+- [x] **REFINO-02**: Sistema de densidade aplicado via tokens CSS no nível "regular" como padrão (gutter, page-y, block, panel, cell, row-y etc.), reduzindo o excesso de espaço negativo
 - [ ] **REFINO-03**: Scroll mobile corrigido em todas as áreas roláveis (`min-height: 0` na cadeia de flex containers + altura definida em html/body/root) — containers não estouram mais
-- [ ] **REFINO-04**: Modais/overlays centralizam na viewport inteira no mobile (`position: fixed; inset: 0`)
-- [ ] **REFINO-05**: Animações de entrada partem do estado oculto sem deixar `opacity:0` como fill final (visíveis em render pausado/print/projetor), respeitando `prefers-reduced-motion`, com safeguard `@media print`
+- [x] **REFINO-04**: Modais/overlays centralizam na viewport inteira no mobile (`position: fixed; inset: 0`)
+- [x] **REFINO-05**: Animações de entrada partem do estado oculto sem deixar `opacity:0` como fill final (visíveis em render pausado/print/projetor), respeitando `prefers-reduced-motion`, com safeguard `@media print`
 
 ### Acesso (Login / Cadastro / Redefinir)
 
@@ -118,11 +118,11 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| REFINO-01 | Phase 17 | Pending |
-| REFINO-02 | Phase 17 | Pending |
+| REFINO-01 | Phase 17 | Complete |
+| REFINO-02 | Phase 17 | Complete |
 | REFINO-03 | Phase 17 | Pending |
-| REFINO-04 | Phase 17 | Pending |
-| REFINO-05 | Phase 17 | Pending |
+| REFINO-04 | Phase 17 | Complete |
+| REFINO-05 | Phase 17 | Complete |
 | ACESSO-01 | Phase 18 | Pending |
 | ACESSO-02 | Phase 18 | Pending |
 | ACESSO-03 | Phase 18 | Pending |
