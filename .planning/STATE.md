@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-13T22:10:45.338Z"
+last_updated: "2026-06-13T22:16:35.906Z"
 last_activity: 2026-06-13
 progress:
   total_phases: 9
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -100,14 +100,21 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 15 plan 03 complete. Unit tests for auth.js (cadastrarProprietario, 3 cases D-06/D-07) and locatarios.js (revogarConvite, 4 cases D-06/D-07/D-08). D-08 asserts .eq('proprietario_id', user.id) regression guard. 7 tests, exit 0. Commits 5aa8283+e3ee878.
 - 2026-06-12: Phase 16 plan 02 complete. MT-03 IDOR closed: authGuard in parcelas.js returns { user }; marcarParcelaComoPaga adds 4-hop ownership pre-check (parcela→contrato→unidade→edificio→proprietario_id); cross-tenant → 404 before update. ESLint clean. Commit 3df8a4c.
 - 2026-06-13: Milestone v1.5 roadmap criado. 9 fases (17-25), 42 requirements mapeados 100% (sem órfãos). Ordem dependency-aware: tokens+infra primeiro (Phase 17), depois passes por área de tela. Novos write paths (foto capa, renovar contrato, portal PIX) com cadeia de propriedade.
+- 2026-06-13: Phase 17 plan 03 complete. 20260601000000_v15_foundation.sql applied to remote vfymttcajeyhrmsyhrtj: proprietarios.nome/sobrenome/telefone + unidades.foto_url + private bucket unidades-fotos + SECURITY DEFINER ownership-chain RLS. next.config.mjs remotePatterns added. Commits c9cad75+188d194+69465a4.
+
+## Key Decisions
+
+- Private bucket (public=false) with SECURITY DEFINER ownership-chain RLS enforces IDOR-safe storage access for unidades-fotos (Phase 17 plan 03)
+- search key omitted from next.config.mjs remotePatterns to allow signed URL ?token= query params (Phase 17 plan 03)
 
 ## Current Position
 
 Phase: 17 (funda-o-tokens-mobile-modal-fixes-infra) — EXECUTING
-Plan: 2 of 3
-Status: Ready to execute
+Plan: 3 of 3 (plan 03 complete)
+Status: Plans 01 and 02 remaining
 Last activity: 2026-06-13
+Last session: Completed 17-03-PLAN.md — v15 foundation migration + storage RLS + next.config remotePatterns applied to remote vfymttcajeyhrmsyhrtj
 
 ## Operator Next Steps
 
-- Planejar a primeira fase com /gsd-plan-phase 17
+- Execute phase 17 plans 01 and 02 (CSS tokens, mobile scroll, modal backdrop, animation retrofit)
