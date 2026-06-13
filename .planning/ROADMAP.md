@@ -92,7 +92,11 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
   2. O login tem senha com alternância exibir/ocultar, checkbox "manter sessão", link "esqueci minha senha" e botão bracket que transiciona `[>] ACESSAR SISTEMA → [···] AUTENTICANDO → [OK] 200`
   3. O Proprietário se cadastra preenchendo nome, sobrenome, e-mail, telefone (máscara), senha e confirmar senha; validações bloqueiam envio inválido (obrigatórios, e-mail, telefone ≥10 dígitos, senha ≥6, senhas coincidem) e o sucesso mostra banner "Verifique seu e-mail"; `sobrenome` e `telefone` persistem em `proprietarios`
   4. A tela de Redefinir senha envia link por e-mail e mostra confirmação de sucesso
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 18-01-PLAN.md — Componentes compartilhados de Acesso + extensão de metadata (signUp/confirm)
+  - [ ] 18-02-PLAN.md — TDD: utilitários puros de formulário (máscara telefone, política de senha, gate de validação) + testes unitários
+  - [ ] 18-03-PLAN.md — Redesign Login + extensão/redesign Cadastro (6 campos)
+  - [ ] 18-04-PLAN.md — Redesign Redefinir senha (duplo sub-fluxo) + specs E2E
 **UI hint**: yes
 
 ### Phase 19: Unidades — Modal Unificado & Foto de Capa
@@ -187,7 +191,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 17. Fundação — Tokens, Mobile/Modal Fixes & Infra | 3/3 | Complete   | 2026-06-13 |
-| 18. Acesso — Login / Cadastro / Redefinir | 0/TBD | Not started | - |
+| 18. Acesso — Login / Cadastro / Redefinir | 0/4 | Planned | - |
 | 19. Unidades — Modal Unificado & Foto de Capa | 0/TBD | Not started | - |
 | 20. Edifícios — Cards & Drill-in | 0/TBD | Not started | - |
 | 21. Dashboard — Visão Geral Editorial | 0/TBD | Not started | - |
