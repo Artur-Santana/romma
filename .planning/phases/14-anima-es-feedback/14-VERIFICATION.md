@@ -1,7 +1,8 @@
 ---
 phase: 14-anima-es-feedback
 verified: 2026-06-12T03:00:00Z
-status: human_needed
+status: passed
+human_verification_resolved: "Toast E2E verde em CI + app live confirma remocao e historico de contrato. Fade visual de-riscado pelo CI. 2026-06-13"
 score: 8/8
 overrides_applied: 0
 human_verification:
