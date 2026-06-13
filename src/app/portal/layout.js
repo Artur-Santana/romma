@@ -10,7 +10,7 @@ export default async function PortalLayout({ children }) {
   return (
     <div className="flex flex-col h-screen bg-background">
       <TopStrip />
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto min-h-0">
         {children}
       </main>
     </div>
