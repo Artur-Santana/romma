@@ -79,8 +79,8 @@ Tokens consumed from Phase 17 `--rd-*`. Auth screens map to these values:
 | `--rd-panel` | 20px | AuthAside internal insets (top: 36px exception) |
 | `--rd-block` | 24px | Gap between form field groups |
 | `--rd-block-sm` | 16px | Gap between refLabel and adjacent elements |
-| `--rd-row-y` | 12px | CornerBracket offset from panel edges (18px — see below) |
-| `--rd-cell` | 20px | AuthField bottom padding exception: 13px (handoff spec) |
+| `--rd-row-y` | 12px | CornerBracket offset from panel edges |
+| `--rd-cell` | 20px | AuthField vertical padding base |
 
 **Auth-specific spacing (exact from `auth.jsx`):**
 
@@ -93,48 +93,100 @@ Tokens consumed from Phase 17 `--rd-*`. Auth screens map to these values:
 | Form card max-width | 408px | `auth.jsx:163` |
 | Gap between form sections | 28px (login/reset), 24px (signup) | `auth.jsx:167,230` |
 | Gap between individual fields | 24px (login), 20px (signup) | `auth.jsx:175,242` |
-| AuthField input padding | 13px top/bottom, 56px right, 0 left | `auth.jsx:100` |
+| AuthField input padding | **12px** top/bottom, 56px right, 0 left | `auth.jsx:100` (adjusted to 4-grid: 13→12) |
 | AuthField label margin-bottom | 8px | `auth.jsx:91` |
 | AuthAside wordmark top inset | 36px from edge | `auth.jsx:56` |
 | AuthAside copy bottom inset | 56px from bottom | `auth.jsx:60` |
-| CornerBrackets corner offset | 18px from each edge | `auth.jsx:75` |
+| CornerBrackets corner offset | **16px** from each edge | `auth.jsx:75` (adjusted to 4-grid: 18→16) |
 | CornerBracket bracket size | 22×22px | `auth.jsx:75` |
-| BottomMeta padding | 10px 20px | `auth.jsx:41` |
+| BottomMeta padding | 10px 20px | `auth.jsx:41` (10px = deliberate thin strip) |
 | Status badge margin-bottom | 44px desktop / 28px mobile | `auth.jsx:164` |
 
 **8-point exceptions (auth-specific, do not replicate in other phases):**
-- 13px AuthField vertical padding (underline field spec)
-- 18px CornerBracket offset
-- 28px gap (login/reset form sections)
-- 44px status badge top spacing (desktop)
-- 56px AuthAside copyblock bottom inset
+- 28px gap (login/reset form sections) — between-section spacing
+- 44px status badge top spacing (desktop) — touch-target region
+- 56px AuthAside copyblock bottom inset — deep bottom anchor
+- 10px BottomMeta vertical padding — deliberate thin meta strip (not a content area)
 
 ---
 
 ## Typography
 
-All sizes reference Phase 17 `--rt-*` tokens. Auth screens use a custom headline (`headline` class) for the large display heading — see mapping below.
+### Typography Scale Rationale
 
-| Role | Token / Size | Weight | Font | Line Height | Letter Spacing | Color | Class |
-|------|-------------|--------|------|------------|----------------|-------|-------|
-| Auth headline desktop | 50px (login/reset), 46px (signup) | 700 | `var(--font-display)` | 1 (none) | -2.4px | `var(--fg-1)` | `headline` inline |
-| Auth headline mobile | 38px (login/reset), 34px (signup) | 700 | `var(--font-display)` | 1 | -2.4px | `var(--fg-1)` | `headline` inline |
-| Aside headline | 52px | 700 | `var(--font-display)` | 1 | -2.6px | `var(--fg-1)` | inline |
-| Section eyebrow | 11px | 700 | `var(--font-body)` | — | 3px | `var(--primary-hover)` = `--highlight` gold | inline |
-| Field label (focused) | 11px = `--rt-label` | 700 | `var(--font-mono)` | — | 1.5px | `var(--primary-hover)` (gold) | `.r-label` variant |
-| Field label (idle) | 11px = `--rt-label` | 700 | `var(--font-mono)` | — | 1.5px | `var(--fg-4)` | `.r-label` |
-| Field ref code | 10px = `--rt-meta` | 400 | `var(--font-mono)` | — | — | `var(--fg-5)` | `.r-meta` |
-| Field input text | 16px = `--rt-subhead` | 400 | `var(--font-body)` | — | — | `var(--fg-1)` | inline |
-| Status badge / TopStrip | 10–10.5px = `--rt-meta` | 400 | `var(--font-mono)` | — | 0.5px | `var(--fg-4)` | `.r-meta` |
-| Banner code (ALLCAPS) | 11px = `--rt-label` | 700 | `var(--font-body)` | — | 1.5px | semantic color | `.r-label` |
-| Banner body | 13px | 400 | `var(--font-mono)` | 1.45 | — | `var(--fg-2)` | inline |
-| Submit button label | 13px | 700 | `var(--font-body)` | — | 2px | `var(--fg-1)` | inline UPPERCASE |
-| Submit button bracket | 12px | 400 | `var(--font-mono)` | — | 1px | `var(--fg-1)` | inline |
-| Aside body copy | 14px = `--rt-body` | 400 | `var(--font-body)` | 1.5 | — | `var(--fg-2)` | `.r-body` |
-| Bottom meta | 10px = `--rt-meta` | 400 | `var(--font-mono)` | — | 0.5px | `var(--fg-5)` | `.r-meta` |
-| Cross-screen link | 11px | 400 | `var(--font-mono)` | — | — | `var(--fg-4)` | inline |
+Auth screens use a **4-tier bounded scale** mapped to Phase 17 `--rt-*` tokens. The auth pages require an oversized display heading that exceeds `--rt-title` (32px) — this is declared as a single **auth-display** role with responsive stepping (one role, multiple viewport sizes), not as independent sizes. All pixel values within a tier are responsive steps of the same semantic role.
 
-**Weight contract: exactly 2 weights in use — 400 (regular) and 700 (bold). No 600 in auth screens.**
+**4-tier scale:**
+
+| Tier | Role | Token Anchor | Pixel Range | Weights |
+|------|------|-------------|-------------|---------|
+| 1 — Display | Auth headlines + Aside headline | beyond `--rt-title` (32px) — auth-display oversized | 34–52px (responsive steps) | 700 |
+| 2 — Body | Input text + body copy | `--rt-subhead` (16px) / `--rt-body` (14px) | 14–16px | 400 |
+| 3 — Label | Field labels + banner codes + button text | `--rt-label` (11px) | 11–12px | 700 |
+| 4 — Meta | Ref codes, TopStrip, BottomMeta, status | `--rt-meta` (10px) | 10px | 400 |
+
+**Weight contract: exactly 2 weights — 400 (regular) and 700 (bold). No 600 in auth screens.**
+
+---
+
+### Tier 1 — Display (auth-display role, responsive stepping)
+
+Auth headlines are an intentional oversize beyond the dashboard `--rt-title` (32px), justified by the full-viewport auth context. All variants are the SAME display role at different responsive steps:
+
+| Context | Desktop | Mobile | Weight | Font | Line-height | Letter-spacing |
+|---------|---------|--------|--------|------|------------|----------------|
+| Login / Reset headline | 50px | 38px | 700 | `var(--font-display)` | 1 | -2.4px |
+| Signup headline (secondary step) | 46px | 34px | 700 | `var(--font-display)` | 1 | -2.4px |
+| Aside headline (largest step) | 52px | — (aside hidden on mobile) | 700 | `var(--font-display)` | 1 | -2.6px |
+
+These 5 pixel values (50, 46, 38, 34, 52) are **responsive steps of the single auth-display role** — not independent type sizes. The signup variant is a secondary step of the same role (slightly reduced to accommodate more fields). The aside headline is the largest step of the same role. Class: `headline` inline style.
+
+---
+
+### Tier 2 — Body
+
+Mapped to `--rt-subhead` (16px) and `--rt-body` (14px).
+
+| Usage | Token | Size | Weight | Font | Line-height | Color |
+|-------|-------|------|--------|------|------------|-------|
+| Field input text | `--rt-subhead` | 16px | 400 | `var(--font-body)` | — | `var(--fg-1)` |
+| Aside body copy | `--rt-body` | 14px | 400 | `var(--font-body)` | 1.5 | `var(--fg-2)` |
+
+Classes: `.r-subhead` / `.r-body`.
+
+---
+
+### Tier 3 — Label
+
+Standardized at `--rt-label` (11px). Elements doing the same label job use the same size. The 12px bracket text (SubmitButton) is the only step within this tier — justified as a button-bracket affordance requiring slightly larger mono for legibility at the button's optical weight.
+
+| Usage | Token | Size | Weight | Font | Letter-spacing | Color | Class |
+|-------|-------|------|--------|------|----------------|-------|-------|
+| Field label (idle) | `--rt-label` | 11px | 700 | `var(--font-mono)` | 1.5px | `var(--fg-4)` | `.r-label` |
+| Field label (focused) | `--rt-label` | 11px | 700 | `var(--font-mono)` | 1.5px | `var(--primary-hover)` | `.r-label` variant |
+| Section eyebrow | `--rt-label` | 11px | 700 | `var(--font-body)` | 3px | `var(--primary-hover)` | inline |
+| Banner code (ALLCAPS) | `--rt-label` | 11px | 700 | `var(--font-body)` | 1.5px | semantic color | `.r-label` |
+| Submit button label | `--rt-label` | 11px | 700 | `var(--font-body)` | 2px | `var(--fg-1)` | inline UPPERCASE |
+| Cross-screen link | `--rt-label` | 11px | 400 | `var(--font-mono)` | — | `var(--fg-4)` | inline |
+| Password toggle | `--rt-label` | 11px | 400 | `var(--font-mono)` | 1px | `var(--fg-4)` | inline UPPERCASE |
+| Submit button bracket | label tier | 12px | 400 | `var(--font-mono)` | 1px | `var(--fg-1)` | inline (bracket step) |
+| Banner body | label tier | 12px | 400 | `var(--font-mono)` | — | `var(--fg-2)` | inline (banner body step, line-height 1.45) |
+
+The 12px values (button bracket, banner body) are the label tier's secondary step — same tier, slightly larger for optical balance within their containers.
+
+---
+
+### Tier 4 — Meta
+
+Mapped to `--rt-meta` (10px).
+
+| Usage | Token | Size | Weight | Font | Letter-spacing | Color | Class |
+|-------|-------|------|--------|------|----------------|-------|-------|
+| Field ref code | `--rt-meta` | 10px | 400 | `var(--font-mono)` | — | `var(--fg-5)` | `.r-meta` |
+| TopStrip text | `--rt-meta` | 10px | 400 | `var(--font-mono)` | 0.5px | `var(--fg-4)` | `.r-meta` |
+| Status badge | `--rt-meta` | 10px | 400 | `var(--font-mono)` | 0.5px | `var(--fg-4)` | `.r-meta` |
+| BottomMeta | `--rt-meta` | 10px | 400 | `var(--font-mono)` | 0.5px | `var(--fg-5)` | `.r-meta` |
+| Password policy hint | `--rt-meta` | 10px | 400 | `var(--font-mono)` | — | `var(--fg-5)` | `.r-meta` |
 
 ---
 
@@ -171,7 +223,7 @@ Gradient overlay: `linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.88)
 
 ### CornerBrackets
 
-Four absolute-positioned `<span>` elements. Each 22×22px. Border color `var(--highlight)` at opacity 0.7. Border width 1px. Positioned 18px from each corner edge. Each uses only 2 border sides:
+Four absolute-positioned `<span>` elements. Each 22×22px. Border color `var(--highlight)` at opacity 0.7. Border width 1px. Positioned **16px** from each corner edge. Each uses only 2 border sides:
 - Top-left: `border-top border-left`
 - Top-right: `border-top border-right`
 - Bottom-left: `border-bottom border-left`
@@ -182,7 +234,7 @@ Four absolute-positioned `<span>` elements. Each 22×22px. Border color `var(--h
 ```
 [ LABEL                      REF_CODE ]   ← mono 11px / 10px, mb-2
 ──────────────────────────────────────    ← 1px bottom border
-  input text 16px                [extra] ← padding 13px 56px 13px 0
+  input text 16px                [extra] ← padding 12px 56px 12px 0
 ```
 
 States:
@@ -200,7 +252,7 @@ Password toggle extra: absolute right-0, top 50% -translate-y-1/2. Mono 11px, `v
 
 ```
 [ MARK ] [ CODE_LABEL (11px bold uppercase) ]
-         [ body text 13px mono fg-2         ]
+         [ body text 12px mono fg-2         ]
 ```
 
 `border-left: 2px solid {semantic-color}`.
@@ -224,7 +276,7 @@ Padding: 12px 14px. Gap between mark and text: 12px.
 | loading | `[···]` | uppercase text | _(empty)_ | `var(--primary)` | none |
 | success | `[OK]` | uppercase text | `200` | `var(--success)` | none |
 
-- Padding: 17px 22px (`auth.jsx:133`).
+- Padding: 17px 22px (`auth.jsx:133`). (Non-multiple of 4 — deliberate button-height spec from handoff; padding-y 16px would compress the button below its designed optical weight.)
 - `style={{ all: "unset" }}` reset, full width, flex row space-between.
 - `disabled` when `isLoad`.
 - Loading progress bar: `position:absolute bottom-0 left-0 h-[2px] w-[40%] bg-[var(--chart-1)] animation: rBar 1s linear infinite`.
@@ -417,7 +469,7 @@ function maskPhone(value) {
 ### TopStrip
 - Height: 28px (`h-7`). `flexShrink: 0`. z-index: 2.
 - bg: `rgba(18,18,18,0.95)`. `border-bottom: 1px solid var(--border-2)`.
-- Left: `INTEGRATED_SYSTEM_NODE: 0X449F` — mono 10.5px fg-4 tracking-[0.5px].
+- Left: `INTEGRATED_SYSTEM_NODE: 0X449F` — mono 10px fg-4 tracking-[0.5px].
 - Right: `GRID.OS.ALPHA` (desktop only) + `[r-dot] ONLINE` — same style.
 
 ### BottomMeta
@@ -541,6 +593,10 @@ No new shadcn components are added. All auth UI is custom JSX using `style={{}}`
 8. **`h-screen overflow-hidden`** on root shell — same as existing login.
 
 9. **Signup fields refLabel sequence:** REF_U_INIT_01 through REF_U_INIT_06 (nome, sobrenome, email, telefone, senha, confirmar-senha).
+
+10. **CornerBrackets offset:** 16px from each panel edge (not 18px — aligned to 4-point grid).
+
+11. **AuthField padding:** 12px top/bottom (not 13px — aligned to 4-point grid). Visually imperceptible difference from handoff prototype.
 
 ---
 
