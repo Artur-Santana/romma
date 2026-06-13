@@ -347,7 +347,7 @@
   to   { transform: translateX(-50%); }
 }
 
-.romma-page      { animation: rommaFadeIn 320ms var(--ease-crisp) both; }
+.romma-page      { animation: rFade 320ms var(--ease-crisp); }
 .romma-unit-out  { animation: rommaUnitOut 600ms var(--ease-crisp) forwards; }
 .romma-mobile-pane::-webkit-scrollbar { width: 0; }
 .romma-mobile-pane { scrollbar-width: none; }
@@ -355,8 +355,114 @@
 .romma-desktop-only { display: block; }
 .romma-mobile-only  { display: none; }
 
+/* ── Modal backdrop utility ──────────────────────────────────────────────── */
+/* Consolidates the repeated "fixed inset-0 z-50 bg-black/70 flex center" pattern */
+/* Sources: LocatariosDesktop.js lines 240,337 + ConfirmDialog.js line 23 */
+.romma-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: oklch(0 0 0 / 0.70);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
 @media (max-width: 768px) {
   .romma-sidebar-wrapper { display: none !important; }
   .romma-desktop-only    { display: none !important; }
   .romma-mobile-only     { display: block; }
 }
+
+/* ── v1.5 Design Refinement Tokens ─────────────────────────────────────────
+   Additive over Obsidian Blueprint. Zero regression on unreleased screens.
+   Source: .planning/design/styles/app.css
+   Decision: ONLY "regular" density. Compact/comfy: DEFERRED (REFINO-F1).
+   ────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Type scale */
+  --rt-metric:   40px;
+  --rt-title:    32px;
+  --rt-title-sm: 24px;
+  --rt-section:  20px;
+  --rt-subhead:  16px;
+  --rt-body:     14px;
+  --rt-data:     14px;
+  --rt-label:    11px;
+  --rt-meta:     10px;
+
+  /* Density — Regular only (compact/comfy: DEFERRED REFINO-F1) */
+  --rd-gutter:   32px;
+  --rd-gutter-m: 20px;
+  --rd-page-y:   28px;
+  --rd-block:    24px;
+  --rd-block-sm: 16px;
+  --rd-panel:    20px;
+  --rd-cell:     20px;
+  --rd-row-y:    12px;
+  --rd-row-x:    16px;
+
+  /* Duration tokens — required by .r-* classes; defined in DS bundle, not app.css */
+  --dur-base: 220ms;
+  --dur-fast: 120ms;
+
+  /* Font display alias — app.css uses --font-display; globals.css has --font-display-arch */
+  --font-display: var(--font-display-arch);
+
+  /* Highlight alias — .r-eyebrow.gold uses var(--highlight); globals.css defines --color-highlight */
+  --highlight: var(--color-highlight);
+}
+
+/* ── v1.5 Type + Density helper classes ──────────────────────────────────── */
+/* Source: .planning/design/styles/app.css lines 71-124 */
+.r-metric  { font-family: var(--font-display); font-weight: 700; font-size: var(--rt-metric);  line-height: 1; letter-spacing: -2px;  color: var(--fg-1); margin: 0; }
+.r-title   { font-family: var(--font-display); font-weight: 700; font-size: var(--rt-title);   line-height: 1; letter-spacing: -1.6px; color: var(--fg-1); margin: 0; }
+.r-section { font-family: var(--font-display); font-weight: 700; font-size: var(--rt-section); line-height: 1.05; letter-spacing: -0.6px; color: var(--fg-1); margin: 0; }
+.r-subhead { font-family: var(--font-body); font-weight: 600; font-size: var(--rt-subhead); line-height: 1.2; color: var(--fg-1); margin: 0; }
+.r-body    { font-family: var(--font-body); font-weight: 400; font-size: var(--rt-body); line-height: 1.5; color: var(--fg-3); }
+.r-data    { font-family: var(--font-mono); font-size: var(--rt-data); color: var(--fg-2); }
+.r-label   { font-family: var(--font-mono); font-weight: 700; font-size: var(--rt-label); letter-spacing: 1px; text-transform: uppercase; color: var(--fg-4); }
+.r-meta    { font-family: var(--font-mono); font-size: var(--rt-meta); letter-spacing: 0.5px; color: var(--fg-4); }
+.r-eyebrow { font-family: var(--font-body); font-weight: 700; font-size: var(--rt-meta); letter-spacing: 1.5px; text-transform: uppercase; color: var(--fg-4); display: block; }
+.r-eyebrow.indigo  { color: var(--indigo); }
+.r-eyebrow.warning { color: var(--warning); }
+.r-eyebrow.gold    { color: var(--highlight); }
+
+.r-panel  { background: var(--surface); border: 1px solid var(--border-3); }
+.r-divtop { border-top: 1px solid var(--border-3); }
+.r-divrt  { border-right: 1px solid var(--border-3); }
+
+/* Hover affordances */
+.r-rowlink  { transition: background var(--dur-fast) var(--ease-crisp); cursor: pointer; }
+.r-rowlink:hover { background: var(--surface-hi); }
+.r-cell     { transition: background var(--dur-fast) var(--ease-crisp); cursor: pointer; }
+.r-cell:hover    { background: var(--surface-hi); }
+.r-ghostbtn { transition: color var(--dur-fast), border-color var(--dur-fast), background var(--dur-fast); cursor: pointer; }
+.r-ghostbtn:hover { color: var(--fg-1); border-color: var(--fg-4); }
+
+/* Scrollbars */
+.r-scroll::-webkit-scrollbar       { width: 9px; height: 9px; }
+.r-scroll::-webkit-scrollbar-track { background: var(--background); }
+.r-scroll::-webkit-scrollbar-thumb { background: var(--border-3); }
+.r-scroll::-webkit-scrollbar-thumb:hover { background: var(--fg-5); }
+.r-noscroll::-webkit-scrollbar { display: none; }
+.r-noscroll { scrollbar-width: none; }
+
+/* Realtime dot */
+.r-dot   { position: relative; width: 6px; height: 6px; display: inline-block; flex-shrink: 0; }
+.r-dot i { position: absolute; inset: 0; background: var(--success); display: block; }
+.r-dot i:last-child { animation: rPulse 2s var(--ease-crisp) infinite; }
+
+/* ── v1.5 Motion keyframes ────────────────────────────────────────────────── */
+@keyframes rFade    { from { transform: translateY(8px); } to { transform: translateY(0); } }
+@keyframes rPulse   { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.2; transform: scale(2); } }
+@keyframes rUnitOut { to { opacity: 0; transform: translateX(40px); filter: blur(4px); } }
+@keyframes rBar     { 0% { transform: translateX(-100%); } 100% { transform: translateX(260%); } }
+@keyframes rSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes rGrow    { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Entrance fade — base state is VISIBLE; animation plays in only (no fill:both) */
+.r-fade { animation: rFade var(--dur-base) var(--ease-crisp); }
+@media (prefers-reduced-motion: reduce) { .r-fade, .romma-page { animation: none; } }
+@media print { .r-fade, .romma-page { animation: none; } }

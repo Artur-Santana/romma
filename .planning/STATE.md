@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
-status: roadmapped
-last_updated: "2026-06-13T18:30:00.000Z"
-last_activity: 2026-06-13
+status: completed
+last_updated: "2026-06-13T22:51:15.434Z"
+last_activity: 2026-06-13 -- Phase 17 marked complete
 progress:
   total_phases: 9
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  completed_phases: 1
+  total_plans: 3
+  completed_plans: 3
+  percent: 11
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 17 — Fundação (Tokens, Mobile/Modal Fixes & Infra) — não iniciada
+**Current focus:** Phase 17 — funda-o-tokens-mobile-modal-fixes-infra
 
 ---
 
@@ -100,14 +100,21 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 15 plan 03 complete. Unit tests for auth.js (cadastrarProprietario, 3 cases D-06/D-07) and locatarios.js (revogarConvite, 4 cases D-06/D-07/D-08). D-08 asserts .eq('proprietario_id', user.id) regression guard. 7 tests, exit 0. Commits 5aa8283+e3ee878.
 - 2026-06-12: Phase 16 plan 02 complete. MT-03 IDOR closed: authGuard in parcelas.js returns { user }; marcarParcelaComoPaga adds 4-hop ownership pre-check (parcela→contrato→unidade→edificio→proprietario_id); cross-tenant → 404 before update. ESLint clean. Commit 3df8a4c.
 - 2026-06-13: Milestone v1.5 roadmap criado. 9 fases (17-25), 42 requirements mapeados 100% (sem órfãos). Ordem dependency-aware: tokens+infra primeiro (Phase 17), depois passes por área de tela. Novos write paths (foto capa, renovar contrato, portal PIX) com cadeia de propriedade.
+- 2026-06-13: Phase 17 plan 03 complete. 20260601000000_v15_foundation.sql applied to remote vfymttcajeyhrmsyhrtj: proprietarios.nome/sobrenome/telefone + unidades.foto_url + private bucket unidades-fotos + SECURITY DEFINER ownership-chain RLS. next.config.mjs remotePatterns added. Commits c9cad75+188d194+69465a4.
+
+## Key Decisions
+
+- Private bucket (public=false) with SECURITY DEFINER ownership-chain RLS enforces IDOR-safe storage access for unidades-fotos (Phase 17 plan 03)
+- search key omitted from next.config.mjs remotePatterns to allow signed URL ?token= query params (Phase 17 plan 03)
 
 ## Current Position
 
-Phase: 17 — Fundação (Tokens, Mobile/Modal Fixes & Infra) — não iniciada
-Plan: —
-Status: Roadmapped (aguardando planejamento da Phase 17)
-Last activity: 2026-06-13 — Roadmap v1.5 criado (9 fases, 42 reqs)
+Phase: 17 — COMPLETE
+Plan: 3 of 3 (plan 03 complete)
+Status: Phase 17 complete
+Last activity: 2026-06-13 -- Phase 17 marked complete
+Last session: 2026-06-13T22:20:29.508Z
 
 ## Operator Next Steps
 
-- Planejar a primeira fase com /gsd-plan-phase 17
+- Execute phase 17 plans 01 and 02 (CSS tokens, mobile scroll, modal backdrop, animation retrofit)
