@@ -114,17 +114,51 @@ Explicitamente excluído (cortado a pedido ou fora do TCC):
 
 ## Traceability
 
-Preenchido pelo roadmapper durante a criação do roadmap.
+Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órfãos, sem duplicatas).
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| REFINO-01..05 | — | Pending |
-| ACESSO-01..04 | — | Pending |
-| DASH-04..06 | — | Pending |
-| UNID-01..05 | — | Pending |
-| EDIF-01..03 | — | Pending |
-| CONTR-01..05 | — | Pending |
-| PARC-01..04 | — | Pending |
-| LOC-01..06 | — | Pending |
-| PUB-01..05 | — | Pending |
-| PORT-04..07 | — | Pending |
+| REFINO-01 | Phase 17 | Pending |
+| REFINO-02 | Phase 17 | Pending |
+| REFINO-03 | Phase 17 | Pending |
+| REFINO-04 | Phase 17 | Pending |
+| REFINO-05 | Phase 17 | Pending |
+| ACESSO-01 | Phase 18 | Pending |
+| ACESSO-02 | Phase 18 | Pending |
+| ACESSO-03 | Phase 18 | Pending |
+| ACESSO-04 | Phase 18 | Pending |
+| UNID-01 | Phase 19 | Pending |
+| UNID-02 | Phase 19 | Pending |
+| UNID-03 | Phase 19 | Pending |
+| UNID-04 | Phase 19 | Pending |
+| UNID-05 | Phase 19 | Pending |
+| EDIF-01 | Phase 20 | Pending |
+| EDIF-02 | Phase 20 | Pending |
+| EDIF-03 | Phase 20 | Pending |
+| DASH-04 | Phase 21 | Pending |
+| DASH-05 | Phase 21 | Pending |
+| DASH-06 | Phase 21 | Pending |
+| CONTR-01 | Phase 22 | Pending |
+| CONTR-02 | Phase 22 | Pending |
+| CONTR-03 | Phase 22 | Pending |
+| CONTR-04 | Phase 22 | Pending |
+| CONTR-05 | Phase 22 | Pending |
+| PARC-01 | Phase 22 | Pending |
+| PARC-02 | Phase 22 | Pending |
+| PARC-03 | Phase 22 | Pending |
+| PARC-04 | Phase 22 | Pending |
+| LOC-01 | Phase 23 | Pending |
+| LOC-02 | Phase 23 | Pending |
+| LOC-03 | Phase 23 | Pending |
+| LOC-04 | Phase 23 | Pending |
+| LOC-05 | Phase 23 | Pending |
+| LOC-06 | Phase 23 | Pending |
+| PUB-01 | Phase 24 | Pending |
+| PUB-02 | Phase 24 | Pending |
+| PUB-03 | Phase 24 | Pending |
+| PUB-04 | Phase 24 | Pending |
+| PUB-05 | Phase 24 | Pending |
+| PORT-04 | Phase 25 | Pending |
+| PORT-05 | Phase 25 | Pending |
+| PORT-06 | Phase 25 | Pending |
+| PORT-07 | Phase 25 | Pending |
