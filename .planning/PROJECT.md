@@ -78,14 +78,14 @@ Proprietário gerencia edifícios, contratos e pagamentos em um único painel �
 
 Projeto TCC de Artur Santana. Stack: Next.js 16 App Router (JS), Tailwind v4, shadcn/ui, Supabase (Postgres + Auth + RLS + Edge Functions Deno), Turbopack, Vercel.
 
-**Estado atual (2026-06-09 — v1.1 em progresso, Phase 11 completa):**
+**Estado atual (2026-06-13 — v1.1 SHIPPED):**
 - Sistema completo e deployed em romma-alpha.vercel.app
-- v1.0: 7 fases, 29 planos executados (shipped 2026-06-03)
-- v1.1: Phases 8-11 completas (bug fixes, páginas públicas, signup Proprietário, multi-tenant)
-- Isolamento multi-tenant implementado: RLS policies + Server Actions escopeadas por proprietario_id
-- IDOR fechado: editarEdificio, deletarEdificio, editarLocatario, deletarLocatario, revogarConvite
-- Banca em 9 dias (18/06/2026)
-- Próxima: Phase 12 — Escala Desktop + Tema
+- v1.0: 7 fases, 29 planos (shipped 2026-06-03)
+- v1.1: Phases 8-16 completas — bug fixes, páginas públicas, signup, multi-tenant, desktop/mobile, animações, testes, IDOR closure (shipped 2026-06-13)
+- Multi-tenant: RLS + TODAS as Server Actions de escrita escopeadas por proprietario_id (IDOR 100% fechado)
+- Testes: 47 unit (Vitest) + 73 E2E (Playwright) + CI jobs unit/e2e bloqueando merge
+- Banca em 5 dias (18/06/2026)
+- Próximo: preparação da demo / próximo milestone pós-banca
 
 **Codebase map:** `.planning/codebase/` (gerado 21/05/2026)
 
