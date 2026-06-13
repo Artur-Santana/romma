@@ -240,7 +240,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           className="romma-modal-backdrop"
           onClick={e => { if (e.target === e.currentTarget) handleCancelarEdit() }}
         >
-          <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
+          <div className="bg-surface border border-border-2 w-full max-w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">LOCATÁRIO</span>
               <h3 className="font-body font-bold text-[30px] text-fg-1 m-0">
@@ -337,7 +337,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
           className="romma-modal-backdrop"
           onClick={e => { if (e.target === e.currentTarget) setShowInviteForm(false) }}
         >
-          <div className="bg-surface border border-border-2 w-[480px] p-8 flex flex-col gap-6">
+          <div className="bg-surface border border-border-2 w-full max-w-[480px] p-8 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="eyebrow eyebrow--indigo">NOVO LOCATÁRIO</span>
               <h3 className="font-body font-bold text-[30px] text-fg-1 m-0">
