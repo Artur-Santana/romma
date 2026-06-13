@@ -347,13 +347,26 @@
   to   { transform: translateX(-50%); }
 }
 
-.romma-page      { animation: rommaFadeIn 320ms var(--ease-crisp) both; }
+.romma-page      { animation: rFade 320ms var(--ease-crisp); }
 .romma-unit-out  { animation: rommaUnitOut 600ms var(--ease-crisp) forwards; }
 .romma-mobile-pane::-webkit-scrollbar { width: 0; }
 .romma-mobile-pane { scrollbar-width: none; }
 
 .romma-desktop-only { display: block; }
 .romma-mobile-only  { display: none; }
+
+/* ── Modal backdrop utility ──────────────────────────────────────────────── */
+/* Consolidates the repeated "fixed inset-0 z-50 bg-black/70 flex center" pattern */
+/* Sources: LocatariosDesktop.js lines 240,337 + ConfirmDialog.js line 23 */
+.romma-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: oklch(0 0 0 / 0.70);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 @media (max-width: 768px) {
   .romma-sidebar-wrapper { display: none !important; }
