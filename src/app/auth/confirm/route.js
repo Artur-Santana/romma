@@ -42,11 +42,24 @@ async function tentarRegistrarProprietario(userId, userMetadata = {}) {
   return true
 }
 
+// Redireciona copiando os cookies de sessão estagiados pelo Supabase SSR (setAll)
+// para o NextResponse — em Route Handlers GET, mutações em cookies() não propagam
+// para um NextResponse.redirect separado, então a sessão se perde sem esta cópia (CR-02).
+async function redirectComSessao(path, request) {
+  const res = NextResponse.redirect(new URL(path, request.url))
+  const cookieStore = await cookies()
+  for (const cookie of cookieStore.getAll()) {
+    res.cookies.set(cookie.name, cookie.value, cookie)
+  }
+  return res
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const token_hash = searchParams.get("token_hash")
   const type = searchParams.get("type")
   const code = searchParams.get("code")
+  const next = searchParams.get("next")
 
   const supabase = await createServer()
 
@@ -58,22 +71,16 @@ export async function GET(request) {
       return NextResponse.redirect(new URL("/login?error=invite_invalid", request.url))
     }
     if (type === "recovery") {
-      // Após verifyOtp, o Supabase SSR estagiou os cookies de sessão via setAll.
-      // Precisamos copiá-los para o NextResponse.redirect para que o browser
-      // receba a sessão de recovery e o sub-fluxo define-new-password seja ativado.
-      const redirectRes = NextResponse.redirect(new URL("/auth/reset-password", request.url))
-      const cookieStore = await cookies()
-      for (const cookie of cookieStore.getAll()) {
-        redirectRes.cookies.set(cookie.name, cookie.value, cookie)
-      }
-      return redirectRes
+      // Recovery: estabelece a sessão (cookies copiados) e ativa o sub-fluxo
+      // define-new-password em /auth/reset-password.
+      return redirectComSessao("/auth/reset-password", request)
     }
     if (data?.user) {
       // Promoção a Proprietário APENAS em signup — nunca em invite ou outros fluxos (CR-01)
       if (type === "signup") {
         const viroupProprietario = await tentarRegistrarProprietario(data.user.id, data.user.user_metadata)
         if (viroupProprietario) {
-          return NextResponse.redirect(new URL("/dashboard", request.url))
+          return redirectComSessao("/dashboard", request)
         }
         // Promoção falhou (erro transitório de DB, não UNIQUE). Como fallback, tentar
         // atualizar status_convite caso o email coincida com um locatário pendente
@@ -83,7 +90,7 @@ export async function GET(request) {
         await atualizarStatusConvite(data.user.id, data.user.email)
       }
     }
-    return NextResponse.redirect(new URL("/portal/dashboard", request.url))
+    return redirectComSessao("/portal/dashboard", request)
   }
 
   if (code) {
@@ -91,6 +98,12 @@ export async function GET(request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     if (error) {
       return NextResponse.redirect(new URL("/login?error=invite_invalid", request.url))
+    }
+    // Recovery via PKCE (reset de senha): o link de recovery do @supabase/ssr volta
+    // como ?code=...&next=recovery. Estabelece a sessão e envia ao sub-fluxo
+    // define-new-password — NUNCA promove a Proprietário neste caminho.
+    if (next === "recovery") {
+      return redirectComSessao("/auth/reset-password", request)
     }
     if (data?.user) {
       // type não está disponível no caminho code — inferir papel via user_metadata.
@@ -101,12 +114,12 @@ export async function GET(request) {
       if (meta.nome) {
         const viroupProprietario = await tentarRegistrarProprietario(data.user.id, meta)
         if (viroupProprietario) {
-          return NextResponse.redirect(new URL("/dashboard", request.url))
+          return redirectComSessao("/dashboard", request)
         }
       }
       await atualizarStatusConvite(data.user.id, data.user.email)
     }
-    return NextResponse.redirect(new URL("/portal/dashboard", request.url))
+    return redirectComSessao("/portal/dashboard", request)
   }
 
   // Sem parâmetros válidos

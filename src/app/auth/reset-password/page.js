@@ -73,7 +73,7 @@ function ResetPasswordForm() {
     }
     setStatus("loading")
     const { error } = await supabase.auth.resetPasswordForEmail(form.email, {
-      redirectTo: `${window.location.origin}/auth/confirm`,
+      redirectTo: `${window.location.origin}/auth/confirm?next=recovery`,
     })
     if (error) {
       setErroEnvioMsg(error.message || "Ocorreu um erro ao enviar o e-mail. Tente novamente.")
