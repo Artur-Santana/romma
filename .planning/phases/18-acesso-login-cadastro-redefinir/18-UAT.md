@@ -67,10 +67,26 @@ pending: 0
 
 ## Gaps
 
+- truth: "Cadastro de Proprietário deve criar a linha em proprietarios"
+  status: code_fixed_pending_config
+  reason: "Bug humano: cadastro não criou Proprietário. Causa-raiz: projeto Supabase com mailer_autoconfirm=true (evidência: GET /auth/v1/settings) → signUp auto-confirma e NÃO envia email → /auth/confirm (onde proprietarios é criado) nunca roda → nenhuma linha em proprietarios. Decisão do usuário: ligar confirmação de email no Supabase. Código já suporta o fluxo; falta config no dashboard (ação do usuário). Code path agora copia cookies de sessão (estava perdendo a sessão pós-exchange)."
+  severity: blocker
+  test: 5
+  artifacts: [src/app/auth/confirm/route.js, src/actions/auth.js]
+  missing: [dashboard Supabase: habilitar Confirm email, Site URL=http://localhost:3000, Redirect URLs com http://localhost:3000/**]
+
+- truth: "Link de recovery deve abrir o sub-fluxo define-new-password"
+  status: code_fixed_pending_config
+  reason: "Bug humano: link de reset manda pra landing page. Causa-raiz dupla: (1) CÓDIGO — recovery do @supabase/ssr usa PKCE, volta como /auth/confirm?code=, mas o code path não tinha branch de recovery → proprietário (meta.nome) era tratado como signup → /dashboard; e não copiava cookies de sessão. CORRIGIDO (commit 0f0d965): redirectTo carrega ?next=recovery, code path roteia recovery→/auth/reset-password e copia cookies. (2) CONFIG — 'landing page' indica redirect_to fora da allowlist do Supabase → fallback pro Site URL. Falta config no dashboard (ação do usuário)."
+  severity: blocker
+  test: 7
+  artifacts: [src/app/auth/confirm/route.js, src/app/auth/reset-password/page.js]
+  missing: [dashboard Supabase: Redirect URLs com http://localhost:3000/**, Site URL=http://localhost:3000]
+
 - truth: "Banner de validação client-side deve indicar erro de cliente, não de servidor"
-  status: failed
-  reason: "Em /auth/reset-password, submeter email vazio mostra banner 'ERRO_AUTH · 500 — Informe o e-mail antes de continuar.' O guard funciona (não dispara request), mas o rótulo '· 500' é estilo de erro de servidor para uma validação client-side. Enganoso."
+  status: open
+  reason: "Em /auth/reset-password, submeter email vazio mostra banner 'ERRO_AUTH · 500 — Informe o e-mail antes de continuar.' O guard funciona (não dispara request), mas o rótulo '· 500' é estilo de erro de servidor para validação client-side. Enganoso."
   severity: cosmetic
   test: 6
   artifacts: [src/app/auth/reset-password/page.js]
-  missing: [código/tom de banner client-side distinto de erro 500]
+  missing: [tom/código de banner client-side distinto de erro 500]
