@@ -85,6 +85,10 @@ test.describe('ANIM-03 — Toast Unidades', () => {
     await expect(row).toBeVisible({ timeout: 10_000 })
     await row.getByRole('button', { name: 'Remover' }).click()
 
+    // ConfirmDialog appears — confirm before toast fires (UNID-05)
+    await expect(page.locator('.romma-modal-backdrop')).toBeVisible()
+    await page.getByRole('button', { name: 'Remover Unidade' }).click()
+
     // ANIM-03: toast must be visible
     await expect(page.getByText('Unidade removida')).toBeVisible({ timeout: 10_000 })
   })
