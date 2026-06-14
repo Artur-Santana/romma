@@ -58,7 +58,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 **Phase Numbering:** integers continuam de v1.1 (terminou na Phase 16). v1.5 começa na **Phase 17**. Decimais (17.1...) marcam inserções urgentes (INSERTED).
 
 - [x] **Phase 17: Fundação — Tokens, Mobile/Modal Fixes & Infra** - Escala tipográfica + densidade em globals.css, fixes cross-cutting de scroll/modal/animação nas cascas base, migrações de schema, Storage bucket privado, remotePatterns (completed 2026-06-13)
-- [ ] **Phase 18: Acesso — Login / Cadastro / Redefinir** - Split-panel, show/hide senha, manter sessão, máscara telefone, cadastro completo de Proprietário, redefinir senha
+- [x] **Phase 18: Acesso — Login / Cadastro / Redefinir** - Split-panel, show/hide senha, manter sessão, máscara telefone, cadastro completo de Proprietário, redefinir senha (completed 2026-06-14)
 - [ ] **Phase 19: Unidades — Modal Unificado & Foto de Capa** - Métricas-resumo, busca/filtros, modal único criar/editar, upload de foto via Storage, confirmação de remoção com cleanup
 - [ ] **Phase 20: Edifícios — Cards & Drill-in** - Cards 2 colunas, stats por edifício, barra de ocupação contígua, drill-in clicável reusando o modal de unidade
 - [ ] **Phase 21: Dashboard — Visão Geral Editorial** - Bloco de ocupação em destaque, gráfico de fluxo de caixa, contratos recentes/parcelas + atalhos rápidos
@@ -92,7 +92,11 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
   2. O login tem senha com alternância exibir/ocultar, checkbox "manter sessão", link "esqueci minha senha" e botão bracket que transiciona `[>] ACESSAR SISTEMA → [···] AUTENTICANDO → [OK] 200`
   3. O Proprietário se cadastra preenchendo nome, sobrenome, e-mail, telefone (máscara), senha e confirmar senha; validações bloqueiam envio inválido (obrigatórios, e-mail, telefone ≥10 dígitos, senha ≥6, senhas coincidem) e o sucesso mostra banner "Verifique seu e-mail"; `sobrenome` e `telefone` persistem em `proprietarios`
   4. A tela de Redefinir senha envia link por e-mail e mostra confirmação de sucesso
-**Plans**: TBD
+**Plans**: 4 plans
+  - [x] 18-01-PLAN.md — Componentes compartilhados de Acesso + extensão de metadata (signUp/confirm)
+  - [x] 18-02-PLAN.md — TDD: utilitários puros de formulário (máscara telefone, política de senha, gate de validação) + testes unitários
+  - [x] 18-03-PLAN.md — Redesign Login + extensão/redesign Cadastro (6 campos)
+  - [x] 18-04-PLAN.md — Redesign Redefinir senha (duplo sub-fluxo) + specs E2E
 **UI hint**: yes
 
 ### Phase 19: Unidades — Modal Unificado & Foto de Capa
@@ -187,7 +191,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 17. Fundação — Tokens, Mobile/Modal Fixes & Infra | 3/3 | Complete   | 2026-06-13 |
-| 18. Acesso — Login / Cadastro / Redefinir | 0/TBD | Not started | - |
+| 18. Acesso — Login / Cadastro / Redefinir | 4/4 | Complete    | 2026-06-14 |
 | 19. Unidades — Modal Unificado & Foto de Capa | 0/TBD | Not started | - |
 | 20. Edifícios — Cards & Drill-in | 0/TBD | Not started | - |
 | 21. Dashboard — Visão Geral Editorial | 0/TBD | Not started | - |
