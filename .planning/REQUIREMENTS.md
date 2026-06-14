@@ -19,7 +19,7 @@
 ### Acesso (Login / Cadastro / Redefinir)
 
 - [x] **ACESSO-01**: Tela de acesso usa layout split-panel (variante A): foto de prédio dessaturada + cantoneiras douradas à esquerda, formulário à direita; no mobile faz stack (só formulário)
-- [ ] **ACESSO-02**: Login tem campo de senha com alternância exibir/ocultar, checkbox "manter sessão", link "esqueci minha senha" e botão estilo bracket (`[>] ACESSAR SISTEMA` → `[···] AUTENTICANDO` → `[OK] 200`)
+- [x] **ACESSO-02**: Login tem campo de senha com alternância exibir/ocultar, checkbox "manter sessão", link "esqueci minha senha" e botão estilo bracket (`[>] ACESSAR SISTEMA` → `[···] AUTENTICANDO` → `[OK] 200`)
 - [x] **ACESSO-03**: Proprietário se cadastra via tela de Cadastro completa (nome, sobrenome, e-mail, telefone com máscara, senha, confirmar senha) com validações (obrigatórios, e-mail válido, telefone ≥10 dígitos, senha ≥6, senhas coincidem) e banner de sucesso "Verifique seu e-mail"
 - [ ] **ACESSO-04**: Tela de Redefinir senha envia link por e-mail e mostra confirmação de sucesso
 
@@ -124,7 +124,7 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | REFINO-04 | Phase 17 | Complete |
 | REFINO-05 | Phase 17 | Complete |
 | ACESSO-01 | Phase 18 | Complete |
-| ACESSO-02 | Phase 18 | Pending |
+| ACESSO-02 | Phase 18 | Complete |
 | ACESSO-03 | Phase 18 | Complete |
 | ACESSO-04 | Phase 18 | Pending |
 | UNID-01 | Phase 19 | Pending |
