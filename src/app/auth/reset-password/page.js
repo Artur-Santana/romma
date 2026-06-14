@@ -64,6 +64,10 @@ function ResetPasswordForm() {
   async function handleEnviarLink(e) {
     e.preventDefault()
     setErro(null)
+    if (!form.email.trim()) {
+      setErro("ERRO_ENVIO")
+      return
+    }
     setStatus("loading")
     const { error } = await supabase.auth.resetPasswordForEmail(form.email, {
       redirectTo: `${window.location.origin}/auth/confirm`,
