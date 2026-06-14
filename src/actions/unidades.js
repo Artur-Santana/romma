@@ -74,12 +74,19 @@ export async function deletarUnidade(id) {
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
 
   const { data: unidade, error: fetchUnidadeErr } = await supabaseAdmin
-    .from('unidades').select('edificio_id').eq('id', id).single()
+    .from('unidades').select('edificio_id, foto_url').eq('id', id).single()
   if (fetchUnidadeErr || !unidade) return { status: 404, erroMessage: 'Unidade não encontrada.' }
 
   const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
     .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
   if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Unidade não encontrada.' }
+
+  if (unidade.foto_url && !unidade.foto_url.startsWith('/')) {
+    await supabaseAdmin.storage
+      .from('unidades-fotos')
+      .remove([unidade.foto_url])
+      .catch(() => {})
+  }
 
   const { error } = await supabaseAdmin.from('unidades').delete().eq('id', id)
   if (error) return { status: 500, erroMessage: error.message }
