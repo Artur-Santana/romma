@@ -68,6 +68,10 @@ export async function GET(request) {
         if (viroupProprietario) {
           return NextResponse.redirect(new URL("/dashboard", request.url))
         }
+        // Promoção falhou (erro transitório de DB, não UNIQUE). Como fallback, tentar
+        // atualizar status_convite caso o email coincida com um locatário pendente
+        // (evita que o convite fique em "pendente" para sempre).
+        await atualizarStatusConvite(data.user.id, data.user.email)
       } else if (type === "invite") {
         await atualizarStatusConvite(data.user.id, data.user.email)
       }
