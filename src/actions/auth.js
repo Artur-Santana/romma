@@ -29,7 +29,10 @@ export async function cadastrarProprietario({ email, senha, nome, sobrenome, tel
     }
   )
 
-  const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+  const siteUrl = process.env.SITE_URL
+  if (!siteUrl) {
+    return { status: 500, erroMessage: "Configuração de servidor incompleta. Contate o administrador." }
+  }
   const { error } = await supabase.auth.signUp({
     email,
     password: senha,
