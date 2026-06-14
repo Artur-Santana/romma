@@ -28,7 +28,7 @@ Cobre UNID-01..05. A infra de Storage (coluna `foto_url`, bucket `unidades-fotos
 ### Upload de Foto & Preview
 - **D-06:** Seleção (arrastar/clicar) gera **preview local via object URL** imediatamente; o upload real só acontece no submit do modal. Evita órfãos de formulários abandonados.
 - **D-07:** Upload feito client-side via `supabase-browser` direto ao bucket privado `unidades-fotos`; a **Server Action grava apenas a string do path** em `unidades.foto_url` (nunca recebe/processa o binário). Validação de MIME `image/*` e tamanho `<2MB` no cliente antes do upload, re-checada na Server Action onde aplicável.
-- **D-08:** Path do objeto no bucket estruturado para resolver a cadeia de propriedade da RLS (segmento por `edificio_id`), ex.: `{edificio_id}/{uuid}.{ext}`. Cadeia de propriedade validada por `edificio.proprietario_id` mantida em toda mutação.
+- **D-08:** Path do objeto no bucket = `{unidade_id}/{uuid}.{ext}`. **Corrigido pela RESEARCH:** a função RLS `storage_unidade_owned_by_auth` (Phase 17) extrai o **primeiro segmento do path como `unidade_id`** (não `edificio_id`) — usar `edificio_id` no 1º segmento bloquearia todos os uploads. Consequência: `criarUnidade` deve **retornar o `id`** da unidade criada para o client montar o path antes do upload (criar unidade → obter id → upload → gravar `foto_url`). Cadeia de propriedade validada por `edificio.proprietario_id` mantida em toda mutação.
 
 ### Foto de Exemplo
 - **D-09:** "Usar foto de exemplo" referencia um **asset estático em `/public`** salvo diretamente em `foto_url` — não passa pelo Storage (sem upload). Simplifica o fluxo de demo.
