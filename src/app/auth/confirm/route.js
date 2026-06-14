@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { cookies } from "next/headers"
 import { createServer } from "@/lib/supabase-server"
 import supabaseAdmin from "@/lib/supabaseAdmin"
 
@@ -50,7 +51,15 @@ export async function GET(request) {
       return NextResponse.redirect(new URL("/login?error=invite_invalid", request.url))
     }
     if (type === "recovery") {
-      return NextResponse.redirect(new URL("/auth/reset-password", request.url))
+      // Após verifyOtp, o Supabase SSR estagiou os cookies de sessão via setAll.
+      // Precisamos copiá-los para o NextResponse.redirect para que o browser
+      // receba a sessão de recovery e o sub-fluxo define-new-password seja ativado.
+      const redirectRes = NextResponse.redirect(new URL("/auth/reset-password", request.url))
+      const cookieStore = await cookies()
+      for (const cookie of cookieStore.getAll()) {
+        redirectRes.cookies.set(cookie.name, cookie.value, cookie)
+      }
+      return redirectRes
     }
     if (data?.user) {
       // Promoção a Proprietário APENAS em signup — nunca em invite ou outros fluxos (CR-01)
@@ -73,9 +82,16 @@ export async function GET(request) {
       return NextResponse.redirect(new URL("/login?error=invite_invalid", request.url))
     }
     if (data?.user) {
-      const viroupProprietario = await tentarRegistrarProprietario(data.user.id, data.user.user_metadata)
-      if (viroupProprietario) {
-        return NextResponse.redirect(new URL("/dashboard", request.url))
+      // type não está disponível no caminho code — inferir papel via user_metadata.
+      // Apenas promover a Proprietário quando user_metadata.nome está presente
+      // (definido por cadastrarProprietario no signUp). Usuários convidados
+      // (locatários) não possuem esses metadados e nunca devem ser promovidos.
+      const meta = data.user.user_metadata ?? {}
+      if (meta.nome) {
+        const viroupProprietario = await tentarRegistrarProprietario(data.user.id, meta)
+        if (viroupProprietario) {
+          return NextResponse.redirect(new URL("/dashboard", request.url))
+        }
       }
       await atualizarStatusConvite(data.user.id, data.user.email)
     }
