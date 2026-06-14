@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
-status: executing
-last_updated: "2026-06-14T09:23:09.576Z"
+status: verifying
+last_updated: "2026-06-14T09:32:20.021Z"
 last_activity: 2026-06-14
 progress:
   total_phases: 9
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
-  completed_plans: 6
-  percent: 11
+  completed_plans: 7
+  percent: 22
 ---
 
 # Project State — Romma
@@ -101,20 +101,24 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 - 2026-06-12: Phase 16 plan 02 complete. MT-03 IDOR closed: authGuard in parcelas.js returns { user }; marcarParcelaComoPaga adds 4-hop ownership pre-check (parcela→contrato→unidade→edificio→proprietario_id); cross-tenant → 404 before update. ESLint clean. Commit 3df8a4c.
 - 2026-06-13: Milestone v1.5 roadmap criado. 9 fases (17-25), 42 requirements mapeados 100% (sem órfãos). Ordem dependency-aware: tokens+infra primeiro (Phase 17), depois passes por área de tela. Novos write paths (foto capa, renovar contrato, portal PIX) com cadeia de propriedade.
 - 2026-06-13: Phase 17 plan 03 complete. 20260601000000_v15_foundation.sql applied to remote vfymttcajeyhrmsyhrtj: proprietarios.nome/sobrenome/telefone + unidades.foto_url + private bucket unidades-fotos + SECURITY DEFINER ownership-chain RLS. next.config.mjs remotePatterns added. Commits c9cad75+188d194+69465a4.
+- 2026-06-14: Phase 18 complete. 4 planos: shared auth components (AuthFrame/AuthAside/CornerBrackets/AuthField/AuthBanner/SubmitButton), auth-form utilities (TDD), /login + /signup redesign, /auth/reset-password redesign + dual sub-flow + role-aware redirect bug-fix + e2e/auth-screens.spec.js (13 tests). ACESSO-01/02/03/04 verified.
 
 ## Key Decisions
 
 - Private bucket (public=false) with SECURITY DEFINER ownership-chain RLS enforces IDOR-safe storage access for unidades-fotos (Phase 17 plan 03)
 - search key omitted from next.config.mjs remotePatterns to allow signed URL ?token= query params (Phase 17 plan 03)
+- Session-based sub-flow detection in reset-password via getSession() on mount — avoids reliance on query params since /auth/confirm already sets recovery session before redirecting (Phase 18 plan 04)
+- Role-aware redirect post-password-reset via rpc(is_proprietario) branch — fixes unconditional /portal/dashboard bug in original reset-password, T-18-12 mitigated (Phase 18 plan 04)
 
 ## Current Position
 
-Phase: 18 (acesso-login-cadastro-redefinir) — EXECUTING
+Phase: 18 (acesso-login-cadastro-redefinir) — COMPLETE
 Plan: 4 of 4
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-06-14
-Last session: 2026-06-14T09:23:09.564Z
+Last session: 2026-06-14T09:32:20.010Z
 
 ## Operator Next Steps
 
-- Execute phase 17 plans 01 and 02 (CSS tokens, mobile scroll, modal backdrop, animation retrofit)
+- Phase 18 complete — verify auth screens UAT (login, signup, reset-password visual + flow)
+- Phase 19: Unidades — Modal Unificado & Foto de Capa
