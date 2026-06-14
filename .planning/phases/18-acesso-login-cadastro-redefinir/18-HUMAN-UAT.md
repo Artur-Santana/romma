@@ -1,10 +1,13 @@
 ---
-status: partial
+status: complete
+superseded_by: 18-UAT.md
 phase: 18-acesso-login-cadastro-redefinir
 source: [18-VERIFICATION.md]
 started: 2026-06-14
 updated: 2026-06-14
 ---
+
+> NOTA: Placeholder inicial dos itens de verificação humana. Substituído por **18-UAT.md** (8/8 pass, conduzido via gsd-browser + confirmação do usuário). Mantido só para histórico.
 
 ## Current Test
 
