@@ -21,6 +21,9 @@ import { cadastrarProprietario } from '@/actions/auth'
 describe('cadastrarProprietario', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // CR-03: SITE_URL é obrigatório — sem ele a action retorna 500.
+    // Definir aqui garante que os testes de happy-path passem.
+    process.env.SITE_URL = 'https://app.example.com'
   })
 
   it('happy path — retorna status 200 com todos os campos válidos', async () => {
@@ -75,6 +78,19 @@ describe('cadastrarProprietario', () => {
   it('erro de validação — email presente mas telefone ausente retorna 400', async () => {
     const result = await cadastrarProprietario({ email: 'a@b.com', senha: 'pass123', nome: 'João', sobrenome: 'Silva', telefone: '' })
     expect(result.status).toBe(400)
+    expect(result.erroMessage).toBeTruthy()
+  })
+
+  it('SITE_URL ausente — retorna 500 com erroMessage de configuração (CR-03)', async () => {
+    delete process.env.SITE_URL
+    const result = await cadastrarProprietario({
+      email: 'a@b.com',
+      senha: 'pass123',
+      nome: 'João',
+      sobrenome: 'Silva',
+      telefone: '11999999999',
+    })
+    expect(result.status).toBe(500)
     expect(result.erroMessage).toBeTruthy()
   })
 
