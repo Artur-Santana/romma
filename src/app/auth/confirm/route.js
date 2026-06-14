@@ -22,10 +22,11 @@ async function atualizarStatusConvite(userId, userEmail) {
 // AUTH-01: Todo signup confirmado vira Proprietário.
 // INSERT só após verifyOtp/exchangeCodeForSession bem-sucedidos (evita registro órfão).
 // Se userId já está na tabela (re-confirmação), INSERT falha silenciosamente — ok.
-async function tentarRegistrarProprietario(userId) {
+async function tentarRegistrarProprietario(userId, userMetadata = {}) {
+  const { nome, sobrenome, telefone } = userMetadata
   const { error: insertError } = await supabaseAdmin
     .from("proprietarios")
-    .insert({ usuario_id: userId })
+    .insert({ usuario_id: userId, nome, sobrenome, telefone })
 
   // UNIQUE violation = usuário já é Proprietário (re-confirmação), tratar como sucesso
   if (insertError && insertError.code !== "23505") return false
@@ -54,7 +55,7 @@ export async function GET(request) {
     if (data?.user) {
       // Promoção a Proprietário APENAS em signup — nunca em invite ou outros fluxos (CR-01)
       if (type === "signup") {
-        const viroupProprietario = await tentarRegistrarProprietario(data.user.id)
+        const viroupProprietario = await tentarRegistrarProprietario(data.user.id, data.user.user_metadata)
         if (viroupProprietario) {
           return NextResponse.redirect(new URL("/dashboard", request.url))
         }
@@ -72,7 +73,7 @@ export async function GET(request) {
       return NextResponse.redirect(new URL("/login?error=invite_invalid", request.url))
     }
     if (data?.user) {
-      const viroupProprietario = await tentarRegistrarProprietario(data.user.id)
+      const viroupProprietario = await tentarRegistrarProprietario(data.user.id, data.user.user_metadata)
       if (viroupProprietario) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
       }

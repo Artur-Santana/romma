@@ -4,9 +4,9 @@ import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 
 // emailRedirectTo usa SITE_URL (env server-only) pois window não está disponível em Server Actions.
-export async function cadastrarProprietario({ email, senha }) {
-  if (!email || !senha) {
-    return { status: 400, erroMessage: "Email e senha são obrigatórios." }
+export async function cadastrarProprietario({ email, senha, nome, sobrenome, telefone }) {
+  if (!email || !senha || !nome || !sobrenome || !telefone) {
+    return { status: 400, erroMessage: "Todos os campos são obrigatórios." }
   }
 
   // Criar conta via cliente Supabase com cookies do browser (necessário para
@@ -34,6 +34,7 @@ export async function cadastrarProprietario({ email, senha }) {
     email,
     password: senha,
     options: {
+      data: { nome, sobrenome, telefone },
       emailRedirectTo: `${siteUrl}/auth/confirm`,
     },
   })
