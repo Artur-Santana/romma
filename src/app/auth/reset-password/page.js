@@ -48,6 +48,7 @@ function ResetPasswordForm() {
   const [form, setForm] = useState({ email: "", senha: "", confirmarSenha: "" })
   const [status, setStatus] = useState("idle")
   const [erro, setErro] = useState(null)
+  const [erroEnvioMsg, setErroEnvioMsg] = useState(null)
   const [showSenha, setShowSenha] = useState(false)
   const [showConfirmar, setShowConfirmar] = useState(false)
   const [focusedField, setFocusedField] = useState(null)
@@ -64,7 +65,9 @@ function ResetPasswordForm() {
   async function handleEnviarLink(e) {
     e.preventDefault()
     setErro(null)
+    setErroEnvioMsg(null)
     if (!form.email.trim()) {
+      setErroEnvioMsg("Informe o e-mail antes de continuar.")
       setErro("ERRO_ENVIO")
       return
     }
@@ -73,6 +76,7 @@ function ResetPasswordForm() {
       redirectTo: `${window.location.origin}/auth/confirm`,
     })
     if (error) {
+      setErroEnvioMsg(error.message || "Ocorreu um erro ao enviar o e-mail. Tente novamente.")
       setErro("ERRO_ENVIO")
       setStatus("idle")
       return
@@ -366,7 +370,7 @@ function ResetPasswordForm() {
           <AuthBanner
             tone="danger"
             code="ERRO_AUTH · 500"
-            body="Ocorreu um erro ao enviar o e-mail. Tente novamente."
+            body={erroEnvioMsg || "Ocorreu um erro ao enviar o e-mail. Tente novamente."}
           />
         </div>
       )}
