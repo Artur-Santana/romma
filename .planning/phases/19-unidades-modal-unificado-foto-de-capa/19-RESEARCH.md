@@ -17,7 +17,7 @@
 - **D-05:** Busca por nome e filtros (status: todos/disponível/alugada; edifício) são filtragem client-side ao vivo, sem round-trip.
 - **D-06:** Preview local via object URL ao selecionar arquivo; upload real só no submit. Evita órfãos de formulários abandonados.
 - **D-07:** Upload feito client-side via `supabase-browser` direto ao bucket privado `unidades-fotos`; Server Action grava apenas a string do path em `unidades.foto_url`. Validação MIME `image/*` e `<2MB` no cliente antes do upload.
-- **D-08:** Path do objeto estruturado como `{edificio_id}/{uuid}.{ext}` para resolver cadeia de propriedade da RLS (primeiro segmento = unidade_id para a função `storage_unidade_owned_by_auth`).
+- **D-08 (CORRIGIDO):** Path do objeto = `{unidade_id}/{uuid}.{ext}` — primeiro segmento = `unidade_id` para a função RLS `storage_unidade_owned_by_auth` (NÃO `edificio_id`; a versão original de D-08 estava errada — ver Pitfall 1). Implica `criarUnidade` retornar o `id`.
 - **D-09:** "Usar foto de exemplo" referencia asset estático em `/public` salvo diretamente em `foto_url` — não passa pelo Storage.
 - **D-10:** `foto_url` armazena path do objeto no Storage (não URL pública). Exibição via `createSignedUrl` on-read. Asset de exemplo exibido direto pelo path público.
 - **D-11:** Remover exige `ConfirmDialog`. Foto órfã deletada do Storage antes do delete no banco, mas delete do DB não bloqueia por falha de cleanup (best-effort).
@@ -552,7 +552,7 @@ const inputRef = useRef(null)
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Cleanup do Storage no delete: client-side ou server-side?**
    - O que sabemos: D-11 diz "best-effort no Storage, log/ignore erro". Server Action já tem `supabaseAdmin` que pode remover do Storage com service_role.
