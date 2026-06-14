@@ -5,7 +5,7 @@ export default function SubmitButton({ isLoad, isSuccess, idleLabel, loadLabel, 
     <div style={{ position: "relative", overflow: "hidden" }}>
       <button
         type="submit"
-        disabled={isLoad}
+        disabled={isLoad || isSuccess}
         style={{
           all: "unset",
           display: "flex",
@@ -14,7 +14,7 @@ export default function SubmitButton({ isLoad, isSuccess, idleLabel, loadLabel, 
           width: "100%",
           padding: "17px 22px",
           background: isSuccess ? "var(--success)" : "var(--primary)",
-          cursor: isLoad ? "default" : "pointer",
+          cursor: isLoad || isSuccess ? "default" : "pointer",
           boxShadow: isLoad || isSuccess ? "none" : "0 0 16px 0 var(--primary-glow)",
           transition: "background var(--dur-base), box-shadow var(--dur-base)",
           boxSizing: "border-box",
