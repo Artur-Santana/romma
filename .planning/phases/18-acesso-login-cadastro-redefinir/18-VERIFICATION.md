@@ -1,7 +1,8 @@
 ---
 phase: 18-acesso-login-cadastro-redefinir
 verified: 2026-06-14T07:00:00Z
-status: human_needed
+status: passed
+human_verification_resolved: "2026-06-14 via 18-UAT.md (8/8 pass; signup→proprietário e reset end-to-end confirmados pelo usuário após config Supabase; bugs A/B + cosmético + onboarding corrigidos)"
 score: 8/8 must-haves verified
 overrides_applied: 0
 human_verification:
