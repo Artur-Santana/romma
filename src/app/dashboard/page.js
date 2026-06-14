@@ -101,7 +101,7 @@ export default async function Dashboard() {
               <p className="text-[18px] text-fg-4 m-0 mb-10">Quatro etapas, zero atalhos. Configure o Romma para começar a gerir suas unidades.</p>
               <div className="border border-border-3">
                 {[
-                  { num: "01", label: "Cadastrar primeiro Edifício", href: "/dashboard/unidades", active: true },
+                  { num: "01", label: "Cadastrar primeiro Edifício", href: "/dashboard/edificios", active: true },
                   { num: "02", label: "Adicionar Unidades",         href: null,                  active: false },
                   { num: "03", label: "Convidar Locatário",         href: null,                  active: false },
                   { num: "04", label: "Criar primeiro Contrato",    href: null,                  active: false },
@@ -134,7 +134,7 @@ export default async function Dashboard() {
               <h3 className="font-display font-bold text-[28px] tracking-[-1.4px] text-fg-1 m-0 mb-2 leading-[1.1]">Construa seu sistema.</h3>
               <p className="text-[13px] text-fg-3 m-0 mb-6">Configure o Romma para começar a gerir suas unidades.</p>
               <Link
-                href="/dashboard/unidades"
+                href="/dashboard/edificios"
                 className="block bg-indigo py-[18px] px-6 no-underline font-mono text-[14px] text-white tracking-[1px] uppercase text-center"
               >
                 Cadastrar Edifício →
