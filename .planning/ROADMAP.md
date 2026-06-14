@@ -109,7 +109,11 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
   3. O Proprietário cria e edita unidade pelo mesmo modal unificado (edifício, nome, área, valor mensal, status, descrição, checkbox "exibir valor publicamente")
   4. O Proprietário adiciona foto de capa (arrastar/clicar → preview, "usar foto de exemplo", trocar/remover); o upload persiste no bucket privado via supabase-browser e a URL é salva em `unidades.foto_url` (Server Action grava só a string; cadeia de propriedade por `edificio.proprietario_id` mantida; validação de MIME image/* e tamanho <2MB)
   5. Remover unidade exige modal de confirmação e a foto órfã é removida do Storage antes do delete no banco (DB delete não bloqueia por falha de cleanup)
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 19-01-PLAN.md — Server-action + query layer: criarUnidade retorna id, editar/deletar foto_url, cleanup best-effort, getUnidades SELECT
+  - [ ] 19-02-PLAN.md — Wave-0 E2E scaffold (modal flow, métricas/busca/ConfirmDialog) + asset /public/images/unidade-exemplo.jpg
+  - [ ] 19-03-PLAN.md — UnifiedUnidadeModal + CoverPhotoField: campos, upload 3-step, signed-URL preview, validação MIME/<2MB
+  - [ ] 19-04-PLAN.md — Refactor Unidades.js (métricas + filtros + modal + ConfirmDialog) + UnidadeCard Variant-B signed-URL
 **UI hint**: yes
 
 ### Phase 20: Edifícios — Cards & Drill-in
@@ -192,7 +196,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 |-------|----------------|--------|-----------|
 | 17. Fundação — Tokens, Mobile/Modal Fixes & Infra | 3/3 | Complete   | 2026-06-13 |
 | 18. Acesso — Login / Cadastro / Redefinir | 4/4 | Complete    | 2026-06-14 |
-| 19. Unidades — Modal Unificado & Foto de Capa | 0/TBD | Not started | - |
+| 19. Unidades — Modal Unificado & Foto de Capa | 0/4 | Not started | - |
 | 20. Edifícios — Cards & Drill-in | 0/TBD | Not started | - |
 | 21. Dashboard — Visão Geral Editorial | 0/TBD | Not started | - |
 | 22. Contratos & Parcelas — Renovação | 0/TBD | Not started | - |
