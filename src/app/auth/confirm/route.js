@@ -5,18 +5,25 @@ import supabaseAdmin from "@/lib/supabaseAdmin"
 
 async function atualizarStatusConvite(userId, userEmail) {
   // UPDATE primário por usuario_id (retorna linhas afetadas)
-  const { data: rows } = await supabaseAdmin
+  const { data: rows, error: errPrimary } = await supabaseAdmin
     .from("locatarios")
     .update({ status_convite: "aceito" })
     .eq("usuario_id", userId)
     .select("id")
 
+  if (errPrimary) {
+    console.error("[auth/confirm] atualizarStatusConvite primary update error:", errPrimary)
+  }
+
   // Fallback por email quando UPDATE primário não afeta linhas (locatário existe mas usuario_id ainda não vinculado)
   if (!rows || rows.length === 0) {
-    await supabaseAdmin
+    const { error: errFallback } = await supabaseAdmin
       .from("locatarios")
       .update({ status_convite: "aceito", usuario_id: userId })
       .eq("email", userEmail)
+    if (errFallback) {
+      console.error("[auth/confirm] atualizarStatusConvite fallback update error:", errFallback)
+    }
   }
 }
 
