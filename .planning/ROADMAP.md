@@ -59,7 +59,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 
 - [x] **Phase 17: Fundação — Tokens, Mobile/Modal Fixes & Infra** - Escala tipográfica + densidade em globals.css, fixes cross-cutting de scroll/modal/animação nas cascas base, migrações de schema, Storage bucket privado, remotePatterns (completed 2026-06-13)
 - [x] **Phase 18: Acesso — Login / Cadastro / Redefinir** - Split-panel, show/hide senha, manter sessão, máscara telefone, cadastro completo de Proprietário, redefinir senha (completed 2026-06-14)
-- [ ] **Phase 19: Unidades — Modal Unificado & Foto de Capa** - Métricas-resumo, busca/filtros, modal único criar/editar, upload de foto via Storage, confirmação de remoção com cleanup
+- [x] **Phase 19: Unidades — Modal Unificado & Foto de Capa** - Métricas-resumo, busca/filtros, modal único criar/editar, upload de foto via Storage, confirmação de remoção com cleanup (completed 2026-06-14)
 - [ ] **Phase 20: Edifícios — Cards & Drill-in** - Cards 2 colunas, stats por edifício, barra de ocupação contígua, drill-in clicável reusando o modal de unidade
 - [ ] **Phase 21: Dashboard — Visão Geral Editorial** - Bloco de ocupação em destaque, gráfico de fluxo de caixa, contratos recentes/parcelas + atalhos rápidos
 - [ ] **Phase 22: Contratos & Parcelas — Renovação** - Busca/filtro vencendo, countdown, progresso, arquivo de encerrados, timeline de parcelas, registrar pagamento, renovar contrato (append)
@@ -113,7 +113,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
   - [x] 19-01-PLAN.md — Server-action + query layer: criarUnidade retorna id, editar/deletar foto_url, cleanup best-effort, getUnidades SELECT
   - [x] 19-02-PLAN.md — Wave-0 E2E scaffold (modal flow, métricas/busca/ConfirmDialog) + asset /public/images/unidade-exemplo.jpg
   - [x] 19-03-PLAN.md — UnifiedUnidadeModal + CoverPhotoField: campos, upload 3-step, signed-URL preview, validação MIME/<2MB
-  - [ ] 19-04-PLAN.md — Refactor Unidades.js (métricas + filtros + modal + ConfirmDialog) + UnidadeCard Variant-B signed-URL
+  - [x] 19-04-PLAN.md — Refactor Unidades.js (métricas + filtros + modal + ConfirmDialog) + UnidadeCard Variant-B signed-URL
 **UI hint**: yes
 
 ### Phase 20: Edifícios — Cards & Drill-in
@@ -196,7 +196,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 |-------|----------------|--------|-----------|
 | 17. Fundação — Tokens, Mobile/Modal Fixes & Infra | 3/3 | Complete   | 2026-06-13 |
 | 18. Acesso — Login / Cadastro / Redefinir | 4/4 | Complete    | 2026-06-14 |
-| 19. Unidades — Modal Unificado & Foto de Capa | 3/4 | In Progress|  |
+| 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-14 |
 | 20. Edifícios — Cards & Drill-in | 0/TBD | Not started | - |
 | 21. Dashboard — Visão Geral Editorial | 0/TBD | Not started | - |
 | 22. Contratos & Parcelas — Renovação | 0/TBD | Not started | - |
