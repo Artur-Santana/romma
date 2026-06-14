@@ -68,7 +68,7 @@ function ResetPasswordForm() {
     setErroEnvioMsg(null)
     if (!form.email.trim()) {
       setErroEnvioMsg("Informe o e-mail antes de continuar.")
-      setErro("ERRO_ENVIO")
+      setErro("VALIDACAO")
       return
     }
     setStatus("loading")
@@ -365,11 +365,11 @@ function ResetPasswordForm() {
         </div>
       )}
 
-      {erro === "ERRO_ENVIO" && (
+      {(erro === "ERRO_ENVIO" || erro === "VALIDACAO") && (
         <div style={{ marginBottom: 24 }}>
           <AuthBanner
-            tone="danger"
-            code="ERRO_AUTH · 500"
+            tone={erro === "VALIDACAO" ? "warning" : "danger"}
+            code={erro === "VALIDACAO" ? "ENTRADA · INVÁLIDA" : "ERRO_AUTH · 500"}
             body={erroEnvioMsg || "Ocorreu um erro ao enviar o e-mail. Tente novamente."}
           />
         </div>
