@@ -84,9 +84,9 @@ pending: 0
   missing: [dashboard Supabase: Redirect URLs com http://localhost:3000/**, Site URL=http://localhost:3000]
 
 - truth: "Banner de validação client-side deve indicar erro de cliente, não de servidor"
-  status: open
-  reason: "Em /auth/reset-password, submeter email vazio mostra banner 'ERRO_AUTH · 500 — Informe o e-mail antes de continuar.' O guard funciona (não dispara request), mas o rótulo '· 500' é estilo de erro de servidor para validação client-side. Enganoso."
+  status: resolved
+  reason: "CORRIGIDO (commit 72acd52). Empty-email agora usa erro 'VALIDACAO' → AuthBanner tone=warning, code 'ENTRADA · INVÁLIDA' (sem '· 500'). Verificado ao vivo via gsd-browser: banner mostra 'ENTRADA · INVÁLIDA — Informe o e-mail antes de continuar.'"
   severity: cosmetic
   test: 6
   artifacts: [src/app/auth/reset-password/page.js]
-  missing: [tom/código de banner client-side distinto de erro 500]
+  missing: []
