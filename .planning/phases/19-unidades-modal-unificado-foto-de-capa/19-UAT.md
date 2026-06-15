@@ -63,4 +63,19 @@ note: tests 5 e 7 com follow-up manual para o lado de mutação (upload real / d
 
 ## Gaps
 
-[none — nenhum defeito de código encontrado nas verificações visuais]
+Usuário reportou 3 issues em UAT manual (15/06) — todos diagnosticados ao vivo (gsd-browser) e corrigidos no commit `3154bb6`:
+
+- gap: "Cards sem imagem têm metade da altura dos com imagem → buracos no grid."
+  root_cause: UnidadeCard só renderizava o bloco de capa quando havia foto.
+  fix: capa sempre renderizada (altura fixa 140); placeholder `/images/unidade-exemplo.jpg` dimmed + label "Sem foto" quando não há foto.
+  status: fixed (verificado — /tmp/uat19/fix1-cards.png).
+
+- gap: "Apagar card não atualiza a lista."
+  root_cause: delete de unidade COM contratos viola FK `contratos_unidade_id_fkey` (Postgres 23503); deletarUnidade retornava erro cru e a UI não surfaceava de forma visível → parecia "nada acontece". (Delete de unidade SEM contrato sempre atualizou a lista in-place — confirmado com Sala 302.)
+  fix: deletarUnidade trata 23503 → 409 com mensagem amigável; Unidades mostra via toast.error.
+  status: fixed (verificado — toast "...possui contratos vinculados..." em /tmp/uat19/fix2-toast-final.png).
+
+- gap: "Ao adicionar imagem aparece placeholder e preciso clicar na imagem para então selecionar (não intuitivo)."
+  root_cause: o link "ou usar foto de exemplo" competia com o alvo de upload; além disso o exemplo só setava preview, nunca `form.foto_url` (não salvava).
+  fix: botão primário "Selecionar imagem" (abre picker direto) + exemplo demovido a link secundário; exemplo agora persiste em `form.foto_url`.
+  status: fixed (verificado — /tmp/uat19/fix3-modal.png).
