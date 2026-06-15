@@ -237,7 +237,7 @@ Plans:
 | 17. Fundação — Tokens, Mobile/Modal Fixes & Infra | 3/3 | Complete   | 2026-06-13 |
 | 18. Acesso — Login / Cadastro / Redefinir | 4/4 | Complete    | 2026-06-14 |
 | 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-15 |
-| 20. Edifícios — Cards & Drill-in | 2/2 | Complete   | 2026-06-15 |
+| 20. Edifícios — Cards & Drill-in | 2/2 | Complete    | 2026-06-15 |
 | 21. Dashboard — Visão Geral Editorial | 0/TBD | Not started | - |
 | 22. Contratos & Parcelas — Renovação | 0/TBD | Not started | - |
 | 23. Locatários — Busca & Máscaras | 0/TBD | Not started | - |
