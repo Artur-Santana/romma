@@ -144,9 +144,14 @@ export default async function Dashboard() {
               <h2 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Visão Geral.</h2>
             </div>
 
-            {/* Métricas ghosted */}
+            {/* Métricas ghosted — static 4 cells (empty state, no data) */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }} className="border border-border-3 mb-12">
-              {metricas.map((m, i) => (
+              {[
+                { idx: "01", label: "Ocupação" },
+                { idx: "02", label: "MRR" },
+                { idx: "03", label: "Receita Esperada" },
+                { idx: "04", label: "Vencendo em 7 dias" },
+              ].map((m, i) => (
                 <div key={m.idx} className={cn("p-7 relative", i < 3 ? "border-r border-border-3" : "")}>
                   <span className="font-mono absolute top-4 right-4 text-[9px] text-fg-5">{m.idx}</span>
                   <div className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase mb-3">{m.label}</div>
@@ -230,20 +235,60 @@ export default async function Dashboard() {
             <RealtimeDot label="REALTIME · GRID.OS.ALPHA" />
           </div>
 
-          {/* Metrics Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }} className="border border-border-3 mb-12">
-            {metricas.map((m, i) => (
-              <div key={m.idx} className={cn(
-                "p-7 flex flex-col gap-2 relative",
-                i < 3 ? "border-r border-border-3" : "",
-                m.warn ? "bg-warning-bg" : "bg-transparent"
-              )}>
-                <span className="font-mono absolute top-4 right-4 text-[9px] text-fg-5">{m.idx}</span>
-                <div className={cn("font-mono text-[11px] tracking-[1px] uppercase", m.warn ? "text-warning" : "text-fg-4")}>{m.label}</div>
-                <div className={cn("font-display font-bold text-[48px] leading-none tracking-[-2.4px]", m.warn ? "text-warning" : "text-fg-1")}>{m.value}</div>
-                <div className={cn("font-mono text-[11px]", m.warn ? "text-warning" : "text-fg-4")}>{m.sub}</div>
+          {/* Hero Grid — Variant B: 1.55fr occupancy + 1fr stacked metrics */}
+          <div style={{ display: "grid", gridTemplateColumns: "1.55fr 1fr", gap: "var(--rd-block-sm)" }} className="mb-12">
+            {/* Left: occupancy hero + OccupancyBar + divider + CashFlowChart */}
+            <div className="bg-surface border border-border-3" style={{ padding: "var(--rd-panel)" }}>
+              <div className="flex justify-between items-start mb-[18px]">
+                <div>
+                  <span className="eyebrow eyebrow--indigo mb-2">Taxa de Ocupação</span>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+                    <span className="r-metric" style={{ fontSize: 56 }}>{pctOcupacao}%</span>
+                    <span className="r-data" style={{ color: "var(--fg-4)" }}>{alugadas}/{unidades.length} unidades</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="eyebrow mb-2">Disponíveis</span>
+                  <span className="r-metric" style={{ fontSize: 34, color: "var(--success)" }}>{disponiveis}</span>
+                </div>
               </div>
-            ))}
+              <OccupancyBar alugadas={alugadas} total={unidades.length} />
+              <div style={{ height: 1, background: "var(--border-3)", margin: "20px 0 18px" }} />
+              <div className="flex justify-between items-center mb-[14px]">
+                <span className="r-eyebrow gold">Previsão de Fluxo · 2026</span>
+              </div>
+              <div data-testid="cashflow-chart">
+                <CashFlowChart fluxo={fluxoData} height={130} testId="cashflow-chart" />
+              </div>
+            </div>
+            {/* Right: stacked metrics 02, 03, 04 */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--rd-block-sm)" }}>
+              <div className="border border-border-3" style={{ display: "grid", gridTemplateRows: "1fr 1fr" }}>
+                {/* MetricCell 02 — MRR */}
+                <div className="border-b border-border-3 p-7 flex flex-col gap-2 relative">
+                  <span className="font-mono absolute top-4 right-4 text-[9px] text-fg-5">02</span>
+                  <div className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase">MRR</div>
+                  <div className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1">
+                    {mrr >= 1000 ? `R$${(mrr/1000).toFixed(1)}k` : fmtBRL(mrr)}
+                  </div>
+                  <div className="font-mono text-[11px] text-fg-4">{ativos} contrato(s) ativo(s)</div>
+                </div>
+                {/* MetricCell 03 — Receita Esperada */}
+                <div className="p-7 flex flex-col gap-2 relative">
+                  <span className="font-mono absolute top-4 right-4 text-[9px] text-fg-5">03</span>
+                  <div className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase">Receita Esperada</div>
+                  <div className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1">{fmtBRL(totalPendente)}</div>
+                  <div className="font-mono text-[11px] text-fg-4">{parcelas.length} parcela(s) em aberto</div>
+                </div>
+              </div>
+              {/* MetricCell 04 — Vencendo em 7 dias */}
+              <div className="border border-border-3 bg-warning-bg p-7 flex flex-col gap-2 relative">
+                <span className="font-mono absolute top-4 right-4 text-[9px] text-fg-5">04</span>
+                <div className="font-mono text-[11px] text-warning tracking-[1px] uppercase">Vencendo em 7 dias</div>
+                <div className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-warning">{vencendoContratos.length}</div>
+                <div className="font-mono text-[11px] text-warning">{vencendoContratos.length} contrato(s)</div>
+              </div>
+            </div>
           </div>
 
           {/* Vencendo Banner */}
