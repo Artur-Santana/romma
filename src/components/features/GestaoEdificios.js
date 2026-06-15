@@ -328,15 +328,35 @@ export default function GestaoEdificios() {
                     <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
                       <button
                         onClick={() => handleEditar(edificio)}
-                        style={{ all: "unset", cursor: "pointer" }}
-                        className="font-mono text-[10px] tracking-[1px] uppercase text-fg-3 px-3 py-1.5 border border-border-3 hover:text-fg-1 hover:border-border-1"
+                        style={{
+                          all: "unset",
+                          cursor: "pointer",
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 10,
+                          letterSpacing: "1px",
+                          textTransform: "uppercase",
+                          color: "var(--fg-3)",
+                          padding: "7px 13px",
+                          border: "1px solid var(--fg-5)",
+                        }}
+                        className="hover:text-fg-1"
                       >
                         Editar
                       </button>
                       <button
                         onClick={() => handleDeletar(edificio.id)}
-                        style={{ all: "unset", cursor: "pointer" }}
-                        className="font-mono text-[10px] tracking-[1px] uppercase text-danger-fg px-3 py-1.5 border border-danger-fg hover:bg-[var(--danger-bg2)]"
+                        style={{
+                          all: "unset",
+                          cursor: "pointer",
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 10,
+                          letterSpacing: "1px",
+                          textTransform: "uppercase",
+                          color: "var(--danger-fg)",
+                          padding: "7px 13px",
+                          border: "1px solid var(--danger-fg)",
+                        }}
+                        className="hover:bg-[var(--danger-bg2)]"
                       >
                         Remover
                       </button>
@@ -347,7 +367,7 @@ export default function GestaoEdificios() {
                   <div style={{ display: "flex", gap: 36, marginTop: 22, flexWrap: "wrap" }}>
                     {[
                       { l: "Ocupação", v: `${stats.ocupacaoPct}%`, gold: false },
-                      { l: "MRR", v: fmtBRLk(stats.mrr), gold: true },
+                      { l: "MRR", v: fmtBRLk(stats.mrr), gold: false },
                       { l: "Área total", v: `${stats.areaTotal} m²`, gold: false },
                       { l: "Unidades", v: stats.total, gold: false },
                     ].map((m) => (
@@ -403,55 +423,102 @@ export default function GestaoEdificios() {
                         gap: 6,
                       }}
                     >
-                      <span style={{ fontSize: 12 }}>{isExpanded ? "⌄" : "›"}</span>
-                      {`Ver ${n} unidade${n !== 1 ? "s" : ""}`}
+                      <span style={{ fontSize: 12 }}>{isExpanded ? "⌃" : "›"}</span>
+                      {isExpanded ? "Ocultar unidades" : `Ver ${n} unidade${n !== 1 ? "s" : ""}`}
                     </button>
                   </div>
 
                   {/* Accordion Panel */}
                   {isExpanded && (
-                    <div style={{ marginTop: 16 }}>
-                      {lista.map((u) => (
-                        <div
-                          key={u.id}
-                          data-testid="unidade-row"
-                          onClick={() => setModalState({ unidade: u })}
-                          style={{
-                            padding: "12px 16px",
-                            cursor: "pointer",
-                            borderTop: "1px solid var(--border-3)",
-                            background: "transparent",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            transition: "background var(--dur-fast)",
-                          }}
-                          onMouseEnter={e => e.currentTarget.style.background = "var(--surface-hi)"}
-                          onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                        >
-                          <span style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 13, color: "var(--fg-1)" }}>
-                            {u.nome}
-                          </span>
-                          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                            <span style={{
-                              fontFamily: "var(--font-mono)",
-                              fontSize: 9.5,
-                              letterSpacing: "0.5px",
-                              textTransform: "uppercase",
-                              padding: "3px 7px",
-                              background: u.status === "alugada"
-                                ? "oklch(0.339 0.179 301.68 / 0.4)"
-                                : "oklch(0.696 0.17 162.5 / 0.15)",
-                              color: u.status === "alugada" ? "var(--fg-1)" : "var(--success)",
-                            }}>
-                              {u.status === "alugada" ? "Alugada" : "Disponível"}
-                            </span>
-                            <span className="r-meta" style={{ color: "var(--fg-4)" }}>
-                              {u.area_m2 ? `${u.area_m2} m²` : "—"}
-                            </span>
+                    <div style={{ marginTop: 16, borderTop: "1px solid var(--border-3)" }}>
+                      {lista.map((u) => {
+                        const alugada = u.status === "alugada"
+                        return (
+                          <div
+                            key={u.id}
+                            data-testid="unidade-row"
+                            onClick={() => setModalState({ unidade: u })}
+                            style={{
+                              padding: "14px 14px",
+                              cursor: "pointer",
+                              borderBottom: "1px solid var(--border-3)",
+                              background: "transparent",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              gap: 16,
+                              transition: "background var(--dur-fast)",
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = "var(--surface-hi)"}
+                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                          >
+                            {/* Left — name + description */}
+                            <div style={{ minWidth: 0 }}>
+                              <div style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 13, color: "var(--fg-1)" }}>
+                                {u.nome}
+                              </div>
+                              {u.descricao && (
+                                <div style={{
+                                  fontFamily: "var(--font-mono)",
+                                  fontSize: 11,
+                                  color: "var(--fg-4)",
+                                  marginTop: 3,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  maxWidth: 260,
+                                }}>
+                                  {u.descricao}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Right — area · value · pill · Editar */}
+                            <div style={{ display: "flex", gap: 14, alignItems: "center", flexShrink: 0 }}>
+                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)" }}>
+                                {u.area_m2 ? `${u.area_m2} m²` : "—"}
+                              </span>
+                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-1)" }}>
+                                {u.valor_visivel === false
+                                  ? "—"
+                                  : `R$ ${(parseFloat(u.valor_mensal) || 0).toLocaleString("pt-BR")}`}
+                              </span>
+                              <span style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 6,
+                                fontFamily: "var(--font-mono)",
+                                fontSize: 9.5,
+                                letterSpacing: "0.5px",
+                                textTransform: "uppercase",
+                                padding: "4px 8px",
+                                background: alugada
+                                  ? "color-mix(in oklch, var(--color-primary-hover) 20%, transparent)"
+                                  : "color-mix(in oklch, var(--success) 16%, transparent)",
+                                color: alugada ? "var(--color-primary-hover)" : "var(--success)",
+                              }}>
+                                <span style={{
+                                  width: 7, height: 7, flexShrink: 0,
+                                  background: alugada ? "var(--color-primary-hover)" : "var(--success)",
+                                }} />
+                                {alugada ? "Alugada" : "Disponível"}
+                              </span>
+                              <span style={{
+                                fontFamily: "var(--font-mono)",
+                                fontSize: 10.5,
+                                letterSpacing: "0.5px",
+                                textTransform: "uppercase",
+                                color: "var(--indigo)",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 5,
+                              }}>
+                                Editar <span style={{ fontSize: 12 }}>→</span>
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </>
