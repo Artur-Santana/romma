@@ -61,20 +61,20 @@ Source: CONTEXT.md decisions D-05/D-06/D-08/D-11, `overview.jsx` line references
 
 ## Typography
 
-The project uses a fixed 8-level type scale via `--rt-*` tokens. This phase uses 5 of the 8 levels. Two font families; two weights.
+The project uses a fixed 8-level type scale via `--rt-*` tokens. This phase uses 5 of the 8 levels. Two font families; two active weights introduced by Phase 21 (700 and 400).
 
 | Role | Class / Token | Size | Weight | Line Height | Usage in this phase |
 |------|---------------|------|--------|-------------|---------------------|
 | Display / metric | `.r-metric` + `fontSize: 56` override | 56px | 700 | 1 | Occupancy % numeral (hero panel) |
 | Display / metric | `.r-metric` (default `--rt-metric: 40px`) | 40px | 700 | 1 | Stacked right metric values (MRR, Receita Esperada, Vencendo count) |
 | Section heading | `.r-section` (`--rt-section: 20px`) | 20px | 700 | 1.05 | "Contratos Recentes", "Parcelas" section headers |
-| Body / data row | `.r-subhead` (`--rt-subhead: 16px`) | 16px | 600 | 1.2 | Locatário names in contratos table, parcelas list |
+| Body / data row | `.r-subhead` (`--rt-subhead: 16px`) | 16px | 600 | 1.2 | Locatário names in contratos table, parcelas list (preserved — not modified in Phase 21) |
 | Label / mono | `.r-label` (`--rt-label: 11px`) | 11px | 700 | — | Table column headers ("Locatário · Unidade", "Valor mensal" etc.) |
 | Data mono | `.r-data` (`--rt-data: 14px`) | 14px | 400 | — | Valor mensal, data_fim, BRL values in table rows |
 | Eyebrow | `.r-eyebrow` / `.eyebrow` (`--rt-meta: 10px`) | 10px | 700 | — | Section eyebrows ("SISTEMA.01", "CONSOLE.OS", "FLUXO · PREVISÃO 2026") |
 | Meta | `.r-meta` (`--rt-meta: 10px`, `fontSize: 9` for chart labels) | 10px / 9px | 400 | — | Month abbreviations in chart, sub-labels, operator line |
 
-Active font weights in this phase: **700 (bold)** and **400 (regular)** only. Weight 600 via `.r-subhead` and existing quick-action labels (`font-semibold`).
+Active font weights introduced by Phase 21: **700 (bold)** and **400 (regular)** only (2 weights). Weight 600 (`font-semibold`) appears in existing `.r-subhead` usage and quick-action labels — both are preserved verbatim from prior phases and are NOT modified in Phase 21. Phase 21 introduces no new weight-600 usage.
 
 Source: `globals.css` lines 419-427, `overview.jsx` lines 63-67 / 233, existing `page.js` class patterns.
 
