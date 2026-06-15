@@ -1,7 +1,7 @@
 ---
 phase: 19-unidades-modal-unificado-foto-de-capa
 verified: 2026-06-14T23:30:00Z
-status: human_needed
+status: passed
 score: 5/5 must-haves verified
 overrides_applied: 0
 human_verification:
@@ -29,7 +29,7 @@ human_verification:
 
 **Phase Goal:** O Proprietário gerencia Unidades numa grade de cards com métricas-resumo, busca e filtros, criando/editando por um único modal unificado (UnifiedUnidadeModal) que inclui upload de foto de capa persistida no Storage privado. Remoção exige confirmação e limpa foto órfã.
 **Verified:** 2026-06-14T23:30:00Z
-**Status:** human_needed
+**Status:** passed (UAT 7/7 — visual + manual confirmation 15/06)
 **Re-verification:** No — initial verification
 
 ---

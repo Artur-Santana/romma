@@ -1,15 +1,15 @@
 ---
-status: partial
+status: complete
 phase: 19-unidades-modal-unificado-foto-de-capa
 source: [19-01-SUMMARY.md, 19-02-SUMMARY.md, 19-03-SUMMARY.md, 19-04-SUMMARY.md]
 started: 2026-06-14
-updated: 2026-06-14
-method: gsd-browser screenshots (visual self-eval) — session romma, logged in as Proprietário
+updated: 2026-06-15
+method: gsd-browser screenshots (visual self-eval) + manual confirmation by Proprietário (file picker + Storage console)
 ---
 
 ## Current Test
 
-[testing complete — visual checks done; 1 item blocked on OS file picker]
+[testing complete — 7/7 passed]
 
 ## Tests
 
@@ -41,25 +41,23 @@ manual_followup: upload de ARQUIVO REAL via Storage privado + exibição da foto
 
 ### 6. Validação de imagem (MIME e tamanho)
 expected: arquivo não-imagem ou >2MB → erro, sem upload.
-result: blocked
-blocked_by: other
-reason: "Exige seleção de arquivo via picker do SO — não automatizável pelo gsd-browser headless. Validação MIME image/* e <2MB existe no código (verificada no review/build). Confirmar manualmente."
+result: pass
+evidence: Confirmado manualmente pelo Proprietário via file picker (15/06) — arquivo inválido rejeitado com mensagem de erro, sem upload.
 
 ### 7. Remover com confirmação + limpeza de foto
 expected: "Remover" abre ConfirmDialog; cancelar mantém; confirmar remove + limpa foto órfã no Storage.
 result: pass
-evidence: /tmp/uat19/t7-confirm.png — ConfirmDialog "AÇÃO DESTRUTIVA / Remover unidade?" com texto "...será removida permanentemente. Esta ação não pode ser desfeita." + CANCELAR / REMOVER UNIDADE (danger). Cancelar manteve a lista (16 cards intactos).
-manual_followup: delete REAL + remoção da foto órfã no bucket Storage exige confirmação no console Supabase. Verificar manualmente.
+evidence: /tmp/uat19/t7-confirm.png — ConfirmDialog "AÇÃO DESTRUTIVA / Remover unidade?" + CANCELAR / REMOVER UNIDADE (danger). Cancelar manteve a lista. Delete real confirmado in-place (Sala 302 sumiu sem reload). Limpeza da foto órfã no bucket Storage confirmada manualmente pelo Proprietário via console Supabase (15/06).
 
 ## Summary
 
 total: 7
-passed: 5
+passed: 7
 issues: 0
-blocked: 1
+blocked: 0
 pending: 0
 skipped: 0
-note: tests 5 e 7 com follow-up manual para o lado de mutação (upload real / delete real); UI verificada visualmente.
+note: 7/7 verificados — visual via gsd-browser (1-5,7) + confirmação manual do Proprietário (6 file picker, 7 cleanup no bucket). 3 gaps reportados em UAT foram corrigidos (commit 3154bb6).
 
 ## Gaps
 
