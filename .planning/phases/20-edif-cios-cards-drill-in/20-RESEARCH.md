@@ -556,7 +556,7 @@ Step 2.6: SKIPPED (no external dependencies — pure frontend restructure, no ne
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Inline edit form inside 2-col card layout**
    - What we know: The current edit form expands inline within each list row. In a 2-column card grid, the inline edit form needs to fit inside its card without breaking grid layout.
