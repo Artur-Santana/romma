@@ -461,8 +461,13 @@
 @keyframes rBar     { 0% { transform: translateX(-100%); } 100% { transform: translateX(260%); } }
 @keyframes rSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes rGrow    { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes rGrowY   { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 
 /* Entrance fade — base state is VISIBLE; animation plays in only (no fill:both) */
 .r-fade { animation: rFade var(--dur-base) var(--ease-crisp); }
 @media (prefers-reduced-motion: reduce) { .r-fade, .romma-page { animation: none; } }
 @media print { .r-fade, .romma-page { animation: none; } }
+
+/* Chart bar animations — vertical grow with reduced-motion + print guards */
+@media (prefers-reduced-motion: reduce) { .chart-bar { animation: none !important; } }
+@media print { .chart-bar { animation: none !important; } }
