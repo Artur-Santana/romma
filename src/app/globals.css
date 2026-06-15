@@ -471,3 +471,24 @@
 /* Chart bar animations — vertical grow with reduced-motion + print guards */
 @media (prefers-reduced-motion: reduce) { .chart-bar { animation: none !important; } }
 @media print { .chart-bar { animation: none !important; } }
+
+/* Cash-flow chart column hover tooltip */
+.chart-col .chart-tooltip {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-hi);
+  border: 1px solid var(--border-3);
+  padding: 7px 10px;
+  white-space: nowrap;
+  z-index: 20;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-3);
+  line-height: 1.8;
+}
+.chart-col:hover .chart-tooltip { opacity: 1; }
