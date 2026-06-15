@@ -196,7 +196,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 |-------|----------------|--------|-----------|
 | 17. Fundação — Tokens, Mobile/Modal Fixes & Infra | 3/3 | Complete   | 2026-06-13 |
 | 18. Acesso — Login / Cadastro / Redefinir | 4/4 | Complete    | 2026-06-14 |
-| 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-14 |
+| 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-15 |
 | 20. Edifícios — Cards & Drill-in | 0/TBD | Not started | - |
 | 21. Dashboard — Visão Geral Editorial | 0/TBD | Not started | - |
 | 22. Contratos & Parcelas — Renovação | 0/TBD | Not started | - |
