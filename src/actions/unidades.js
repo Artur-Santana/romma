@@ -19,7 +19,7 @@ export async function criarUnidade(form) {
   const { err, user } = await authGuard()
   if (err) return err
 
-  const { nome, descricao, area_m2, valor_mensal, status, valor_visivel, edificio_id } = form
+  const { nome, descricao, area_m2, valor_mensal, status, valor_visivel, edificio_id, foto_url } = form
   if (!nome?.trim()) return { status: 400, erroMessage: 'Nome é obrigatório.' }
   if (!UUID_RE.test(edificio_id)) return { status: 400, erroMessage: 'Edifício inválido.' }
   if (isNaN(parseFloat(area_m2)) || parseFloat(area_m2) <= 0) return { status: 400, erroMessage: 'Área inválida.' }
@@ -30,12 +30,13 @@ export async function criarUnidade(form) {
     .from('edificios').select('id').eq('id', edificio_id).eq('proprietario_id', user.id).single()
   if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Edifício não encontrado.' }
 
-  const { error } = await supabaseAdmin.from('unidades').insert({
+  const { data, error } = await supabaseAdmin.from('unidades').insert({
     nome: nome.trim(), descricao, area_m2, valor_mensal,
-    status, valor_visivel: Boolean(valor_visivel), edificio_id
-  })
+    status, valor_visivel: Boolean(valor_visivel), edificio_id,
+    foto_url: foto_url ?? null,
+  }).select('id').single()
   if (error) return { status: 500, erroMessage: error.message }
-  return { status: 200 }
+  return { status: 200, id: data.id }
 }
 
 export async function editarUnidade(id, form) {
@@ -52,13 +53,14 @@ export async function editarUnidade(id, form) {
     .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
   if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Unidade não encontrada.' }
 
-  const { nome, descricao, area_m2, valor_mensal, status, valor_visivel } = form
+  const { nome, descricao, area_m2, valor_mensal, status, valor_visivel, foto_url } = form
   if (nome !== undefined && !nome?.trim()) return { status: 400, erroMessage: 'Nome é obrigatório.' }
   if (status !== undefined && !STATUS_UNIDADE.includes(status)) return { status: 400, erroMessage: 'Status inválido.' }
 
   const patch = { descricao, area_m2, valor_mensal, status }
   if (nome !== undefined) patch.nome = nome.trim()
   if (valor_visivel !== undefined) patch.valor_visivel = Boolean(valor_visivel)
+  if (foto_url !== undefined) patch.foto_url = foto_url
 
   const { error } = await supabaseAdmin.from('unidades').update(patch).eq('id', id)
   if (error) return { status: 500, erroMessage: error.message }
@@ -72,14 +74,28 @@ export async function deletarUnidade(id) {
   if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
 
   const { data: unidade, error: fetchUnidadeErr } = await supabaseAdmin
-    .from('unidades').select('edificio_id').eq('id', id).single()
+    .from('unidades').select('edificio_id, foto_url').eq('id', id).single()
   if (fetchUnidadeErr || !unidade) return { status: 404, erroMessage: 'Unidade não encontrada.' }
 
   const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
     .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
   if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Unidade não encontrada.' }
 
+  if (unidade.foto_url && !unidade.foto_url.startsWith('/')) {
+    await supabaseAdmin.storage
+      .from('unidades-fotos')
+      .remove([unidade.foto_url])
+      .catch(() => {})
+  }
+
   const { error } = await supabaseAdmin.from('unidades').delete().eq('id', id)
-  if (error) return { status: 500, erroMessage: error.message }
+  if (error) {
+    // FK violation (Postgres 23503): unidade has linked contratos — block with a
+    // clear message instead of leaking the raw constraint error.
+    if (error.code === '23503') {
+      return { status: 409, erroMessage: 'Não é possível remover: a unidade possui contratos vinculados. Encerre ou cancele os contratos antes.' }
+    }
+    return { status: 500, erroMessage: error.message }
+  }
   return { status: 200 }
 }

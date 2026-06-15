@@ -3,6 +3,10 @@
  *
  * Cobertura: CRUD completo de Unidades (criar / editar / deletar)
  * + BUG-02: Estado de Erro Separado (delete vs edit)
+ * + Wave-0 scaffold: métricas (UNID-01), busca/filtro (UNID-02), ConfirmDialog-before-delete (UNID-05)
+ *
+ * NOTE: Tests targeting UnifiedUnidadeModal flow (Tasks 2–4) will be RED until
+ * Plans 03 and 04 land — this is the Wave-0 scaffold, not a regression.
  *
  * Pré-condições para rodar:
  *   - `supabase start` rodando (127.0.0.1:54321)
@@ -39,31 +43,99 @@ test.describe('TEST-01 — CRUD Unidades', () => {
     test('criar unidade', async ({ page }) => {
       await page.getByRole('button', { name: 'Nova Unidade' }).click()
 
-      // shadcn Select — Edifício é o combobox índice 0 (Status é o índice 1)
-      // Usar o edifício do seed principal (não depende de dado E2E-)
-      await page.getByRole('combobox').first().click()
-      await page.getByRole('option', { name: 'Edifício Teste E2E' }).click()
+      // Modal appears — wait for UnifiedUnidadeModal backdrop
+      await expect(page.locator('.romma-modal-backdrop')).toBeVisible()
 
-      await page.fill('input[placeholder="Nome da unidade"]', 'E2E-Sala 301')
-      await page.fill('input[placeholder="Área (m²)"]', '50')
-      await page.fill('input[placeholder="Valor mensal (R$)"]', '3000')
+      // Select edificio via native <select> (FSelect uses native select, not shadcn combobox)
+      await page.selectOption('select', { label: 'Edifício Teste E2E' })
+
+      // Fields are scoped inside the modal
+      await page.fill('input[placeholder="Ex: Sala 1208"]', 'E2E-Sala 301')
+      await page.fill('input[placeholder="0"][type="number"]', '50')
 
       await page.getByRole('button', { name: 'Criar Unidade' }).click()
       await expect(page.getByText('E2E-Sala 301')).toBeVisible({ timeout: 10_000 })
     })
 
     test('editar unidade', async ({ page }) => {
-      // Ancorar no card da unidade criada — locator('../..') sobe 2 níveis: span → info div → row div
+      // Ancorar no card da unidade criada
       await page.getByText('E2E-Sala 301').locator('../..').getByRole('button', { name: 'Editar' }).click()
-      // Após clicar Editar, o nome vira input com value preenchido
-      await page.fill('input[value="E2E-Sala 301"]', 'E2E-Sala 301 Editada')
-      await page.getByRole('button', { name: 'Salvar' }).click()
+
+      // Modal appears in edit mode
+      await expect(page.locator('.romma-modal-backdrop')).toBeVisible()
+
+      // Scope the nome input to the modal backdrop
+      const nomeInput = page.locator('.romma-modal-backdrop input[placeholder="Ex: Sala 1208"]')
+      await nomeInput.fill('E2E-Sala 301 Editada')
+
+      await page.getByRole('button', { name: 'Salvar Alterações' }).click()
       await expect(page.getByText('E2E-Sala 301 Editada')).toBeVisible({ timeout: 10_000 })
     })
 
     test('deletar unidade', async ({ page }) => {
       await page.getByText('E2E-Sala 301 Editada').locator('../..').getByRole('button', { name: 'Remover' }).click()
+
+      // ConfirmDialog appears — same romma-modal-backdrop class
+      await expect(page.locator('.romma-modal-backdrop')).toBeVisible()
+      await page.getByRole('button', { name: 'Remover Unidade' }).click()
+
       await expect(page.getByText('E2E-Sala 301 Editada')).toHaveCount(0)
+    })
+  })
+
+  // --------------------------------------------------------- Métricas (UNID-01)
+  test.describe('Métricas — UNID-01', () => {
+    test.beforeEach(async ({ page }) => {
+      await login(page, PROPRIETARIO)
+      await page.waitForURL('**/dashboard', { timeout: 15_000 })
+      await page.goto('/dashboard/unidades')
+      await page.waitForURL('**/dashboard/unidades', { timeout: 10_000 })
+    })
+
+    test('métricas visíveis na tela de unidades', async ({ page }) => {
+      await expect(page.getByText('Área total')).toBeVisible()
+      await expect(page.getByText('MRR realizado')).toBeVisible()
+      await expect(page.getByText('Potencial em aberto')).toBeVisible()
+      await expect(page.getByText('Valores ocultos')).toBeVisible()
+    })
+  })
+
+  // --------------------------------------------------------- Busca/Filtro (UNID-02)
+  test.describe('Busca e Filtros — UNID-02', () => {
+    test.beforeEach(async ({ page }) => {
+      await login(page, PROPRIETARIO)
+      await page.waitForURL('**/dashboard', { timeout: 15_000 })
+      await page.goto('/dashboard/unidades')
+      await page.waitForURL('**/dashboard/unidades', { timeout: 10_000 })
+    })
+
+    test('busca por nome filtra cards ao vivo', async ({ page }) => {
+      await page.fill('input[placeholder="Buscar unidade..."]', 'E2E-')
+      // result count appears when filter is active
+      await expect(page.locator('text=/resultado/i')).toBeVisible()
+    })
+  })
+
+  // --------------------------------------------------------- ConfirmDialog (UNID-05)
+  test.describe('ConfirmDialog antes do delete — UNID-05', () => {
+    test.beforeEach(async ({ page }) => {
+      await login(page, PROPRIETARIO)
+      await page.waitForURL('**/dashboard', { timeout: 15_000 })
+      await page.goto('/dashboard/unidades')
+      await page.waitForURL('**/dashboard/unidades', { timeout: 10_000 })
+    })
+
+    test('ConfirmDialog aparece antes do delete', async ({ page }) => {
+      const row = page.getByText('E2E-Sala Disponivel').locator('../..')
+      await row.getByRole('button', { name: 'Remover' }).click()
+
+      // ConfirmDialog opens — backdrop visible + title text
+      await expect(page.locator('.romma-modal-backdrop')).toBeVisible()
+      await expect(page.getByText('Remover unidade?')).toBeVisible()
+
+      // Cancel — don't actually delete
+      await page.getByRole('button', { name: 'Cancelar' }).click()
+      await expect(page.locator('.romma-modal-backdrop')).not.toBeVisible()
     })
   })
 
@@ -85,6 +157,10 @@ test.describe('TEST-01 — CRUD Unidades', () => {
       // Tentar deletar Sala 101 (deve falhar por FK)
       await sala101Row.getByRole('button', { name: 'Remover' }).click()
 
+      // ConfirmDialog appears — confirm to trigger the delete attempt
+      await expect(page.locator('.romma-modal-backdrop')).toBeVisible()
+      await page.getByRole('button', { name: 'Remover Unidade' }).click()
+
       // Mensagem de erro de delete deve aparecer no nível da lista (acima dos cards)
       // No código atual (estado único), a mensagem aparece DENTRO do card via prop erro={erro}
       // Após o fix BUG-02, o erro de delete aparece no nível da lista com a classe bg-danger-bg2
@@ -95,11 +171,14 @@ test.describe('TEST-01 — CRUD Unidades', () => {
       await expect(salaDisponivel).toBeVisible({ timeout: 10_000 })
       await salaDisponivel.getByRole('button', { name: 'Editar' }).click()
 
-      // Dentro do card de edição da E2E-Sala Disponivel, NÃO deve aparecer o erro de delete
+      // Modal opens in edit mode
+      await expect(page.locator('.romma-modal-backdrop')).toBeVisible()
+
+      // Dentro do modal de edição da E2E-Sala Disponivel, NÃO deve aparecer o erro de delete
       // Este teste estará RED no código atual porque estado único vaza o erro para o card
-      const editCard = page.getByText('E2E-Sala Disponivel').locator('../..')
-      // O erro de delete não deve estar dentro do card em edição
-      await expect(editCard.locator('.text-danger-fg')).toHaveCount(0, { timeout: 5_000 })
+      const editModal = page.locator('.romma-modal-backdrop')
+      // O erro de delete não deve estar dentro do modal em edição
+      await expect(editModal.locator('.text-danger-fg')).toHaveCount(0, { timeout: 5_000 })
     })
   })
 })

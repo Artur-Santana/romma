@@ -1,168 +1,188 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import StatusBadge from "@/components/ui/StatusBadge"
-import { fmtBRL, refOf } from "@/lib/utils"
+import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase-browser"
 
-export default function UnidadeCard({
-  unidade,
-  editandoId,
-  formEdit,
-  onEditar,
-  onSalvar,
-  onDeletar,
-  onFormChange,
-  onCancelar,
-  erro,
-}) {
-  const isEditing = editandoId === unidade.id
+/* ── Signed URL hook ───────────────────────────────────────────────────── */
+function useFotoSignedUrl(fotoUrl) {
+  // For static /public paths, seed the initial value directly to avoid
+  // a setState-in-effect call that would trigger a cascading render.
+  const [signedUrl, setSignedUrl] = useState(
+    () => (fotoUrl && fotoUrl.startsWith("/")) ? fotoUrl : null
+  )
 
-  if (isEditing) {
-    return (
-      <div className="border-t border-border-3 px-5 py-5 bg-surface">
-        <div className="mb-4">
-          <span className="font-mono text-[11px] text-fg-5 tracking-[1px] uppercase">{refOf(unidade)}</span>
-        </div>
+  useEffect(() => {
+    if (!fotoUrl) return
+    if (fotoUrl.startsWith("/")) return  // already seeded by useState initializer
+    let cancelled = false
+    const supabase = createClient()
+    supabase.storage
+      .from("unidades-fotos")
+      .createSignedUrl(fotoUrl, 3600)
+      .then(({ data, error }) => {
+        if (!cancelled && !error && data?.signedUrl) setSignedUrl(data.signedUrl)
+      })
+    return () => { cancelled = true }
+  }, [fotoUrl])
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
+  return signedUrl
+}
 
-          <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Nome da unidade</span>
-            <Input
-              type="text"
-              value={formEdit.nome}
-              onChange={(e) => onFormChange({ ...formEdit, nome: e.target.value })}
-              className="h-9 rounded-none border-border-3 bg-surface text-fg-1"
-            />
-          </label>
+/* ── Status badge ──────────────────────────────────────────────────────── */
+function StatusBadge({ status }) {
+  const isAlugada = status === "alugada"
+  return (
+    <span style={{
+      fontFamily: "var(--font-mono)",
+      fontSize: 9,
+      fontWeight: 700,
+      letterSpacing: "0.5px",
+      textTransform: "uppercase",
+      padding: "2px 6px",
+      background: isAlugada
+        ? "oklch(0.339 0.1793 301.68 / 0.20)"
+        : "oklch(0.696 0.17 162.5 / 0.15)",
+      color: isAlugada ? "var(--fg-1)" : "var(--success)",
+      flexShrink: 0,
+    }}>
+      {isAlugada ? "Alugada" : "Disponível"}
+    </span>
+  )
+}
 
-          <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Descrição</span>
-            <Input
-              type="text"
-              value={formEdit.descricao}
-              onChange={(e) => onFormChange({ ...formEdit, descricao: e.target.value })}
-              className="h-9 rounded-none border-border-3 bg-surface text-fg-1"
-            />
-          </label>
+/* ── UnidadeCard — Variante B ──────────────────────────────────────────── */
+const FOTO_PLACEHOLDER = "/images/unidade-exemplo.jpg"
 
-          <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Área (m²)</span>
-            <Input
-              type="number"
-              value={formEdit.area_m2}
-              onChange={(e) => onFormChange({ ...formEdit, area_m2: e.target.value })}
-              className="h-9 rounded-none border-border-3 bg-surface text-fg-1"
-            />
-          </label>
+export default function UnidadeCard({ unidade, onEditar, onDeletar }) {
+  const fotoResolvida = useFotoSignedUrl(unidade.foto_url)
+  // Always show a cover so every card has the same height (no grid gaps).
+  // Units without a photo fall back to a dimmed placeholder image.
+  const isPlaceholder = !fotoResolvida
+  const coverSrc = fotoResolvida ?? FOTO_PLACEHOLDER
 
-          <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Valor mensal (R$)</span>
-            <Input
-              type="number"
-              value={formEdit.valor_mensal}
-              onChange={(e) => onFormChange({ ...formEdit, valor_mensal: e.target.value })}
-              className="h-9 rounded-none border-border-3 bg-surface text-fg-1"
-            />
-          </label>
-
-          <label className="flex flex-col gap-1.5 col-span-2">
-            <span className="font-mono text-[10px] tracking-[1px] uppercase text-fg-4">Status</span>
-            <Select
-              value={formEdit.status}
-              onValueChange={(v) => onFormChange({ ...formEdit, status: v })}
-            >
-              <SelectTrigger className="w-full h-9 rounded-none border-border-3 bg-surface text-fg-1 font-mono text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="disponivel">Disponível</SelectItem>
-                <SelectItem value="alugada">Alugada</SelectItem>
-              </SelectContent>
-            </Select>
-          </label>
-
-        </div>
-
-        {erro && (
-          <span className="font-mono text-[11px] text-danger-fg block mb-3">{erro}</span>
-        )}
-
-        <div className="flex gap-3">
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => onSalvar(unidade.id)}
-            className="bg-indigo text-fg-1 font-mono font-bold text-[13px] tracking-[1px] uppercase rounded-none px-5 h-9"
-          >
-            Salvar
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onCancelar}
-            className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold h-9 px-4 rounded-none border border-border-3"
-          >
-            Cancelar
-          </Button>
-        </div>
-      </div>
-    )
+  // Format value: always show on dashboard (owner view)
+  function fmtValor(v) {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency", currency: "BRL", maximumFractionDigits: 0
+    }).format(v ?? 0)
   }
 
+  const edificioNome = unidade.edificios?.nome ?? ""
+  const area = unidade.area_m2 ? `${unidade.area_m2} m²` : ""
+  const subtitulo = [edificioNome, area].filter(Boolean).join(" · ")
+
   return (
-    <div className="border-t border-border-3 px-5 py-4">
-      <div className="flex justify-between items-start gap-3">
-        <div className="flex flex-col gap-1 min-w-0">
-          <span className="font-mono text-[11px] text-fg-5 tracking-[0.8px] uppercase">
-            {refOf(unidade)}
+    <div style={{
+      border: "1px solid var(--border-3)",
+      background: "var(--surface)",
+      display: "flex",
+      flexDirection: "column",
+    }}>
+      {/* Cover photo — always rendered so all cards share the same height */}
+      <div style={{ height: 140, overflow: "hidden", flexShrink: 0, position: "relative" }}>
+        <img
+          src={coverSrc}
+          alt=""
+          style={{
+            width: "100%", height: "100%", objectFit: "cover",
+            filter: isPlaceholder ? "grayscale(0.4) contrast(1.05) brightness(0.55)" : "none",
+          }}
+        />
+        {isPlaceholder && (
+          <span style={{
+            position: "absolute", bottom: 8, left: 10,
+            fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700,
+            letterSpacing: "0.5px", textTransform: "uppercase",
+            color: "var(--fg-4)",
+          }}>
+            Sem foto
           </span>
-          <span className="font-display font-bold text-[18px] tracking-[-0.6px] text-fg-1">
-            {unidade.nome}
-          </span>
-          {unidade.descricao && (
-            <span className="font-body text-[18px] text-fg-3 mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap">
-              {unidade.descricao}
-            </span>
-          )}
-          <div className="flex items-center gap-3 mt-1.5 flex-wrap">
-            {unidade.area_m2 && (
-              <span className="font-mono text-[10px] text-fg-4 tracking-[0.5px] uppercase">
-                {unidade.area_m2}m²
-              </span>
+        )}
+      </div>
+
+      {/* Card body */}
+      <div style={{
+        padding: "var(--rd-panel)",
+        display: "flex",
+        flexDirection: "column",
+        gap: 14,
+      }}>
+        {/* Name line + badge */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div
+              className="r-subhead"
+              style={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                color: "var(--fg-1)",
+              }}
+            >
+              {unidade.nome}
+            </div>
+            {subtitulo && (
+              <div className="r-meta" style={{ marginTop: 2, color: "var(--fg-4)" }}>
+                {subtitulo}
+              </div>
             )}
+          </div>
+          <StatusBadge status={unidade.status} />
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: "var(--border-3)" }} />
+
+        {/* Value line + actions */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
             {unidade.valor_visivel ? (
-              <span className="font-mono text-[10px] text-fg-3 tracking-[0.5px]">
-                {fmtBRL(unidade.valor_mensal)}<span className="text-fg-5">/mês</span>
-              </span>
+              <>
+                <span className="r-data" style={{ fontSize: 14, color: "var(--fg-1)" }}>
+                  {fmtValor(unidade.valor_mensal)}
+                </span>
+                <span className="r-meta" style={{ color: "var(--fg-4)" }}>/mês</span>
+              </>
             ) : (
-              <span className="font-mono text-[10px] text-fg-5 tracking-[0.5px] uppercase">
+              <span className="r-meta" style={{ color: "var(--fg-5)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                 Valor sob consulta
               </span>
             )}
-            <StatusBadge status={unidade.status} />
           </div>
-        </div>
 
-        <div className="flex gap-2 shrink-0">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onEditar(unidade)}
-            className="font-mono text-[10px] text-fg-3 uppercase tracking-[0.5px] font-bold p-0 h-auto"
-          >
-            Editar
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onDeletar(unidade.id)}
-            className="font-mono text-[10px] text-danger-fg uppercase tracking-[0.5px] font-bold p-0 h-auto"
-          >
-            Remover
-          </Button>
+          {/* Micro action buttons */}
+          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+            <button
+              onClick={() => onEditar(unidade)}
+              style={{
+                all: "unset", cursor: "pointer",
+                fontFamily: "var(--font-mono)",
+                fontSize: 10, fontWeight: 700,
+                color: "var(--fg-3)",
+                letterSpacing: "0.5px",
+                textTransform: "uppercase",
+                padding: "5px 9px",
+                border: "1px solid var(--border-3)",
+              }}
+            >
+              Editar
+            </button>
+            <button
+              onClick={() => onDeletar(unidade)}
+              style={{
+                all: "unset", cursor: "pointer",
+                fontFamily: "var(--font-mono)",
+                fontSize: 10, fontWeight: 700,
+                color: "var(--danger-fg)",
+                letterSpacing: "0.5px",
+                textTransform: "uppercase",
+                padding: "5px 9px",
+                border: "1px solid color-mix(in oklch, var(--destructive) 30%, transparent)",
+              }}
+            >
+              Remover
+            </button>
+          </div>
         </div>
       </div>
     </div>
