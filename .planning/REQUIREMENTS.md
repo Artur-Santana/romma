@@ -39,9 +39,9 @@
 
 ### Edifícios (variante B — cards 2 colunas)
 
-- [ ] **EDIF-01**: Edifícios são exibidos em cards de 2 colunas com stats por edifício (ocupação %, MRR, área total, nº de unidades)
-- [ ] **EDIF-02**: Cada edifício mostra barra de ocupação contígua (unidades alugadas renderizadas primeiro, depois disponíveis, sem buracos) com legenda "X alugada(s) · Y disponível(is)"
-- [ ] **EDIF-03**: Botão "Ver N unidade(s)" expande a lista de unidades do edifício; cada unidade é clicável e abre o modal unificado de edição de unidade
+- [x] **EDIF-01**: Edifícios são exibidos em cards de 2 colunas com stats por edifício (ocupação %, MRR, área total, nº de unidades)
+- [x] **EDIF-02**: Cada edifício mostra barra de ocupação contígua (unidades alugadas renderizadas primeiro, depois disponíveis, sem buracos) com legenda "X alugada(s) · Y disponível(is)"
+- [x] **EDIF-03**: Botão "Ver N unidade(s)" expande a lista de unidades do edifício; cada unidade é clicável e abre o modal unificado de edição de unidade
 
 ### Contratos (variante B — board de cards)
 
@@ -132,9 +132,9 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | UNID-03 | Phase 19 | Complete |
 | UNID-04 | Phase 19 | Complete |
 | UNID-05 | Phase 19 | Complete |
-| EDIF-01 | Phase 20 | Pending |
-| EDIF-02 | Phase 20 | Pending |
-| EDIF-03 | Phase 20 | Pending |
+| EDIF-01 | Phase 20 | Complete |
+| EDIF-02 | Phase 20 | Complete |
+| EDIF-03 | Phase 20 | Complete |
 | DASH-04 | Phase 21 | Pending |
 | DASH-05 | Phase 21 | Pending |
 | DASH-06 | Phase 21 | Pending |

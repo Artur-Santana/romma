@@ -6,8 +6,8 @@
 
 @theme {
   /* Cores — Obsidian Blueprint */
-  --color-primary: oklch(0.339 0.1793 301.68);
-  --color-primary-hover: oklch(from var(--color-primary) calc(l + 0.25) c h);
+  --color-primary-2: oklch(0.339 0.1793 301.68);
+  --color-primary-hover: oklch(from var(--color-primary-2) calc(l + 0.25) c h);
   --color-secondary: oklch(0.3012 0 0);
   --color-neutral: oklch(0 0 0);
   --color-highlight: oklch(0.7245 0.0998 82.35);
@@ -37,7 +37,7 @@
   /* ── Source tokens — edite aqui para retematicar o app ──────────────────
      Todas as variáveis abaixo derivam destas via CSS relative color syntax.
      Trocar qualquer --ds-* cascateia em tempo real para todo o sistema.   */
-  --ds-primary:    oklch(0.339 0.1793 301.68);
+  --ds-primary:    oklch(0.54 0.1784 301.8);
   --ds-background: oklch(0.2393 0 0);
   --ds-surface:    oklch(0.2178 0 0);
   --ds-secondary:  oklch(0.3012 0 0);
