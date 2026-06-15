@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-15T10:35:43.601Z"
-last_activity: 2026-06-15 -- Phase 20 planning complete
+last_updated: "2026-06-15T10:37:14.924Z"
+last_activity: 2026-06-15 -- Phase 20 execution started
 progress:
   total_phases: 9
   completed_phases: 3
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 19 — unidades-modal-unificado-foto-de-capa
+**Current focus:** Phase 20 — edif-cios-cards-drill-in
 
 ---
 
@@ -112,10 +112,10 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 19 (unidades-modal-unificado-foto-de-capa) — EXECUTING
-Plan: 4 of 4
-Status: Ready to execute
-Last activity: 2026-06-15 -- Phase 20 planning complete
+Phase: 20 (edif-cios-cards-drill-in) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 20
+Last activity: 2026-06-15 -- Phase 20 execution started
 Last session: 2026-06-15T10:22:49.014Z
 
 ## Operator Next Steps
