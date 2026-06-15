@@ -124,7 +124,10 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
   1. Edifícios aparecem em cards de 2 colunas com stats por edifício (ocupação %, MRR, área total, nº de unidades)
   2. Cada edifício mostra barra de ocupação contígua (alugadas renderizadas primeiro, depois disponíveis, sem buracos) com legenda "X alugada(s) · Y disponível(is)"
   3. O botão "Ver N unidade(s)" expande a lista de unidades; cada unidade é clicável e abre o modal unificado de edição (mesmo componente, com edifício travado)
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 20-01-PLAN.md — Estender UnifiedUnidadeModal com lockEdificio + scaffold E2E (EDIF-03)
+- [ ] 20-02-PLAN.md — GestaoEdificios cards 2-col, stats, barra de ocupação, accordion drill-in (EDIF-01/02/03)
 **UI hint**: yes
 
 ### Phase 21: Dashboard — Visão Geral Editorial
