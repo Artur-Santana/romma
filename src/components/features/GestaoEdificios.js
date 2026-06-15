@@ -364,7 +364,7 @@ export default function GestaoEdificios() {
                   </div>
 
                   {/* Stats Row — horizontal inline */}
-                  <div style={{ display: "flex", gap: 36, marginTop: 22, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", gap: 36, marginTop: 11, flexWrap: "wrap" }}>
                     {[
                       { l: "Ocupação", v: `${stats.ocupacaoPct}%`, gold: false },
                       { l: "MRR", v: fmtBRLk(stats.mrr), gold: false },
@@ -396,16 +396,16 @@ export default function GestaoEdificios() {
                   </div>
 
                   {/* Occupation Bar */}
-                  <div style={{ marginTop: 20 }}>
+                  <div style={{ marginTop: 10 }}>
                     <OccupationBar alugadas={stats.alugadas} disponiveis={stats.disponiveis} />
-                    <p className="r-meta" style={{ color: "var(--fg-4)", marginTop: 8, display: "flex", alignItems: "center", gap: 7 }}>
+                    <p className="r-meta" style={{ color: "var(--fg-4)", marginTop: 4, display: "flex", alignItems: "center", gap: 7 }}>
                       <span style={{ width: 8, height: 8, background: "var(--indigo)", flexShrink: 0, display: "inline-block" }} />
                       {stats.alugadas} alugada(s) · {stats.disponiveis} disponível(is)
                     </p>
                   </div>
 
                   {/* Expand Link */}
-                  <div style={{ marginTop: 18 }}>
+                  <div style={{ marginTop: 9 }}>
                     <button
                       onClick={() => toggleExpandido(edificio.id)}
                       disabled={n === 0}
@@ -430,7 +430,7 @@ export default function GestaoEdificios() {
 
                   {/* Accordion Panel */}
                   {isExpanded && (
-                    <div style={{ marginTop: 16, borderTop: "1px solid var(--border-3)" }}>
+                    <div style={{ marginTop: 8, borderTop: "1px solid var(--border-3)" }}>
                       {lista.map((u) => {
                         const alugada = u.status === "alugada"
                         return (
@@ -439,7 +439,7 @@ export default function GestaoEdificios() {
                             data-testid="unidade-row"
                             onClick={() => setModalState({ unidade: u })}
                             style={{
-                              padding: "14px 14px",
+                              padding: "7px 14px",
                               cursor: "pointer",
                               borderBottom: "1px solid var(--border-3)",
                               background: "transparent",
@@ -479,9 +479,7 @@ export default function GestaoEdificios() {
                                 {u.area_m2 ? `${u.area_m2} m²` : "—"}
                               </span>
                               <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-1)" }}>
-                                {u.valor_visivel === false
-                                  ? "—"
-                                  : `R$ ${(parseFloat(u.valor_mensal) || 0).toLocaleString("pt-BR")}`}
+                                {`R$ ${(parseFloat(u.valor_mensal) || 0).toLocaleString("pt-BR")}`}
                               </span>
                               <span style={{
                                 display: "inline-flex",
