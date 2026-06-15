@@ -38,20 +38,43 @@ function OccupancyBar({ alugadas, total }) {
   )
 }
 
-function CashFlowChart({ fluxo, height = 132, testId }) {
+function fmtChartVal(raw) {
+  if (!raw) return null
+  if (raw >= 1000) return `R$${Math.round(raw / 1000)}k`
+  return `R$${raw}`
+}
+
+function CashFlowChart({ fluxo, testId }) {
   return (
     <div
       data-testid={testId}
-      style={{ display: "flex", alignItems: "flex-end", gap: 10, height }}
+      style={{ display: "flex", gap: 6, height: "100%", alignItems: "stretch" }}
     >
       {fluxo.map((f, i) => (
         <div
           key={f.key}
-          style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, height: "100%", justifyContent: "flex-end" }}
+          style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}
         >
+          {/* value label above bars — fixed 20px zone */}
+          <div style={{ height: 20, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 4 }}>
+            <span style={{
+              fontSize: 9,
+              fontFamily: "var(--font-mono)",
+              color: f.peak ? "var(--highlight)" : "var(--fg-3)",
+              whiteSpace: "nowrap",
+            }}>
+              {fmtChartVal(f.rawRecebido)}
+            </span>
+          </div>
+          {/* bar area — fills remaining height */}
           <div style={{ position: "relative", width: "100%", flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-            {/* previsto ghost — renders first in DOM so solid stacks on top */}
-            <div style={{ position: "absolute", bottom: 0, width: "62%", height: `${f.previsto}%`, background: "var(--secondary)", opacity: 0.5 }} />
+            {/* previsto ghost — renders first in DOM */}
+            <div style={{
+              position: "absolute", bottom: 0, width: "62%",
+              height: `${Math.max(f.previsto, f.previsto > 0 ? 4 : 0)}%`,
+              background: "oklch(1 0 0 / 0.10)",
+              border: "1px solid oklch(1 0 0 / 0.22)",
+            }} />
             {/* recebido solid */}
             <div
               className="chart-bar"
@@ -60,7 +83,7 @@ function CashFlowChart({ fluxo, height = 132, testId }) {
                 width: "62%",
                 height: `${f.recebido}%`,
                 background: f.peak ? "var(--highlight)" : "var(--color-primary-hover)",
-                boxShadow: f.peak ? "0 0 6px 0 var(--highlight)" : "none",
+                boxShadow: f.peak ? "0 0 8px 0 var(--highlight)" : "none",
                 transformOrigin: "bottom",
                 animation: `rGrowY var(--dur-base) var(--ease-crisp)`,
                 animationDelay: `${i * 60}ms`,
@@ -68,7 +91,10 @@ function CashFlowChart({ fluxo, height = 132, testId }) {
               }}
             />
           </div>
-          <span className="r-meta" style={{ fontSize: 9 }}>{f.mes}</span>
+          {/* month label — fixed 18px zone */}
+          <div style={{ height: 18, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 5 }}>
+            <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--fg-3)" }}>{f.mes}</span>
+          </div>
         </div>
       ))}
     </div>
@@ -238,27 +264,28 @@ export default async function Dashboard() {
           {/* Hero Grid — Variant B: 1.55fr occupancy + 1fr stacked metrics */}
           <div style={{ display: "grid", gridTemplateColumns: "1.55fr 1fr", gap: "var(--rd-block-sm)" }} className="mb-12">
             {/* Left: occupancy hero + OccupancyBar + divider + CashFlowChart */}
-            <div className="bg-surface border border-border-3" style={{ padding: "var(--rd-panel)" }}>
-              <div className="flex justify-between items-start mb-[18px]">
-                <div>
-                  <span className="eyebrow eyebrow--indigo mb-2">Taxa de Ocupação</span>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                    <span className="r-metric" style={{ fontSize: 56 }}>{pctOcupacao}%</span>
-                    <span className="r-data" style={{ color: "var(--fg-4)" }}>{alugadas}/{unidades.length} unidades</span>
+            <div className="bg-surface border border-border-3" style={{ padding: "var(--rd-panel)", display: "flex", flexDirection: "column" }}>
+              <div>
+                <div className="flex justify-between items-start mb-[18px]">
+                  <div>
+                    <span className="eyebrow eyebrow--indigo mb-2">Taxa de Ocupação</span>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+                      <span className="r-metric" style={{ fontSize: 56 }}>{pctOcupacao}%</span>
+                      <span className="r-data" style={{ color: "var(--fg-4)" }}>{alugadas}/{unidades.length} unidades</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="eyebrow mb-2">Disponíveis</span>
+                    <span className="r-metric" style={{ fontSize: 34, color: "var(--success)" }}>{disponiveis}</span>
                   </div>
                 </div>
-                <div className="text-right">
-                  <span className="eyebrow mb-2">Disponíveis</span>
-                  <span className="r-metric" style={{ fontSize: 34, color: "var(--success)" }}>{disponiveis}</span>
-                </div>
+                <OccupancyBar alugadas={alugadas} total={unidades.length} />
+                <div style={{ height: 1, background: "var(--border-3)", margin: "20px 0 18px" }} />
+                <span className="r-eyebrow gold" style={{ display: "block", marginBottom: 12 }}>Previsão de Fluxo · 2026</span>
               </div>
-              <OccupancyBar alugadas={alugadas} total={unidades.length} />
-              <div style={{ height: 1, background: "var(--border-3)", margin: "20px 0 18px" }} />
-              <div className="flex justify-between items-center mb-[14px]">
-                <span className="r-eyebrow gold">Previsão de Fluxo · 2026</span>
-              </div>
-              <div data-testid="cashflow-chart">
-                <CashFlowChart fluxo={fluxoData} height={130} testId="cashflow-chart" />
+              {/* chart fills remaining panel height */}
+              <div style={{ flex: 1, minHeight: 160 }}>
+                <CashFlowChart fluxo={fluxoData} testId="cashflow-chart" />
               </div>
             </div>
             {/* Right: stacked metrics 02, 03, 04 */}
@@ -354,8 +381,8 @@ export default async function Dashboard() {
                           <div className="font-mono text-[10px] text-fg-4">{uniNome} · {ediNome}</div>
                         </div>
                       </div>
-                      <span className="font-mono text-[18px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
-                      <span className={cn("font-mono text-[18px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
+                      <span className="font-mono text-[14px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
+                      <span className={cn("font-mono text-[14px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
                       <StatusBadge status={isExpiring ? "vencendo" : c.status} />
                     </div>
                   )
@@ -387,7 +414,7 @@ export default async function Dashboard() {
                         <div className="font-mono text-[10px] text-fg-4">{uni?.nome ?? "—"} · {edi?.nome ?? "—"}</div>
                       </div>
                       <div className="text-right">
-                        <div className="font-mono text-[18px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
+                        <div className="font-mono text-[14px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</div>
                         <div className={cn("font-mono text-[10px]", isVencida ? "text-warning" : "text-fg-4")}>
                           {isVencida ? `${Math.abs(diasRestantes)}d atraso` : `${diasRestantes}d restantes`}
                         </div>
