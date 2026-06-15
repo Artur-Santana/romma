@@ -28,8 +28,8 @@ function computeStats(lista) {
   const ocupacaoPct = total > 0 ? Math.round((alugadas / total) * 100) : 0
   const mrr = lista
     .filter(u => u.status === "alugada")
-    .reduce((s, u) => s + (u.valor_mensal || 0), 0)
-  const areaTotal = lista.reduce((s, u) => s + (u.area_m2 || 0), 0)
+    .reduce((s, u) => s + (parseFloat(u.valor_mensal) || 0), 0)
+  const areaTotal = lista.reduce((s, u) => s + (parseFloat(u.area_m2) || 0), 0)
   return { total, alugadas, disponiveis, ocupacaoPct, mrr, areaTotal }
 }
 
@@ -255,6 +255,7 @@ export default function GestaoEdificios() {
           return (
             <div
               key={edificio.id}
+              data-testid="edificio-card"
               style={{
                 border: "1px solid var(--border-3)",
                 background: "var(--surface)",
@@ -400,10 +401,11 @@ export default function GestaoEdificios() {
 
                   {/* Accordion Panel */}
                   {isExpanded && (
-                    <div style={{ borderTop: "1px solid var(--border-3)", marginTop: 16 }}>
+                    <div style={{ marginTop: 16 }}>
                       {lista.map((u) => (
                         <div
                           key={u.id}
+                          data-testid="unidade-row"
                           onClick={() => setModalState({ unidade: u })}
                           style={{
                             padding: "12px 16px",
