@@ -108,9 +108,14 @@ function FormCheck({ checked, onClick, label }) {
 }
 
 /* ── Cover photo field (inline) ────────────────────────────────────────── */
-function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, setErro }) {
+function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, setFotoUrl, setErro }) {
   const [drag, setDrag] = useState(false)
   const inputRef = useRef(null)
+
+  function openPicker(e) {
+    e?.stopPropagation()
+    inputRef.current?.click()
+  }
 
   function handleFileSelect(file) {
     if (!file) return
@@ -127,6 +132,7 @@ function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, s
       URL.revokeObjectURL(preview)
     }
     setErro(null)
+    setFotoUrl(null)          // real upload will produce a storage path at submit
     setFileToUpload(file)
     setPreview(URL.createObjectURL(file))
   }
@@ -137,6 +143,7 @@ function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, s
       URL.revokeObjectURL(preview)
     }
     setFileToUpload(null)
+    setFotoUrl("/images/unidade-exemplo.jpg")   // persist the example path on save
     setPreview("/images/unidade-exemplo.jpg")
   }
 
@@ -145,6 +152,7 @@ function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, s
       URL.revokeObjectURL(preview)
     }
     setFileToUpload(null)
+    setFotoUrl(null)
     setPreview(null)
   }
 
@@ -208,16 +216,16 @@ function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, s
         </div>
       ) : (
         <div
-          onClick={() => inputRef.current?.click()}
+          onClick={openPicker}
           onDragOver={(e) => { e.preventDefault(); setDrag(true) }}
           onDragLeave={() => setDrag(false)}
           onDrop={(e) => { e.preventDefault(); setDrag(false); handleFileSelect(e.dataTransfer.files[0]) }}
           style={{
-            marginTop: 6, height: 110, cursor: "pointer",
+            marginTop: 6, height: 130, cursor: "pointer",
             border: `1px dashed ${drag ? "var(--indigo)" : "var(--border-2)"}`,
             background: drag ? "oklch(0.339 0.179 301.68 / 0.08)" : "var(--surface-hi)",
             display: "flex", flexDirection: "column", alignItems: "center",
-            justifyContent: "center", gap: 8, transition: "all var(--dur-fast)"
+            justifyContent: "center", gap: 10, transition: "all var(--dur-fast)"
           }}
         >
           <span style={{
@@ -225,14 +233,31 @@ function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, s
             display: "flex", alignItems: "center", justifyContent: "center",
             color: "var(--fg-4)", fontFamily: "var(--font-mono)"
           }}>⤓</span>
-          <span className="r-meta">Arraste uma imagem ou clique para enviar</span>
+          <span className="r-meta" style={{ color: "var(--fg-4)" }}>
+            Arraste uma imagem aqui
+          </span>
+          {/* Primary upload action */}
+          <button
+            type="button"
+            onClick={openPicker}
+            style={{
+              all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)",
+              fontSize: 11, fontWeight: 700, color: "var(--fg-1)",
+              letterSpacing: "0.5px", textTransform: "uppercase",
+              padding: "8px 16px", border: "1px solid var(--indigo)",
+              background: "oklch(0.339 0.179 301.68 / 0.18)",
+            }}
+          >
+            Selecionar imagem
+          </button>
+          {/* Secondary, clearly de-emphasised */}
           <button
             type="button"
             onClick={handleUsarExemplo}
             style={{
               all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)",
-              fontSize: 10, color: "var(--indigo)", letterSpacing: "0.5px",
-              textTransform: "uppercase"
+              fontSize: 9.5, color: "var(--fg-5)", letterSpacing: "0.5px",
+              textTransform: "uppercase", textDecoration: "underline",
             }}
           >
             ou usar foto de exemplo
@@ -397,6 +422,7 @@ export default function UnifiedUnidadeModal({ mode, initial, edificios, onClose,
             setPreview={setPreview}
             fileToUpload={fileToUpload}
             setFileToUpload={setFileToUpload}
+            setFotoUrl={(v) => setForm(f => ({ ...f, foto_url: v }))}
             setErro={setErro}
           />
 

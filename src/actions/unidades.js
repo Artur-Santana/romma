@@ -89,6 +89,13 @@ export async function deletarUnidade(id) {
   }
 
   const { error } = await supabaseAdmin.from('unidades').delete().eq('id', id)
-  if (error) return { status: 500, erroMessage: error.message }
+  if (error) {
+    // FK violation (Postgres 23503): unidade has linked contratos — block with a
+    // clear message instead of leaking the raw constraint error.
+    if (error.code === '23503') {
+      return { status: 409, erroMessage: 'Não é possível remover: a unidade possui contratos vinculados. Encerre ou cancele os contratos antes.' }
+    }
+    return { status: 500, erroMessage: error.message }
+  }
   return { status: 200 }
 }
