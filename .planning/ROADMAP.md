@@ -167,7 +167,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 21-01-PLAN.md — Foundation: getParcelasFluxo() query + src/lib/fluxo.js aggregation (+ unit test) + rGrowY keyframe/motion guards + Wave-0 E2E scaffold (DASH-05)
+- [x] 21-01-PLAN.md — Foundation: getParcelasFluxo() query + src/lib/fluxo.js aggregation (+ unit test) + rGrowY keyframe/motion guards + Wave-0 E2E scaffold (DASH-05)
 
 **Wave 2** *(blocked on Wave 1)*
 
@@ -251,7 +251,7 @@ Plans:
 | 18. Acesso — Login / Cadastro / Redefinir | 4/4 | Complete    | 2026-06-14 |
 | 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-15 |
 | 20. Edifícios — Cards & Drill-in | 2/2 | Complete    | 2026-06-15 |
-| 21. Dashboard — Visão Geral Editorial | 0/3 | Not started | - |
+| 21. Dashboard — Visão Geral Editorial | 1/3 | In Progress|  |
 | 22. Contratos & Parcelas — Renovação | 0/TBD | Not started | - |
 | 23. Locatários — Busca & Máscaras | 0/TBD | Not started | - |
 | 24. Público — Unidades Disponíveis | 0/TBD | Not started | - |
