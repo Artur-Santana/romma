@@ -40,14 +40,18 @@ function OccupationBar({ alugadas, disponiveis }) {
       <div style={{ height: 6, background: "var(--border-3)", width: "100%" }} />
     )
   }
+  // Per-unit segments, alugadas grouped first (no interleaving) — matches design ref.
+  const segments = []
+  for (let i = 0; i < alugadas; i++) segments.push("alugada")
+  for (let i = 0; i < disponiveis; i++) segments.push("disponivel")
   return (
-    <div style={{ display: "flex", height: 6, width: "100%", overflow: "hidden" }}>
-      {alugadas > 0 && (
-        <div style={{ flex: alugadas, background: "var(--indigo)" }} />
-      )}
-      {disponiveis > 0 && (
-        <div style={{ flex: disponiveis, background: "var(--border-3)" }} />
-      )}
+    <div style={{ display: "flex", gap: 3, height: 6, width: "100%" }}>
+      {segments.map((s, i) => (
+        <div
+          key={i}
+          style={{ flex: 1, background: s === "alugada" ? "var(--indigo)" : "var(--border-3)" }}
+        />
+      ))}
     </div>
   )
 }
@@ -57,8 +61,8 @@ function SkeletonEdificios() {
     <div className="romma-page r-fade" style={{ padding: "var(--rd-page-y) var(--rd-gutter)", paddingBottom: 64 }}>
       <div style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-        gap: 16,
+        gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 520px), 1fr))",
+        gap: 20,
         marginTop: 32,
       }}>
         {[0, 1, 2, 3].map((i) => (
@@ -239,14 +243,14 @@ export default function GestaoEdificios() {
 
       <div style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-        gap: 16,
+        gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 520px), 1fr))",
+        gap: 20,
         alignItems: "start",
       }}>
         {edificios.length === 0 && (
           <p className="font-mono text-[12px] text-fg-5">Nenhum edifício cadastrado.</p>
         )}
-        {edificios.map((edificio) => {
+        {edificios.map((edificio, idx) => {
           const lista = unidadesPorEdificio[edificio.id] ?? []
           const stats = computeStats(lista)
           const isExpanded = expandidos.has(edificio.id)
@@ -308,52 +312,52 @@ export default function GestaoEdificios() {
                 <>
                   {/* Card Header Row */}
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
-                    <div>
-                      <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 20, color: "var(--fg-1)", margin: 0 }}>
-                        {edificio.nome}
-                      </p>
-                      <p style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: "var(--fg-4)", marginTop: 2 }}>
-                        {edificio.endereco}
-                      </p>
+                    <div style={{ display: "flex", gap: 14, minWidth: 0 }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-5)", marginTop: 5, flexShrink: 0 }}>
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 20, color: "var(--fg-1)", margin: 0 }}>
+                          {edificio.nome}
+                        </p>
+                        <p style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: "var(--fg-4)", marginTop: 3 }}>
+                          {edificio.endereco}
+                        </p>
+                      </div>
                     </div>
                     <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
                       <button
                         onClick={() => handleEditar(edificio)}
                         style={{ all: "unset", cursor: "pointer" }}
-                        className="font-mono text-[11px] text-fg-3 px-3 py-1.5 border border-border-3 hover:text-fg-1 hover:border-border-1"
+                        className="font-mono text-[10px] tracking-[1px] uppercase text-fg-3 px-3 py-1.5 border border-border-3 hover:text-fg-1 hover:border-border-1"
                       >
                         Editar
                       </button>
                       <button
                         onClick={() => handleDeletar(edificio.id)}
                         style={{ all: "unset", cursor: "pointer" }}
-                        className="font-mono text-[11px] text-danger-fg px-3 py-1.5 border border-danger-fg hover:bg-[var(--danger-bg2)]"
+                        className="font-mono text-[10px] tracking-[1px] uppercase text-danger-fg px-3 py-1.5 border border-danger-fg hover:bg-[var(--danger-bg2)]"
                       >
                         Remover
                       </button>
                     </div>
                   </div>
 
-                  {/* Stats Row */}
-                  <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(4, 1fr)",
-                    border: "1px solid var(--border-3)",
-                    marginTop: 16,
-                  }}>
+                  {/* Stats Row — horizontal inline */}
+                  <div style={{ display: "flex", gap: 36, marginTop: 22, flexWrap: "wrap" }}>
                     {[
-                      { l: "Unidades", v: stats.total, s: `${stats.alugadas} alugada${stats.alugadas !== 1 ? "s" : ""}`, gold: false },
-                      { l: "Ocupação", v: `${stats.ocupacaoPct}%`, s: `${stats.disponiveis} disponível${stats.disponiveis !== 1 ? "is" : ""}`, gold: false },
-                      { l: "MRR", v: fmtBRLk(stats.mrr), s: `${stats.alugadas} alugada${stats.alugadas !== 1 ? "s" : ""}`, gold: true },
-                      { l: "Área total", v: `${stats.areaTotal} m²`, s: `${stats.total} unidade${stats.total !== 1 ? "s" : ""}`, gold: false },
-                    ].map((m, i) => (
-                      <div key={m.l} style={{
-                        padding: "12px 20px",
-                        borderRight: i < 3 ? "1px solid var(--border-3)" : "none",
-                      }}>
-                        <div className="r-label" style={{
+                      { l: "Ocupação", v: `${stats.ocupacaoPct}%`, gold: false },
+                      { l: "MRR", v: fmtBRLk(stats.mrr), gold: true },
+                      { l: "Área total", v: `${stats.areaTotal} m²`, gold: false },
+                      { l: "Unidades", v: stats.total, gold: false },
+                    ].map((m) => (
+                      <div key={m.l}>
+                        <div style={{
+                          fontFamily: "var(--font-mono)",
                           fontSize: 9.5,
-                          marginBottom: 7,
+                          letterSpacing: "1px",
+                          textTransform: "uppercase",
+                          marginBottom: 6,
                           color: m.gold ? "var(--highlight)" : "var(--fg-4)",
                         }}>
                           {m.l}
@@ -361,26 +365,27 @@ export default function GestaoEdificios() {
                         <div style={{
                           fontFamily: "var(--font-display)",
                           fontWeight: 700,
-                          fontSize: 20,
+                          fontSize: 19,
                           color: m.gold ? "var(--highlight)" : "var(--fg-1)",
+                          whiteSpace: "nowrap",
                         }}>
                           {m.v}
                         </div>
-                        <div className="r-meta" style={{ marginTop: 4 }}>{m.s}</div>
                       </div>
                     ))}
                   </div>
 
                   {/* Occupation Bar */}
-                  <div style={{ marginTop: 16 }}>
+                  <div style={{ marginTop: 20 }}>
                     <OccupationBar alugadas={stats.alugadas} disponiveis={stats.disponiveis} />
-                    <p className="r-meta" style={{ color: "var(--fg-4)", marginTop: 6 }}>
-                      {stats.alugadas} alugada{stats.alugadas !== 1 ? "s" : ""} · {stats.disponiveis} disponíve{stats.disponiveis !== 1 ? "is" : "l"}
+                    <p className="r-meta" style={{ color: "var(--fg-4)", marginTop: 8, display: "flex", alignItems: "center", gap: 7 }}>
+                      <span style={{ width: 8, height: 8, background: "var(--indigo)", flexShrink: 0, display: "inline-block" }} />
+                      {stats.alugadas} alugada(s) · {stats.disponiveis} disponível(is)
                     </p>
                   </div>
 
-                  {/* Expand Button */}
-                  <div style={{ marginTop: 16 }}>
+                  {/* Expand Link */}
+                  <div style={{ marginTop: 18 }}>
                     <button
                       onClick={() => toggleExpandido(edificio.id)}
                       disabled={n === 0}
@@ -389,12 +394,16 @@ export default function GestaoEdificios() {
                         cursor: n === 0 ? "not-allowed" : "pointer",
                         opacity: n === 0 ? 0.4 : 1,
                         fontFamily: "var(--font-mono)",
-                        fontSize: 11,
-                        color: "var(--fg-3)",
-                        padding: "6px 12px",
-                        border: "1px solid var(--indigo)",
+                        fontSize: 10.5,
+                        letterSpacing: "0.5px",
+                        textTransform: "uppercase",
+                        color: "var(--indigo)",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
                       }}
                     >
+                      <span style={{ fontSize: 12 }}>{isExpanded ? "⌄" : "›"}</span>
                       {`Ver ${n} unidade${n !== 1 ? "s" : ""}`}
                     </button>
                   </div>
