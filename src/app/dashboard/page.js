@@ -5,7 +5,9 @@ import {
   getLocatarios,
   getEdificios,
   getParcelasByContratos,
+  getParcelasFluxo,
 } from "@/lib/queries-server"
+import { aggregateFluxo } from "@/lib/fluxo"
 import { createServer } from "@/lib/supabase-server"
 import { cn, fmtBRL, fmtData } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
@@ -18,14 +20,70 @@ function getInitials(name) {
   return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
 }
 
+function OccupancyBar({ alugadas, total }) {
+  return (
+    <div style={{ display: "flex", gap: 3 }}>
+      {Array.from({ length: total }).map((_, i) => (
+        <div
+          key={i}
+          style={{
+            flex: 1,
+            height: 28,
+            background: i < alugadas ? "var(--color-primary-hover)" : "var(--surface-hi)",
+            border:     i < alugadas ? "none" : "1px solid var(--border-3)",
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function CashFlowChart({ fluxo, height = 132, testId }) {
+  return (
+    <div
+      data-testid={testId}
+      style={{ display: "flex", alignItems: "flex-end", gap: 10, height }}
+    >
+      {fluxo.map((f, i) => (
+        <div
+          key={f.key}
+          style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, height: "100%", justifyContent: "flex-end" }}
+        >
+          <div style={{ position: "relative", width: "100%", flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+            {/* previsto ghost — renders first in DOM so solid stacks on top */}
+            <div style={{ position: "absolute", bottom: 0, width: "62%", height: `${f.previsto}%`, background: "var(--secondary)", opacity: 0.5 }} />
+            {/* recebido solid */}
+            <div
+              className="chart-bar"
+              style={{
+                position: "relative",
+                width: "62%",
+                height: `${f.recebido}%`,
+                background: f.peak ? "var(--highlight)" : "var(--color-primary-hover)",
+                boxShadow: f.peak ? "0 0 6px 0 var(--highlight)" : "none",
+                transformOrigin: "bottom",
+                animation: `rGrowY var(--dur-base) var(--ease-crisp)`,
+                animationDelay: `${i * 60}ms`,
+                animationFillMode: "none",
+              }}
+            />
+          </div>
+          <span className="r-meta" style={{ fontSize: 9 }}>{f.mes}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default async function Dashboard() {
   let unidades = [], contratos = [], locatarios = [], edificios = [], parcelas = []
+  let parcelasFluxo = []
   let proprietarioNome = "—"
   let erro = null
 
   try {
-    ;[unidades, contratos, locatarios, edificios] = await Promise.all([
-      getUnidades(), getContratos(), getLocatarios(), getEdificios(),
+    ;[unidades, contratos, locatarios, edificios, parcelasFluxo] = await Promise.all([
+      getUnidades(), getContratos(), getLocatarios(), getEdificios(), getParcelasFluxo(),
     ])
     const contratosAtivosIds = contratos.filter(c => c.status === "ativo").map(c => c.id)
     parcelas = await getParcelasByContratos(contratosAtivosIds)
@@ -63,6 +121,9 @@ export default async function Dashboard() {
     return diff >= 0 && diff <= 7
   })
   const pctOcupacao = unidades.length ? Math.round((alugadas / unidades.length) * 100) : 0
+
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const fluxoData = aggregateFluxo(parcelasFluxo, contratos, unidades, todayStr)
 
   const isEmpty = edificios.length === 0
 
