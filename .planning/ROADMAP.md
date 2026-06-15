@@ -60,7 +60,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 - [x] **Phase 17: Fundação — Tokens, Mobile/Modal Fixes & Infra** - Escala tipográfica + densidade em globals.css, fixes cross-cutting de scroll/modal/animação nas cascas base, migrações de schema, Storage bucket privado, remotePatterns (completed 2026-06-13)
 - [x] **Phase 18: Acesso — Login / Cadastro / Redefinir** - Split-panel, show/hide senha, manter sessão, máscara telefone, cadastro completo de Proprietário, redefinir senha (completed 2026-06-14)
 - [x] **Phase 19: Unidades — Modal Unificado & Foto de Capa** - Métricas-resumo, busca/filtros, modal único criar/editar, upload de foto via Storage, confirmação de remoção com cleanup (completed 2026-06-14)
-- [ ] **Phase 20: Edifícios — Cards & Drill-in** - Cards 2 colunas, stats por edifício, barra de ocupação contígua, drill-in clicável reusando o modal de unidade
+- [x] **Phase 20: Edifícios — Cards & Drill-in** - Cards 2 colunas, stats por edifício, barra de ocupação contígua, drill-in clicável reusando o modal de unidade (completed 2026-06-15)
 - [ ] **Phase 21: Dashboard — Visão Geral Editorial** - Bloco de ocupação em destaque, gráfico de fluxo de caixa, contratos recentes/parcelas + atalhos rápidos
 - [ ] **Phase 22: Contratos & Parcelas — Renovação** - Busca/filtro vencendo, countdown, progresso, arquivo de encerrados, timeline de parcelas, registrar pagamento, renovar contrato (append)
 - [ ] **Phase 23: Locatários — Busca & Máscaras** - Busca, convidar/editar com máscaras CPF/CNPJ/telefone, reenviar/revogar, ações expostas no mobile
@@ -148,7 +148,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 20-02-PLAN.md — GestaoEdificios cards 2-col, stats, barra de ocupação, accordion drill-in (EDIF-01/02/03)
+- [x] 20-02-PLAN.md — GestaoEdificios cards 2-col, stats, barra de ocupação, accordion drill-in (EDIF-01/02/03)
 
 **UI hint**: yes
 
@@ -237,7 +237,7 @@ Plans:
 | 17. Fundação — Tokens, Mobile/Modal Fixes & Infra | 3/3 | Complete   | 2026-06-13 |
 | 18. Acesso — Login / Cadastro / Redefinir | 4/4 | Complete    | 2026-06-14 |
 | 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-15 |
-| 20. Edifícios — Cards & Drill-in | 1/2 | In Progress|  |
+| 20. Edifícios — Cards & Drill-in | 2/2 | Complete   | 2026-06-15 |
 | 21. Dashboard — Visão Geral Editorial | 0/TBD | Not started | - |
 | 22. Contratos & Parcelas — Renovação | 0/TBD | Not started | - |
 | 23. Locatários — Busca & Máscaras | 0/TBD | Not started | - |
