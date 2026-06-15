@@ -148,6 +148,7 @@ export default function Unidades() {
     const result = await deletarUnidade(unidade.id)
     if (result.status !== 200) {
       setErro(result.erroMessage)
+      toast.error(result.erroMessage)
       setRemovingIds(prev => { const n = new Set(prev); n.delete(unidade.id); return n })
       return
     }

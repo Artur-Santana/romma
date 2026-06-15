@@ -51,8 +51,14 @@ function StatusBadge({ status }) {
 }
 
 /* ── UnidadeCard — Variante B ──────────────────────────────────────────── */
+const FOTO_PLACEHOLDER = "/images/unidade-exemplo.jpg"
+
 export default function UnidadeCard({ unidade, onEditar, onDeletar }) {
   const fotoResolvida = useFotoSignedUrl(unidade.foto_url)
+  // Always show a cover so every card has the same height (no grid gaps).
+  // Units without a photo fall back to a dimmed placeholder image.
+  const isPlaceholder = !fotoResolvida
+  const coverSrc = fotoResolvida ?? FOTO_PLACEHOLDER
 
   // Format value: always show on dashboard (owner view)
   function fmtValor(v) {
@@ -72,16 +78,27 @@ export default function UnidadeCard({ unidade, onEditar, onDeletar }) {
       display: "flex",
       flexDirection: "column",
     }}>
-      {/* Cover photo */}
-      {fotoResolvida && (
-        <div style={{ height: 140, overflow: "hidden", flexShrink: 0 }}>
-          <img
-            src={fotoResolvida}
-            alt=""
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </div>
-      )}
+      {/* Cover photo — always rendered so all cards share the same height */}
+      <div style={{ height: 140, overflow: "hidden", flexShrink: 0, position: "relative" }}>
+        <img
+          src={coverSrc}
+          alt=""
+          style={{
+            width: "100%", height: "100%", objectFit: "cover",
+            filter: isPlaceholder ? "grayscale(0.4) contrast(1.05) brightness(0.55)" : "none",
+          }}
+        />
+        {isPlaceholder && (
+          <span style={{
+            position: "absolute", bottom: 8, left: 10,
+            fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700,
+            letterSpacing: "0.5px", textTransform: "uppercase",
+            color: "var(--fg-4)",
+          }}>
+            Sem foto
+          </span>
+        )}
+      </div>
 
       {/* Card body */}
       <div style={{
