@@ -37,7 +37,7 @@ function FInput({ style, ...props }) {
   )
 }
 
-function FSelect({ value, onChange, children }) {
+function FSelect({ value, onChange, children, disabled }) {
   const [focused, setFocused] = useState(false)
   return (
     <div style={{ position: "relative" }}>
@@ -46,11 +46,14 @@ function FSelect({ value, onChange, children }) {
         onChange={onChange}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        disabled={disabled}
         style={{
           all: "unset", boxSizing: "border-box", width: "100%",
           padding: "10px 34px 10px 12px", fontSize: 13,
           fontFamily: "var(--font-mono)", color: "var(--fg-1)",
-          background: "var(--surface-hi)", cursor: "pointer",
+          background: "var(--surface-hi)",
+          cursor: disabled ? "default" : "pointer",
+          opacity: disabled ? 0.5 : 1,
           border: `1px solid ${focused ? "var(--primary)" : "var(--border-3)"}`,
           transition: "border-color var(--dur-fast)"
         }}
@@ -269,7 +272,7 @@ function CoverPhotoField({ preview, setPreview, fileToUpload, setFileToUpload, s
 }
 
 /* ── UnifiedUnidadeModal ───────────────────────────────────────────────── */
-export default function UnifiedUnidadeModal({ mode, initial, edificios, onClose, onSaved }) {
+export default function UnifiedUnidadeModal({ mode, initial, edificios, onClose, onSaved, lockEdificio = false }) {
   const [form, setForm] = useState({
     nome: initial?.nome ?? "",
     descricao: initial?.descricao ?? "",
@@ -431,9 +434,13 @@ export default function UnifiedUnidadeModal({ mode, initial, edificios, onClose,
             <FormField label="Edifício">
               <FSelect
                 value={form.edificio_id}
-                onChange={(e) => setForm({ ...form, edificio_id: e.target.value })}
+                onChange={(e) => !lockEdificio && setForm({ ...form, edificio_id: e.target.value })}
+                disabled={lockEdificio}
               >
-                {edificios.map((ed) => (
+                {(lockEdificio
+                  ? edificios.filter(ed => ed.id === form.edificio_id)
+                  : edificios
+                ).map((ed) => (
                   <option key={ed.id} value={ed.id}>{ed.nome}</option>
                 ))}
               </FSelect>
