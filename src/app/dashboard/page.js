@@ -53,29 +53,27 @@ function CashFlowChart({ fluxo, testId }) {
       {fluxo.map((f, i) => (
         <div
           key={f.key}
-          style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}
+          className="chart-col"
+          style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}
         >
-          {/* value label above bars — fixed 20px zone */}
+          {/* previsto (total recebível) at top */}
           <div style={{ height: 20, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 4 }}>
-            <span style={{
-              fontSize: 9,
-              fontFamily: "var(--font-mono)",
-              color: f.peak ? "var(--highlight)" : "var(--fg-3)",
-              whiteSpace: "nowrap",
-            }}>
-              {fmtChartVal(f.rawRecebido)}
-            </span>
+            {f.rawPrevisto > 0 && (
+              <span style={{ fontSize: 9, fontFamily: "var(--font-mono)", color: "var(--fg-4)", whiteSpace: "nowrap" }}>
+                {fmtChartVal(f.rawPrevisto)}
+              </span>
+            )}
           </div>
-          {/* bar area — fills remaining height */}
+          {/* bar area */}
           <div style={{ position: "relative", width: "100%", flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-            {/* previsto ghost — renders first in DOM */}
+            {/* previsto ghost */}
             <div style={{
               position: "absolute", bottom: 0, width: "62%",
               height: `${Math.max(f.previsto, f.previsto > 0 ? 4 : 0)}%`,
               background: "oklch(1 0 0 / 0.10)",
               border: "1px solid oklch(1 0 0 / 0.22)",
             }} />
-            {/* recebido solid */}
+            {/* recebido solid — value inside when tall enough */}
             <div
               className="chart-bar"
               style={{
@@ -88,12 +86,33 @@ function CashFlowChart({ fluxo, testId }) {
                 animation: `rGrowY var(--dur-base) var(--ease-crisp)`,
                 animationDelay: `${i * 60}ms`,
                 animationFillMode: "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden",
               }}
-            />
+            >
+              {f.recebido > 24 && (
+                <span style={{
+                  fontSize: 8, fontFamily: "var(--font-mono)", whiteSpace: "nowrap",
+                  color: f.peak ? "oklch(0.25 0.05 70)" : "oklch(0 0 0 / 0.6)",
+                }}>
+                  {fmtChartVal(f.rawRecebido)}
+                </span>
+              )}
+            </div>
           </div>
-          {/* month label — fixed 18px zone */}
+          {/* month label */}
           <div style={{ height: 18, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 5 }}>
             <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--fg-3)" }}>{f.mes}</span>
+          </div>
+          {/* hover tooltip */}
+          <div className="chart-tooltip">
+            <div style={{ color: "var(--fg-2)", fontWeight: 700, marginBottom: 2 }}>
+              {f.mes.charAt(0).toUpperCase() + f.mes.slice(1)}
+            </div>
+            <div>Recebido:&nbsp;<span style={{ color: "var(--fg-1)" }}>{fmtChartVal(f.rawRecebido) ?? "R$0"}</span></div>
+            <div>Previsto:&nbsp;<span style={{ color: "var(--fg-1)" }}>{fmtChartVal(f.rawPrevisto) ?? "R$0"}</span></div>
           </div>
         </div>
       ))}
@@ -322,15 +341,19 @@ export default async function Dashboard() {
           {vencendoContratos.length > 0 && (
             <div className="bg-warning-bg border-l-2 border-warning px-6 py-4 mb-8 flex justify-between items-center">
               <div>
-                <span className="eyebrow eyebrow--warning mb-1">ATENÇÃO · CONTRATOS A VENCER</span>
-                <span className="text-[14px] text-warning block">
+                <span className="eyebrow eyebrow--warning mb-2">ATENÇÃO · CONTRATOS A VENCER</span>
+                <div className="flex flex-col gap-1">
                   {vencendoContratos.map(c => {
                     const loc  = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
                     const uni  = c.unidades?.nome ?? unidades.find(u => u.id === c.unidade_id)?.nome ?? "—"
                     const diff = Math.ceil((new Date(c.data_fim) - new Date()) / MS_POR_DIA)
-                    return `${loc} · ${uni} — vence em ${diff} dia(s) (${fmtData(c.data_fim)})`
-                  }).join(" · ")}
-                </span>
+                    return (
+                      <Link key={c.id} href={`/dashboard/contratos/${c.id}`} className="text-[14px] text-warning no-underline hover:underline">
+                        {loc} · {uni} — vence em {diff} dia(s) ({fmtData(c.data_fim)})
+                      </Link>
+                    )
+                  })}
+                </div>
               </div>
               <Link
                 href="/dashboard/contratos"
@@ -371,7 +394,7 @@ export default async function Dashboard() {
                   const diff    = (new Date(c.data_fim) - new Date()) / MS_POR_DIA
                   const isExpiring = diff >= 0 && diff <= 7
                   return (
-                    <div key={c.id} style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-4 border-t border-border-3 items-center">
+                    <Link key={c.id} href={`/dashboard/contratos/${c.id}`} style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-4 border-t border-border-3 items-center no-underline hover:bg-surface-hi transition-colors">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-surface-hi flex items-center justify-center shrink-0">
                           <span className="font-mono text-[10px] text-fg-2 font-bold">{getInitials(locNome)}</span>
@@ -384,7 +407,7 @@ export default async function Dashboard() {
                       <span className="font-mono text-[14px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
                       <span className={cn("font-mono text-[14px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
                       <StatusBadge status={isExpiring ? "vencendo" : c.status} />
-                    </div>
+                    </Link>
                   )
                 })}
               </div>
@@ -408,7 +431,7 @@ export default async function Dashboard() {
                   const diasRestantes = Math.ceil((new Date(p.data_vencimento) - new Date()) / MS_POR_DIA)
                   const isVencida     = p.status === "vencida"
                   return (
-                    <div key={p.id} className={cn("px-5 py-4 flex justify-between items-center", i > 0 ? "border-t border-border-3" : "")}>
+                    <Link key={p.id} href={`/dashboard/contratos/${p.contrato_id}`} className={cn("px-5 py-4 flex justify-between items-center no-underline hover:bg-surface-hi transition-colors", i > 0 ? "border-t border-border-3" : "")}>
                       <div>
                         <div className="text-[18px] text-fg-1 font-semibold">{loc?.nome_razao_social ?? "—"}</div>
                         <div className="font-mono text-[10px] text-fg-4">{uni?.nome ?? "—"} · {edi?.nome ?? "—"}</div>
@@ -419,7 +442,7 @@ export default async function Dashboard() {
                           {isVencida ? `${Math.abs(diasRestantes)}d atraso` : `${diasRestantes}d restantes`}
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   )
                 })}
               </div>
