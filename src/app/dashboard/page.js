@@ -59,7 +59,7 @@ function CashFlowChart({ fluxo, testId }) {
           {/* previsto (total recebível) at top */}
           <div style={{ height: 20, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 4 }}>
             {f.rawPrevisto > 0 && (
-              <span style={{ fontSize: 9, fontFamily: "var(--font-mono)", color: "var(--fg-4)", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--fg-4)", whiteSpace: "nowrap" }}>
                 {fmtChartVal(f.rawPrevisto)}
               </span>
             )}
@@ -94,7 +94,7 @@ function CashFlowChart({ fluxo, testId }) {
             >
               {f.recebido > 24 && (
                 <span style={{
-                  fontSize: 8, fontFamily: "var(--font-mono)", whiteSpace: "nowrap",
+                  fontSize: 10, fontFamily: "var(--font-mono)", whiteSpace: "nowrap",
                   color: f.peak ? "oklch(0.25 0.05 70)" : "oklch(0 0 0 / 0.6)",
                 }}>
                   {fmtChartVal(f.rawRecebido)}
@@ -104,7 +104,7 @@ function CashFlowChart({ fluxo, testId }) {
           </div>
           {/* month label */}
           <div style={{ height: 18, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 5 }}>
-            <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--fg-3)" }}>{f.mes}</span>
+            <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--fg-3)" }}>{f.mes}</span>
           </div>
           {/* hover tooltip */}
           <div className="chart-tooltip">
