@@ -181,17 +181,14 @@ describe('criarUnidade', () => {
   })
 
   it('happy path — dono do edifício, cria unidade com sucesso', async () => {
+    const newId = '00000000-0000-0000-0000-000000000099'
     // Step 1: edificios ownership fetch → returns row (owner match)
     mockAdmin.single.mockResolvedValueOnce({ data: { id: validEdificioId }, error: null })
-    // Step 2: insert thenable → { error: null }
-    const thenMock = vi.fn()
-    mockAdmin.then = thenMock
-    thenMock.mockImplementationOnce((resolve) =>
-      Promise.resolve({ error: null }).then(resolve)
-    )
+    // Step 2: insert .select('id').single() → returns new row
+    mockAdmin.single.mockResolvedValueOnce({ data: { id: newId }, error: null })
 
     const result = await criarUnidade(validCriarForm)
-    expect(result).toEqual({ status: 200 })
+    expect(result).toEqual({ status: 200, id: newId })
   })
 
   it('cross-tenant — edificios ownership retorna nulo → 404, insert não executado', async () => {
@@ -215,14 +212,10 @@ describe('criarUnidade', () => {
   })
 
   it('D-08 — proprietario_id do usuário é usado no filtro do edificios ownership check', async () => {
-    // edificios ownership fetch → returns row (owner match)
+    // Step 1: edificios ownership fetch → returns row (owner match)
     mockAdmin.single.mockResolvedValueOnce({ data: { id: validEdificioId }, error: null })
-    // insert thenable → { error: null }
-    const thenMock = vi.fn()
-    mockAdmin.then = thenMock
-    thenMock.mockImplementationOnce((resolve) =>
-      Promise.resolve({ error: null }).then(resolve)
-    )
+    // Step 2: insert .select('id').single() → returns new row
+    mockAdmin.single.mockResolvedValueOnce({ data: { id: '00000000-0000-0000-0000-000000000099' }, error: null })
 
     await criarUnidade(validCriarForm)
 

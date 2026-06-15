@@ -31,11 +31,11 @@
 
 ### Unidades (variante B — grade de cards)
 
-- [ ] **UNID-01**: Tela de Unidades exibe barra de métricas-resumo (área total m², MRR realizado, potencial em aberto em dourado, contagem de valores ocultos)
-- [ ] **UNID-02**: Proprietário busca unidade por nome e filtra por status (todos/disponível/alugada) e por edifício
-- [ ] **UNID-03**: Proprietário cria e edita unidade através de um único modal unificado (mesmo componente), com campos edifício, nome, área, valor mensal, status, descrição e checkbox "exibir valor publicamente"
-- [ ] **UNID-04**: Proprietário adiciona foto de capa à unidade (arrastar/clicar → preview, opção "usar foto de exemplo", trocar/remover), com upload persistido no Supabase Storage e URL salva no registro da unidade
-- [ ] **UNID-05**: Remover unidade exige modal de confirmação (ação destrutiva) e limpa a foto de capa órfã no Storage
+- [x] **UNID-01**: Tela de Unidades exibe barra de métricas-resumo (área total m², MRR realizado, potencial em aberto em dourado, contagem de valores ocultos)
+- [x] **UNID-02**: Proprietário busca unidade por nome e filtra por status (todos/disponível/alugada) e por edifício
+- [x] **UNID-03**: Proprietário cria e edita unidade através de um único modal unificado (mesmo componente), com campos edifício, nome, área, valor mensal, status, descrição e checkbox "exibir valor publicamente"
+- [x] **UNID-04**: Proprietário adiciona foto de capa à unidade (arrastar/clicar → preview, opção "usar foto de exemplo", trocar/remover), com upload persistido no Supabase Storage e URL salva no registro da unidade
+- [x] **UNID-05**: Remover unidade exige modal de confirmação (ação destrutiva) e limpa a foto de capa órfã no Storage
 
 ### Edifícios (variante B — cards 2 colunas)
 
@@ -127,11 +127,11 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | ACESSO-02 | Phase 18 | Complete |
 | ACESSO-03 | Phase 18 | Complete |
 | ACESSO-04 | Phase 18 | Complete |
-| UNID-01 | Phase 19 | Pending |
-| UNID-02 | Phase 19 | Pending |
-| UNID-03 | Phase 19 | Pending |
-| UNID-04 | Phase 19 | Pending |
-| UNID-05 | Phase 19 | Pending |
+| UNID-01 | Phase 19 | Complete |
+| UNID-02 | Phase 19 | Complete |
+| UNID-03 | Phase 19 | Complete |
+| UNID-04 | Phase 19 | Complete |
+| UNID-05 | Phase 19 | Complete |
 | EDIF-01 | Phase 20 | Pending |
 | EDIF-02 | Phase 20 | Pending |
 | EDIF-03 | Phase 20 | Pending |
