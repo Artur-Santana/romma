@@ -56,6 +56,8 @@ function normalizeFluxo(windowMonths, recebido, previsto) {
     recebido: Math.round(((recebido[key] ?? 0) / maxVal) * 100),
     previsto:  Math.round(((previsto[key]  ?? 0) / maxVal) * 100),
     peak:     peakRecebido > 0 && (recebido[key] ?? 0) === peakRecebido,
+    rawRecebido: recebido[key] ?? 0,
+    rawPrevisto: previsto[key] ?? 0,
   }))
 }
 
