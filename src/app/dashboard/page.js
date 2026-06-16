@@ -20,7 +20,7 @@ function getInitials(name) {
   return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
 }
 
-function OccupancyBar({ alugadas, total }) {
+function OccupancyBar({ alugadas, total, cellHeight = 28 }) {
   return (
     <div style={{ display: "flex", gap: 3 }}>
       {Array.from({ length: total }).map((_, i) => (
@@ -28,7 +28,7 @@ function OccupancyBar({ alugadas, total }) {
           key={i}
           style={{
             flex: 1,
-            height: 28,
+            height: cellHeight,
             background: i < alugadas ? "var(--color-primary-hover)" : "var(--surface-hi)",
             border:     i < alugadas ? "none" : "1px solid var(--border-3)",
           }}
@@ -44,11 +44,11 @@ function fmtChartVal(raw) {
   return `R$${raw}`
 }
 
-function CashFlowChart({ fluxo, testId }) {
+function CashFlowChart({ fluxo, testId, height }) {
   return (
     <div
       data-testid={testId}
-      style={{ display: "flex", gap: 6, height: "100%", alignItems: "stretch" }}
+      style={{ display: "flex", gap: 6, height: height ?? "100%", alignItems: "stretch" }}
     >
       {fluxo.map((f, i) => (
         <div
@@ -511,6 +511,11 @@ export default async function Dashboard() {
             </div>
           </div>
 
+          {/* Mobile OccupancyBar — compact, 1 cell per unit */}
+          <div className="mx-5 mb-4">
+            <OccupancyBar alugadas={alugadas} total={unidades.length} cellHeight={20} />
+          </div>
+
           {/* Vencendo banner mobile */}
           {vencendoContratos.length > 0 && (
             <div className="bg-warning-bg border-l-2 border-warning px-5 py-[14px] mx-5 mb-6">
@@ -526,6 +531,14 @@ export default async function Dashboard() {
               </span>
             </div>
           )}
+
+          {/* Mobile CashFlowChart — compact, indigo eyebrow */}
+          <div className="mx-5 mb-6">
+            <span className="eyebrow eyebrow--indigo mb-[10px]">FLUXO · PREVISÃO 2026</span>
+            <div className="bg-surface border border-border-3" style={{ padding: "16px 14px" }}>
+              <CashFlowChart fluxo={fluxoData} height={108} />
+            </div>
+          </div>
 
           {/* Contratos recentes mobile */}
           <div className="mx-5 mb-6">
