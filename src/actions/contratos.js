@@ -161,6 +161,87 @@ export async function encerrarContrato(id) {
   return { status: 200 }
 }
 
+export async function renovarContrato(id, meses) {
+  const { err, user } = await authGuard()
+  if (err) return err
+
+  if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+
+  const m = Number(meses)
+  if (!Number.isInteger(m) || m < 1 || m > 36) {
+    return { status: 400, erroMessage: 'Número de meses inválido (1–36).' }
+  }
+
+  // Cadeia de propriedade 3 níveis (igual cancelarContrato)
+  const { data: contrato, error: fetchErr } = await supabaseAdmin
+    .from('contratos')
+    .select('unidade_id, data_fim')
+    .eq('id', id)
+    .single()
+  if (fetchErr || !contrato) return { status: 404, erroMessage: 'Contrato não encontrado.' }
+
+  const { data: unidade, error: fetchUnidadeErr } = await supabaseAdmin
+    .from('unidades').select('edificio_id').eq('id', contrato.unidade_id).single()
+  if (fetchUnidadeErr || !unidade) return { status: 404, erroMessage: 'Contrato não encontrado.' }
+
+  const { data: edificio, error: fetchEdificioErr } = await supabaseAdmin
+    .from('edificios').select('id').eq('id', unidade.edificio_id).eq('proprietario_id', user.id).single()
+  if (fetchEdificioErr || !edificio) return { status: 404, erroMessage: 'Contrato não encontrado.' }
+
+  // Calcular nova data_fim com T12:00:00 para evitar UTC shift
+  const d = new Date(contrato.data_fim + 'T12:00:00')
+  d.setMonth(d.getMonth() + m)
+  const nova_data_fim = d.toISOString().slice(0, 10)
+
+  // UPDATE data_fim primeiro
+  const { error: updateErr } = await supabaseAdmin
+    .from('contratos')
+    .update({ data_fim: nova_data_fim })
+    .eq('id', id)
+  if (updateErr) return { status: 500, erroMessage: updateErr.message }
+
+  // Buscar última parcela (MAX(numero) via ORDER DESC LIMIT 1)
+  const { data: lastParc, error: lastParcErr } = await supabaseAdmin
+    .from('parcelas')
+    .select('numero, data_fechamento')
+    .eq('contrato_id', id)
+    .order('numero', { ascending: false })
+    .limit(1)
+    .single()
+  if (lastParcErr) return { status: 500, erroMessage: lastParcErr.message }
+
+  // Gerar novas parcelas a partir do mês seguinte ao último fechamento
+  const novasParcelas = []
+  let nextNumero = lastParc.numero + 1
+  const fechBase = new Date(lastParc.data_fechamento + 'T12:00:00')
+  fechBase.setMonth(fechBase.getMonth() + 1)
+  fechBase.setDate(1)
+  const fim = new Date(nova_data_fim + 'T12:00:00')
+
+  while (fechBase <= fim) {
+    const venc = new Date(fechBase)
+    venc.setDate(venc.getDate() + 7)
+    novasParcelas.push({
+      contrato_id: id,
+      numero: nextNumero,
+      data_fechamento: fechBase.toISOString().slice(0, 10),
+      data_vencimento: venc.toISOString().slice(0, 10),
+      status: 'futura',
+    })
+    nextNumero++
+    fechBase.setMonth(fechBase.getMonth() + 1)
+  }
+
+  if (novasParcelas.length > 0) {
+    const { error: insertErr } = await supabaseAdmin
+      .from('parcelas')
+      .insert(novasParcelas)
+    if (insertErr) return { status: 500, erroMessage: insertErr.message }
+  }
+
+  return { status: 200 }
+}
+
 export async function gerarParcelas(contratoId) {
     const supabase = await createServer()
     const { data: { user } } = await supabase.auth.getUser()
