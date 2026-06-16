@@ -249,118 +249,171 @@ export default function Contratos() {
           eyebrow="SISTEMA.02 // VÍNCULOS"
           title="Contratos."
           subtitle={`${ativos} ativos · ${encerrados} encerrados`}
-          cta={{ label: showForm ? "Fechar" : "Novo Contrato", code: showForm ? "×" : "C+", onClick: () => setShowForm(v => !v) }}
+          cta={{ label: "Novo Contrato", code: "C+", onClick: () => setShowForm(true) }}
         />
 
-        {/* New contract form */}
+        {/* New contract modal */}
         {showForm && (
-          <div className="border border-indigo p-8 mb-8 bg-surface">
-            <span className="eyebrow eyebrow--indigo mb-5 block">NOVO CONTRATO</span>
-            <form onSubmit={handleCriarContrato}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Locatário</span>
-                  <Select
-                    required
-                    value={form.locatario_id}
-                    onValueChange={v => setForm({ ...form, locatario_id: v })}
-                  >
-                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none">
-                      <SelectValue placeholder="Selecionar locatário..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {locatarios.map(l => (
-                        <SelectItem key={l.id} value={l.id}>{l.nome_razao_social}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </label>
-                <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Unidade (disponíveis)</span>
-                  <Select
-                    required
-                    value={form.unidade_id}
-                    onValueChange={v => setForm({ ...form, unidade_id: v })}
-                  >
-                    <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none">
-                      <SelectValue placeholder="Selecionar unidade..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {unidadesDisponiveis.map(u => (
-                        <SelectItem key={u.id} value={u.id}>{u.nome}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </label>
-                <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Data de Início</span>
-                  <Input
-                    required
-                    type="date"
-                    value={form.data_inicio}
-                    onChange={e => setForm({ ...form, data_inicio: e.target.value })}
-                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
-                  />
-                </label>
-                <label className="flex flex-col gap-1.5">
-                  <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Data de Término</span>
-                  <Input
-                    required
-                    type="date"
-                    value={form.data_fim}
-                    onChange={e => setForm({ ...form, data_fim: e.target.value })}
-                    className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[16px] rounded-none"
-                  />
-                </label>
-              </div>
-
-              {unidadeSelecionada && (
-                <div className="px-4 py-3 mb-4 border border-border-3 bg-surface-hi flex items-center gap-4">
-                  <span className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Valor Mensal</span>
-                  <span className="font-mono text-[18px] text-fg-1 font-bold">
-                    {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(unidadeSelecionada.valor_mensal ?? 0)}
-                  </span>
+          <div
+            onClick={() => { resetForm(); setShowForm(false); setErro(null) }}
+            className="romma-modal-backdrop z-[100]"
+          >
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{
+                width: 560, maxWidth: "calc(100vw - 32px)",
+                background: "var(--background)",
+                border: "1px solid var(--border-3)",
+                padding: 28,
+                maxHeight: "90vh",
+                overflowY: "auto",
+              }}
+            >
+              {/* Header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+                <div>
+                  <span className="eyebrow eyebrow--indigo" style={{ marginBottom: 6, display: "block" }}>NOVO CONTRATO</span>
+                  <h3 className="r-section">Cadastrar Contrato</h3>
                 </div>
-              )}
-
-              <label className="flex flex-col gap-1.5 mb-5">
-                <span className="font-mono text-[10px] tracking-[1px] text-fg-4 uppercase">Observações</span>
-                <textarea
-                  rows={3}
-                  value={form.observacoes}
-                  onChange={e => setForm({ ...form, observacoes: e.target.value })}
-                  placeholder="Opcional"
-                  className="bg-surface-hi border border-border-3 text-fg-1 font-body text-[16px] px-3.5 py-2.5 w-full resize-y focus:outline-none"
-                />
-              </label>
-
-              {erro && (
-                <div className="bg-[var(--danger-bg2)] border border-[var(--danger-bg)] border-l-2 border-l-danger-fg px-4 py-3 font-mono text-[12px] text-danger-fg mb-4">
-                  {erro}
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className={cn(
-                    "bg-indigo text-fg-1 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-10 py-[18px] rounded-none",
-                    loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
-                  )}
-                >
-                  {loading ? "Criando..." : "Criar Contrato"}
-                </Button>
-                <Button
+                <button
                   type="button"
-                  variant="ghost"
                   onClick={() => { resetForm(); setShowForm(false); setErro(null) }}
-                  className="border border-border-3 bg-transparent text-fg-3 font-body font-bold text-[14px] tracking-[1.2px] uppercase px-8 py-[18px] rounded-none cursor-pointer"
-                >
-                  Cancelar
-                </Button>
+                  style={{
+                    all: "unset", cursor: "pointer", width: 30, height: 30,
+                    border: "1px solid var(--border-3)", display: "flex",
+                    alignItems: "center", justifyContent: "center",
+                    color: "var(--fg-3)", fontFamily: "var(--font-mono)",
+                  }}
+                >✕</button>
               </div>
-            </form>
+
+              {/* Form */}
+              <form onSubmit={handleCriarContrato} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                  <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "1px", textTransform: "uppercase", color: "var(--fg-4)" }}>Locatário</span>
+                    <Select required value={form.locatario_id} onValueChange={v => setForm({ ...form, locatario_id: v })}>
+                      <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none h-[42px]">
+                        <SelectValue placeholder="Selecionar..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {locatarios.map(l => (
+                          <SelectItem key={l.id} value={l.id}>{l.nome_razao_social}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </label>
+
+                  <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "1px", textTransform: "uppercase", color: "var(--fg-4)" }}>Unidade</span>
+                    <Select required value={form.unidade_id} onValueChange={v => setForm({ ...form, unidade_id: v })}>
+                      <SelectTrigger className="bg-surface-hi border-border-3 text-fg-1 font-mono text-[13px] rounded-none h-[42px]">
+                        <SelectValue placeholder="Selecionar..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {unidadesDisponiveis.map(u => (
+                          <SelectItem key={u.id} value={u.id}>{u.nome}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </label>
+
+                  <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "1px", textTransform: "uppercase", color: "var(--fg-4)" }}>Data de Início</span>
+                    <input
+                      required type="date"
+                      value={form.data_inicio}
+                      onChange={e => setForm({ ...form, data_inicio: e.target.value })}
+                      style={{
+                        all: "unset", boxSizing: "border-box", width: "100%",
+                        padding: "10px 12px", fontSize: 13,
+                        fontFamily: "var(--font-mono)", color: "var(--fg-1)",
+                        background: "var(--surface-hi)", border: "1px solid var(--border-3)",
+                      }}
+                    />
+                  </label>
+
+                  <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "1px", textTransform: "uppercase", color: "var(--fg-4)" }}>Data de Término</span>
+                    <input
+                      required type="date"
+                      value={form.data_fim}
+                      onChange={e => setForm({ ...form, data_fim: e.target.value })}
+                      style={{
+                        all: "unset", boxSizing: "border-box", width: "100%",
+                        padding: "10px 12px", fontSize: 13,
+                        fontFamily: "var(--font-mono)", color: "var(--fg-1)",
+                        background: "var(--surface-hi)", border: "1px solid var(--border-3)",
+                      }}
+                    />
+                  </label>
+                </div>
+
+                {unidadeSelecionada && (
+                  <div style={{ padding: "10px 14px", border: "1px solid var(--border-3)", background: "var(--surface-hi)", display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--fg-4)", letterSpacing: "1px", textTransform: "uppercase" }}>Valor Mensal</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 16, color: "var(--fg-1)", fontWeight: 700 }}>
+                      {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(unidadeSelecionada.valor_mensal ?? 0)}
+                    </span>
+                  </div>
+                )}
+
+                <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "1px", textTransform: "uppercase", color: "var(--fg-4)" }}>Observações</span>
+                  <textarea
+                    rows={3}
+                    value={form.observacoes}
+                    onChange={e => setForm({ ...form, observacoes: e.target.value })}
+                    placeholder="Opcional"
+                    style={{
+                      all: "unset", boxSizing: "border-box", width: "100%",
+                      padding: "10px 12px", fontSize: 13, resize: "vertical",
+                      fontFamily: "var(--font-body)", color: "var(--fg-1)",
+                      background: "var(--surface-hi)", border: "1px solid var(--border-3)",
+                    }}
+                  />
+                </label>
+
+                {erro && (
+                  <div style={{ background: "var(--danger-bg2)", borderLeft: "2px solid var(--danger-fg)", padding: "10px 14px", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--danger-fg)" }}>
+                    {erro}
+                  </div>
+                )}
+
+                <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 4 }}>
+                  <button
+                    type="button"
+                    onClick={() => { resetForm(); setShowForm(false); setErro(null) }}
+                    style={{
+                      all: "unset", cursor: "pointer",
+                      border: "1px solid var(--border-3)", background: "transparent",
+                      color: "var(--fg-2)", padding: "10px 16px",
+                      fontFamily: "var(--font-mono)", fontSize: 12,
+                      letterSpacing: "0.5px", textTransform: "uppercase",
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    style={{
+                      all: "unset", cursor: loading ? "wait" : "pointer",
+                      background: "var(--indigo)", color: "var(--fg-1)",
+                      padding: "10px 18px",
+                      fontFamily: "var(--font-mono)", fontSize: 12,
+                      letterSpacing: "0.5px", textTransform: "uppercase",
+                      opacity: loading ? 0.7 : 1,
+                    }}
+                  >
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, marginRight: 6 }}>
+                      {loading ? "[···]" : "[✓]"}
+                    </span>
+                    {loading ? "Criando..." : "Criar Contrato"}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
 
