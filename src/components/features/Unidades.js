@@ -191,10 +191,11 @@ export default function Unidades() {
       )}
 
       {/* ── Metrics bar ─────────────────────────────────────────────────── */}
+      <div style={{ overflowX: "auto", marginBottom: "var(--rd-block)" }}>
       <div style={{
-        display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+        display: "grid", gridTemplateColumns: "repeat(4, minmax(130px, 1fr))",
         border: "1px solid var(--border-3)",
-        marginBottom: "var(--rd-block)",
+        minWidth: 520,
       }}>
         {[
           {
@@ -248,6 +249,7 @@ export default function Unidades() {
             <div className="r-meta" style={{ marginTop: 4 }}>{m.s}</div>
           </div>
         ))}
+      </div>
       </div>
 
       {/* ── Filter bar ──────────────────────────────────────────────────── */}
