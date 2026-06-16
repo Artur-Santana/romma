@@ -125,9 +125,34 @@ export default function Parcelas({ contratoId }) {
   ]
 
   if (carregando) {
+    const skel = (w, h, mb = 0) => (
+      <div style={{ width: w, height: h, marginBottom: mb, background: "var(--surface)", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, transparent 0%, var(--surface-hi) 50%, transparent 100%)", animation: "rBar 1.4s ease-in-out infinite" }} />
+      </div>
+    )
     return (
       <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
-        <div className="font-mono text-[12px] text-fg-4 py-16 text-center">Carregando…</div>
+        {skel(110, 36, 40)}
+        <div style={{ marginBottom: "var(--rd-block)" }}>
+          {skel(140, 11, 12)}
+          {skel("55%", 48)}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", border: "1px solid var(--border-3)", marginBottom: "var(--rd-block)" }}>
+          {[0,1,2,3,4].map(i => (
+            <div key={i} style={{ padding: "14px 16px", borderRight: i < 4 ? "1px solid var(--border-3)" : "none" }}>
+              {skel(60, 10, 10)}
+              {skel("75%", 16)}
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", border: "1px solid var(--border-3)", marginBottom: 20 }}>
+          {[0,1,2,3].map(i => (
+            <div key={i} style={{ padding: "14px 16px", borderRight: i < 3 ? "1px solid var(--border-3)" : "none" }}>
+              {skel(70, 10, 10)}
+              {skel("65%", 24)}
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -350,7 +375,14 @@ export default function Parcelas({ contratoId }) {
             border: "1px solid var(--border-2)",
             maxWidth: 500, width: "100%",
             padding: 28,
+            position: "relative",
+            overflow: "hidden",
           }}>
+            {renovando && (
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "var(--surface-hi)" }}>
+                <div style={{ position: "absolute", inset: 0, background: "var(--indigo)", animation: "rBar 1.2s ease-in-out infinite" }} />
+              </div>
+            )}
             {/* Header do modal */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
               <div>
