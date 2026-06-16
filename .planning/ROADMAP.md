@@ -192,7 +192,10 @@ Plans:
   4. Registrar pagamento em parcela pendente/vencida marca como paga (data=hoje), atualiza os números do resumo financeiro ao vivo e mostra toast
   5. Renovar contrato via modal (+6/+12/+24 meses + campo personalizado) estende `data_fim` e faz **append** de novas parcelas futuras via Server Action (datas parseadas com `T12:00:00`, cadeia de propriedade verificada, parcelas já pagas preservadas — sem re-chamar a Edge Function gerar-parcelas)
 
-**Plans**: TBD
+**Plans**: 3 plans
+- [ ] 22-01-PLAN.md — Contratos.js: cards desktop + busca + filtro Vencendo + countdown + progresso + arquivo (CONTR-01..05)
+- [ ] 22-02-PLAN.md — Parcelas.js: grade-resumo + resumo financeiro + barra segmentada + timeline + registrar pagamento (PARC-01..03)
+- [ ] 22-03-PLAN.md — SA renovarContrato + modal de renovação em Parcelas.js (PARC-04)
 **UI hint**: yes
 
 ### Phase 23: Locatários — Busca & Máscaras
