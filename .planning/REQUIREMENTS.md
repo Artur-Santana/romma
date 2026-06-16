@@ -26,7 +26,7 @@
 ### Dashboard (Visão Geral — variante B)
 
 - [ ] **DASH-04**: Dashboard exibe bloco de ocupação em destaque (numeral grande de % + barra de ocupação dividida por unidade) e métricas empilhadas (ocupação, MRR, receita esperada, contratos vencendo em 7 dias)
-- [ ] **DASH-05**: Dashboard exibe gráfico de fluxo de caixa (barras: recebido sólido vs. previsto fantasma, com pico em dourado), alimentado por agregação mensal de parcelas
+- [x] **DASH-05**: Dashboard exibe gráfico de fluxo de caixa (barras: recebido sólido vs. previsto fantasma, com pico em dourado), alimentado por agregação mensal de parcelas
 - [ ] **DASH-06**: Dashboard tem tabela de contratos recentes, painel de parcelas e atalhos rápidos que navegam para as seções correspondentes
 
 ### Unidades (variante B — grade de cards)
@@ -136,7 +136,7 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | EDIF-02 | Phase 20 | Complete |
 | EDIF-03 | Phase 20 | Complete |
 | DASH-04 | Phase 21 | Pending |
-| DASH-05 | Phase 21 | Pending |
+| DASH-05 | Phase 21 | Complete |
 | DASH-06 | Phase 21 | Pending |
 | CONTR-01 | Phase 22 | Pending |
 | CONTR-02 | Phase 22 | Pending |

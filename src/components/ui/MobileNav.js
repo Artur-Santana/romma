@@ -45,7 +45,9 @@ export function MobileBottomNav({ items = [], pathname: pathnameProp }) {
   return (
     <div data-testid="mobile-bottom-nav" className="bg-background border-t border-[var(--border-2)] flex shrink-0">
       {items.map((item) => {
-        const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+        const isActive = item.href === "/dashboard"
+          ? pathname === item.href
+          : pathname === item.href || pathname.startsWith(item.href + "/");
         return (
           <Link
             key={item.href}

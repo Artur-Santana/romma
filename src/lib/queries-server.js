@@ -61,6 +61,15 @@ export async function getParcelasByContratos(contratoIds) {
   return data ?? []
 }
 
+export async function getParcelasFluxo() {
+  const supabase = await createServer()
+  const { data } = await supabase
+    .from('parcelas')
+    .select('id, contrato_id, data_vencimento, data_pagamento, status')
+    .order('data_vencimento', { ascending: true })
+  return data ?? []
+}
+
 export async function getParcelasByContrato(contratoId) {
     const supabase = await createServer()
     const { data } = await supabase
