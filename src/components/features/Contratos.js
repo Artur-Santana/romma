@@ -520,19 +520,87 @@ export default function Contratos() {
           })}
         </div>
 
-        {/* Archive callout */}
-        <div className="flex justify-between items-center px-6 py-4 border border-border-3 text-fg-3">
-          <span className="font-mono text-[11px] tracking-[0.5px]">
+        {/* Archive callout + toggle */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", border: "1px solid var(--border-3)" }}>
+          <span className="font-mono text-[11px] text-fg-4" style={{ letterSpacing: "0.5px" }}>
             Contratos encerrados são preservados como histórico imutável.
           </span>
-          <Button
-            variant="ghost"
-            disabled
-            className="font-mono font-bold text-[10px] tracking-[1.4px] text-fg-2 uppercase p-0 h-auto opacity-50 cursor-not-allowed"
+          <button
+            onClick={() => setShowArquivo(v => !v)}
+            style={{
+              all: "unset",
+              cursor: "pointer",
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+              color: showArquivo ? "var(--indigo)" : "var(--fg-3)",
+            }}
           >
-            Ver Arquivo →
-          </Button>
+            {showArquivo ? "⌃ Ocultar Arquivo" : `Ver Arquivo (${arquivo.length}) →`}
+          </button>
         </div>
+
+        {showArquivo && (
+          <div style={{ marginTop: 12 }}>
+            <span className="eyebrow eyebrow--indigo" style={{ marginBottom: 12, display: "block" }}>
+              Arquivo · Contratos Encerrados
+            </span>
+            {arquivo.length === 0 ? (
+              <div style={{ padding: "40px 24px", textAlign: "center", border: "1px solid var(--border-3)" }}>
+                <span className="font-mono text-[12px] text-fg-4">Nenhum contrato arquivado.</span>
+              </div>
+            ) : (
+              <div style={{ border: "1px solid var(--border-3)", background: "var(--surface)" }}>
+                {arquivo.map((c, i) => {
+                  const uni = unidades.find(u => u.id === c.unidade_id) ?? c.unidades
+                  const edi = edificios.find(e => e.id === uni?.edificio_id)
+                  return (
+                    <div
+                      key={c.id}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 12,
+                        padding: "12px 20px",
+                        borderTop: i > 0 ? "1px solid var(--border-3)" : "none",
+                        opacity: 0.78,
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+                        <span className="font-mono text-[11px] text-fg-5" style={{ flexShrink: 0 }}>
+                          ARQ_{String(i + 1).padStart(3, "0")}
+                        </span>
+                        <div style={{ minWidth: 0 }}>
+                          <div
+                            className="font-body text-[14px] font-bold text-fg-1"
+                            style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                          >
+                            {c.locatarios?.nome_razao_social ?? "—"}
+                          </div>
+                          <div className="font-mono text-[11px] text-fg-4">
+                            {uni?.nome ?? "—"}{edi ? ` · ${edi.nome.replace(/Edifício\s*/i, "")}` : ""} · {fmtData(c.data_inicio)}→{fmtData(c.data_fim)}
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
+                        <StatusBadge status={c.status} />
+                        <button
+                          onClick={() => router.push(`/dashboard/contratos/${c.id}`)}
+                          style={{ all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "var(--fg-4)", letterSpacing: "1px", textTransform: "uppercase" }}
+                        >
+                          Ver →
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
       </div>
     </>
