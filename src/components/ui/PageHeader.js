@@ -25,7 +25,7 @@ export default function PageHeader({ eyebrow, title, subtitle, cta }) {
           <span className="font-mono text-[9px] text-indigo tracking-[1px]">
             {cta.code}
           </span>
-          <span className="hidden sm:block font-body font-bold text-[11px] tracking-[1.4px] uppercase text-fg-1">
+          <span className="font-body font-bold text-[11px] tracking-[1.4px] uppercase text-fg-1">
             {cta.label}
           </span>
         </button>

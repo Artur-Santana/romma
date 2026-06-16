@@ -21,7 +21,7 @@ function SkeletonContratos() {
     </div>
   )
   return (
-    <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
+    <div className="romma-page px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
       {/* Header skeleton */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
         <div>
@@ -35,8 +35,8 @@ function SkeletonContratos() {
         {skel("100%", 36)}
         {skel(110, 36)}
       </div>
-      {/* Cards grid skeleton */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 12 }}>
+      {/* Cards grid skeleton — desktop */}
+      <div className="romma-desktop-only" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 12 }}>
         {[0,1,2,3].map(i => (
           <div key={i} style={{ border: "1px solid var(--border-3)", background: "var(--surface)", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
             {skel(60, 10, 4)}
@@ -47,6 +47,18 @@ function SkeletonContratos() {
               {skel(80, 14)}
               {skel(60, 28)}
             </div>
+          </div>
+        ))}
+      </div>
+      {/* Rows skeleton — mobile */}
+      <div className="romma-mobile-only" style={{ border: "1px solid var(--border-3)", background: "var(--surface)" }}>
+        {[0,1,2,3].map(i => (
+          <div key={i} style={{ padding: "12px 16px", borderTop: i > 0 ? "1px solid var(--border-3)" : "none", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+            <div style={{ flex: 1 }}>
+              {skel("60%", 14, 6)}
+              {skel("80%", 11)}
+            </div>
+            {skel(72, 22)}
           </div>
         ))}
       </div>
@@ -231,7 +243,7 @@ export default function Contratos() {
         onCancel={() => setConfirmDialog(null)}
       />
 
-      <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
+      <div className="romma-page px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
 
         <PageHeader
           eyebrow="SISTEMA.02 // VÍNCULOS"
@@ -524,7 +536,12 @@ export default function Contratos() {
                   flexDirection: "column",
                   gap: 6,
                   cursor: "pointer",
+                  WebkitTapHighlightColor: "transparent",
+                  transition: "background 120ms ease",
                 }}
+                onPointerDown={e => e.currentTarget.style.background = "var(--surface-hi)"}
+                onPointerUp={e => e.currentTarget.style.background = ""}
+                onPointerLeave={e => e.currentTarget.style.background = ""}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span className="font-body text-[14px] font-bold text-fg-1">
@@ -581,6 +598,7 @@ export default function Contratos() {
                   return (
                     <div
                       key={c.id}
+                      onClick={() => router.push(`/dashboard/contratos/${c.id}`)}
                       style={{
                         display: "flex",
                         alignItems: "center",
@@ -589,12 +607,14 @@ export default function Contratos() {
                         padding: "12px 20px",
                         borderTop: i > 0 ? "1px solid var(--border-3)" : "none",
                         opacity: 0.78,
+                        cursor: "pointer",
+                        transition: "background 120ms ease",
                       }}
+                      onPointerDown={e => e.currentTarget.style.background = "var(--surface-hi)"}
+                      onPointerUp={e => e.currentTarget.style.background = ""}
+                      onPointerLeave={e => e.currentTarget.style.background = ""}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-                        <span className="font-mono text-[11px] text-fg-5" style={{ flexShrink: 0 }}>
-                          ARQ_{String(i + 1).padStart(3, "0")}
-                        </span>
                         <div style={{ minWidth: 0 }}>
                           <div
                             className="font-body text-[14px] font-bold text-fg-1"
@@ -607,15 +627,7 @@ export default function Contratos() {
                           </div>
                         </div>
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
-                        <StatusBadge status={c.status} />
-                        <button
-                          onClick={() => router.push(`/dashboard/contratos/${c.id}`)}
-                          style={{ all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "var(--fg-4)", letterSpacing: "1px", textTransform: "uppercase" }}
-                        >
-                          Ver →
-                        </button>
-                      </div>
+                      <StatusBadge status={c.status} />
                     </div>
                   )
                 })}

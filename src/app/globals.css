@@ -373,6 +373,7 @@
   .romma-sidebar-wrapper { display: none !important; }
   .romma-desktop-only    { display: none !important; }
   .romma-mobile-only     { display: block; }
+  .grade-resumo-ultimo   { grid-column: 1 / -1; }
 }
 
 /* ── v1.5 Design Refinement Tokens ─────────────────────────────────────────
