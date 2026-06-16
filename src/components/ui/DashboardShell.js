@@ -15,6 +15,7 @@ const NAV_ITEMS = [
 
 const ROUTE_TITLES = {
   "/dashboard":             "Dashboard",
+  "/dashboard/edificios":   "Edifícios",
   "/dashboard/unidades":    "Unidades",
   "/dashboard/contratos":   "Contratos",
   "/dashboard/locatarios":  "Locatários",
