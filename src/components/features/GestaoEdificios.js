@@ -58,7 +58,7 @@ function OccupationBar({ alugadas, disponiveis }) {
 
 function SkeletonEdificios() {
   return (
-    <div className="romma-page r-fade" style={{ padding: "var(--rd-page-y) var(--rd-gutter)", paddingBottom: 64 }}>
+    <div className="romma-page r-fade" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 520px), 1fr))",
@@ -178,7 +178,7 @@ export default function GestaoEdificios() {
   if (loadingInicial) return <SkeletonEdificios />;
 
   return (
-    <div className="romma-page r-fade" style={{ padding: "var(--rd-page-y) var(--rd-gutter)", paddingBottom: 64, minHeight: "100%" }}>
+    <div className="romma-page r-fade" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
       <PageHeader
         eyebrow="E.LIST · EDIFÍCIOS"
         title="Edifícios."
@@ -364,11 +364,11 @@ export default function GestaoEdificios() {
                   </div>
 
                   {/* Stats Row — horizontal inline */}
-                  <div style={{ display: "flex", gap: 36, marginTop: 11, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", gap: 16, marginTop: 11, flexWrap: "wrap" }}>
                     {[
                       { l: "Ocupação", v: `${stats.ocupacaoPct}%`, gold: false },
                       { l: "MRR", v: fmtBRLk(stats.mrr), gold: false },
-                      { l: "Área total", v: `${stats.areaTotal} m²`, gold: false },
+                      { l: "Área", v: `${stats.areaTotal} m²`, gold: false },
                       { l: "Unidades", v: stats.total, gold: false },
                     ].map((m) => (
                       <div key={m.l}>
@@ -385,7 +385,7 @@ export default function GestaoEdificios() {
                         <div style={{
                           fontFamily: "var(--font-display)",
                           fontWeight: 700,
-                          fontSize: 19,
+                          fontSize: 15,
                           color: m.gold ? "var(--highlight)" : "var(--fg-1)",
                           whiteSpace: "nowrap",
                         }}>
