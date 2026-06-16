@@ -165,6 +165,9 @@ export default function Unidades() {
     <div className="romma-page r-fade" style={{
       padding: "var(--rd-page-y) var(--rd-gutter)",
       paddingBottom: 64,
+      paddingRight: 0,
+      paddingLeft: 0,
+      paddingTop: 12,
       minHeight: "100%",
     }}>
       {/* ── Page Header ─────────────────────────────────────────────────── */}
