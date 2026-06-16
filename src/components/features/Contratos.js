@@ -512,6 +512,7 @@ export default function Contratos() {
           {view.map((contrato, i) => {
             const uni = unidades.find(u => u.id === contrato.unidade_id) ?? contrato.unidades
             const exp = isExpiring(contrato)
+            const days = daysLeft(contrato)
             return (
               <div
                 key={contrato.id}
@@ -529,7 +530,7 @@ export default function Contratos() {
                   <span className="font-body text-[14px] font-bold text-fg-1">
                     {contrato.locatarios?.nome_razao_social ?? "—"}
                   </span>
-                  <StatusBadge status={exp ? "vencendo" : contrato.status} />
+                  <StatusBadge status={exp ? "vencendo" : contrato.status} label={exp ? `Vence em ${days}d` : undefined} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span className="font-mono text-[11px] text-fg-4">
@@ -601,7 +602,7 @@ export default function Contratos() {
                           >
                             {c.locatarios?.nome_razao_social ?? "—"}
                           </div>
-                          <div className="font-mono text-[11px] text-fg-4">
+                          <div className="font-mono text-[11px] text-fg-4" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {uni?.nome ?? "—"}{edi ? ` · ${edi.nome.replace(/Edifício\s*/i, "")}` : ""} · {fmtData(c.data_inicio)}→{fmtData(c.data_fim)}
                           </div>
                         </div>
