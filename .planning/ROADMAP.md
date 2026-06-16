@@ -194,7 +194,7 @@ Plans:
 
 **Plans**: 3 plans
 - [x] 22-01-PLAN.md — Contratos.js: cards desktop + busca + filtro Vencendo + countdown + progresso + arquivo (CONTR-01..05)
-- [ ] 22-02-PLAN.md — Parcelas.js: grade-resumo + resumo financeiro + barra segmentada + timeline + registrar pagamento (PARC-01..03)
+- [x] 22-02-PLAN.md — Parcelas.js: grade-resumo + resumo financeiro + barra segmentada + timeline + registrar pagamento (PARC-01..03)
 - [ ] 22-03-PLAN.md — SA renovarContrato + modal de renovação em Parcelas.js (PARC-04)
 **UI hint**: yes
 
@@ -255,7 +255,7 @@ Plans:
 | 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-15 |
 | 20. Edifícios — Cards & Drill-in | 2/2 | Complete    | 2026-06-15 |
 | 21. Dashboard — Visão Geral Editorial | 1/3 | In Progress|  |
-| 22. Contratos & Parcelas — Renovação | 1/3 | In Progress|  |
+| 22. Contratos & Parcelas — Renovação | 2/3 | In Progress|  |
 | 23. Locatários — Busca & Máscaras | 0/TBD | Not started | - |
 | 24. Público — Unidades Disponíveis | 0/TBD | Not started | - |
 | 25. Portal do Locatário — PIX & Recibo | 0/TBD | Not started | - |

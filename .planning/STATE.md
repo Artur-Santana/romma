@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-16T03:43:33.667Z"
+last_updated: "2026-06-16T10:23:42.343Z"
 last_activity: 2026-06-16
 progress:
   total_phases: 9
   completed_phases: 4
   total_plans: 19
-  completed_plans: 16
+  completed_plans: 17
   percent: 44
 ---
 
@@ -113,10 +113,9 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 ## Current Position
 
 Phase: 22 (contratos-parcelas-renova-o) — EXECUTING
-Plan: 2 of 3
-All 3 plans done. Side fixes: MobileNav exact-match, Unidades metrics 2×2.
+Plan: 3 of 3 (Plan 02 complete — Parcelas.js redesenhado)
 Last activity: 2026-06-16
 
 ## Operator Next Steps
 
-- Phase 22: Contratos & Parcelas — Renovação (next in sequence)
+- Phase 22 Plan 03: Modal de renovação + SA renovarContrato
