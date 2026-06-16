@@ -56,7 +56,7 @@
 - [x] **PARC-01**: Detalhe do contrato exibe grade-resumo (unidade, edifício, valor mensal, início, término) e resumo financeiro (valor total do contrato, total recebido, em aberto, inadimplência com destaque vermelho se houver vencidas)
 - [x] **PARC-02**: Parcelas são exibidas em timeline vertical com barra de progresso (pagas/total)
 - [x] **PARC-03**: Registrar pagamento em parcela pendente/vencida marca como paga (data = hoje), atualiza os números do resumo financeiro ao vivo e mostra toast
-- [ ] **PARC-04**: Renovar contrato via modal com botões rápidos (+6 / +12 / +24 meses) e campo personalizado de meses, estendendo data_fim e o cronograma de parcelas (append de novas parcelas futuras, sem sobrescrever parcelas pagas)
+- [x] **PARC-04**: Renovar contrato via modal com botões rápidos (+6 / +12 / +24 meses) e campo personalizado de meses, estendendo data_fim e o cronograma de parcelas (append de novas parcelas futuras, sem sobrescrever parcelas pagas)
 
 ### Locatários (variante B — grade de cards)
 
@@ -146,7 +146,7 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | PARC-01 | Phase 22 | Complete |
 | PARC-02 | Phase 22 | Complete |
 | PARC-03 | Phase 22 | Complete |
-| PARC-04 | Phase 22 | Pending |
+| PARC-04 | Phase 22 | Complete |
 | LOC-01 | Phase 23 | Pending |
 | LOC-02 | Phase 23 | Pending |
 | LOC-03 | Phase 23 | Pending |

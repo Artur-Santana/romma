@@ -62,7 +62,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 - [x] **Phase 19: Unidades — Modal Unificado & Foto de Capa** - Métricas-resumo, busca/filtros, modal único criar/editar, upload de foto via Storage, confirmação de remoção com cleanup (completed 2026-06-14)
 - [x] **Phase 20: Edifícios — Cards & Drill-in** - Cards 2 colunas, stats por edifício, barra de ocupação contígua, drill-in clicável reusando o modal de unidade (completed 2026-06-15)
 - [x] **Phase 21: Dashboard — Visão Geral Editorial** - Bloco de ocupação em destaque, gráfico de fluxo de caixa, contratos recentes/parcelas + atalhos rápidos (completed 2026-06-16)
-- [ ] **Phase 22: Contratos & Parcelas — Renovação** - Busca/filtro vencendo, countdown, progresso, arquivo de encerrados, timeline de parcelas, registrar pagamento, renovar contrato (append)
+- [x] **Phase 22: Contratos & Parcelas — Renovação** - Busca/filtro vencendo, countdown, progresso, arquivo de encerrados, timeline de parcelas, registrar pagamento, renovar contrato (append) (completed 2026-06-16)
 - [ ] **Phase 23: Locatários — Busca & Máscaras** - Busca, convidar/editar com máscaras CPF/CNPJ/telefone, reenviar/revogar, ações expostas no mobile
 - [ ] **Phase 24: Público — Unidades Disponíveis** - Abas por edifício, ordenação, cards com imagem de capa, ficha bottom-sheet, simular aluguel (realtime existente)
 - [ ] **Phase 25: Portal do Locatário — PIX & Recibo** - Próximo vencimento em destaque, modal PIX + QR estático, confirmação de pagamento (sync proprietário↔locatário), comprovante PDF
@@ -195,7 +195,7 @@ Plans:
 **Plans**: 3 plans
 - [x] 22-01-PLAN.md — Contratos.js: cards desktop + busca + filtro Vencendo + countdown + progresso + arquivo (CONTR-01..05)
 - [x] 22-02-PLAN.md — Parcelas.js: grade-resumo + resumo financeiro + barra segmentada + timeline + registrar pagamento (PARC-01..03)
-- [ ] 22-03-PLAN.md — SA renovarContrato + modal de renovação em Parcelas.js (PARC-04)
+- [x] 22-03-PLAN.md — SA renovarContrato + modal de renovação em Parcelas.js (PARC-04)
 **UI hint**: yes
 
 ### Phase 23: Locatários — Busca & Máscaras
@@ -255,7 +255,7 @@ Plans:
 | 19. Unidades — Modal Unificado & Foto de Capa | 4/4 | Complete   | 2026-06-15 |
 | 20. Edifícios — Cards & Drill-in | 2/2 | Complete    | 2026-06-15 |
 | 21. Dashboard — Visão Geral Editorial | 1/3 | In Progress|  |
-| 22. Contratos & Parcelas — Renovação | 2/3 | In Progress|  |
+| 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 0/TBD | Not started | - |
 | 24. Público — Unidades Disponíveis | 0/TBD | Not started | - |
 | 25. Portal do Locatário — PIX & Recibo | 0/TBD | Not started | - |

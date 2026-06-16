@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-16T10:23:42.343Z"
+last_updated: "2026-06-16T10:29:27.731Z"
 last_activity: 2026-06-16
 progress:
   total_phases: 9
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 19
-  completed_plans: 17
-  percent: 44
+  completed_plans: 18
+  percent: 56
 ---
 
 # Project State — Romma
@@ -112,10 +112,16 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 22 (contratos-parcelas-renova-o) — EXECUTING
-Plan: 3 of 3 (Plan 02 complete — Parcelas.js redesenhado)
+Phase: 22 (contratos-parcelas-renova-o) — COMPLETE
+Plan: 3 of 3 (Plan 03 complete — renovarContrato SA + modal renovação)
 Last activity: 2026-06-16
+
+## Key Decisions (Phase 22)
+
+- renovarContrato INSERT direto via supabaseAdmin sem invocar Edge Function gerar-parcelas (Plan 03)
+- Botão Renovar exibido só quando contrato.status === 'ativo' — impede renovação de encerrados/cancelados (Plan 03)
+- Re-fetch Promise.all após renovação atualiza grade-resumo Término e timeline ao vivo (Plan 03)
 
 ## Operator Next Steps
 
-- Phase 22 Plan 03: Modal de renovação + SA renovarContrato
+- Phase 23: Locatários — Busca & Máscaras
