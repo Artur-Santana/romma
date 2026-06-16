@@ -59,16 +59,6 @@ function nameOf(c) {
   return (c.locatarios?.nome_razao_social ?? "") + " " + (c.unidades?.nome ?? "")
 }
 
-const COL = "116px 1.6fr 1.6fr 1fr 1fr 1.2fr 96px"
-const COL_STYLE = { gridTemplateColumns: COL }
-
-function HeaderCell({ children }) {
-  return (
-    <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">
-      {children}
-    </div>
-  )
-}
 
 export default function Contratos() {
   const router = useRouter()
@@ -341,118 +331,193 @@ export default function Contratos() {
           </div>
         )}
 
-        {/* Contracts table */}
-        <div style={{ overflowX: "auto" }}>
-        <div className="border border-border-3 bg-surface mb-8" style={{ minWidth: "680px" }}>
-          <div style={COL_STYLE} className="grid bg-[var(--surface-hi)] border-b border-border-3">
-            <HeaderCell>ID</HeaderCell>
-            <HeaderCell>Locatário</HeaderCell>
-            <HeaderCell>Unidade</HeaderCell>
-            <HeaderCell>Início</HeaderCell>
-            <HeaderCell>Término</HeaderCell>
-            <HeaderCell>Status</HeaderCell>
-            <HeaderCell>Ações</HeaderCell>
+        {/* Search + Vencendo filter bar */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ position: "relative", flex: "0 0 280px" }}>
+            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-5)" }}>⌕</span>
+            <Input
+              value={q}
+              onChange={e => setQ(e.target.value)}
+              placeholder="Buscar por locatário ou unidade..."
+              className="bg-surface-hi border-border-3 text-fg-1 font-body text-[13px] rounded-none pl-8"
+            />
           </div>
+          <button
+            onClick={() => setOnlyVencendo(v => !v)}
+            style={{
+              all: "unset",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 7,
+              padding: "9px 14px",
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              letterSpacing: "0.5px",
+              textTransform: "uppercase",
+              border: `1px solid ${onlyVencendo ? "var(--warning)" : "var(--border-3)"}`,
+              background: onlyVencendo ? "var(--warning-bg)" : "transparent",
+              color: onlyVencendo ? "var(--warning)" : "var(--fg-4)",
+            }}
+          >
+            <span style={{ width: 6, height: 6, background: "var(--warning)", display: "inline-block" }} />
+            Vencendo · {vencendoCount}
+          </button>
+          {(q || onlyVencendo) && (
+            <span className="font-mono text-[11px] text-fg-4">{view.length} resultado(s)</span>
+          )}
+        </div>
 
-          {contratosAtivos.length === 0 && (
-            <div className="py-12 px-5 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
-              Nenhum contrato cadastrado.
+        {/* Cards desktop */}
+        <div
+          className="romma-desktop-only"
+          style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 12, marginBottom: 16 }}
+        >
+          {view.length === 0 && (
+            <div style={{ gridColumn: "1 / -1", padding: "40px 24px", textAlign: "center" }}>
+              <span className="font-mono text-[11px] text-fg-4">Nenhum contrato corresponde à busca.</span>
             </div>
           )}
-
-          {contratosAtivos.map((contrato, i) => {
-            const loc = locatarios.find(l => l.id === contrato.locatario_id) ?? contrato.locatarios
+          {view.map((contrato, i) => {
             const uni = unidades.find(u => u.id === contrato.unidade_id) ?? contrato.unidades
             const edi = edificios.find(e => e.id === uni?.edificio_id)
-            const expiring = isExpiring(contrato)
+            const exp = isExpiring(contrato)
+            const pct = pctElapsed(contrato)
+            const days = daysLeft(contrato)
+            const isRemoving = removingIds.has(contrato.id)
             const isAtivo = contrato.status === "ativo"
             const vencido = isAtivo && contrato.data_fim < getTodayLocal()
-
-            const isRemoving = removingIds.has(contrato.id)
             return (
               <div
                 key={contrato.id}
                 style={{
-                  ...COL_STYLE,
+                  border: `1px solid ${exp ? "var(--warning)" : "var(--border-3)"}`,
+                  background: "var(--surface)",
+                  padding: "var(--rd-panel, 16px)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 14,
                   opacity: isRemoving ? 0 : 1,
-                  transform: isRemoving ? "scale(0.97)" : "scale(1)",
-                  transition: "opacity 200ms ease, transform 200ms ease",
+                  transform: isRemoving ? "scale(0.98)" : "scale(1)",
+                  transition: "opacity 220ms ease, transform 220ms ease",
+                  animation: "rFade var(--dur-base, 240ms) var(--ease-crisp) both",
+                  animationDelay: `${i * 30}ms`,
                 }}
-                className={cn("grid items-center", i > 0 ? "border-t border-border-3" : "")}
               >
-                <div className="px-5 py-4">
-                  <span className="font-mono text-[18px] text-fg-4 tracking-[0.3px]">
-                    REF_C_{String(i + 1).padStart(3, "0")}
-                  </span>
-                </div>
-
-                <div className="px-5 py-4 overflow-hidden">
-                  <span className="text-[18px] text-fg-1 font-medium block overflow-hidden text-ellipsis whitespace-nowrap">
-                    {loc?.nome_razao_social ?? "—"}
-                  </span>
-                </div>
-
-                <div className="px-5 py-4 overflow-hidden flex flex-col gap-0.5">
-                  <span className="text-[18px] text-fg-1 overflow-hidden text-ellipsis whitespace-nowrap">
-                    {uni?.nome ?? "—"}
-                  </span>
-                  {edi && (
-                    <span className="font-mono text-[10px] text-fg-4 overflow-hidden text-ellipsis whitespace-nowrap">
-                      {edi.nome.replace(/Edifício\s*/i, "")}
+                {/* Card top: badge + countdown */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <span className="font-mono text-[11px] text-fg-5">REF_C_{String(i + 1).padStart(3, "0")}</span>
+                    <div
+                      className="font-body text-[16px] font-bold text-fg-1"
+                      style={{ marginTop: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                    >
+                      {contrato.locatarios?.nome_razao_social ?? "—"}
+                    </div>
+                    <div className="font-mono text-[11px] text-fg-4" style={{ marginTop: 2 }}>
+                      {uni?.nome ?? "—"}{edi ? ` · ${edi.nome.replace(/Edifício\s*/i, "")}` : ""}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
+                    <StatusBadge status={exp ? "vencendo" : contrato.status} />
+                    <span
+                      className="font-mono text-[11px]"
+                      style={{ color: exp ? "var(--warning)" : "var(--fg-4)" }}
+                    >
+                      {days < 0 ? "Encerrado" : `${days} ${days === 1 ? "dia" : "dias"} → ${fmtData(contrato.data_fim)}`}
                     </span>
-                  )}
+                  </div>
                 </div>
 
-                <div className="px-5 py-4">
-                  <span className="font-mono text-[18px] text-fg-3">
-                    {fmtData(contrato.data_inicio)}
-                  </span>
-                </div>
-
-                <div className="px-5 py-4">
-                  <span className={cn("font-mono text-[18px]", expiring ? "text-warning" : "text-fg-3")}>
-                    {fmtData(contrato.data_fim)}
-                  </span>
-                </div>
-
-                <div className="px-5 py-4">
-                  <StatusBadge status={expiring ? "vencendo" : contrato.status} />
-                </div>
-
-                <div className="px-3 py-4 flex flex-col gap-1.5 items-start">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => router.push(`/dashboard/contratos/${contrato.id}`)}
-                    className="font-mono text-[10px] text-fg-3 uppercase tracking-[1px] font-bold py-[10px] px-3 h-auto"
+                {/* Progress bar */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                    <span className="font-mono text-[11px] text-fg-4">{fmtData(contrato.data_inicio)}</span>
+                    <span className="font-mono text-[11px] text-fg-4">{fmtData(contrato.data_fim)}</span>
+                  </div>
+                  <div
+                    style={{ height: 4, background: "var(--surface-hi)" }}
+                    role="progressbar"
+                    aria-valuenow={pct}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
                   >
-                    VER →
-                  </Button>
-                  {isAtivo && !vencido && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => askCancelar(contrato)}
-                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold py-[10px] px-3 h-auto"
+                    <div style={{ height: "100%", width: `${pct}%`, background: exp ? "var(--warning)" : "var(--primary-hover)" }} />
+                  </div>
+                </div>
+
+                {/* Card footer: valor + ações */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid var(--border-3)", paddingTop: 12 }}>
+                  <span className="font-body text-[14px] font-bold text-fg-1">
+                    {fmtBRL(uni?.valor_mensal)}<span className="font-mono text-[11px] text-fg-4 font-normal">/mês</span>
+                  </span>
+                  <div style={{ display: "flex", gap: 12 }}>
+                    <button
+                      onClick={() => router.push(`/dashboard/contratos/${contrato.id}`)}
+                      style={{ all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "var(--fg-3)", letterSpacing: "1px", textTransform: "uppercase" }}
                     >
-                      CANC
-                    </Button>
-                  )}
-                  {vencido && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => askEncerrar(contrato)}
-                      className="font-mono text-[10px] text-danger-fg uppercase tracking-[1px] font-bold py-[10px] px-3 h-auto"
-                    >
-                      ENC
-                    </Button>
-                  )}
+                      Ver →
+                    </button>
+                    {isAtivo && !vencido && (
+                      <button
+                        onClick={() => askCancelar(contrato)}
+                        style={{ all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "var(--danger-fg)", letterSpacing: "1px", textTransform: "uppercase" }}
+                      >
+                        Cancelar
+                      </button>
+                    )}
+                    {vencido && (
+                      <button
+                        onClick={() => askEncerrar(contrato)}
+                        style={{ all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "var(--danger-fg)", letterSpacing: "1px", textTransform: "uppercase" }}
+                      >
+                        Encerrar
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             )
           })}
         </div>
+
+        {/* Rows mobile */}
+        <div className="romma-mobile-only mb-8" style={{ border: "1px solid var(--border-3)", background: "var(--surface)" }}>
+          {view.length === 0 && (
+            <div className="py-10 text-center font-mono text-[12px] text-fg-4">
+              Nenhum contrato corresponde à busca.
+            </div>
+          )}
+          {view.map((contrato, i) => {
+            const uni = unidades.find(u => u.id === contrato.unidade_id) ?? contrato.unidades
+            const exp = isExpiring(contrato)
+            return (
+              <div
+                key={contrato.id}
+                onClick={() => router.push(`/dashboard/contratos/${contrato.id}`)}
+                style={{
+                  padding: "12px 16px",
+                  borderTop: i > 0 ? "1px solid var(--border-3)" : "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
+                  cursor: "pointer",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span className="font-body text-[14px] font-bold text-fg-1">
+                    {contrato.locatarios?.nome_razao_social ?? "—"}
+                  </span>
+                  <StatusBadge status={exp ? "vencendo" : contrato.status} />
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span className="font-mono text-[11px] text-fg-4">
+                    {uni?.nome ?? "—"} · {fmtData(contrato.data_inicio)}→{fmtData(contrato.data_fim)}
+                  </span>
+                </div>
+              </div>
+            )
+          })}
         </div>
 
         {/* Archive callout */}
