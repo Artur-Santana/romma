@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getContratos, getLocatarios, getUnidades, getEdificios } from "@/lib/queries-client"
-import { fmtData, cn } from "@/lib/utils"
+import { fmtData, fmtBRL, cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -40,8 +40,23 @@ function getTodayLocal() {
 
 function isExpiring(c) {
   if (c.status !== "ativo") return false
-  const diff = (new Date(c.data_fim) - new Date()) / 86400000
+  const diff = (new Date(c.data_fim + "T12:00:00") - new Date()) / 86400000
   return diff >= 0 && diff <= 7
+}
+
+function daysLeft(c) {
+  return Math.ceil((new Date(c.data_fim + "T12:00:00") - new Date()) / 86400000)
+}
+
+function pctElapsed(c) {
+  const a = new Date(c.data_inicio + "T12:00:00")
+  const b = new Date(c.data_fim + "T12:00:00")
+  const n = new Date()
+  return Math.max(4, Math.min(100, Math.round(((n - a) / (b - a)) * 100)))
+}
+
+function nameOf(c) {
+  return (c.locatarios?.nome_razao_social ?? "") + " " + (c.unidades?.nome ?? "")
 }
 
 const COL = "116px 1.6fr 1.6fr 1fr 1fr 1.2fr 96px"
@@ -69,6 +84,9 @@ export default function Contratos() {
   const [loadingInicial, setLoadingInicial] = useState(true)
   const [confirmDialog, setConfirmDialog] = useState(null)
   const [removingIds, setRemovingIds] = useState(new Set())
+  const [q, setQ] = useState("")
+  const [onlyVencendo, setOnlyVencendo] = useState(false)
+  const [showArquivo, setShowArquivo] = useState(false)
 
   useEffect(() => {
     async function carregar() {
@@ -180,6 +198,13 @@ export default function Contratos() {
   const ativos = contratos.filter(c => c.status === "ativo").length
   const encerrados = contratos.filter(c => c.status === "encerrado").length
   const contratosAtivos = contratos.filter(c => c.status === "ativo")
+  const vencendoCount = contratosAtivos.filter(isExpiring).length
+  const arquivo = contratos.filter(c => c.status !== "ativo")
+  const view = contratosAtivos.filter(c => {
+    if (onlyVencendo && !isExpiring(c)) return false
+    if (q && !nameOf(c).toLowerCase().includes(q.toLowerCase())) return false
+    return true
+  })
 
   if (loadingInicial) return <SkeletonContratos />;
 
