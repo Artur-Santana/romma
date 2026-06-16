@@ -21,6 +21,7 @@ export default function Parcelas({ contratoId }) {
   const [showRenew, setShowRenew] = useState(false)
   const [renew, setRenew] = useState({ meses: 0, custom: "" })
   const [renovando, setRenovando] = useState(false)
+  const [carregando, setCarregando] = useState(true)
 
   useEffect(() => {
     async function carregar() {
@@ -42,6 +43,7 @@ export default function Parcelas({ contratoId }) {
           setEdificio((edificios ?? []).find(e => e.id === u.edificio_id) ?? null)
         }
       }
+      setCarregando(false)
     }
     carregar()
   }, [contratoId])
@@ -60,8 +62,8 @@ export default function Parcelas({ contratoId }) {
   }
 
   function previewNovoTermino(mesesNum) {
-    if (!contrato?.data_fim || !mesesNum) return null
-    const d = new Date(contrato.data_fim + "T12:00:00")
+    if (!contrato || !contrato.data_fim || !mesesNum) return null
+    const d = new Date(contrato.data_fim + "T12:00:00")  // guarded above
     d.setMonth(d.getMonth() + mesesNum)
     return fmtData(d.toISOString().slice(0, 10))
   }
@@ -120,6 +122,29 @@ export default function Parcelas({ contratoId }) {
       danger: vencidas.length > 0,
     },
   ]
+
+  if (carregando) {
+    return (
+      <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
+        <div className="font-mono text-[12px] text-fg-4 py-16 text-center">Carregando…</div>
+      </div>
+    )
+  }
+
+  if (!contrato) {
+    return (
+      <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
+        <Button
+          variant="outline"
+          onClick={() => router.push("/dashboard/contratos")}
+          className="border-border-3 bg-transparent text-fg-3 font-mono text-[10px] uppercase tracking-[1.2px] font-bold rounded-none mb-10 h-auto py-[10px] px-5"
+        >
+          ← Contratos
+        </Button>
+        <div className="font-mono text-[12px] text-fg-4 py-16 text-center">Contrato não encontrado.</div>
+      </div>
+    )
+  }
 
   return (
     <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
