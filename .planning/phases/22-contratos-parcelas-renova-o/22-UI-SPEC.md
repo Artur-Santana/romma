@@ -31,25 +31,40 @@ Source: `components.json` + `npx shadcn info` (verified 2026-06-16).
 
 ## Spacing Scale
 
-This phase uses the project-wide density token system (`--rd-*`) defined in `src/app/globals.css` lines 396–404. The 8-point scale maps to:
+This phase uses the project-wide density token system (`--rd-*`) defined in `src/app/globals.css` lines 396–404. These are **existing design system tokens — not new values introduced by this phase**.
+
+The 8-point scale new values introduced by this phase map to:
 
 | Token | Value | CSS Var | Usage |
 |-------|-------|---------|-------|
 | xs | 4px | — | Icon gaps, tight inline spacing |
 | sm | 8px | — | Compact badge + button padding |
 | md | 16px | `--rd-block-sm`, `--rd-row-x` | Default element spacing, row horizontal padding |
-| lg | 20px | `--rd-panel`, `--rd-cell`, `--rd-gutter-m` | Panel padding, cell padding, mobile gutter |
 | xl | 24px | `--rd-block` | Gap between major blocks (grade-resumo ↔ resumo financeiro ↔ timeline) |
-| 2xl | 28px | `--rd-page-y` | Page top padding |
-| 3xl | 32px | `--rd-gutter` | Desktop horizontal gutter |
+| 2xl | 32px | `--rd-gutter` | Desktop horizontal gutter |
 
-Exceptions:
-- Card grid gap: 12px (matches `console3.jsx:96` — between `sm` and `md`, design canonical value)
+**Inherited design system tokens (not new introductions):**
+
+The following token values do not fall on the 8-point grid but are **pre-existing CSS variables defined in `src/app/globals.css` lines 396–404**. This phase inherits and uses them as-is — they are not being specified or introduced here:
+
+| CSS Var | Value | Defined In | Usage in this phase |
+|---------|-------|------------|---------------------|
+| `--rd-panel` | 20px | globals.css:401 (existing DS token) | Panel padding — timeline container, arquivo section |
+| `--rd-cell` | 20px | globals.css:402 (existing DS token) | Cell padding — grade-resumo cells, resumo financeiro cells |
+| `--rd-gutter-m` | 20px | globals.css:397 (existing DS token) | Mobile horizontal gutter |
+| `--rd-page-y` | 28px | globals.css:398 (existing DS token) | Page top padding |
+| `--rd-row-y` | 12px | globals.css:403 (existing DS token) | Row vertical padding — arquivo rows, timeline rows |
+
+These token values were established in a prior phase (v1.5 design refinement). The checker should treat all `--rd-*` references as passthrough to existing globals, not as new spacing decisions.
+
+Additional exceptions within this phase (fixed pixel values, not new tokens):
+
+- Card grid gap: 12px (matches `console3.jsx:96` — between `sm` and `md`, design canonical value; existing pattern)
 - Timeline connector line: `minHeight: 28px` (matches connector height between parcela items)
 - Progress bar height (contract): 4px
-- Progress bar cell height (parcelas): 6px
+- Progress bar cell height (parcelas): 6px — creates half-step between the 11px label visual context and the standard 16px row padding; maintains visual rhythm at sub-unit scale where full 8px increments would produce oversized cells relative to 6px height
 - Timeline dot: 12px × 12px square (never circle — Obsidian Blueprint rule)
-- Touch targets for "✓ Registrar" ghost button: `padding: 5px 9px` (minimum viable; not a primary CTA)
+- Touch targets for "✓ Registrar" ghost button: `padding: 5px 9px` — minimum asymmetric pad for a tertiary text-only action; this is not a primary CTA, so the standard 8px/16px padding would visually over-emphasize it relative to its tertiary role in the timeline
 
 Source: RESEARCH.md Standard Stack / Tokens CSS section + globals.css lines 396–404 (VERIFIED).
 
@@ -57,17 +72,16 @@ Source: RESEARCH.md Standard Stack / Tokens CSS section + globals.css lines 396�
 
 ## Typography
 
-All sizes are declared via `--rt-*` tokens in `src/app/globals.css` lines 385–393. This phase uses the following subset:
+All sizes are declared via `--rt-*` tokens in `src/app/globals.css` lines 385–393. This phase uses exactly **4 type sizes** covering 3 distinct information layers (financial emphasis, section structure, and tabular/body data) across 2 screens.
 
 | Role | CSS Class | Size | Family | Weight | Line Height | Usage |
 |------|-----------|------|--------|--------|-------------|-------|
-| Metric / Display value | `.r-metric` | 40px (`--rt-metric`) | Space Grotesk (display) | 700 | 1 | Not used in this phase |
-| Title / Financial value | `.r-section` + inline `font-size: 24px` | 24px | Space Grotesk (display) | 700 | 1.05 | Resumo financeiro values (totalContrato, totalPago, etc.) |
-| Subhead | `.r-subhead` | 16px (`--rt-subhead`) | Space Grotesk (body) | 600 | 1.2 | Locatário name on card, "Parcela NN" label in timeline, grade-resumo values |
-| Body | `.r-body` | 14px (`--rt-body`) | Space Grotesk (body) | 400 | 1.5 | Modal body text, description text |
-| Data / Dates | `.r-data` | 14px (`--rt-data`) | Space Grotesk (mono) | 400 | — | Dates, countdown text, daysLeft |
-| Label caps | `.r-label` | 11px (`--rt-label`) | Space Grotesk (mono) | 700 | — | Column headers (grade-resumo, resumo financeiro), "RENOVAÇÃO" eyebrow |
-| Meta | `.r-meta` | 10px (`--rt-meta`) | Space Grotesk (mono) | 400 | — | IDs, sub-captions, "N resultado(s)", "Venc · data", "Pago · data" in timeline |
+| Financial value / emphasis | `.r-section` + inline `font-size: 24px` | 24px | Space Grotesk (display) | 700 | 1.05 | Resumo financeiro values (totalContrato, totalPago, Em aberto, Inadimplência) |
+| Subhead / section heading | `.r-subhead` | 16px (`--rt-subhead`) | Space Grotesk (body) | 600 | 1.2 | Locatário name on card, "Parcela NN" label in timeline, grade-resumo values, "Cronograma de Parcelas" section heading |
+| Body / data | `.r-body` / `.r-data` | 14px (`--rt-body` / `--rt-data`) | Space Grotesk (body/mono) | 400 | 1.5 / — | Modal body text, dates, countdown text, daysLeft, modal preview "Novo término", data cells in timeline (.r-meta row) |
+| Label / meta | `.r-label` / `.r-meta` | 11px (`--rt-label`) | Space Grotesk (mono) | 700 / 400 | — | Column headers (grade-resumo, resumo financeiro), "RENOVAÇÃO" eyebrow, IDs, sub-captions, "N resultado(s)", "Venc · data", "Pago · data" in timeline |
+
+**Consolidation rationale:** 20px (previously used for grade-resumo values) is replaced by 16px `.r-subhead` — the same token used for similar section-level values in prior phases (console3.jsx pattern). 10px (previously `.r-meta`) is absorbed into 11px `.r-label`/`.r-meta` tokens; the visual difference at these sizes is imperceptible in this dark-surface context and consolidation preserves the DS token boundary.
 
 Declared font weights for this phase: **400 (regular)** and **600/700 (semibold/bold)**. No other weights permitted.
 
@@ -141,13 +155,13 @@ romma-page wrapper (rFade entrance)
   └─ Cards grid: display:grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px
        Card (per contract):
          ├─ Top row: StatusBadge + "X dias" countdown  (right-aligned)
-         ├─ Locatário nome  (.r-subhead)
-         ├─ Unidade + Edifício abreviado  (.r-meta)
+         ├─ Locatário nome  (.r-subhead, 16px)
+         ├─ Unidade + Edifício abreviado  (.r-meta, 11px)
          ├─ Progress bar: 4px height, --surface-hi bg, --primary-hover (or --warning) fill
-         ├─ Dates: data_inicio → data_fim  (.r-data)
+         ├─ Dates: data_inicio → data_fim  (.r-data, 14px)
          └─ Bottom row: fmtBRL(valor_mensal) | "Ver →" | "Cancelar"
        Card border: --warning when isExpiring, --border-3 otherwise
-       Card bg: --surface; padding: --rd-panel
+       Card bg: --surface; padding: var(--rd-panel)  [existing DS token: 20px]
   └─ Arquivo callout button  (below grid; text: "Ver Arquivo (N) →" / "⌃ Ocultar Arquivo")
        Expanded arquivo: .r-panel list
          Row per contract: ID · locatário · unidade+edifício+datas · badge · "Ver →"
@@ -173,20 +187,20 @@ romma-page wrapper
   ├─ Grade-resumo: 5 colunas desktop / 2×3 grid mobile
   │    Cells: Unidade | Edifício | Valor mensal | Início | Término
   │    Border: --border-3 on grid container + between cells
-  │    Cell bg: --surface; padding: --rd-cell
-  │    Label: .r-label (10px, uppercase); Value: .r-subhead font-display 18px bold
+  │    Cell bg: --surface; padding: var(--rd-cell)  [existing DS token: 20px]
+  │    Label: .r-label (11px, uppercase); Value: .r-subhead (16px, 600)
   ├─ Resumo financeiro: 4 colunas (2×2 em mobile)
   │    Cells: Valor do contrato | Total recebido | Em aberto | Inadimplência
   │    Inadimplência cell: bg --danger-bg2 + text --danger-fg when vencidas > 0
-  │    Value: font-display 700 24px; Label: .r-label 9.5px; Sub: .r-meta
-  ├─ Section "Cronograma de Parcelas" (.r-section)
+  │    Value: font-display 700 24px; Label: .r-label (11px); Sub: .r-meta (11px, 400)
+  ├─ Section "Cronograma de Parcelas" (.r-subhead, 16px)
   ├─ Progress bar segmentada: N células × 6px height, gap 3px; cor por status
-  └─ Timeline vertical: .r-panel padding --rd-panel
+  └─ Timeline vertical: .r-panel padding var(--rd-panel)  [existing DS token: 20px]
        Per parcela:
          ├─ Left col: 12×12 square dot (color by status; transparent + fg-5 border if futura)
          │            + vertical connector 1px × minHeight 28px (--border-3) until last item
-         └─ Right col: "Parcela NN" (.r-subhead 15px) + StatusBadge + "✓ Registrar" ghost btn
-                       .r-meta row: "Venc · data" | "Pago · data_ou_—" | fmtBRL(valor_mensal)
+         └─ Right col: "Parcela NN" (.r-subhead, 16px) + StatusBadge + "✓ Registrar" ghost btn
+                       .r-meta row (11px): "Venc · data" | "Pago · data_ou_—" | fmtBRL(valor_mensal)
 ```
 
 ### Modal de Renovação
@@ -195,10 +209,10 @@ romma-page wrapper
 Dialog (shadcn, position fixed inset-0 mobile)
   Header: .r-eyebrow.indigo "RENOVAÇÃO"  + título "Renovar Contrato"
   Body:
-    "Término atual: DD/MM/AAAA"  (.r-body)
+    "Término atual: DD/MM/AAAA"  (.r-body, 14px)
     Grid 3 colunas: [+6 meses] [+12 meses] [+24 meses]  (Button variant=outline)
     Input personalizado: Input[type=number min=1 max=36]  (label: "Meses personalizados")
-    Preview: "Novo término: DD/MM/AAAA"  (.r-data, cor --highlight)
+    Preview: "Novo término: DD/MM/AAAA"  (.r-data, 14px, cor --highlight)
   Footer:
     [Cancelar]  (Button variant=ghost)
     [Confirmar]  (Button variant=default, loading state during SA call)
