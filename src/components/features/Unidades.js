@@ -190,13 +190,11 @@ export default function Unidades() {
         </div>
       )}
 
-      {/* ── Metrics bar ─────────────────────────────────────────────────── */}
-      <div style={{ overflowX: "auto", marginBottom: "var(--rd-block)" }}>
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(4, minmax(130px, 1fr))",
-        border: "1px solid var(--border-3)",
-        minWidth: 520,
-      }}>
+      {/* ── Metrics bar — 2×2 on mobile, 4-col on md+ ─────────────────── */}
+      <div
+        className="grid grid-cols-2 md:grid-cols-4 border border-[var(--border-3)]"
+        style={{ marginBottom: "var(--rd-block)" }}
+      >
         {[
           {
             l: "Área total",
@@ -225,10 +223,13 @@ export default function Unidades() {
         ].map((m, i) => (
           <div
             key={m.l}
-            style={{
-              padding: "14px var(--rd-cell)",
-              borderRight: i < 3 ? "1px solid var(--border-3)" : "none",
-            }}
+            className={`border-border-3 ${
+              i === 0 ? "border-r" :
+              i === 1 ? "md:border-r" :
+              i === 2 ? "border-r border-t md:border-t-0" :
+                        "border-t md:border-t-0"
+            }`}
+            style={{ padding: "14px var(--rd-cell)" }}
           >
             <div
               className="r-label"
@@ -249,7 +250,6 @@ export default function Unidades() {
             <div className="r-meta" style={{ marginTop: 4 }}>{m.s}</div>
           </div>
         ))}
-      </div>
       </div>
 
       {/* ── Filter bar ──────────────────────────────────────────────────── */}
