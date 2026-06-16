@@ -94,7 +94,7 @@ function CashFlowChart({ fluxo, testId }) {
             >
               {f.recebido > 24 && (
                 <span style={{
-                  fontSize: 10, fontFamily: "var(--font-mono)", whiteSpace: "nowrap",
+                  fontSize: 12, fontFamily: "var(--font-mono)", whiteSpace: "nowrap",
                   color: f.peak ? "oklch(0.25 0.05 70)" : "oklch(0 0 0 / 0.6)",
                 }}>
                   {fmtChartVal(f.rawRecebido)}
