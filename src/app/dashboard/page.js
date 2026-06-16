@@ -481,54 +481,48 @@ export default async function Dashboard() {
       <div className="flex flex-col md:hidden">
         <div className="romma-mobile-pane flex-1 overflow-auto">
 
-          {/* Stats row 1: Ocupação + Contratos */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="mx-5 mt-5 border border-border-3 border-b-0">
-            <div className="p-5 flex flex-col gap-1 border-r border-border-3">
-              <div className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Ocupação</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1">{pctOcupacao}%</div>
-              <div className="font-mono text-[10px] text-fg-4">{alugadas}/{unidades.length} unidades</div>
-            </div>
-            <div className="p-5 flex flex-col gap-1">
-              <div className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">Contratos</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1">{ativos}</div>
-              <div className="font-mono text-[10px] text-fg-4">ativos</div>
-            </div>
+          {/* Mobile header */}
+          <div className="mx-5 mt-5 mb-5">
+            <span className="eyebrow eyebrow--indigo mb-2">CONSOLE.OS // VISÃO DO PROPRIETÁRIO</span>
+            <h2 className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1 m-0 mb-1">Visão Geral.</h2>
+            <span className="font-mono text-[11px] text-fg-3">{proprietarioNome} · {edificios.length} edifício(s)</span>
           </div>
 
-          {/* Stats row 2: MRR + Receita Esperada */}
+          {/* Stats 2×2 unified grid — numbered cells */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="mx-5 mb-6 border border-border-3">
-            <div className="p-5 flex flex-col gap-1 border-r border-border-3">
-              <div className="font-mono text-[10px] text-fg-4 tracking-[1px] uppercase">MRR</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1">
-                {mrr >= 1000 ? `R$${(mrr / 1000).toFixed(1)}k` : fmtBRL(mrr)}
+            {metricas.map((m, i) => (
+              <div
+                key={m.idx}
+                className={cn(
+                  "p-5 flex flex-col gap-1 relative",
+                  i % 2 === 0 ? "border-r border-border-3" : "",
+                  i >= 2 ? "border-t border-border-3" : "",
+                  m.warn ? "bg-warning-bg" : ""
+                )}
+              >
+                <span className="font-mono absolute top-3 right-3 text-[9px] text-fg-5">{m.idx}</span>
+                <div className={cn("font-mono text-[10px] tracking-[1px] uppercase", m.warn ? "text-warning" : "text-fg-4")}>{m.label}</div>
+                <div className={cn("font-display font-bold text-[32px] leading-none tracking-[-1.6px]", m.warn ? "text-warning" : "text-fg-1")}>{m.value}</div>
+                <div className={cn("font-mono text-[10px]", m.warn ? "text-warning" : "text-fg-4")}>{m.sub}</div>
               </div>
-              <div className="font-mono text-[10px] text-fg-4">/ mês</div>
-            </div>
-            <div className="p-5 flex flex-col gap-1">
-              <div className="font-mono text-[10px] text-warning tracking-[1px] uppercase">Receita Esperada</div>
-              <div className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-warning">{fmtBRL(totalPendente)}</div>
-              <div className="font-mono text-[10px] text-warning">{parcelas.length} parcela(s) em aberto</div>
-            </div>
-          </div>
-
-          {/* Mobile OccupancyBar — compact, 1 cell per unit */}
-          <div className="mx-5 mb-4">
-            <OccupancyBar alugadas={alugadas} total={unidades.length} cellHeight={20} />
+            ))}
           </div>
 
           {/* Vencendo banner mobile */}
           {vencendoContratos.length > 0 && (
             <div className="bg-warning-bg border-l-2 border-warning px-5 py-[14px] mx-5 mb-6">
-              <span className="eyebrow eyebrow--warning mb-1">ALERTA · VENCIMENTO PRÓXIMO</span>
-              <span className="text-[12px] text-warning block">
-                {(() => {
-                  const c = vencendoContratos[0]
+              <span className="eyebrow eyebrow--warning mb-1">ATENÇÃO · CONTRATOS A VENCER</span>
+              <div className="flex flex-col gap-1">
+                {vencendoContratos.map(c => {
                   const loc  = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
                   const diff = Math.ceil((new Date(c.data_fim) - new Date()) / MS_POR_DIA)
-                  return `${loc} — vence em ${diff} dia(s)`
-                })()}
-                {vencendoContratos.length > 1 && ` +${vencendoContratos.length - 1}`}
-              </span>
+                  return (
+                    <Link key={c.id} href={`/dashboard/contratos/${c.id}`} className="text-[12px] text-warning no-underline">
+                      {loc} — vence em {diff} dia(s) ({fmtData(c.data_fim)})
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           )}
 
@@ -543,8 +537,11 @@ export default async function Dashboard() {
           {/* Contratos recentes mobile */}
           <div className="mx-5 mb-6">
             <div className="flex justify-between items-center mb-3">
-              <span className="eyebrow eyebrow--indigo">SISTEMA.01 · CONTRATOS</span>
-              <Link href="/dashboard/contratos" className="font-mono text-[11px] text-indigo no-underline">Todos →</Link>
+              <div>
+                <span className="eyebrow eyebrow--indigo mb-1">SISTEMA.01</span>
+                <h5 className="font-display font-bold text-[26px] tracking-[-0.5px] text-fg-1 m-0">Contratos Recentes</h5>
+              </div>
+              <Link href="/dashboard/contratos" className="font-mono text-[11px] text-indigo no-underline shrink-0 ml-3">Ver todos →</Link>
             </div>
             <div className="bg-surface border border-border-3">
               {contratosRecentesMobile.length === 0 && (
@@ -554,23 +551,22 @@ export default async function Dashboard() {
                 const locNome = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
                 const uni     = unidades.find(u => u.id === c.unidade_id)
                 const uniNome = c.unidades?.nome ?? uni?.nome ?? "—"
+                const diff    = (new Date(c.data_fim) - new Date()) / MS_POR_DIA
+                const isExpiring = diff >= 0 && diff <= 7
                 return (
-                  <div key={c.id} className={cn("p-4 flex flex-col gap-1.5", i > 0 ? "border-t border-border-3" : "")}>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[13px] text-fg-1 font-medium">{locNome}</span>
-                      <span className="font-mono text-[12px] text-fg-1">{fmtBRL(uni?.valor_mensal)}</span>
+                  <Link key={c.id} href={`/dashboard/contratos/${c.id}`} className={cn("px-4 py-4 flex justify-between items-center no-underline hover:bg-surface-hi transition-colors", i > 0 ? "border-t border-border-3" : "")}>
+                    <div>
+                      <div className="text-[13px] text-fg-1 font-semibold">{locNome}</div>
+                      <div className="font-mono text-[10px] text-fg-4">{uniNome} · {fmtData(c.data_fim)}</div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="font-mono text-[10px] text-fg-4">{uniNome} · {fmtData(c.data_fim)}</span>
-                      <StatusBadge status={c.status} />
-                    </div>
-                  </div>
+                    <StatusBadge status={isExpiring ? "vencendo" : c.status} />
+                  </Link>
                 )
               })}
             </div>
           </div>
 
-          {/* Quick actions 2x2 mobile */}
+          {/* Quick actions 2×2 mobile */}
           <div className="mx-5 mb-6">
             <span className="eyebrow eyebrow--indigo mb-3">AÇÕES RÁPIDAS</span>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="border border-border-3">
@@ -590,7 +586,7 @@ export default async function Dashboard() {
                   )}
                 >
                   <span className="font-mono text-[9px] text-indigo">{action.code}</span>
-                  <span className="font-bold text-[11px] text-fg-1 tracking-[0.5px] uppercase leading-[1.2]">{action.label}</span>
+                  <span className="font-bold text-[11px] text-fg-1 tracking-[0.5px] uppercase leading-[1.2]">{action.label} →</span>
                 </Link>
               ))}
             </div>
