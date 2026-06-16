@@ -325,7 +325,7 @@ export default function GestaoEdificios() {
                         </p>
                       </div>
                     </div>
-                    <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                    <div className="hidden md:flex" style={{ gap: 8, flexShrink: 0 }}>
                       <button
                         onClick={() => handleEditar(edificio)}
                         style={{
@@ -425,6 +425,42 @@ export default function GestaoEdificios() {
                     >
                       <span style={{ fontSize: 12 }}>{isExpanded ? "⌃" : "›"}</span>
                       {isExpanded ? "Ocultar unidades" : `Ver ${n} unidade${n !== 1 ? "s" : ""}`}
+                    </button>
+                  </div>
+
+                  {/* Mobile action buttons — base do card */}
+                  <div className="flex md:hidden" style={{ gap: 8, marginTop: 12 }}>
+                    <button
+                      onClick={() => handleEditar(edificio)}
+                      style={{
+                        all: "unset",
+                        cursor: "pointer",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 10,
+                        letterSpacing: "1px",
+                        textTransform: "uppercase",
+                        color: "var(--fg-3)",
+                        padding: "7px 13px",
+                        border: "1px solid var(--fg-5)",
+                      }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDeletar(edificio.id)}
+                      style={{
+                        all: "unset",
+                        cursor: "pointer",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 10,
+                        letterSpacing: "1px",
+                        textTransform: "uppercase",
+                        color: "var(--danger-fg)",
+                        padding: "7px 13px",
+                        border: "1px solid var(--danger-fg)",
+                      }}
+                    >
+                      Remover
                     </button>
                   </div>
 
