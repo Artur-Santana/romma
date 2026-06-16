@@ -8,7 +8,7 @@ export function buildFluxoWindow(todayStr) {
   // todayStr = "YYYY-MM-DD" ISO date string from server
   const [y, m] = todayStr.split("-").map(Number)
   const months = []
-  for (let delta = -3; delta <= 2; delta++) {
+  for (let delta = -4; delta <= 1; delta++) {
     let mm = m + delta
     let yy = y
     if (mm < 1)  { mm += 12; yy-- }
