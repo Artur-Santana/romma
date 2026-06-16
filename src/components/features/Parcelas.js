@@ -7,8 +7,9 @@ import { getParcelasByContrato, getContratos, getLocatarios, getUnidades, getEdi
 import { cn, fmtData, fmtBRL } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
 import { Button } from "@/components/ui/button"
+import ConfirmDialog from "@/components/ui/ConfirmDialog"
 import { marcarParcelaComoPaga } from "@/actions/parcelas"
-import { renovarContrato } from "@/actions/contratos"
+import { renovarContrato, cancelarContrato, encerrarContrato } from "@/actions/contratos"
 
 export default function Parcelas({ contratoId }) {
   const router = useRouter()
@@ -22,6 +23,7 @@ export default function Parcelas({ contratoId }) {
   const [renew, setRenew] = useState({ meses: 0, custom: "" })
   const [renovando, setRenovando] = useState(false)
   const [carregando, setCarregando] = useState(true)
+  const [confirmDialog, setConfirmDialog] = useState(null)
 
   useEffect(() => {
     async function carregar() {
@@ -124,6 +126,47 @@ export default function Parcelas({ contratoId }) {
     },
   ]
 
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const vencido = contrato?.status === "ativo" && contrato?.data_fim < todayStr
+
+  function askCancelar() {
+    setConfirmDialog({
+      title: "Cancelar contrato?",
+      body: `O contrato de ${locatario?.nome_razao_social ?? "—"} na unidade ${unidade?.nome ?? "—"} será cancelado e a unidade ficará disponível.`,
+      danger: true,
+      confirmLabel: "Cancelar Contrato",
+      onConfirm: async () => {
+        setConfirmDialog(null)
+        const result = await cancelarContrato(contrato.id)
+        if (result.status === 200) {
+          toast.success("Contrato cancelado")
+          router.push("/dashboard/contratos")
+        } else {
+          setErro(result.erroMessage)
+        }
+      },
+    })
+  }
+
+  function askEncerrar() {
+    setConfirmDialog({
+      title: "Encerrar contrato?",
+      body: `O contrato de ${locatario?.nome_razao_social ?? "—"} na unidade ${unidade?.nome ?? "—"} será encerrado e a unidade ficará disponível.`,
+      danger: false,
+      confirmLabel: "Encerrar",
+      onConfirm: async () => {
+        setConfirmDialog(null)
+        const result = await encerrarContrato(contrato.id)
+        if (result.status === 200) {
+          toast.success("Contrato encerrado")
+          router.push("/dashboard/contratos")
+        } else {
+          setErro(result.erroMessage)
+        }
+      },
+    })
+  }
+
   if (carregando) {
     const skel = (w, h, mb = 0) => (
       <div style={{ width: w, height: h, marginBottom: mb, background: "var(--surface)", position: "relative", overflow: "hidden" }}>
@@ -173,6 +216,16 @@ export default function Parcelas({ contratoId }) {
   }
 
   return (
+    <>
+    <ConfirmDialog
+      open={!!confirmDialog}
+      title={confirmDialog?.title}
+      body={confirmDialog?.body}
+      danger={confirmDialog?.danger ?? true}
+      confirmLabel={confirmDialog?.confirmLabel}
+      onConfirm={confirmDialog?.onConfirm}
+      onCancel={() => setConfirmDialog(null)}
+    />
     <div className="romma-page bg-background" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
 
       {/* Back */}
@@ -192,21 +245,49 @@ export default function Parcelas({ contratoId }) {
             {locatario?.nome_razao_social ?? "Parcelas."}
           </h1>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <StatusBadge status={contrato?.status} />
-          {contrato?.status === "ativo" && (
+          {contrato?.status === "ativo" && !vencido && (
             <button
               onClick={() => setShowRenew(true)}
               style={{
                 all: "unset", cursor: "pointer",
                 fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 700,
                 letterSpacing: "1px", textTransform: "uppercase",
-                color: "#fff",
-                background: "var(--indigo)",
-                padding: "9px 14px",
+                color: "#fff", background: "var(--indigo)", padding: "9px 14px",
               }}
             >
               Renovar
+            </button>
+          )}
+          {contrato?.status === "ativo" && !vencido && (
+            <button
+              onClick={askCancelar}
+              style={{
+                all: "unset", cursor: "pointer",
+                fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 700,
+                letterSpacing: "1px", textTransform: "uppercase",
+                color: "var(--danger-fg)",
+                border: "1px solid color-mix(in oklch, var(--danger-fg) 40%, transparent)",
+                padding: "8px 14px",
+              }}
+            >
+              Cancelar
+            </button>
+          )}
+          {contrato?.status === "ativo" && vencido && (
+            <button
+              onClick={askEncerrar}
+              style={{
+                all: "unset", cursor: "pointer",
+                fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 700,
+                letterSpacing: "1px", textTransform: "uppercase",
+                color: "var(--danger-fg)",
+                border: "1px solid color-mix(in oklch, var(--danger-fg) 40%, transparent)",
+                padding: "8px 14px",
+              }}
+            >
+              Encerrar
             </button>
           )}
         </div>
@@ -500,5 +581,6 @@ export default function Parcelas({ contratoId }) {
       )}
 
     </div>
+    </>
   )
 }
