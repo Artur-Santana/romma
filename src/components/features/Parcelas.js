@@ -197,7 +197,7 @@ export default function Parcelas({ contratoId }) {
       {contrato && unidade && (
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
           border: "1px solid var(--border-3)",
           marginBottom: "var(--rd-block)",
         }}>
@@ -224,7 +224,7 @@ export default function Parcelas({ contratoId }) {
       {contrato && (
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
           border: "1px solid var(--border-3)",
           marginBottom: 20,
         }}>
