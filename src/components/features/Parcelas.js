@@ -69,6 +69,7 @@ export default function Parcelas({ contratoId }) {
   }
 
   async function handleRenovar(mesesNum) {
+    if (!contrato) return
     setRenovando(true)
     const result = await renovarContrato(contrato.id, mesesNum)
     if (result.status === 200) {
