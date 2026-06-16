@@ -131,7 +131,7 @@ export default function Parcelas({ contratoId }) {
       </div>
     )
     return (
-      <div className="romma-page bg-background min-h-full px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20">
+      <div className="romma-page bg-background" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
         {skel(110, 36, 40)}
         <div style={{ marginBottom: "var(--rd-block)" }}>
           {skel(140, 11, 12)}
@@ -145,7 +145,7 @@ export default function Parcelas({ contratoId }) {
             </div>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", border: "1px solid var(--border-3)", marginBottom: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", border: "1px solid var(--border-3)", marginBottom: 20 }}>
           {[0,1,2,3].map(i => (
             <div key={i} style={{ padding: "14px 16px", borderRight: i < 3 ? "1px solid var(--border-3)" : "none" }}>
               {skel(70, 10, 10)}
@@ -159,7 +159,7 @@ export default function Parcelas({ contratoId }) {
 
   if (!contrato) {
     return (
-      <div className="romma-page bg-background min-h-full px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20">
+      <div className="romma-page bg-background" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
         <Button
           variant="outline"
           onClick={() => router.push("/dashboard/contratos")}
@@ -173,7 +173,7 @@ export default function Parcelas({ contratoId }) {
   }
 
   return (
-    <div className="romma-page bg-background min-h-full px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20">
+    <div className="romma-page bg-background" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
 
       {/* Back */}
       <Button
@@ -249,7 +249,7 @@ export default function Parcelas({ contratoId }) {
       {contrato && (
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
           border: "1px solid var(--border-3)",
           marginBottom: 20,
         }}>
