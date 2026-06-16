@@ -94,7 +94,7 @@ function CashFlowChart({ fluxo, testId, height, compact }) {
                 overflow: "hidden",
               }}
             >
-              {f.recebido > 24 && (
+              {!compact && f.recebido > 24 && (
                 <span style={{
                   fontSize: 12, fontFamily: "var(--font-mono)", whiteSpace: "nowrap",
                   color: f.peak ? "oklch(0.25 0.05 70)" : "oklch(0 0 0 / 0.6)",
@@ -481,17 +481,17 @@ export default async function Dashboard() {
 
       {/* Mobile layout */}
       <div className="flex flex-col md:hidden">
-        <div className="romma-mobile-pane flex-1 overflow-auto">
+        <div className="romma-mobile-pane flex-1 overflow-auto px-3">
 
           {/* Mobile header */}
-          <div className="mx-3 mt-4 mb-4">
+          <div className="mt-4 mb-4">
             <span className="eyebrow eyebrow--indigo mb-2">CONSOLE.OS // VISÃO DO PROPRIETÁRIO</span>
             <h2 className="font-display font-bold text-[36px] leading-none tracking-[-1.8px] text-fg-1 m-0 mb-1">Visão Geral.</h2>
             <span className="font-mono text-[11px] text-fg-3">{proprietarioNome} · {edificios.length} edifício(s)</span>
           </div>
 
           {/* Stats 2×2 unified grid — numbered cells */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="mx-3 mb-5 border border-border-3">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="mb-5 border border-border-3">
             {metricas.map((m, i) => (
               <div
                 key={m.idx}
@@ -512,7 +512,7 @@ export default async function Dashboard() {
 
           {/* Vencendo banner mobile */}
           {vencendoContratos.length > 0 && (
-            <div className="bg-warning-bg border-l-2 border-warning px-4 py-[12px] mx-3 mb-5">
+            <div className="bg-warning-bg border-l-2 border-warning px-4 py-[12px] mb-5">
               <span className="eyebrow eyebrow--warning mb-1">ATENÇÃO · CONTRATOS A VENCER</span>
               <div className="flex flex-col gap-1">
                 {vencendoContratos.map(c => {
@@ -529,7 +529,7 @@ export default async function Dashboard() {
           )}
 
           {/* Mobile CashFlowChart — compact, indigo eyebrow */}
-          <div className="mx-3 mb-5">
+          <div className="mb-5">
             <span className="eyebrow eyebrow--indigo mb-[8px]">FLUXO · PREVISÃO 2026</span>
             <div className="bg-surface border border-border-3" style={{ padding: "12px 10px" }}>
               <CashFlowChart fluxo={fluxoData} height={120} compact />
@@ -537,7 +537,7 @@ export default async function Dashboard() {
           </div>
 
           {/* Contratos recentes mobile */}
-          <div className="mx-3 mb-5">
+          <div className="mb-5">
             <div className="flex justify-between items-center mb-3">
               <div>
                 <span className="eyebrow eyebrow--indigo mb-1">SISTEMA.01</span>
@@ -572,7 +572,7 @@ export default async function Dashboard() {
           </div>
 
           {/* Quick actions 2×2 mobile */}
-          <div className="mx-3 mb-6">
+          <div className="mb-6">
             <span className="eyebrow eyebrow--indigo mb-3">AÇÕES RÁPIDAS</span>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }} className="border border-border-3">
               {[
