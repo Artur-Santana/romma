@@ -8,6 +8,7 @@ import { cn, fmtData, fmtBRL } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
 import { Button } from "@/components/ui/button"
 import { marcarParcelaComoPaga } from "@/actions/parcelas"
+import { renovarContrato } from "@/actions/contratos"
 
 export default function Parcelas({ contratoId }) {
   const router = useRouter()
@@ -17,6 +18,9 @@ export default function Parcelas({ contratoId }) {
   const [unidade, setUnidade] = useState(null)
   const [edificio, setEdificio] = useState(null)
   const [erro, setErro] = useState(null)
+  const [showRenew, setShowRenew] = useState(false)
+  const [renew, setRenew] = useState({ meses: 0, custom: "" })
+  const [renovando, setRenovando] = useState(false)
 
   useEffect(() => {
     async function carregar() {
@@ -53,6 +57,32 @@ export default function Parcelas({ contratoId }) {
     } else {
       setErro(result.erroMessage)
     }
+  }
+
+  function previewNovoTermino(mesesNum) {
+    if (!contrato?.data_fim || !mesesNum) return null
+    const d = new Date(contrato.data_fim + "T12:00:00")
+    d.setMonth(d.getMonth() + mesesNum)
+    return fmtData(d.toISOString().slice(0, 10))
+  }
+
+  async function handleRenovar(mesesNum) {
+    setRenovando(true)
+    const result = await renovarContrato(contrato.id, mesesNum)
+    if (result.status === 200) {
+      setShowRenew(false)
+      toast.success(`Contrato renovado até ${previewNovoTermino(mesesNum)}`)
+      const [p, contratos] = await Promise.all([
+        getParcelasByContrato(contratoId),
+        getContratos(),
+      ])
+      setParcelas(p ?? [])
+      const c = (contratos ?? []).find(x => x.id === contratoId)
+      if (c) setContrato(c)
+    } else {
+      toast.error(result.erroMessage)
+    }
+    setRenovando(false)
   }
 
   // Derivações financeiras inline — recalculam no re-render após setParcelas
@@ -113,6 +143,21 @@ export default function Parcelas({ contratoId }) {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <StatusBadge status={contrato?.status} />
+          {contrato?.status === "ativo" && (
+            <button
+              onClick={() => setShowRenew(true)}
+              style={{
+                all: "unset", cursor: "pointer",
+                fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 700,
+                letterSpacing: "1px", textTransform: "uppercase",
+                color: "var(--fg-2)",
+                border: "1px solid var(--border-3)",
+                padding: "9px 14px",
+              }}
+            >
+              Renovar
+            </button>
+          )}
         </div>
       </div>
 
@@ -320,6 +365,138 @@ export default function Parcelas({ contratoId }) {
           )
         })}
       </div>
+
+      {/* Modal de renovação */}
+      {showRenew && (
+        <div
+          onClick={e => { if (e.target === e.currentTarget) setShowRenew(false) }}
+          style={{
+            position: "fixed", inset: 0, zIndex: 60,
+            background: "oklch(0 0 0 / 0.72)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "16px",
+            animation: "rFade 200ms var(--ease-crisp) both",
+          }}
+        >
+          <div style={{
+            background: "var(--surface)",
+            border: "1px solid var(--border-2)",
+            maxWidth: 500, width: "100%",
+            padding: 28,
+          }}>
+            {/* Header do modal */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
+              <div>
+                <span className="eyebrow eyebrow--indigo" style={{ marginBottom: 6, display: "block" }}>RENOVAÇÃO</span>
+                <h3 className="font-display font-bold text-fg-1 m-0" style={{ fontSize: 20 }}>Renovar Contrato</h3>
+              </div>
+              <button
+                aria-label="Fechar"
+                onClick={() => setShowRenew(false)}
+                style={{
+                  all: "unset", cursor: "pointer",
+                  width: 30, height: 30,
+                  border: "1px solid var(--border-3)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "var(--fg-3)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Body */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <p className="r-body" style={{ fontSize: 14, margin: 0 }}>
+                Término atual: <strong style={{ color: "var(--fg-1)" }}>{fmtData(contrato?.data_fim)}</strong>. Estenda o prazo do contrato:
+              </p>
+
+              {/* Opções rápidas: 3 colunas */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                {[6, 12, 24].map(m => (
+                  <button
+                    key={m}
+                    onClick={() => setRenew({ meses: m, custom: "" })}
+                    style={{
+                      all: "unset", cursor: "pointer", textAlign: "center",
+                      padding: "16px 10px",
+                      border: renew.meses === m ? "1px solid var(--indigo)" : "1px solid var(--border-3)",
+                      background: renew.meses === m ? "var(--indigo-soft)" : "var(--surface-hi)",
+                    }}
+                  >
+                    <div className="font-display font-bold" style={{ fontSize: 20, color: "var(--fg-1)" }}>+{m}</div>
+                    <div className="r-meta" style={{ marginTop: 4 }}>meses</div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Campo custom */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <label className="r-label" style={{ fontSize: 11 }}>Meses personalizados (1–36)</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={36}
+                  value={renew.custom}
+                  onChange={e => setRenew({ meses: Number(e.target.value), custom: e.target.value })}
+                  placeholder="Ex: 18"
+                  style={{
+                    all: "unset",
+                    border: "1px solid var(--border-3)",
+                    background: "var(--surface-hi)",
+                    color: "var(--fg-1)",
+                    padding: "10px 12px",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 14,
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+
+              {/* Preview */}
+              <div style={{
+                fontFamily: "var(--font-mono)", fontSize: 14,
+                color: renew.meses ? "var(--highlight)" : "var(--fg-4)",
+              }}>
+                Novo término: <strong>{previewNovoTermino(renew.meses) ?? "—"}</strong>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 24 }}>
+              <button
+                onClick={() => setShowRenew(false)}
+                style={{
+                  all: "unset", cursor: "pointer",
+                  fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 400,
+                  color: "var(--fg-3)",
+                  border: "1px solid var(--border-3)",
+                  padding: "9px 16px",
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => handleRenovar(renew.meses)}
+                disabled={!renew.meses || renovando}
+                style={{
+                  all: "unset",
+                  cursor: !renew.meses || renovando ? "not-allowed" : "pointer",
+                  fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 700,
+                  color: "var(--fg-1)",
+                  background: !renew.meses || renovando ? "var(--border-3)" : "var(--indigo)",
+                  padding: "9px 20px",
+                  opacity: !renew.meses || renovando ? 0.6 : 1,
+                }}
+              >
+                {renovando ? "Confirmando…" : "Confirmar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )
