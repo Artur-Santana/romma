@@ -475,66 +475,48 @@ export default function GestaoEdificios() {
                             data-testid="unidade-row"
                             onClick={() => setModalState({ unidade: u })}
                             style={{
-                              padding: "7px 14px",
+                              padding: "10px 14px",
                               cursor: "pointer",
                               borderBottom: "1px solid var(--border-3)",
                               background: "transparent",
                               display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              gap: 16,
+                              flexDirection: "column",
+                              gap: 5,
                               transition: "background var(--dur-fast)",
                             }}
                             onMouseEnter={e => e.currentTarget.style.background = "var(--surface-hi)"}
                             onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                           >
-                            {/* Left — name + description */}
-                            <div style={{ minWidth: 0 }}>
-                              <div style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 13, color: "var(--fg-1)" }}>
+                            {/* Linha 1 — nome + área */}
+                            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
+                              <span style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 13, color: "var(--fg-1)", minWidth: 0 }}>
                                 {u.nome}
-                              </div>
-                              {u.descricao && (
-                                <div style={{
-                                  fontFamily: "var(--font-mono)",
-                                  fontSize: 11,
-                                  color: "var(--fg-4)",
-                                  marginTop: 3,
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  maxWidth: 260,
-                                }}>
-                                  {u.descricao}
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Right — area · value · pill · Editar */}
-                            <div style={{ display: "flex", gap: 14, alignItems: "center", flexShrink: 0 }}>
-                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)" }}>
+                              </span>
+                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-4)", flexShrink: 0 }}>
                                 {u.area_m2 ? `${u.area_m2} m²` : "—"}
                               </span>
+                            </div>
+
+                            {/* Linha 2 — valor + pill + editar */}
+                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                               <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-1)" }}>
                                 {`R$ ${(parseFloat(u.valor_mensal) || 0).toLocaleString("pt-BR")}`}
                               </span>
                               <span style={{
                                 display: "inline-flex",
                                 alignItems: "center",
-                                gap: 6,
+                                gap: 5,
                                 fontFamily: "var(--font-mono)",
                                 fontSize: 9.5,
                                 letterSpacing: "0.5px",
                                 textTransform: "uppercase",
-                                padding: "4px 8px",
+                                padding: "3px 7px",
                                 background: alugada
                                   ? "color-mix(in oklch, var(--color-primary-hover) 20%, transparent)"
                                   : "color-mix(in oklch, var(--success) 16%, transparent)",
                                 color: alugada ? "var(--color-primary-hover)" : "var(--success)",
                               }}>
-                                <span style={{
-                                  width: 7, height: 7, flexShrink: 0,
-                                  background: alugada ? "var(--color-primary-hover)" : "var(--success)",
-                                }} />
+                                <span style={{ width: 6, height: 6, flexShrink: 0, background: alugada ? "var(--color-primary-hover)" : "var(--success)" }} />
                                 {alugada ? "Alugada" : "Disponível"}
                               </span>
                               <span style={{
@@ -546,6 +528,7 @@ export default function GestaoEdificios() {
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: 5,
+                                marginLeft: "auto",
                               }}>
                                 Editar <span style={{ fontSize: 12 }}>→</span>
                               </span>
