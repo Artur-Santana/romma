@@ -15,22 +15,43 @@ import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function SkeletonContratos() {
+  const skel = (w, h, mb = 0) => (
+    <div style={{ width: w, height: h, marginBottom: mb, background: "var(--surface)", position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, transparent 0%, var(--surface-hi) 50%, transparent 100%)", animation: "rBar 1.4s ease-in-out infinite" }} />
+    </div>
+  )
   return (
     <div className="romma-page px-4 sm:px-12 pt-6 sm:pt-12 pb-20 bg-background min-h-full">
-      <div className="border border-border-3 bg-surface mb-8">
-        <div className="px-5 py-3 bg-[var(--surface-hi)] border-b border-border-3">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-[10px] w-full rounded-none mb-2" />
-          ))}
+      {/* Header skeleton */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
+        <div>
+          {skel(120, 11, 10)}
+          {skel(180, 40)}
         </div>
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} className={i > 0 ? "border-t border-border-3 px-5 py-3" : "px-5 py-3"}>
-            <Skeleton className="h-8 w-full rounded-none mt-1" />
+        {skel(120, 34)}
+      </div>
+      {/* Busca + filtro skeleton */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        {skel("100%", 36)}
+        {skel(110, 36)}
+      </div>
+      {/* Cards grid skeleton */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 12 }}>
+        {[0,1,2,3].map(i => (
+          <div key={i} style={{ border: "1px solid var(--border-3)", background: "var(--surface)", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+            {skel(60, 10, 4)}
+            {skel("70%", 18)}
+            {skel("50%", 11)}
+            {skel("100%", 4, 4)}
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              {skel(80, 14)}
+              {skel(60, 28)}
+            </div>
           </div>
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 function getTodayLocal() {
@@ -419,7 +440,7 @@ export default function Contratos() {
                     </div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
-                    <StatusBadge status={exp ? "vencendo" : contrato.status} />
+                    <StatusBadge status={exp ? "vencendo" : contrato.status} label={exp ? `Vence em ${days}d` : undefined} />
                     <span
                       className="font-mono text-[11px]"
                       style={{ color: exp ? "var(--warning)" : "var(--fg-4)" }}

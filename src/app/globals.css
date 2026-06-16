@@ -473,10 +473,9 @@
 @media print { .chart-bar { animation: none !important; } }
 
 /* Cash-flow chart column hover tooltip */
+.chart-col { position: relative; }
 .chart-col .chart-tooltip {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
+  display: none;
   position: absolute;
   bottom: calc(100% + 6px);
   left: 50%;
@@ -490,5 +489,6 @@
   font-size: 12px;
   color: var(--fg-3);
   line-height: 1.8;
+  pointer-events: none;
 }
-.chart-col:hover .chart-tooltip { opacity: 1; }
+.chart-col:hover .chart-tooltip { display: block; }
