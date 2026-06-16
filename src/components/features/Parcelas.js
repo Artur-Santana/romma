@@ -137,17 +137,17 @@ export default function Parcelas({ contratoId }) {
           {skel(140, 11, 12)}
           {skel("55%", 48)}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", border: "1px solid var(--border-3)", marginBottom: "var(--rd-block)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", border: "1px solid var(--border-3)", gap: "1px", background: "var(--border-3)", marginBottom: "var(--rd-block)" }}>
           {[0,1,2,3,4].map(i => (
-            <div key={i} className={i === 4 ? "grade-resumo-ultimo" : ""} style={{ padding: "14px 16px", borderRight: i < 4 ? "1px solid var(--border-3)" : "none" }}>
+            <div key={i} className={i === 4 ? "grade-resumo-ultimo" : ""} style={{ padding: "14px 16px", background: "var(--surface)" }}>
               {skel(60, 10, 10)}
               {skel("75%", 16)}
             </div>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", border: "1px solid var(--border-3)", marginBottom: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", border: "1px solid var(--border-3)", gap: "1px", background: "var(--border-3)", marginBottom: 20 }}>
           {[0,1,2,3].map(i => (
-            <div key={i} style={{ padding: "14px 16px", borderRight: i < 3 ? "1px solid var(--border-3)" : "none" }}>
+            <div key={i} style={{ padding: "14px 16px", background: "var(--surface)" }}>
               {skel(70, 10, 10)}
               {skel("65%", 24)}
             </div>
@@ -224,6 +224,8 @@ export default function Parcelas({ contratoId }) {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
           border: "1px solid var(--border-3)",
+          gap: "1px",
+          background: "var(--border-3)",
           marginBottom: "var(--rd-block)",
         }}>
           {[
@@ -236,7 +238,6 @@ export default function Parcelas({ contratoId }) {
             <div key={s.label} className={i === arr.length - 1 ? "grade-resumo-ultimo" : ""} style={{
               padding: "14px 16px",
               background: "var(--surface)",
-              borderRight: i < arr.length - 1 ? "1px solid var(--border-3)" : "none",
             }}>
               <div className="r-label" style={{ marginBottom: 8 }}>{s.label}</div>
               <div className="font-display font-bold text-fg-1" style={{ fontSize: 16, letterSpacing: "-0.4px" }}>{s.value}</div>
@@ -251,13 +252,14 @@ export default function Parcelas({ contratoId }) {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
           border: "1px solid var(--border-3)",
+          gap: "1px",
+          background: "var(--border-3)",
           marginBottom: 20,
         }}>
-          {metrics.map((m, i, arr) => (
+          {metrics.map((m) => (
             <div key={m.l} style={{
               padding: "14px 16px",
-              background: m.danger ? "var(--danger-bg2)" : "transparent",
-              borderRight: i < arr.length - 1 ? "1px solid var(--border-3)" : "none",
+              background: m.danger ? "var(--danger-bg2)" : "var(--surface)",
             }}>
               <div className="r-label" style={{
                 fontSize: 9.5, marginBottom: 7,
