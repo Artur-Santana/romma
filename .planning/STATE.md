@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-16T03:00:40.572Z"
+last_updated: "2026-06-16T03:43:33.667Z"
 last_activity: 2026-06-16
 progress:
   total_phases: 9
   completed_phases: 4
-  total_plans: 16
-  completed_plans: 15
+  total_plans: 19
+  completed_plans: 16
   percent: 44
 ---
 
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 21 — dashboard-vis-o-geral-editorial
+**Current focus:** Phase 22 — contratos-parcelas-renova-o
 
 ---
 
@@ -112,7 +112,8 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 21 (dashboard-vis-o-geral-editorial) — COMPLETE
+Phase: 22 (contratos-parcelas-renova-o) — EXECUTING
+Plan: 2 of 3
 All 3 plans done. Side fixes: MobileNav exact-match, Unidades metrics 2×2.
 Last activity: 2026-06-16
 
