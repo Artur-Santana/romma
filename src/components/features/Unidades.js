@@ -165,6 +165,9 @@ export default function Unidades() {
     <div className="romma-page r-fade" style={{
       padding: "var(--rd-page-y) var(--rd-gutter)",
       paddingBottom: 64,
+      paddingRight: 0,
+      paddingLeft: 0,
+      paddingTop: 12,
       minHeight: "100%",
     }}>
       {/* ── Page Header ─────────────────────────────────────────────────── */}
@@ -190,12 +193,11 @@ export default function Unidades() {
         </div>
       )}
 
-      {/* ── Metrics bar ─────────────────────────────────────────────────── */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-        border: "1px solid var(--border-3)",
-        marginBottom: "var(--rd-block)",
-      }}>
+      {/* ── Metrics bar — 2×2 on mobile, 4-col on md+ ─────────────────── */}
+      <div
+        className="grid grid-cols-2 md:grid-cols-4 border border-[var(--border-3)]"
+        style={{ marginBottom: "var(--rd-block)" }}
+      >
         {[
           {
             l: "Área total",
@@ -224,10 +226,13 @@ export default function Unidades() {
         ].map((m, i) => (
           <div
             key={m.l}
-            style={{
-              padding: "14px var(--rd-cell)",
-              borderRight: i < 3 ? "1px solid var(--border-3)" : "none",
-            }}
+            className={`border-border-3 ${
+              i === 0 ? "border-r" :
+              i === 1 ? "md:border-r" :
+              i === 2 ? "border-r border-t md:border-t-0" :
+                        "border-t md:border-t-0"
+            }`}
+            style={{ padding: "14px var(--rd-cell)" }}
           >
             <div
               className="r-label"
