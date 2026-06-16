@@ -131,7 +131,7 @@ export default function Parcelas({ contratoId }) {
       </div>
     )
     return (
-      <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
+      <div className="romma-page bg-background min-h-full px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20">
         {skel(110, 36, 40)}
         <div style={{ marginBottom: "var(--rd-block)" }}>
           {skel(140, 11, 12)}
@@ -139,13 +139,13 @@ export default function Parcelas({ contratoId }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", border: "1px solid var(--border-3)", marginBottom: "var(--rd-block)" }}>
           {[0,1,2,3,4].map(i => (
-            <div key={i} style={{ padding: "14px 16px", borderRight: i < 4 ? "1px solid var(--border-3)" : "none" }}>
+            <div key={i} className={i === 4 ? "grade-resumo-ultimo" : ""} style={{ padding: "14px 16px", borderRight: i < 4 ? "1px solid var(--border-3)" : "none" }}>
               {skel(60, 10, 10)}
               {skel("75%", 16)}
             </div>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", border: "1px solid var(--border-3)", marginBottom: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", border: "1px solid var(--border-3)", marginBottom: 20 }}>
           {[0,1,2,3].map(i => (
             <div key={i} style={{ padding: "14px 16px", borderRight: i < 3 ? "1px solid var(--border-3)" : "none" }}>
               {skel(70, 10, 10)}
@@ -159,7 +159,7 @@ export default function Parcelas({ contratoId }) {
 
   if (!contrato) {
     return (
-      <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
+      <div className="romma-page bg-background min-h-full px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20">
         <Button
           variant="outline"
           onClick={() => router.push("/dashboard/contratos")}
@@ -173,7 +173,7 @@ export default function Parcelas({ contratoId }) {
   }
 
   return (
-    <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
+    <div className="romma-page bg-background min-h-full px-[18px] sm:px-12 pt-6 sm:pt-12 pb-20">
 
       {/* Back */}
       <Button
@@ -233,7 +233,7 @@ export default function Parcelas({ contratoId }) {
             { label: "Início", value: fmtData(contrato?.data_inicio) },
             { label: "Término", value: fmtData(contrato?.data_fim) },
           ].map((s, i, arr) => (
-            <div key={s.label} style={{
+            <div key={s.label} className={i === arr.length - 1 ? "grade-resumo-ultimo" : ""} style={{
               padding: "14px 16px",
               background: "var(--surface)",
               borderRight: i < arr.length - 1 ? "1px solid var(--border-3)" : "none",
@@ -245,11 +245,11 @@ export default function Parcelas({ contratoId }) {
         </div>
       )}
 
-      {/* Resumo financeiro: auto-fill responsive (4 cols desktop, wraps mobile) */}
+      {/* Resumo financeiro: 2×2 mobile, 4 cols desktop */}
       {contrato && (
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
           border: "1px solid var(--border-3)",
           marginBottom: 20,
         }}>

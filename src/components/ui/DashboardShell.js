@@ -7,6 +7,7 @@ import OwnerSidebar from "@/components/ui/OwnerSidebar"
 
 const NAV_ITEMS = [
   { href: "/dashboard",              label: "Início",     code: "OVW" },
+  { href: "/dashboard/edificios",    label: "Edifícios",  code: "ED"  },
   { href: "/dashboard/unidades",     label: "Unidades",   code: "UNI" },
   { href: "/dashboard/contratos",    label: "Contratos",  code: "CTR" },
   { href: "/dashboard/locatarios",   label: "Locatários", code: "LOC" },
