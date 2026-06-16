@@ -176,8 +176,8 @@ export default function Parcelas({ contratoId }) {
                 all: "unset", cursor: "pointer",
                 fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 700,
                 letterSpacing: "1px", textTransform: "uppercase",
-                color: "var(--fg-2)",
-                border: "1px solid var(--border-3)",
+                color: "#fff",
+                background: "var(--indigo)",
                 padding: "9px 14px",
               }}
             >
@@ -193,118 +193,59 @@ export default function Parcelas({ contratoId }) {
         </div>
       )}
 
-      {/* Grade-resumo: 5 colunas desktop, 2×3 mobile */}
+      {/* Grade-resumo: auto-fill responsive (5 cols desktop, wraps mobile) */}
       {contrato && unidade && (
-        <>
-          {/* Desktop: 5 colunas */}
-          <div className="romma-desktop-only" style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
-            border: "1px solid var(--border-3)",
-            marginBottom: "var(--rd-block)",
-          }}>
-            {[
-              { label: "Unidade", value: unidade?.nome ?? "—" },
-              { label: "Edifício", value: edificio?.nome ?? "—" },
-              { label: "Valor mensal", value: fmtBRL(unidade?.valor_mensal) },
-              { label: "Início", value: fmtData(contrato?.data_inicio) },
-              { label: "Término", value: fmtData(contrato?.data_fim) },
-            ].map((s, i) => (
-              <div key={s.label} style={{
-                padding: "14px 16px",
-                background: "var(--surface)",
-                borderRight: i < 4 ? "1px solid var(--border-3)" : "none",
-              }}>
-                <div className="r-label" style={{ marginBottom: 8 }}>{s.label}</div>
-                <div className="font-display font-bold text-fg-1" style={{ fontSize: 16, letterSpacing: "-0.4px" }}>{s.value}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile: 2×3 grid */}
-          <div className="romma-mobile-only" style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            border: "1px solid var(--border-3)",
-            marginBottom: "var(--rd-block)",
-          }}>
-            {[
-              { label: "Unidade", value: unidade?.nome ?? "—" },
-              { label: "Edifício", value: edificio?.nome ?? "—" },
-              { label: "Valor mensal", value: fmtBRL(unidade?.valor_mensal) },
-              { label: "Início", value: fmtData(contrato?.data_inicio) },
-              { label: "Término", value: fmtData(contrato?.data_fim) },
-            ].map((s, i) => (
-              <div key={s.label} style={{
-                padding: "14px 16px",
-                background: "var(--surface)",
-                borderRight: i % 2 === 0 ? "1px solid var(--border-3)" : "none",
-                borderTop: i >= 2 ? "1px solid var(--border-3)" : "none",
-              }}>
-                <div className="r-label" style={{ marginBottom: 8 }}>{s.label}</div>
-                <div className="font-display font-bold text-fg-1" style={{ fontSize: 16, letterSpacing: "-0.4px" }}>{s.value}</div>
-              </div>
-            ))}
-          </div>
-        </>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+          border: "1px solid var(--border-3)",
+          marginBottom: "var(--rd-block)",
+        }}>
+          {[
+            { label: "Unidade", value: unidade?.nome ?? "—" },
+            { label: "Edifício", value: edificio?.nome ?? "—" },
+            { label: "Valor mensal", value: fmtBRL(unidade?.valor_mensal) },
+            { label: "Início", value: fmtData(contrato?.data_inicio) },
+            { label: "Término", value: fmtData(contrato?.data_fim) },
+          ].map((s, i, arr) => (
+            <div key={s.label} style={{
+              padding: "14px 16px",
+              background: "var(--surface)",
+              borderRight: i < arr.length - 1 ? "1px solid var(--border-3)" : "none",
+            }}>
+              <div className="r-label" style={{ marginBottom: 8 }}>{s.label}</div>
+              <div className="font-display font-bold text-fg-1" style={{ fontSize: 16, letterSpacing: "-0.4px" }}>{s.value}</div>
+            </div>
+          ))}
+        </div>
       )}
 
-      {/* Resumo financeiro: 4 colunas */}
+      {/* Resumo financeiro: auto-fill responsive (4 cols desktop, wraps mobile) */}
       {contrato && (
-        <>
-          {/* Desktop: 4 colunas */}
-          <div className="romma-desktop-only" style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            border: "1px solid var(--border-3)",
-            marginBottom: 20,
-          }}>
-            {metrics.map((m, i) => (
-              <div key={m.l} style={{
-                padding: "14px 16px",
-                background: m.danger ? "var(--danger-bg2)" : "transparent",
-                borderRight: i < 3 ? "1px solid var(--border-3)" : "none",
-              }}>
-                <div className="r-label" style={{
-                  fontSize: 9.5, marginBottom: 7,
-                  color: m.danger ? "var(--danger-fg)" : m.gold ? "var(--highlight)" : m.ok ? "var(--success)" : "var(--fg-4)",
-                }}>{m.l}</div>
-                <div className="font-display font-bold" style={{
-                  fontSize: 24, letterSpacing: "-1px",
-                  color: m.danger ? "var(--danger-fg)" : m.gold ? "var(--highlight)" : m.ok ? "var(--success)" : "var(--fg-1)",
-                }}>{m.v}</div>
-                <div className="r-meta" style={{ marginTop: 4 }}>{m.s}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile: 2×2 grid */}
-          <div className="romma-mobile-only" style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            border: "1px solid var(--border-3)",
-            marginBottom: 20,
-          }}>
-            {metrics.map((m, i) => (
-              <div key={m.l} style={{
-                padding: "14px 16px",
-                background: m.danger ? "var(--danger-bg2)" : "transparent",
-                borderRight: i % 2 === 0 ? "1px solid var(--border-3)" : "none",
-                borderTop: i >= 2 ? "1px solid var(--border-3)" : "none",
-              }}>
-                <div className="r-label" style={{
-                  fontSize: 9.5, marginBottom: 7,
-                  color: m.danger ? "var(--danger-fg)" : m.gold ? "var(--highlight)" : m.ok ? "var(--success)" : "var(--fg-4)",
-                }}>{m.l}</div>
-                <div className="font-display font-bold" style={{
-                  fontSize: 20, letterSpacing: "-0.8px",
-                  color: m.danger ? "var(--danger-fg)" : m.gold ? "var(--highlight)" : m.ok ? "var(--success)" : "var(--fg-1)",
-                }}>{m.v}</div>
-                <div className="r-meta" style={{ marginTop: 4 }}>{m.s}</div>
-              </div>
-            ))}
-          </div>
-        </>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+          border: "1px solid var(--border-3)",
+          marginBottom: 20,
+        }}>
+          {metrics.map((m, i, arr) => (
+            <div key={m.l} style={{
+              padding: "14px 16px",
+              background: m.danger ? "var(--danger-bg2)" : "transparent",
+              borderRight: i < arr.length - 1 ? "1px solid var(--border-3)" : "none",
+            }}>
+              <div className="r-label" style={{
+                fontSize: 9.5, marginBottom: 7,
+                color: m.danger ? "var(--danger-fg)" : m.gold ? "var(--highlight)" : m.ok ? "var(--success)" : "var(--fg-4)",
+              }}>{m.l}</div>
+              <div className="font-display font-bold" style={{
+                fontSize: 24, letterSpacing: "-1px",
+                color: m.danger ? "var(--danger-fg)" : m.gold ? "var(--highlight)" : m.ok ? "var(--success)" : "var(--fg-1)",
+              }}>{m.v}</div>
+              <div className="r-meta" style={{ marginTop: 4 }}>{m.s}</div>
+            </div>
+          ))}
+        </div>
       )}
 
       {/* Cabeçalho da seção de parcelas */}
