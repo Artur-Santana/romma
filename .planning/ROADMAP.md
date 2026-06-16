@@ -61,7 +61,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 - [x] **Phase 18: Acesso — Login / Cadastro / Redefinir** - Split-panel, show/hide senha, manter sessão, máscara telefone, cadastro completo de Proprietário, redefinir senha (completed 2026-06-14)
 - [x] **Phase 19: Unidades — Modal Unificado & Foto de Capa** - Métricas-resumo, busca/filtros, modal único criar/editar, upload de foto via Storage, confirmação de remoção com cleanup (completed 2026-06-14)
 - [x] **Phase 20: Edifícios — Cards & Drill-in** - Cards 2 colunas, stats por edifício, barra de ocupação contígua, drill-in clicável reusando o modal de unidade (completed 2026-06-15)
-- [ ] **Phase 21: Dashboard — Visão Geral Editorial** - Bloco de ocupação em destaque, gráfico de fluxo de caixa, contratos recentes/parcelas + atalhos rápidos
+- [x] **Phase 21: Dashboard — Visão Geral Editorial** - Bloco de ocupação em destaque, gráfico de fluxo de caixa, contratos recentes/parcelas + atalhos rápidos (completed 2026-06-16)
 - [ ] **Phase 22: Contratos & Parcelas — Renovação** - Busca/filtro vencendo, countdown, progresso, arquivo de encerrados, timeline de parcelas, registrar pagamento, renovar contrato (append)
 - [ ] **Phase 23: Locatários — Busca & Máscaras** - Busca, convidar/editar com máscaras CPF/CNPJ/telefone, reenviar/revogar, ações expostas no mobile
 - [ ] **Phase 24: Público — Unidades Disponíveis** - Abas por edifício, ordenação, cards com imagem de capa, ficha bottom-sheet, simular aluguel (realtime existente)
@@ -171,11 +171,11 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 21-02-PLAN.md — Desktop reorganization: inline OccupancyBar/CashFlowChart, Promise.all extension, Variant B hero grid replacing 4-col metrics (DASH-04/05/06)
+- [x] 21-02-PLAN.md — Desktop reorganization: inline OccupancyBar/CashFlowChart, Promise.all extension, Variant B hero grid replacing 4-col metrics (DASH-04/05/06)
 
 **Wave 3** *(blocked on Wave 2 — same file)*
 
-- [ ] 21-03-PLAN.md — Mobile parity: compact OccupancyBar + compact CashFlowChart blocks (DASH-04/05)
+- [x] 21-03-PLAN.md — Mobile parity: compact OccupancyBar + compact CashFlowChart blocks (DASH-04/05)
 
 **UI hint**: yes
 

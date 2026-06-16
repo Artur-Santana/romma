@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-15T20:13:12.100Z"
-last_activity: 2026-06-15
+last_updated: "2026-06-16T02:10:00.000Z"
+last_activity: 2026-06-16
 progress:
   total_phases: 9
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 16
-  completed_plans: 14
-  percent: 44
+  completed_plans: 16
+  percent: 56
 ---
 
 # Project State — Romma
@@ -112,13 +112,10 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 21 (dashboard-vis-o-geral-editorial) — EXECUTING
-Plan: 2 of 3
-Status: Ready to execute
-Last activity: 2026-06-15
-Last session: 2026-06-15T20:13:12.089Z
+Phase: 21 (dashboard-vis-o-geral-editorial) — COMPLETE
+All 3 plans done. Side fixes: MobileNav exact-match, Unidades metrics 2×2.
+Last activity: 2026-06-16
 
 ## Operator Next Steps
 
-- Phase 18 complete — verify auth screens UAT (login, signup, reset-password visual + flow)
-- Phase 19: Unidades — Modal Unificado & Foto de Capa
+- Phase 22: Contratos & Parcelas — Renovação (next in sequence)
