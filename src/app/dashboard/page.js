@@ -275,7 +275,7 @@ export default async function Dashboard() {
               <h2 className="font-display font-bold text-[48px] leading-none tracking-[-2.4px] text-fg-1 m-0">Visão Geral.</h2>
               <div className="flex items-center gap-4 mt-1">
                 <span className="font-mono text-[12px] text-fg-3">OPERADOR · {proprietarioNome}</span>
-                <span className="w-px h-3 bg-[var(--border-2)]" />
+                <span className="w-px h-3 bg-border-2" />
                 <span className="font-mono text-[12px] text-fg-3">{edificios.length} EDIFÍCIOS · {unidades.length} UNIDADES</span>
               </div>
             </div>
