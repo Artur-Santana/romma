@@ -44,3 +44,42 @@ export async function marcarParcelaComoPaga(id) {
   if (error) return { status: 500, erroMessage: error.message }
   return { status: 200 }
 }
+
+// Guard para o Locatário — não chama isProprietario (Locatário não tem role de Proprietário)
+async function authGuardLocatario() {
+  const supabase = await createServer()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { err: { status: 401, erroMessage: 'Não autenticado.' } }
+  return { user }
+}
+
+export async function confirmarPagamentoLocatario(id) {
+  const { err, user } = await authGuardLocatario()
+  if (err) return err
+
+  if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+
+  // Hop 1 — parcela existe?
+  const { data: parcela, error: e1 } = await supabaseAdmin
+    .from('parcelas').select('contrato_id').eq('id', id).single()
+  if (e1 || !parcela) return { status: 404, erroMessage: 'Parcela não encontrada.' }
+
+  // Hop 2 — contrato existe?
+  const { data: contrato, error: e2 } = await supabaseAdmin
+    .from('contratos').select('locatario_id').eq('id', parcela.contrato_id).single()
+  if (e2 || !contrato) return { status: 404, erroMessage: 'Parcela não encontrada.' }
+
+  // Hop 3 — locatário pertence ao usuário autenticado? (cross-tenant → 404, mascarado)
+  const { data: locatario, error: e3 } = await supabaseAdmin
+    .from('locatarios').select('usuario_id').eq('id', contrato.locatario_id).single()
+  if (e3 || !locatario || locatario.usuario_id !== user.id)
+    return { status: 404, erroMessage: 'Parcela não encontrada.' }
+
+  const { error } = await supabaseAdmin
+    .from('parcelas')
+    .update({ status: 'paga', data_pagamento: new Date().toISOString().split('T')[0] })
+    .eq('id', id)
+    .in('status', ['pendente', 'vencida'])
+  if (error) return { status: 500, erroMessage: error.message }
+  return { status: 200 }
+}

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-17T20:49:04.924Z"
+last_updated: "2026-06-17T22:29:36.163Z"
 last_activity: 2026-06-17
 progress:
   total_phases: 9
-  completed_phases: 7
-  total_plans: 23
-  completed_plans: 22
-  percent: 78
+  completed_phases: 8
+  total_plans: 27
+  completed_plans: 26
+  percent: 89
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 24 — p-blico-unidades-dispon-veis
+**Current focus:** v1.5 milestone — 8/9 phases complete. Remaining: Phase 21 (Dashboard), Phase 23 (Locatários).
 
 ---
 
@@ -68,7 +68,7 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 22 | Contratos & Parcelas — Renovação | v1.5 | ⬜ Not started |
 | 23 | Locatários — Busca & Máscaras | v1.5 | ⬜ Not started |
 | 24 | Público — Unidades Disponíveis | v1.5 | ⬜ Not started |
-| 25 | Portal do Locatário — PIX & Recibo | v1.5 | ⬜ Not started |
+| 25 | Portal do Locatário — PIX & Recibo | v1.5 | ✅ Complete — 2026-06-17 |
 
 ---
 
@@ -112,9 +112,9 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 24 (p-blico-unidades-dispon-veis) — EXECUTING
-Plan: 2 of 2
-Last activity: 2026-06-17
+Phase 25 (portal-do-locat-rio-pix-recibo) — COMPLETE 2026-06-17
+All 4 plans done. Human verification pending (PDF download, modal PIX visual).
+Next: Phase 21 (Dashboard) or Phase 23 (Locatários — plans 1/2 partial).
 
 ## Key Decisions (Phase 22)
 

@@ -1,52 +1,29 @@
 import { fmtBRL, fmtData } from "@/lib/utils"
-import StatusBadge from "@/components/ui/StatusBadge"
 
 export default function ContratoCard({ contrato }) {
+  const summary = [
+    { label: "Unidade",      value: contrato.unidades?.nome ?? "—" },
+    { label: "Valor Mensal", value: fmtBRL(contrato.unidades?.valor_mensal) },
+    { label: "Início",       value: fmtData(contrato.data_inicio) },
+    { label: "Fim",          value: fmtData(contrato.data_fim) },
+  ]
+
   return (
-    <section className="border border-border-3 bg-surface p-7">
-      <span className="eyebrow eyebrow--indigo">CONTRATO ATIVO</span>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-        <div>
-          <span className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase block">
-            UNIDADE
-          </span>
-          <span className="font-display font-bold text-[24px] leading-tight text-fg-1 block mt-1">
-            {contrato.unidades?.nome ?? "—"}
-          </span>
-        </div>
-        <div>
-          <span className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase block">
-            VALOR MENSAL
-          </span>
-          <span className="font-display font-bold text-[24px] leading-tight text-fg-1 block mt-1">
-            {fmtBRL(contrato.unidades?.valor_mensal)}
-          </span>
-        </div>
-        <div>
-          <span className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase block">
-            INÍCIO
-          </span>
-          <span className="font-display font-bold text-[24px] leading-tight text-fg-1 block mt-1">
-            {fmtData(contrato.data_inicio)}
-          </span>
-        </div>
-        <div>
-          <span className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase block">
-            FIM
-          </span>
-          <span className="font-display font-bold text-[24px] leading-tight text-fg-1 block mt-1">
-            {fmtData(contrato.data_fim)}
-          </span>
-        </div>
-        <div>
-          <span className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase block">
-            STATUS
-          </span>
-          <div className="mt-1">
-            <StatusBadge status={contrato.status} />
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", border: "1px solid var(--border-3)" }}>
+      {summary.map((s, i) => (
+        <div
+          key={s.label}
+          style={{
+            padding: "var(--rd-cell)",
+            borderRight: i < 3 ? "1px solid var(--border-3)" : "none",
+          }}
+        >
+          <div className="r-label" style={{ marginBottom: 8 }}>{s.label}</div>
+          <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 20, letterSpacing: "-0.4px", color: "var(--fg-1)" }}>
+            {s.value}
           </div>
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
   )
 }

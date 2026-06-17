@@ -148,3 +148,16 @@ export async function getParcelasPortal(contratoId) {
     if (error) throw new Error(error.message)
     return data ?? []
 }
+
+// Variante sem filtro de status futura — inclui todas as parcelas para contadores de
+// progresso (D-08: pagas/total, % adimplente) e para o destaque de próximo vencimento.
+// Também inclui data_fechamento para o recibo PDF (PORT-07).
+export async function getTodasParcelasPortal(contratoId) {
+    const { data, error } = await supabase
+        .from('parcelas')
+        .select('id, numero, data_vencimento, data_fechamento, data_pagamento, status')
+        .eq('contrato_id', contratoId)
+        .order('data_vencimento', { ascending: true })
+    if (error) throw new Error(error.message)
+    return data ?? []
+}

@@ -77,9 +77,9 @@
 
 ### Portal do Locatário (variante B — foco em pagamento)
 
-- [ ] **PORT-04**: Portal exibe próximo vencimento em destaque (valor, parcela X/N, dias restantes) + progresso do contrato (parcelas pagas/total, % adimplente) + grade-resumo + histórico de parcelas
-- [ ] **PORT-05**: "Pagar Agora" abre modal PIX com QR estático único, código copia-e-cola (botão copiar) e nota explícita de que o pagamento real não é processado; ao confirmar, marca a parcela como paga
-- [ ] **PORT-06**: Baixa de pagamento confirmada no portal reflete como "Paga" no painel do Proprietário (Visão Geral e detalhe do contrato), via persistência Supabase na mesma tabela de parcelas, com guard de propriedade (parcela → contrato → locatário → usuário autenticado)
+- [x] **PORT-04**: Portal exibe próximo vencimento em destaque (valor, parcela X/N, dias restantes) + progresso do contrato (parcelas pagas/total, % adimplente) + grade-resumo + histórico de parcelas
+- [x] **PORT-05**: "Pagar Agora" abre modal PIX com QR estático único, código copia-e-cola (botão copiar) e nota explícita de que o pagamento real não é processado; ao confirmar, marca a parcela como paga
+- [x] **PORT-06**: Baixa de pagamento confirmada no portal reflete como "Paga" no painel do Proprietário (Visão Geral e detalhe do contrato), via persistência Supabase na mesma tabela de parcelas, com guard de propriedade (parcela → contrato → locatário → usuário autenticado)
 - [ ] **PORT-07**: Parcelas pagas têm "Baixar comprovante" que gera recibo em PDF (valor, parcela, locatário, unidade, datas, forma PIX, código de autenticação)
 
 ---
@@ -158,7 +158,7 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | PUB-03 | Phase 24 | Complete |
 | PUB-04 | Phase 24 | Complete |
 | PUB-05 | Phase 24 | Complete |
-| PORT-04 | Phase 25 | Pending |
-| PORT-05 | Phase 25 | Pending |
-| PORT-06 | Phase 25 | Pending |
+| PORT-04 | Phase 25 | Complete |
+| PORT-05 | Phase 25 | Complete |
+| PORT-06 | Phase 25 | Complete |
 | PORT-07 | Phase 25 | Pending |

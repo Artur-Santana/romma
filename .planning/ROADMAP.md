@@ -259,7 +259,22 @@ Plans:
   3. A baixa confirmada no portal reflete como "Paga" no painel do Proprietário (Visão Geral e detalhe do contrato) via persistência na mesma tabela `parcelas`, com guard de propriedade fresco (parcela → contrato → locatário → usuário autenticado) escrito test-first; tentativa cross-tenant retorna 404
   4. Parcelas pagas têm "Baixar comprovante" que gera recibo PDF no browser (valor, parcela, locatário, unidade, datas, forma PIX, código de autenticação) via import dinâmico, funcionando em produção sem crash SSR
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+**Wave 1**
+
+- [x] 25-01-PLAN.md — TDD: testes + confirmarPagamentoLocatario (guard 3-hop) + getTodasParcelasPortal (PORT-06)
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [x] 25-02-PLAN.md — VencimentoDestaque + ContratoCard progresso + PortalDashboard wiring (PORT-04, PORT-05)
+- [x] 25-03-PLAN.md — PixModal completo + public/pix-qr.png (PORT-05, PORT-06)
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [x] 25-04-PLAN.md — ParcelsTable coluna Ação + recibo PDF jsPDF (PORT-05, PORT-07)
+
 **UI hint**: yes
 
 ---
@@ -276,7 +291,7 @@ Plans:
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 1/2 | In Progress|  |
 | 24. Público — Unidades Disponíveis | 2/2 | Complete   | 2026-06-17 |
-| 25. Portal do Locatário — PIX & Recibo | 0/TBD | Not started | - |
+| 25. Portal do Locatário — PIX & Recibo | 4/4 | Complete   | 2026-06-17 |
 
 ---
 
