@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { getUnidadesDisponiveis, getEdificiosPublicos } from '@/lib/queries-client'
 import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
@@ -45,6 +45,25 @@ export default function UnidadesPublicas() {
   const [sort, setSort] = useState('rel')
   const [selected, setSelected] = useState(null)
   const [fotoSrcs, setFotoSrcs] = useState({})
+  const tabsRef = useRef(null)
+  const dragRef = useRef({ down: false, startX: 0, scrollLeft: 0, moved: false })
+
+  function onTabsDown(e) {
+    const el = tabsRef.current
+    if (!el) return
+    dragRef.current = { down: true, startX: e.pageX - el.offsetLeft, scrollLeft: el.scrollLeft, moved: false }
+  }
+  function onTabsMove(e) {
+    const d = dragRef.current
+    const el = tabsRef.current
+    if (!d.down || !el) return
+    const walk = (e.pageX - el.offsetLeft) - d.startX
+    if (Math.abs(walk) > 4) d.moved = true
+    el.scrollLeft = d.scrollLeft - walk
+  }
+  function endTabsDrag() {
+    dragRef.current.down = false
+  }
 
   useEffect(() => {
     const supabase = createClient()
@@ -112,7 +131,14 @@ export default function UnidadesPublicas() {
 
       <div style={{ flexShrink: 0, borderBottom: '1px solid var(--border-3)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '12px var(--rd-gutter-m)' }}>
-          <div className="flex flex-row gap-1.5 overflow-x-auto pb-2 [scrollbar-width:thin]">
+          <div
+            ref={tabsRef}
+            onMouseDown={onTabsDown}
+            onMouseMove={onTabsMove}
+            onMouseUp={endTabsDrag}
+            onMouseLeave={endTabsDrag}
+            className="flex flex-row gap-1.5 overflow-x-auto select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          >
             {tabs.map(tab => {
               const count = tab.id === 'todos'
                 ? disponiveis.length
@@ -121,7 +147,7 @@ export default function UnidadesPublicas() {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => { if (!dragRef.current.moved) setActiveTab(tab.id) }}
                   style={{
                     all: 'unset',
                     cursor: 'pointer',
