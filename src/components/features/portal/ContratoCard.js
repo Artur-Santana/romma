@@ -1,7 +1,7 @@
-import { fmtBRL, fmtData } from "@/lib/utils"
+import { fmtBRL, fmtData, cn } from "@/lib/utils"
 import StatusBadge from "@/components/ui/StatusBadge"
 
-export default function ContratoCard({ contrato }) {
+export default function ContratoCard({ contrato, parcelas = [] }) {
   return (
     <section className="border border-border-3 bg-surface p-7">
       <span className="eyebrow eyebrow--indigo">CONTRATO ATIVO</span>
@@ -47,6 +47,32 @@ export default function ContratoCard({ contrato }) {
           </div>
         </div>
       </div>
+      {parcelas.length > 0 && (() => {
+        const total = parcelas.length
+        const pagas = parcelas.filter(p => p.status === 'paga').length
+        const pct = Math.round((pagas / total) * 100)
+        return (
+          <div className="mt-4">
+            <div
+              className="w-full bg-border-3"
+              style={{ height: 6 }}
+              role="progressbar"
+              aria-valuenow={pct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`Progresso do contrato: ${pagas} parcelas pagas de ${total}`}
+            >
+              <div className="bg-indigo h-full origin-left" style={{ width: pct + '%' }} />
+            </div>
+            <div className="flex gap-4 mt-2">
+              <span className="font-mono text-[11px] text-fg-4">{pagas} pagas · {total} total</span>
+              <span className={cn("font-mono text-[11px]", pct === 100 ? "text-success" : "text-highlight")}>
+                · {pct}% adimplente
+              </span>
+            </div>
+          </div>
+        )
+      })()}
     </section>
   )
 }
