@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-17T09:56:42.877Z"
-last_activity: 2026-06-17 -- Phase 23 execution started
+last_updated: "2026-06-17T20:49:04.924Z"
+last_activity: 2026-06-17
 progress:
   total_phases: 9
-  completed_phases: 5
-  total_plans: 21
-  completed_plans: 18
-  percent: 56
+  completed_phases: 7
+  total_plans: 23
+  completed_plans: 22
+  percent: 78
 ---
 
 # Project State — Romma
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 23 — locat-rios-busca-m-scaras
+**Current focus:** Phase 24 — p-blico-unidades-dispon-veis
 
 ---
 
@@ -112,9 +112,9 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 23 (locat-rios-busca-m-scaras) — EXECUTING
-Plan: 1 of 2
-Last activity: 2026-06-17 -- Phase 23 execution started
+Phase: 24 (p-blico-unidades-dispon-veis) — EXECUTING
+Plan: 2 of 2
+Last activity: 2026-06-17
 
 ## Key Decisions (Phase 22)
 

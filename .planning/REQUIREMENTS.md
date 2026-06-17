@@ -69,11 +69,11 @@
 
 ### Público — Unidades Disponíveis (variante A — cards com imagem)
 
-- [ ] **PUB-01**: Listagem pública tem abas por edifício (com contadores) + aba "Todos"
-- [ ] **PUB-02**: Listagem pública permite ordenação (relevância / menor valor / maior valor / maior área)
-- [ ] **PUB-03**: Cards públicos exibem imagem de capa, área, valor (ou "Consulte o proprietário" quando oculto) e status "Disponível"
-- [ ] **PUB-04**: Ficha da unidade abre em bottom sheet com imagem, descrição, área, valor mensal, valor/m² e refs
-- [ ] **PUB-05**: "Simular aluguel" remove a unidade da lista com animação (representa a saída de "disponível" via Supabase realtime existente)
+- [x] **PUB-01**: Listagem pública tem abas por edifício (com contadores) + aba "Todos"
+- [x] **PUB-02**: Listagem pública permite ordenação (relevância / menor valor / maior valor / maior área)
+- [x] **PUB-03**: Cards públicos exibem imagem de capa, área, valor (ou "Consulte o proprietário" quando oculto) e status "Disponível"
+- [x] **PUB-04**: Ficha da unidade abre em bottom sheet com imagem, descrição, área, valor mensal, valor/m² e refs
+- [x] **PUB-05**: CTA "Falar com Proprietário" na ficha registra interesse com feedback visual ("[✓] Solicitação enviada") — pivot do "Simular aluguel" original: o visitante não aluga, quem fecha é o Proprietário, então a unidade permanece na lista (Phase 24)
 
 ### Portal do Locatário (variante B — foco em pagamento)
 
@@ -153,11 +153,11 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | LOC-04 | Phase 23 | Pending |
 | LOC-05 | Phase 23 | Pending |
 | LOC-06 | Phase 23 | Pending |
-| PUB-01 | Phase 24 | Pending |
-| PUB-02 | Phase 24 | Pending |
-| PUB-03 | Phase 24 | Pending |
-| PUB-04 | Phase 24 | Pending |
-| PUB-05 | Phase 24 | Pending |
+| PUB-01 | Phase 24 | Complete |
+| PUB-02 | Phase 24 | Complete |
+| PUB-03 | Phase 24 | Complete |
+| PUB-04 | Phase 24 | Complete |
+| PUB-05 | Phase 24 | Complete |
 | PORT-04 | Phase 25 | Pending |
 | PORT-05 | Phase 25 | Pending |
 | PORT-06 | Phase 25 | Pending |
