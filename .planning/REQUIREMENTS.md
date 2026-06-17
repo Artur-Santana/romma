@@ -25,9 +25,9 @@
 
 ### Dashboard (Visão Geral — variante B)
 
-- [ ] **DASH-04**: Dashboard exibe bloco de ocupação em destaque (numeral grande de % + barra de ocupação dividida por unidade) e métricas empilhadas (ocupação, MRR, receita esperada, contratos vencendo em 7 dias)
+- [x] **DASH-04**: Dashboard exibe bloco de ocupação em destaque (numeral grande de % + barra de ocupação dividida por unidade) e métricas empilhadas (ocupação, MRR, receita esperada, contratos vencendo em 7 dias)
 - [x] **DASH-05**: Dashboard exibe gráfico de fluxo de caixa (barras: recebido sólido vs. previsto fantasma, com pico em dourado), alimentado por agregação mensal de parcelas
-- [ ] **DASH-06**: Dashboard tem tabela de contratos recentes, painel de parcelas e atalhos rápidos que navegam para as seções correspondentes
+- [x] **DASH-06**: Dashboard tem tabela de contratos recentes, painel de parcelas e atalhos rápidos que navegam para as seções correspondentes
 
 ### Unidades (variante B — grade de cards)
 
@@ -60,12 +60,12 @@
 
 ### Locatários (variante B — grade de cards)
 
-- [ ] **LOC-01**: Proprietário busca locatário por nome, e-mail ou documento
-- [ ] **LOC-02**: Convidar locatário via modal com tipo PF/PJ (segmented), documento com máscara CPF/CNPJ que re-formata ao trocar o tipo, e telefone com máscara — valor armazenado só com dígitos
-- [ ] **LOC-03**: Editar locatário via modal (nome, e-mail, telefone com máscara)
-- [ ] **LOC-04**: Reenviar convite para locatários pendentes com feedback ("✓ Reenviado")
-- [ ] **LOC-05**: Revogar acesso exige modal de confirmação (ação destrutiva)
-- [ ] **LOC-06**: No mobile, cards/linhas de locatário expõem as ações (Reenviar / Revogar / Editar)
+- [x] **LOC-01**: Proprietário busca locatário por nome, e-mail ou documento
+- [x] **LOC-02**: Convidar locatário via modal com tipo PF/PJ (segmented), documento com máscara CPF/CNPJ que re-formata ao trocar o tipo, e telefone com máscara — valor armazenado só com dígitos
+- [x] **LOC-03**: Editar locatário via modal (nome, e-mail, telefone com máscara)
+- [x] **LOC-04**: Reenviar convite para locatários pendentes com feedback ("✓ Reenviado")
+- [x] **LOC-05**: Revogar acesso exige modal de confirmação (ação destrutiva)
+- [x] **LOC-06**: No mobile, cards/linhas de locatário expõem as ações (Reenviar / Revogar / Editar)
 
 ### Público — Unidades Disponíveis (variante A — cards com imagem)
 
@@ -80,7 +80,7 @@
 - [x] **PORT-04**: Portal exibe próximo vencimento em destaque (valor, parcela X/N, dias restantes) + progresso do contrato (parcelas pagas/total, % adimplente) + grade-resumo + histórico de parcelas
 - [x] **PORT-05**: "Pagar Agora" abre modal PIX com QR estático único, código copia-e-cola (botão copiar) e nota explícita de que o pagamento real não é processado; ao confirmar, marca a parcela como paga
 - [x] **PORT-06**: Baixa de pagamento confirmada no portal reflete como "Paga" no painel do Proprietário (Visão Geral e detalhe do contrato), via persistência Supabase na mesma tabela de parcelas, com guard de propriedade (parcela → contrato → locatário → usuário autenticado)
-- [ ] **PORT-07**: Parcelas pagas têm "Baixar comprovante" que gera recibo em PDF (valor, parcela, locatário, unidade, datas, forma PIX, código de autenticação)
+- [x] **PORT-07**: Parcelas pagas têm "Baixar comprovante" que gera recibo em PDF (valor, parcela, locatário, unidade, datas, forma PIX, código de autenticação)
 
 ---
 
@@ -135,9 +135,9 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | EDIF-01 | Phase 20 | Complete |
 | EDIF-02 | Phase 20 | Complete |
 | EDIF-03 | Phase 20 | Complete |
-| DASH-04 | Phase 21 | Pending |
+| DASH-04 | Phase 21 | Complete |
 | DASH-05 | Phase 21 | Complete |
-| DASH-06 | Phase 21 | Pending |
+| DASH-06 | Phase 21 | Complete |
 | CONTR-01 | Phase 22 | Complete |
 | CONTR-02 | Phase 22 | Complete |
 | CONTR-03 | Phase 22 | Complete |
@@ -147,12 +147,12 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | PARC-02 | Phase 22 | Complete |
 | PARC-03 | Phase 22 | Complete |
 | PARC-04 | Phase 22 | Complete |
-| LOC-01 | Phase 23 | Pending |
-| LOC-02 | Phase 23 | Pending |
-| LOC-03 | Phase 23 | Pending |
-| LOC-04 | Phase 23 | Pending |
-| LOC-05 | Phase 23 | Pending |
-| LOC-06 | Phase 23 | Pending |
+| LOC-01 | Phase 23 | Complete |
+| LOC-02 | Phase 23 | Complete |
+| LOC-03 | Phase 23 | Complete |
+| LOC-04 | Phase 23 | Complete |
+| LOC-05 | Phase 23 | Complete |
+| LOC-06 | Phase 23 | Complete |
 | PUB-01 | Phase 24 | Complete |
 | PUB-02 | Phase 24 | Complete |
 | PUB-03 | Phase 24 | Complete |
@@ -161,4 +161,4 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | PORT-04 | Phase 25 | Complete |
 | PORT-05 | Phase 25 | Complete |
 | PORT-06 | Phase 25 | Complete |
-| PORT-07 | Phase 25 | Pending |
+| PORT-07 | Phase 25 | Complete |

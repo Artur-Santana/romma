@@ -55,9 +55,22 @@ Proprietário gerencia edifícios, contratos e pagamentos em um único painel �
 - ✓ Suite de testes: 47 unit (Vitest) + 73 E2E (Playwright) + CI job unit (TEST-01, TEST-02) — v1.1 Phase 15
 - ✓ IDOR multi-tenant 100% fechado — todos os vetores de escrita escopeados por proprietario_id (MT-03) — v1.1 Phase 16
 
+### Validated (v1.5)
+
+- ✓ Design system v1.5: escala tipográfica única (8 tokens CSS `--rt-*`) + densidade "regular" (`--rd-*`) + classes `r-*` — v1.5 Phase 17
+- ✓ Scroll mobile corrigido em todas as áreas roláveis (`min-height: 0` chain) — v1.5 Phase 17
+- ✓ Tela de Acesso split-panel com bracket buttons, show/hide senha, manter sessão, cadastro completo Proprietário — v1.5 Phase 18
+- ✓ Unidades: modal unificado criar/editar + upload foto de capa Supabase Storage (privado, signed URLs) — v1.5 Phase 19
+- ✓ Edifícios: cards 2-col com stats, barra de ocupação contígua, drill-in para modal unificado — v1.5 Phase 20
+- ✓ Dashboard: bloco de ocupação destaque + gráfico fluxo de caixa (barras recebido/previsto) + atalhos rápidos — v1.5 Phase 21
+- ✓ Contratos: busca/filtro vencendo, countdown, barra progresso, arquivo de encerrados, renovar contrato (append) — v1.5 Phase 22
+- ✓ Locatários: busca, máscaras CPF/CNPJ/telefone, reenviar/revogar/editar, ações expostas no mobile — v1.5 Phase 23
+- ✓ Listagem pública: abas por edifício, ordenação, imagem de capa, bottom-sheet, "Falar com Proprietário" — v1.5 Phase 24
+- ✓ Portal Locatário: PIX modal (FauxQR), guard IDOR 3-hop test-first, comprovante PDF client-side — v1.5 Phase 25
+
 ### Active
 
-*(Requirements de v1.5 definidos em `.planning/REQUIREMENTS.md` — refino global de UI + funcionalidades por tela do design handoff.)*
+*(Nenhum requirement ativo — v1.5 completo. Novo milestone define novos requirements.)*
 
 **Deferido:** AUTH-02 (guard de instância única no form /signup — atualmente só DB-side, aceito p/ single-instance).
 
@@ -78,14 +91,15 @@ Proprietário gerencia edifícios, contratos e pagamentos em um único painel �
 
 Projeto TCC de Artur Santana. Stack: Next.js 16 App Router (JS), Tailwind v4, shadcn/ui, Supabase (Postgres + Auth + RLS + Edge Functions Deno), Turbopack, Vercel.
 
-**Estado atual (2026-06-13 — v1.1 SHIPPED):**
+**Estado atual (2026-06-17 — v1.5 SHIPPED):**
 - Sistema completo e deployed em romma-alpha.vercel.app
 - v1.0: 7 fases, 29 planos (shipped 2026-06-03)
-- v1.1: Phases 8-16 completas — bug fixes, páginas públicas, signup, multi-tenant, desktop/mobile, animações, testes, IDOR closure (shipped 2026-06-13)
+- v1.1: Phases 8-16 — bug fixes, páginas públicas, signup, multi-tenant, desktop/mobile, animações, testes, IDOR closure (shipped 2026-06-13)
+- v1.5: Phases 17-25 — design system v1.5, 9 telas refinadas, Storage, renovação contrato, PIX portal, PDF comprovante (shipped 2026-06-17)
+- Total: 25 fases, 56+ planos — 3 milestones completos
 - Multi-tenant: RLS + TODAS as Server Actions de escrita escopeadas por proprietario_id (IDOR 100% fechado)
-- Testes: 47 unit (Vitest) + 73 E2E (Playwright) + CI jobs unit/e2e bloqueando merge
-- Banca em 5 dias (18/06/2026)
-- v1.5 iniciado (2026-06-13): refino global de UI + funcionalidades por tela do design handoff (`.planning/design/`)
+- Testes: 47+ unit (Vitest) + 73 E2E (Playwright) + CI jobs unit/e2e
+- Banca amanhã (18/06/2026) — sistema production-ready
 
 **Codebase map:** `.planning/codebase/` (gerado 21/05/2026)
 
@@ -146,7 +160,7 @@ Projeto TCC de Artur Santana. Stack: Next.js 16 App Router (JS), Tailwind v4, sh
 
 **v1.0 shipped 2026-06-03.** Sistema demonstrável ao vivo para banca em 18/06/2026.
 **v1.1 shipped 2026-06-13.** Polish & Completeness — gaps de UX, signup, multi-tenant, mobile, testes.
-**v1.5 started 2026-06-13.** System Improvement & Design Augmentation — refino global de UI + funcionalidades por tela do design handoff.
+**v1.5 shipped 2026-06-17.** System Improvement & Design Augmentation — design system v1.5, 9 telas refinadas com fidelidade ao design handoff, novas capacidades de escrita.
 
 This document evolves at phase transitions and milestone boundaries.
 
@@ -164,4 +178,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-13 — v1.5 System Improvement & Design Augmentation milestone started*
+*Last updated: 2026-06-17 — v1.5 System Improvement & Design Augmentation milestone complete*
