@@ -112,7 +112,7 @@ export default function UnidadesPublicas() {
 
       <div style={{ flexShrink: 0, borderBottom: '1px solid var(--border-3)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '12px var(--rd-gutter-m)' }}>
-          <div className="flex flex-row gap-1.5 overflow-x-auto [scrollbar-width:none]">
+          <div className="flex flex-row gap-1.5 overflow-x-auto pb-2 [scrollbar-width:thin]">
             {tabs.map(tab => {
               const count = tab.id === 'todos'
                 ? disponiveis.length
