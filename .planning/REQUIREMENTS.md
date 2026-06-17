@@ -71,7 +71,7 @@
 
 - [ ] **PUB-01**: Listagem pública tem abas por edifício (com contadores) + aba "Todos"
 - [ ] **PUB-02**: Listagem pública permite ordenação (relevância / menor valor / maior valor / maior área)
-- [ ] **PUB-03**: Cards públicos exibem imagem de capa, área, valor (ou "Consulte o proprietário" quando oculto) e status "Disponível"
+- [x] **PUB-03**: Cards públicos exibem imagem de capa, área, valor (ou "Consulte o proprietário" quando oculto) e status "Disponível"
 - [ ] **PUB-04**: Ficha da unidade abre em bottom sheet com imagem, descrição, área, valor mensal, valor/m² e refs
 - [ ] **PUB-05**: "Simular aluguel" remove a unidade da lista com animação (representa a saída de "disponível" via Supabase realtime existente)
 
@@ -155,7 +155,7 @@ Mapeamento de cada requirement → fase. Cobertura: **42/42 mapeados** (sem órf
 | LOC-06 | Phase 23 | Pending |
 | PUB-01 | Phase 24 | Pending |
 | PUB-02 | Phase 24 | Pending |
-| PUB-03 | Phase 24 | Pending |
+| PUB-03 | Phase 24 | Complete |
 | PUB-04 | Phase 24 | Pending |
 | PUB-05 | Phase 24 | Pending |
 | PORT-04 | Phase 25 | Pending |

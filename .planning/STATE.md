@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-17T18:27:03.792Z"
-last_activity: 2026-06-17 -- Phase 24 planning complete
+last_updated: "2026-06-17T18:33:37.677Z"
+last_activity: 2026-06-17 -- Phase 24 Plan 01 Task 1 complete; blocked at checkpoint:human-verify (Task 2 — aplicar migration e confirmar storage.sign())
 progress:
   total_phases: 9
   completed_phases: 6
   total_plans: 23
-  completed_plans: 20
+  completed_plans: 21
   percent: 67
 ---
 
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 23 — locat-rios-busca-m-scaras
+**Current focus:** Phase 24 — p-blico-unidades-dispon-veis
 
 ---
 
@@ -112,9 +112,9 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 23 (locat-rios-busca-m-scaras) — EXECUTING
-Plan: 1 of 2
-Last activity: 2026-06-17 -- Phase 24 planning complete
+Phase: 24 (p-blico-unidades-dispon-veis) — EXECUTING
+Plan: 2 of 2
+Last activity: 2026-06-17
 
 ## Key Decisions (Phase 22)
 

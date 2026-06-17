@@ -239,7 +239,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 24-01-PLAN.md — Migration: RPC get_unidades_disponiveis retorna foto_url + foto_signed_url via storage.sign() (PUB-03)
+- [x] 24-01-PLAN.md — Migration: RPC get_unidades_disponiveis retorna foto_url + foto_signed_url via storage.sign() (PUB-03)
 
 **Wave 2** *(blocked on Wave 1)*
 
@@ -275,7 +275,7 @@ Plans:
 | 21. Dashboard — Visão Geral Editorial | 1/3 | In Progress|  |
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 1/2 | In Progress|  |
-| 24. Público — Unidades Disponíveis | 0/2 | Not started | - |
+| 24. Público — Unidades Disponíveis | 1/2 | In Progress|  |
 | 25. Portal do Locatário — PIX & Recibo | 0/TBD | Not started | - |
 
 ---
