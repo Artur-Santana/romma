@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-17T20:49:04.924Z"
-last_activity: 2026-06-17
+last_updated: "2026-06-17T22:16:49.318Z"
+last_activity: 2026-06-17 -- Phase 25 execution started
 progress:
   total_phases: 9
   completed_phases: 7
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 24 — p-blico-unidades-dispon-veis
+**Current focus:** Phase 25 — portal-do-locat-rio-pix-recibo
 
 ---
 
@@ -112,9 +112,9 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 24 (p-blico-unidades-dispon-veis) — EXECUTING
-Plan: 2 of 2
-Last activity: 2026-06-17
+Phase: 25 (portal-do-locat-rio-pix-recibo) — EXECUTING
+Plan: 1 of 4
+Last activity: 2026-06-17 -- Phase 25 execution started
 
 ## Key Decisions (Phase 22)
 
