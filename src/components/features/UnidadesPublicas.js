@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { getUnidadesDisponiveis, getEdificiosPublicos } from '@/lib/queries-client'
 import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
@@ -44,11 +44,7 @@ export default function UnidadesPublicas() {
   const [activeTab, setActiveTab] = useState('todos')
   const [sort, setSort] = useState('rel')
   const [selected, setSelected] = useState(null)
-  const [simulating, setSimulating] = useState(false)
-  const [removedIds, setRemovedIds] = useState(new Set())
-  const [removingId, setRemovingId] = useState(null)
   const [fotoSrcs, setFotoSrcs] = useState({})
-  const timerRef = useRef(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -75,11 +71,10 @@ export default function UnidadesPublicas() {
 
     return () => {
       supabase.removeChannel(channel)
-      clearTimeout(timerRef.current)
     }
   }, [])
 
-  const disponiveis = unidades.filter(u => !removedIds.has(u.id))
+  const disponiveis = unidades
 
   const tabs = [
     { id: 'todos', label: 'Todos' },
@@ -92,19 +87,6 @@ export default function UnidadesPublicas() {
 
   const sorted = sortUnits(filtered, sort)
 
-  function simularAluguel(uid) {
-    setSimulating(true)
-    timerRef.current = setTimeout(() => {
-      setSimulating(false)
-      setSelected(null)
-      setRemovingId(uid)
-      setTimeout(() => {
-        setRemovedIds(prev => new Set([...prev, uid]))
-        setRemovingId(null)
-      }, 700)
-    }, 800)
-  }
-
   const edificioById = useMemo(
     () => Object.fromEntries(edificios.map(e => [e.id, e])),
     [edificios]
@@ -116,38 +98,44 @@ export default function UnidadesPublicas() {
 
   return (
     <div className="bg-background h-dvh flex flex-col relative overflow-hidden">
-      <div className="px-5 pt-5 pb-6 border-b border-border-3 flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors py-3 inline-flex items-center min-h-[44px]">← Voltar</Link>
-          <RealtimeDot />
+      <div style={{ flexShrink: 0, padding: '18px var(--rd-gutter-m)', borderBottom: '1px solid var(--border-3)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div className="flex justify-between items-center" style={{ marginBottom: 12 }}>
+            <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors inline-flex items-center">← Voltar</Link>
+            <RealtimeDot />
+          </div>
+          <h1 className="font-body font-bold text-[30px] md:text-[40px] tracking-[-1.6px] text-fg-1 leading-none m-0">
+            Unidades Disponíveis.
+          </h1>
         </div>
-        <h1 className="font-body font-bold text-[32px] tracking-[-1.6px] text-fg-1 leading-none m-0 whitespace-pre-line">
-          {'Unidades\nDisponíveis.'}
-        </h1>
       </div>
 
-      <div className="flex flex-row gap-1.5 px-5 pt-4 pb-1 overflow-x-auto [scrollbar-width:none]">
-        {tabs.map(tab => {
-          const count = tab.id === 'todos'
-            ? disponiveis.length
-            : disponiveis.filter(u => u.edificio_id === tab.id).length
-          const isActive = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box', minHeight: 44 }}
-              className={`px-3.5 py-3 min-h-[44px] inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
-                isActive
-                  ? 'border-indigo bg-[oklch(0.339_0.179_301.68/0.20)] text-fg-1'
-                  : 'border-border-3 bg-transparent text-fg-3'
-              }`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-              <span className={isActive ? 'text-indigo' : 'text-fg-5'}>{count}</span>
-            </button>
-          )
-        })}
+      <div style={{ flexShrink: 0, borderBottom: '1px solid var(--border-3)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '12px var(--rd-gutter-m)' }}>
+          <div className="flex flex-row gap-1.5 overflow-x-auto [scrollbar-width:none]">
+            {tabs.map(tab => {
+              const count = tab.id === 'todos'
+                ? disponiveis.length
+                : disponiveis.filter(u => u.edificio_id === tab.id).length
+              const isActive = activeTab === tab.id
+              return (
+                <button
+                  key={tab.id}
+                  style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box' }}
+                  className={`px-3.5 py-[9px] inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
+                    isActive
+                      ? 'border-indigo bg-[oklch(0.339_0.179_301.68/0.20)] text-fg-1'
+                      : 'border-border-3 bg-transparent text-fg-3'
+                  }`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  {tab.label}
+                  <span className={isActive ? 'text-indigo' : 'text-fg-5'}>{count}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Count + Sort bar */}
@@ -221,7 +209,6 @@ export default function UnidadesPublicas() {
                     unidade={u}
                     edificio={edificio}
                     onSelect={setSelected}
-                    isRemoving={removingId === u.id}
                     fotoSrc={fotoSrcs[u.id] ?? '/Detalhe_Arquitetonico.png'}
                   />
                 )
@@ -239,12 +226,11 @@ export default function UnidadesPublicas() {
 
       {selected && (
         <UnidadeDetailSheet
+          key={selected.id}
           unidade={selected}
           edificio={getEdificio(selected.edificio_id)}
           onClose={() => setSelected(null)}
-          onSimular={simularAluguel}
           fotoSrc={fotoSrcs[selected.id] ?? '/Detalhe_Arquitetonico.png'}
-          simulating={simulating}
         />
       )}
     </div>

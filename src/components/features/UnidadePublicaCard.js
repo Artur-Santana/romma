@@ -4,7 +4,7 @@ import Image from 'next/image'
 import StatusBadge from '@/components/ui/StatusBadge'
 import { fmtBRL, shortBuilding } from '@/lib/utils'
 
-export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemoving, fotoSrc }) {
+export default function UnidadePublicaCard({ unidade, edificio, onSelect, fotoSrc }) {
   return (
     <button
       style={{
@@ -19,7 +19,6 @@ export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemo
         background: 'var(--surface)',
         border: '1px solid var(--border-2)',
       }}
-      className={`transition-opacity duration-700 ${isRemoving ? 'opacity-0' : 'opacity-100'}`}
       onClick={() => onSelect(unidade)}
     >
       {/* Imagem de capa com overlay e StatusBadge absoluto */}
