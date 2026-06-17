@@ -2,7 +2,9 @@
 
 import { useState } from "react"
 import StatusBadge from "@/components/ui/StatusBadge"
-import { fmtData, fmtBRL, cn } from "@/lib/utils"
+import { fmtData, fmtBRL } from "@/lib/utils"
+
+const GRID = "56px 1fr 1fr 1fr 110px"
 
 function gerarCodigoAuth(parcelaId, dataPagamento) {
   return btoa(parcelaId.slice(0, 8) + (dataPagamento ?? ''))
@@ -11,10 +13,10 @@ function gerarCodigoAuth(parcelaId, dataPagamento) {
     .slice(0, 8)
 }
 
-export default function ParcelsTable({ parcelas, locatario, contrato, onPagar }) {
+export default function ParcelsTable({ parcelas, locatario, contrato }) {
   const [erroPDF, setErroPDF] = useState(null)
 
-  async function handleBaixarRecibo(parcela, totalParcelas) {
+  async function handleBaixarRecibo(parcela) {
     try {
       const mod = await import('jspdf')
       const JsPDF = mod.jsPDF ?? mod.default?.jsPDF ?? mod.default
@@ -32,7 +34,7 @@ export default function ParcelsTable({ parcelas, locatario, contrato, onPagar })
       doc.setFont('helvetica', 'normal')
       doc.text(`Locatário:    ${locatario?.nome_razao_social ?? '—'}`, 20, 40)
       doc.text(`Unidade:      ${contrato?.unidades?.nome ?? '—'}`, 20, 48)
-      doc.text(`Parcela:      ${parcela.numero} de ${totalParcelas}`, 20, 56)
+      doc.text(`Parcela:      ${parcela.numero} de ${parcelas.length}`, 20, 56)
       doc.text(`Valor mensal: ${fmtBRL(contrato?.unidades?.valor_mensal)}`, 20, 64)
 
       doc.setFont('helvetica', 'bold')
@@ -63,79 +65,61 @@ export default function ParcelsTable({ parcelas, locatario, contrato, onPagar })
   }
 
   return (
-    <section data-testid="parcelas-table" aria-label="HISTÓRICO DE PARCELAS" className="mt-10">
-      <span className="eyebrow eyebrow--indigo">HISTÓRICO DE PARCELAS</span>
-      <div className="mt-4 overflow-x-auto">
-        <div className="border border-border-3 bg-surface min-w-[600px]">
-          <div className="grid grid-cols-[60px_1fr_1fr_1fr_1.4fr] border-b border-border-3 bg-[oklch(0.26_0_0)]">
-            <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">#</div>
-            <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Vencimento</div>
-            <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Pagamento</div>
-            <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Status</div>
-            <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Comprovante</div>
+    <section data-testid="parcelas-table" aria-label="HISTÓRICO DE PARCELAS" style={{ marginTop: 32 }}>
+      <span className="eyebrow eyebrow--indigo" style={{ marginBottom: 14 }}>Histórico de Parcelas</span>
+      <div style={{ overflowX: "auto", marginTop: 14 }}>
+        <div className="r-panel" style={{ overflowX: "auto" }}>
+          {/* Header */}
+          <div style={{ display: "grid", gridTemplateColumns: GRID, background: "var(--surface-hi)", borderBottom: "1px solid var(--border-3)", minWidth: 480 }}>
+            {["#", "Vencimento", "Pagamento", "Status", "Comprovante"].map(h => (
+              <span key={h} className="r-label" style={{ padding: "11px var(--rd-row-x)", fontSize: 10 }}>{h}</span>
+            ))}
           </div>
+          {/* Empty */}
           {parcelas.length === 0 && (
-            <div className="px-5 py-12 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
-              Nenhuma parcela registrada para este contrato.
+            <div style={{ padding: "48px 20px", textAlign: "center" }}>
+              <span className="r-meta">Nenhuma parcela registrada para este contrato.</span>
             </div>
           )}
-          {parcelas.map((parcela, i) => (
+          {/* Rows */}
+          {parcelas.map((p, i) => (
             <div
-              key={parcela.id}
-              className={cn(
-                "grid grid-cols-[60px_1fr_1fr_1fr_1.4fr] items-center",
-                i > 0 ? "border-t border-border-3" : ""
-              )}
+              key={p.id}
+              style={{ display: "grid", gridTemplateColumns: GRID, alignItems: "center", borderTop: i > 0 ? "1px solid var(--border-3)" : "none", minWidth: 480 }}
             >
-              <div className="px-5 py-[14px]">
-                <span className="font-mono text-[12px] text-fg-2 font-bold">
-                  {String(parcela.numero).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="px-5 py-[14px]">
-                <span className={cn("font-mono text-[11px]", parcela.status === "vencida" ? "text-danger-fg" : "text-fg-3")}>
-                  {fmtData(parcela.data_vencimento)}
-                </span>
-              </div>
-              <div className="px-5 py-[14px]">
-                <span className={cn("font-mono text-[11px]", parcela.data_pagamento ? "text-success" : "text-fg-5")}>
-                  {parcela.data_pagamento ? fmtData(parcela.data_pagamento) : "—"}
-                </span>
-              </div>
-              <div className="px-5 py-[14px]">
-                <StatusBadge status={parcela.status} />
-              </div>
-              <div className="px-5 py-[14px]">
-                {(parcela.status === 'pendente' || parcela.status === 'vencida') && (
-                  <button
-                    style={{ all: 'unset', cursor: 'pointer' }}
-                    className="font-mono text-[10px] font-bold tracking-[1px] uppercase text-indigo hover:opacity-70 transition-opacity"
-                    aria-label={`Pagar parcela ${String(parcela.numero).padStart(2, '0')}`}
-                    onClick={() => onPagar(parcela)}
-                  >
-                    → PAGAR
-                  </button>
-                )}
-                {parcela.status === 'paga' && (
-                  <button
-                    style={{ all: 'unset', cursor: 'pointer' }}
-                    className="font-mono text-[10px] font-bold tracking-[1px] uppercase text-fg-4 hover:text-fg-2 transition-colors"
-                    aria-label={`Baixar comprovante da parcela ${String(parcela.numero).padStart(2, '0')}`}
-                    onClick={() => handleBaixarRecibo(parcela, parcelas.length)}
-                  >
-                    ↓ BAIXAR
-                  </button>
-                )}
-                {!['pendente', 'vencida', 'paga'].includes(parcela.status) && (
-                  <span className="font-mono text-[10px] text-fg-5">—</span>
-                )}
-              </div>
+              <span className="r-data" style={{ padding: "var(--rd-row-y) var(--rd-row-x)", fontWeight: 700 }}>
+                {String(p.numero).padStart(2, "0")}
+              </span>
+              <span className="r-data" style={{ padding: "var(--rd-row-y) var(--rd-row-x)", fontSize: 13, color: p.status === 'vencida' ? "var(--danger-fg)" : "var(--fg-3)" }}>
+                {fmtData(p.data_vencimento)}
+              </span>
+              <span className="r-data" style={{ padding: "var(--rd-row-y) var(--rd-row-x)", fontSize: 13, color: p.data_pagamento ? "var(--success)" : "var(--fg-5)" }}>
+                {p.data_pagamento ? fmtData(p.data_pagamento) : "—"}
+              </span>
+              <span style={{ padding: "var(--rd-row-y) var(--rd-row-x)" }}>
+                <StatusBadge status={p.status} />
+              </span>
+              <span style={{ padding: "var(--rd-row-y) var(--rd-row-x)" }}>
+                {p.status === 'paga'
+                  ? (
+                    <button
+                      onClick={() => handleBaixarRecibo(p)}
+                      className="r-ghostbtn"
+                      style={{ all: "unset", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "var(--fg-3)", letterSpacing: "0.5px", textTransform: "uppercase" }}
+                      aria-label={`Baixar comprovante parcela ${p.numero}`}
+                    >
+                      ⤓ Baixar
+                    </button>
+                  )
+                  : <span className="r-meta" style={{ color: "var(--fg-5)" }}>—</span>
+                }
+              </span>
             </div>
           ))}
         </div>
       </div>
       {erroPDF && (
-        <p className="mt-2 font-mono text-[11px] text-danger-fg">{erroPDF}</p>
+        <p style={{ marginTop: 8, fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--danger-fg)" }}>{erroPDF}</p>
       )}
     </section>
   )

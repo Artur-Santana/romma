@@ -20,12 +20,8 @@ export default function PortalDashboard() {
   const [pixModal, setPixModal] = useState({ open: false, parcela: null })
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState(null)
-  const [nodeId, setNodeId] = useState("------")
 
   useEffect(() => {
-    const id = Math.random().toString(16).slice(2, 7).toUpperCase()
-    setNodeId(id)
-
     async function fetchData() {
       try {
         const { data: { user } } = await supabase.auth.getUser()
@@ -54,88 +50,84 @@ export default function PortalDashboard() {
   }
 
   return (
-    <div className="bg-background min-h-screen flex flex-col">
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: "var(--background)", minHeight: "100vh" }}>
       {/* System bar */}
-      <div className="flex justify-between items-center px-4 sm:px-12 py-[6px] border-b border-border-3">
-        <span className="font-mono text-[10px] text-fg-5 tracking-[0.5px]">
-          PORTAL_NODE: OX{nodeId}
-        </span>
-        <span className="font-mono text-[10px] text-success tracking-[0.5px] flex items-center gap-1">
-          <span className="w-[6px] h-[6px] rounded-full bg-success inline-block" />
-          STATUS: ONLINE
+      <div style={{ height: 28, flexShrink: 0, background: "rgba(18,18,18,0.95)", borderBottom: "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", fontFamily: "var(--font-mono)", fontSize: 10.5, color: "var(--fg-4)", letterSpacing: "0.5px" }}>
+        <span>PORTAL_NODE: 0X771C</span>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <span className="r-dot"><i /><i /></span>
+          ONLINE
         </span>
       </div>
 
-      <div className="px-4 sm:px-12 pt-8 pb-20 flex-1">
-        {/* Header */}
-        <div className="flex justify-between items-start">
-          <div>
-            <span className="eyebrow eyebrow--indigo">PORTAL DO LOCATÁRIO</span>
-            <h1 className="font-display font-bold text-[28px] sm:text-[48px] leading-none tracking-[-2.4px] text-fg-1 mt-1 mb-0">
-              Seu Contrato.
-            </h1>
-            <p className="font-mono text-[11px] text-fg-4 mt-2">
-              {locatario?.nome_razao_social
-                ? `${locatario.nome_razao_social} — acesso restrito — contrato e histórico de parcelas.`
-                : "Acesso restrito — contrato e histórico de parcelas."}
-            </p>
+      {/* Page body */}
+      <div className="r-scroll r-fade" style={{ flex: 1 }}>
+        <div style={{ maxWidth: 980, margin: "0 auto", padding: "var(--rd-page-y) var(--rd-gutter) 64px" }}>
+          {/* Header */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
+            <span className="r-eyebrow indigo">Portal do Locatário</span>
+            <LogoutButton />
           </div>
-          <LogoutButton />
+          <h1 className="r-title" style={{ fontSize: "var(--rt-title)" }}>Seu Contrato.</h1>
+          <p className="r-meta" style={{ marginTop: 6, marginBottom: "var(--rd-block)" }}>
+            {locatario?.nome_razao_social
+              ? `${locatario.nome_razao_social} · acesso restrito — contrato e histórico de parcelas.`
+              : "Acesso restrito — contrato e histórico de parcelas."}
+          </p>
+
+          {erro ? (
+            <div style={{ padding: "10px 16px", background: "color-mix(in oklch, var(--destructive) 14%, transparent)", border: "1px solid var(--danger-fg)", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--danger-fg)" }}>
+              <strong>Erro ao carregar dados</strong><br />Não foi possível buscar seu contrato. Tente recarregar a página.
+            </div>
+          ) : loading ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <Skeleton className="h-40 w-full rounded-none" />
+              <Skeleton className="h-16 w-full rounded-none" />
+              <Skeleton className="h-8 w-full rounded-none" />
+              <Skeleton className="h-8 w-full rounded-none" />
+            </div>
+          ) : !contrato ? (
+            <div>
+              <h2 className="r-section">Nenhum contrato ativo</h2>
+              <p className="r-meta" style={{ marginTop: 8 }}>Você não possui contrato ativo. Entre em contato com o proprietário.</p>
+            </div>
+          ) : (
+            <>
+              {/* Two-column: VencimentoDestaque + ProgressoContrato */}
+              <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "var(--rd-block-sm)", marginBottom: "var(--rd-block)" }}>
+                <VencimentoDestaque
+                  parcelas={todasParcelas}
+                  contrato={contrato}
+                  onPagar={(parcela) => setPixModal({ open: true, parcela })}
+                />
+                <ProgressoContrato
+                  parcelas={todasParcelas}
+                  contrato={contrato}
+                />
+              </div>
+
+              {/* ContratoCard — flat info grid */}
+              <div style={{ marginBottom: "var(--rd-block)" }}>
+                <ContratoCard contrato={contrato} />
+              </div>
+
+              {/* Histórico de Parcelas */}
+              <ParcelsTable
+                parcelas={todasParcelas}
+                locatario={locatario}
+                contrato={contrato}
+              />
+
+              <PixModal
+                open={pixModal.open}
+                parcela={pixModal.parcela}
+                contrato={contrato}
+                onClose={() => setPixModal({ open: false, parcela: null })}
+                onSucesso={async () => { await refetchParcelas(); toast.success("Pagamento registrado") }}
+              />
+            </>
+          )}
         </div>
-
-        {erro ? (
-          <div className="px-4 py-[10px] mt-8 bg-[var(--danger-bg2)] border border-danger-fg font-mono text-[12px] text-danger-fg">
-            <strong>Erro ao carregar dados</strong><br />Não foi possível buscar seu contrato. Tente recarregar a página.
-          </div>
-        ) : loading ? (
-          <div className="mt-8 flex flex-col gap-4">
-            <Skeleton className="h-40 w-full rounded-none" />
-            <Skeleton className="h-16 w-full rounded-none" />
-            <Skeleton className="h-8 w-full rounded-none" />
-            <Skeleton className="h-8 w-full rounded-none" />
-          </div>
-        ) : !contrato ? (
-          <div className="mt-8">
-            <h2 className="font-display font-bold text-[28px] text-fg-1">Nenhum contrato ativo</h2>
-            <p className="font-mono text-[12px] text-fg-4 mt-2">Você não possui contrato ativo. Entre em contato com o proprietário.</p>
-          </div>
-        ) : (
-          <>
-            {/* Two-column: VencimentoDestaque + ProgressoContrato */}
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-[3fr_2fr] gap-4">
-              <VencimentoDestaque
-                parcelas={todasParcelas}
-                contrato={contrato}
-                onPagar={(parcela) => setPixModal({ open: true, parcela })}
-              />
-              <ProgressoContrato
-                parcelas={todasParcelas}
-                contrato={contrato}
-              />
-            </div>
-
-            {/* ContratoCard — flat info row */}
-            <div className="mt-4">
-              <ContratoCard contrato={contrato} />
-            </div>
-
-            {/* Histórico */}
-            <ParcelsTable
-              parcelas={todasParcelas}
-              locatario={locatario}
-              contrato={contrato}
-              onPagar={(parcela) => setPixModal({ open: true, parcela })}
-            />
-
-            <PixModal
-              open={pixModal.open}
-              parcela={pixModal.parcela}
-              contrato={contrato}
-              onClose={() => setPixModal({ open: false, parcela: null })}
-              onSucesso={async () => { await refetchParcelas(); toast.success("Pagamento registrado") }}
-            />
-          </>
-        )}
       </div>
     </div>
   )
