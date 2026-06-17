@@ -62,8 +62,8 @@ export async function editarLocatario(id, form) {
     if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
     if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-    const { nome_razao_social, tipo, documento, email, telefone } = form
-    const { error } = await supabaseAdmin.from('locatarios').update({ nome_razao_social, tipo, documento, email, telefone }).eq('id', id).eq('proprietario_id', user.id)
+    const { nome_razao_social, email, telefone } = form
+    const { error } = await supabaseAdmin.from('locatarios').update({ nome_razao_social, email, telefone }).eq('id', id).eq('proprietario_id', user.id)
     if (error) return { status: 500, erroMessage: error.message }
     return { status: 200 }
 }
@@ -110,5 +110,24 @@ export async function revogarConvite(id) {
     if (!loc.usuario_id) return { status: 200 }
     const { error: authDelErr } = await supabaseAdmin.auth.admin.deleteUser(loc.usuario_id)
     if (authDelErr) return { status: 500, erroMessage: authDelErr.message }
+    return { status: 200 }
+}
+
+export async function reenviarConvite(id) {
+    const supabase = await createServer()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
+    if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
+    if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+    const { data: loc, error: fetchErr } = await supabaseAdmin
+        .from('locatarios').select('email, status_convite').eq('id', id).eq('proprietario_id', user.id).single()
+    if (fetchErr || !loc) return { status: 404, erroMessage: 'Locatário não encontrado.' }
+    if (loc.status_convite !== 'pendente') return { status: 400, erroMessage: 'Convite já foi aceito.' }
+    const siteUrl = process.env.SITE_URL
+    if (!siteUrl) return { status: 500, erroMessage: 'Configuração de servidor inválida.' }
+    const { error } = await supabaseAdmin.auth.admin.inviteUserByEmail(loc.email, {
+        redirectTo: `${siteUrl}/auth/confirm`
+    })
+    if (error) return { status: 500, erroMessage: error.message }
     return { status: 200 }
 }
