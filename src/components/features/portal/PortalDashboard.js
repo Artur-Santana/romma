@@ -51,15 +51,6 @@ export default function PortalDashboard() {
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", background: "var(--background)", minHeight: "100vh" }}>
-      {/* System bar */}
-      <div style={{ height: 28, flexShrink: 0, background: "rgba(18,18,18,0.95)", borderBottom: "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", fontFamily: "var(--font-mono)", fontSize: 10.5, color: "var(--fg-4)", letterSpacing: "0.5px" }}>
-        <span>PORTAL_NODE: 0X771C</span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-          <span className="r-dot"><i /><i /></span>
-          ONLINE
-        </span>
-      </div>
-
       {/* Page body */}
       <div className="r-scroll r-fade" style={{ flex: 1 }}>
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "var(--rd-page-y) var(--rd-gutter) 64px" }}>
