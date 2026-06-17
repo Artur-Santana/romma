@@ -2,25 +2,25 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
-status: executing
-last_updated: "2026-06-17T22:29:36.163Z"
+status: "✅ v1.5 COMPLETE — milestone archived 2026-06-17"
+last_updated: "2026-06-17T23:59:00Z"
 last_activity: 2026-06-17
 progress:
   total_phases: 9
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 27
-  completed_plans: 26
-  percent: 89
+  completed_plans: 27
+  percent: 100
 ---
 
 # Project State — Romma
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-06-03)
+See: .planning/PROJECT.md (updated 2026-06-17)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** v1.5 milestone — 8/9 phases complete. Remaining: Phase 21 (Dashboard), Phase 23 (Locatários).
+**Current focus:** v1.5 SHIPPED — banca 18/06/2026. Archived in .planning/milestones/v1.5-ROADMAP.md.
 
 ---
 
@@ -60,14 +60,14 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 | 14 | Animações & Feedback | v1.1 | ✅ Complete — PR #33 merged |
 | 15 | Testes | v1.1 | ✅ Complete — PR #34 merged |
 | 16 | Fechamento IDOR MT-02 | v1.1 | ✅ Complete |
-| 17 | Fundação — Tokens, Mobile/Modal Fixes & Infra | v1.5 | ⬜ Not started |
-| 18 | Acesso — Login / Cadastro / Redefinir | v1.5 | ⬜ Not started |
-| 19 | Unidades — Modal Unificado & Foto de Capa | v1.5 | ⬜ Not started |
-| 20 | Edifícios — Cards & Drill-in | v1.5 | ⬜ Not started |
-| 21 | Dashboard — Visão Geral Editorial | v1.5 | ⬜ Not started |
-| 22 | Contratos & Parcelas — Renovação | v1.5 | ⬜ Not started |
-| 23 | Locatários — Busca & Máscaras | v1.5 | ⬜ Not started |
-| 24 | Público — Unidades Disponíveis | v1.5 | ⬜ Not started |
+| 17 | Fundação — Tokens, Mobile/Modal Fixes & Infra | v1.5 | ✅ Complete — 2026-06-13 |
+| 18 | Acesso — Login / Cadastro / Redefinir | v1.5 | ✅ Complete — 2026-06-14 |
+| 19 | Unidades — Modal Unificado & Foto de Capa | v1.5 | ✅ Complete — 2026-06-14 |
+| 20 | Edifícios — Cards & Drill-in | v1.5 | ✅ Complete — 2026-06-15 |
+| 21 | Dashboard — Visão Geral Editorial | v1.5 | ✅ Complete — 2026-06-16 |
+| 22 | Contratos & Parcelas — Renovação | v1.5 | ✅ Complete — 2026-06-16 |
+| 23 | Locatários — Busca & Máscaras | v1.5 | ✅ Complete — 2026-06-16 |
+| 24 | Público — Unidades Disponíveis | v1.5 | ✅ Complete — 2026-06-17 |
 | 25 | Portal do Locatário — PIX & Recibo | v1.5 | ✅ Complete — 2026-06-17 |
 
 ---
@@ -112,16 +112,6 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase 25 (portal-do-locat-rio-pix-recibo) — COMPLETE 2026-06-17
-All 4 plans done. Human verification pending (PDF download, modal PIX visual).
-Next: Phase 21 (Dashboard) or Phase 23 (Locatários — plans 1/2 partial).
-
-## Key Decisions (Phase 22)
-
-- renovarContrato INSERT direto via supabaseAdmin sem invocar Edge Function gerar-parcelas (Plan 03)
-- Botão Renovar exibido só quando contrato.status === 'ativo' — impede renovação de encerrados/cancelados (Plan 03)
-- Re-fetch Promise.all após renovação atualiza grade-resumo Término e timeline ao vivo (Plan 03)
-
-## Operator Next Steps
-
-- Phase 23: Locatários — Busca & Máscaras
+✅ **v1.5 MILESTONE COMPLETE** — 2026-06-17
+All 9 phases (17-25), 27 plans. Archived in .planning/milestones/v1.5-ROADMAP.md.
+Banca: 18/06/2026 — romma-alpha.vercel.app production-ready.
