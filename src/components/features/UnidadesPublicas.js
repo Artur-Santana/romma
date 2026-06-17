@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { getUnidadesDisponiveis, getEdificiosPublicos } from '@/lib/queries-client'
 import { createClient } from '@/lib/supabase-browser'
 import RealtimeDot from '@/components/ui/RealtimeDot'
@@ -16,24 +16,72 @@ function shortenName(nome) {
     .replace('Torre ', '')
 }
 
+const SORTS = [
+  { id: 'rel', label: 'Relevância' },
+  { id: 'valor_asc', label: 'Menor valor' },
+  { id: 'valor_desc', label: 'Maior valor' },
+  { id: 'area_desc', label: 'Maior área' },
+]
+
+function sortUnits(list, sort) {
+  const a = [...list]
+  if (sort === 'valor_asc') a.sort((x, y) => (x.valor_mensal ?? Infinity) - (y.valor_mensal ?? Infinity))
+  else if (sort === 'valor_desc') a.sort((x, y) => (y.valor_mensal ?? -Infinity) - (x.valor_mensal ?? -Infinity))
+  else if (sort === 'area_desc') a.sort((x, y) => (y.area_m2 ?? 0) - (x.area_m2 ?? 0))
+  return a
+}
+
+async function resolveFotoUrl(supabase, foto_url) {
+  if (!foto_url) return '/Detalhe_Arquitetonico.png'
+  if (foto_url.startsWith('/')) return foto_url
+  const { data } = await supabase.storage.from('unidades-fotos').createSignedUrl(foto_url, 3600)
+  return data?.signedUrl ?? '/Detalhe_Arquitetonico.png'
+}
+
 export default function UnidadesPublicas() {
   const [unidades, setUnidades] = useState([])
   const [edificios, setEdificios] = useState([])
   const [activeTab, setActiveTab] = useState('todos')
+  const [sort, setSort] = useState('rel')
   const [selected, setSelected] = useState(null)
-  const [removedIds, setRemovedIds] = useState(new Set())
-  const [removingId, setRemovingId] = useState(null)
-  const timerRef = useRef(null)
+  const [fotoSrcs, setFotoSrcs] = useState({})
+  const tabsRef = useRef(null)
+  const dragRef = useRef({ down: false, startX: 0, scrollLeft: 0, moved: false })
+
+  function onTabsDown(e) {
+    const el = tabsRef.current
+    if (!el) return
+    dragRef.current = { down: true, startX: e.pageX - el.offsetLeft, scrollLeft: el.scrollLeft, moved: false }
+  }
+  function onTabsMove(e) {
+    const d = dragRef.current
+    const el = tabsRef.current
+    if (!d.down || !el) return
+    const walk = (e.pageX - el.offsetLeft) - d.startX
+    if (Math.abs(walk) > 4) d.moved = true
+    el.scrollLeft = d.scrollLeft - walk
+  }
+  function endTabsDrag() {
+    dragRef.current.down = false
+  }
 
   useEffect(() => {
+    const supabase = createClient()
+
     async function load() {
       const [u, e] = await Promise.all([getUnidadesDisponiveis(), getEdificiosPublicos()])
       setUnidades(u ?? [])
       setEdificios(e ?? [])
+
+      // Resolve signed URLs async (D-04/D-05)
+      const srcs = await Promise.all(
+        (u ?? []).map(async x => [x.id, await resolveFotoUrl(supabase, x.foto_url)])
+      )
+      setFotoSrcs(Object.fromEntries(srcs))
     }
+
     load()
 
-    const supabase = createClient()
     const channel = supabase
       .channel('public-unidades')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'unidades' }, () => load())
@@ -42,11 +90,10 @@ export default function UnidadesPublicas() {
 
     return () => {
       supabase.removeChannel(channel)
-      clearTimeout(timerRef.current)
     }
   }, [])
 
-  const disponiveis = unidades.filter(u => !removedIds.has(u.id))
+  const disponiveis = unidades
 
   const tabs = [
     { id: 'todos', label: 'Todos' },
@@ -57,14 +104,7 @@ export default function UnidadesPublicas() {
     ? disponiveis
     : disponiveis.filter(u => u.edificio_id === activeTab)
 
-  function simularAluguel(uid) {
-    setRemovingId(uid)
-    timerRef.current = setTimeout(() => {
-      setRemovingId(null)
-      setSelected(null)
-      setRemovedIds(prev => new Set([...prev, uid]))
-    }, 700)
-  }
+  const sorted = sortUnits(filtered, sort)
 
   const edificioById = useMemo(
     () => Object.fromEntries(edificios.map(e => [e.id, e])),
@@ -77,90 +117,157 @@ export default function UnidadesPublicas() {
 
   return (
     <div className="bg-background h-dvh flex flex-col relative overflow-hidden">
-      <div className="px-5 pt-5 pb-6 border-b border-border-3 flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors py-3 inline-flex items-center min-h-[44px]">← Voltar</Link>
-          <RealtimeDot />
+      <div style={{ flexShrink: 0, padding: '18px var(--rd-gutter-m)', borderBottom: '1px solid var(--border-3)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div className="flex justify-between items-center" style={{ marginBottom: 12 }}>
+            <Link href="/" className="font-mono text-[11px] text-fg-4 tracking-[1px] uppercase hover:text-fg-2 transition-colors inline-flex items-center">← Voltar</Link>
+            <RealtimeDot />
+          </div>
+          <h1 className="font-body font-bold text-[30px] md:text-[40px] tracking-[-1.6px] text-fg-1 leading-none m-0">
+            Unidades Disponíveis.
+          </h1>
         </div>
-        <h1 className="font-body font-bold text-[32px] tracking-[-1.6px] text-fg-1 leading-none m-0 whitespace-pre-line">
-          {'Unidades\nDisponíveis.'}
-        </h1>
       </div>
 
-      <div className="flex flex-row gap-1.5 px-5 pt-4 pb-1 overflow-x-auto [scrollbar-width:none]">
-        {tabs.map(tab => {
-          const count = tab.id === 'todos'
-            ? disponiveis.length
-            : disponiveis.filter(u => u.edificio_id === tab.id).length
-          const isActive = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box', minHeight: 44 }}
-              className={`px-3.5 py-3 min-h-[44px] inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
-                isActive
-                  ? 'border-indigo bg-[oklch(0.339_0.179_301.68/0.20)] text-fg-1'
-                  : 'border-border-3 bg-transparent text-fg-3'
-              }`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-              <span className={isActive ? 'text-indigo' : 'text-fg-5'}>{count}</span>
-            </button>
-          )
-        })}
+      <div style={{ flexShrink: 0, borderBottom: '1px solid var(--border-3)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '12px var(--rd-gutter-m)' }}>
+          <div
+            ref={tabsRef}
+            onMouseDown={onTabsDown}
+            onMouseMove={onTabsMove}
+            onMouseUp={endTabsDrag}
+            onMouseLeave={endTabsDrag}
+            className="flex flex-row gap-1.5 overflow-x-auto select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {tabs.map(tab => {
+              const count = tab.id === 'todos'
+                ? disponiveis.length
+                : disponiveis.filter(u => u.edificio_id === tab.id).length
+              const isActive = activeTab === tab.id
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => { if (!dragRef.current.moved) setActiveTab(tab.id) }}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    display: 'inline-flex',
+                    gap: 8,
+                    alignItems: 'center',
+                    padding: '9px 14px',
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: 10,
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase',
+                    border: `1px solid ${isActive ? 'var(--indigo)' : 'var(--border-3)'}`,
+                    background: isActive ? 'oklch(0.339 0.179 301.68 / 0.20)' : 'transparent',
+                    color: isActive ? 'var(--fg-1)' : 'var(--fg-3)',
+                  }}
+                >
+                  {tab.label}
+                  <span style={{ color: isActive ? 'var(--fg-1)' : 'var(--fg-5)' }}>{count}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
-      <div className="px-5 py-4 border-b border-border-3 flex justify-between items-baseline">
-        <span className="font-mono text-[11px] text-fg-4 tracking-[0.5px] opacity-50">
-          {filtered.length} {filtered.length === 1 ? 'UNIDADE' : 'UNIDADES'}
-        </span>
-        <span className="font-mono text-[11px] text-fg-4 tracking-[0.5px] opacity-50">
-          SYNC · {new Date().toISOString().slice(0, 10)}
-        </span>
+      {/* Count + Sort bar */}
+      <div
+        style={{ flexShrink: 0, borderBottom: '1px solid var(--border-3)' }}
+      >
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: '0 auto',
+            padding: '10px var(--rd-gutter-m)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 12,
+            flexWrap: 'wrap',
+          }}
+        >
+          <span className="r-meta" style={{ color: 'var(--fg-3)' }}>
+            {sorted.length} {sorted.length === 1 ? 'UNIDADE' : 'UNIDADES'}
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="r-label" style={{ fontSize: 9 }}>Ordenar</span>
+            <div className="r-noscroll" style={{ display: 'flex', gap: 4, overflowX: 'auto' }}>
+              {SORTS.map(s => (
+                <button
+                  key={s.id}
+                  onClick={() => setSort(s.id)}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    padding: '5px 10px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10,
+                    letterSpacing: '0.5px',
+                    border: `1px solid ${sort === s.id ? 'var(--indigo)' : 'var(--border-3)'}`,
+                    background: sort === s.id ? 'oklch(0.339 0.179 301.68 / 0.18)' : 'transparent',
+                    color: sort === s.id ? 'var(--fg-1)' : 'var(--fg-4)',
+                  }}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex-1 overflow-auto min-h-0">
-        {filtered.length === 0 ? (
-          <div className="py-20 px-8 text-center flex flex-col gap-3 items-center">
-            <div className="w-12 h-12 border border-border-3 flex items-center justify-center text-[18px] text-fg-4">
-              —
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: 'var(--rd-gutter-m)' }}>
+          {sorted.length === 0 ? (
+            <div className="py-20 px-8 text-center flex flex-col gap-3 items-center">
+              <div className="w-12 h-12 border border-border-3 flex items-center justify-center text-[18px] text-fg-4">
+                —
+              </div>
+              <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-2 block">
+                Nenhuma unidade disponível
+              </span>
+              <p className="text-[12px] text-fg-4 leading-[1.5] max-w-[240px] m-0">
+                Todas as unidades estão ocupadas no momento. Volte em breve.
+              </p>
             </div>
-            <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-2 block">
-              Nenhuma unidade disponível
-            </span>
-            <p className="text-[12px] text-fg-4 leading-[1.5] max-w-[240px] m-0">
-              Todas as unidades estão ocupadas no momento. Volte em breve.
-            </p>
-          </div>
-        ) : (
-          filtered.map(u => {
-            const edificio = getEdificio(u.edificio_id)
-            return (
-              <UnidadePublicaCard
-                key={u.id}
-                unidade={u}
-                edificio={edificio}
-                onSelect={setSelected}
-                isRemoving={removingId === u.id}
-              />
-            )
-          })
-        )}
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-3">
+              {sorted.map(u => {
+                const edificio = getEdificio(u.edificio_id)
+                return (
+                  <UnidadePublicaCard
+                    key={u.id}
+                    unidade={u}
+                    edificio={edificio}
+                    onSelect={setSelected}
+                    fotoSrc={fotoSrcs[u.id] ?? '/Detalhe_Arquitetonico.png'}
+                  />
+                )
+              })}
+            </div>
+          )}
 
-        <div className="py-8 px-5 text-center border-t border-border-3">
-          <span className="font-mono text-[11px] text-fg-5 tracking-[1.5px]">
-            POWERED BY ROMMA · GRID.OS
-          </span>
+          <div className="py-8 px-5 text-center border-t border-border-3">
+            <span className="font-mono text-[11px] text-fg-5 tracking-[1.5px]">
+              POWERED BY ROMMA · GRID.OS
+            </span>
+          </div>
         </div>
       </div>
 
       {selected && (
         <UnidadeDetailSheet
+          key={selected.id}
           unidade={selected}
           edificio={getEdificio(selected.edificio_id)}
           onClose={() => setSelected(null)}
-          onSimular={simularAluguel}
+          fotoSrc={fotoSrcs[selected.id] ?? '/Detalhe_Arquitetonico.png'}
         />
       )}
     </div>

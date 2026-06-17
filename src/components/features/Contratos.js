@@ -528,7 +528,7 @@ export default function Contratos() {
                     aria-valuemin={0}
                     aria-valuemax={100}
                   >
-                    <div style={{ height: "100%", width: `${pct}%`, background: exp ? "var(--warning)" : "var(--primary-hover)" }} />
+                    <div style={{ height: "100%", width: `${pct}%`, background: exp ? "var(--warning)" : "var(--ds-primary)" }} />
                   </div>
                 </div>
 
