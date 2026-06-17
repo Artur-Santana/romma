@@ -1,24 +1,20 @@
--- Migration: adiciona foto_url + foto_signed_url ao RETURNS TABLE de get_unidades_disponiveis().
+-- Migration: adiciona foto_url ao RETURNS TABLE de get_unidades_disponiveis() e abre
+-- policy SELECT para anon no bucket unidades-fotos (geração de signed URL no client).
 --
 -- Contexto:
 -- (1) A coluna foto_url foi adicionada à tabela unidades em 20260601000000_v15_foundation.sql
---     (Phase 17), mas a RPC get_unidades_disponiveis() foi definida na migration anterior
---     (20260523000000_fix_unidades_select_public_rpc.sql) com apenas 9 colunas, sem foto_url.
---     Cards públicos recebiam foto_url = undefined em todos os resultados.
+--     (Phase 17), mas a RPC get_unidades_disponiveis() foi definida em
+--     20260523000000_fix_unidades_select_public_rpc.sql com apenas 9 colunas, sem foto_url.
+--     Cards públicos recebiam foto_url = undefined.
 --
--- (2) O bucket 'unidades-fotos' é PRIVATE (public = false). A única policy SELECT em
---     storage.objects para esse bucket é TO authenticated (função storage_unidade_owned_by_auth).
---     Não existe policy SELECT TO anon. Portanto, o cliente anon NÃO pode chamar createSignedUrl.
---     A assinatura das URLs precisa ocorrer dentro desta RPC SECURITY DEFINER (executa como
---     postgres, que tem acesso pleno ao storage), usando storage.sign().
+-- (2) storage.sign() não existe como função SQL nativa do Supabase/PostgreSQL.
+--     A geração de signed URLs ocorre no client via JS SDK.
+--     Para anon poder chamar createSignedUrl(), precisa de SELECT policy em storage.objects
+--     para o bucket 'unidades-fotos'. O bucket permanece PRIVATE (objetos não acessíveis
+--     sem token válido) — apenas a geração de signed URLs é liberada para anon.
 --
--- (3) TTL das signed URLs: 3600 segundos (1 hora).
+-- (3) TTL das signed URLs: 3600 segundos (gerenciado no client em UnidadesPublicas.js).
 --
--- Lógica do CASE para foto_signed_url:
---   - foto_url IS NULL             → NULL (sem foto)
---   - foto_url LIKE '/%'           → foto_url direto (asset público: /Detalhe_Arquitetonico.png, /images/*)
---   - ELSE                         → (storage.sign('unidades-fotos', foto_url, 3600)).signedURL
-
 -- DROP obrigatório: CREATE OR REPLACE não permite mudar RETURNS TABLE (SQLSTATE 42P13).
 DROP FUNCTION IF EXISTS public.get_unidades_disponiveis();
 
@@ -33,8 +29,7 @@ RETURNS TABLE (
   valor_visivel   boolean,
   status          text,
   edificio_nome   text,
-  foto_url        text,
-  foto_signed_url text
+  foto_url        text
 )
 LANGUAGE sql STABLE SECURITY DEFINER
 SET search_path = public
@@ -49,12 +44,7 @@ AS $$
     u.valor_visivel,
     u.status::text,
     e.nome AS edificio_nome,
-    u.foto_url,
-    CASE
-      WHEN u.foto_url IS NULL THEN NULL
-      WHEN u.foto_url LIKE '/%' THEN u.foto_url
-      ELSE (storage.sign('unidades-fotos', u.foto_url, 3600)).signedURL
-    END AS foto_signed_url
+    u.foto_url
   FROM public.unidades u
   JOIN public.edificios e ON e.id = u.edificio_id
   WHERE u.status = 'disponivel'
@@ -62,3 +52,12 @@ AS $$
 $$;
 
 GRANT EXECUTE ON FUNCTION public.get_unidades_disponiveis() TO anon, authenticated;
+
+-- Policy: permite que anon gere signed URLs para objetos do bucket unidades-fotos.
+-- Bucket permanece PRIVATE: objetos só acessíveis via signed URL com token válido.
+-- Sem esta policy, createSignedUrl() falha silenciosamente para usuários não autenticados.
+CREATE POLICY "anon_signed_url_unidades_fotos"
+  ON storage.objects
+  FOR SELECT
+  TO anon
+  USING (bucket_id = 'unidades-fotos');
