@@ -117,11 +117,29 @@ Nenhum. O placeholder `/Detalhe_Arquitetonico.png` é comportamento correto docu
 
 Nenhum. O client anon usa `createSignedUrl` (TTL 3600s) via policy explícita — nenhuma superfície nova além do que o Plan 24-01 já habilitou.
 
+## Correções pós-UAT (Task 4 — verificação humana)
+
+A verificação ao vivo revelou divergências vs design original e um pivot de fluxo. Correções aplicadas e aprovadas pelo usuário:
+
+1. **Sheet alinhado ao design** (66818fb): modal centrado `maxWidth 520` (era full-width); header com eyebrow `Unidade · {edifício}` (era refOf UN-...); métricas `r-metric 30px`; valor mensal via `fmtBRLk` ("R$6,8k"); CTA bracket `[>] … ENTER`; removido row Endereço + botão Fechar + drag handle. Adicionados `fmtBRLk` + `shortBuilding` em utils.js.
+
+2. **Card alinhado** (66818fb): nome do edifício via `shortBuilding`; valor footer em span único ("Consulte o proprietário" minúsculo).
+
+3. **Pivot CTA "Simular Aluguel" → "Falar com Proprietário"** (83c3cd5): visitante não aluga (Proprietário fecha). Click → feedback `[✓] Solicitação enviada` self-contained, **sem remover card**. Removido fluxo de simular/remoção (`removedIds`, `removingId`, `timerRef`, `simularAluguel`, props `simulating`/`onSimular`/`isRemoving`). `key={selected.id}` reseta feedback.
+
+4. **Barra superior contida** (83c3cd5): header + tabs em `maxWidth 1100` alinhados ao grid (antes edge-to-edge). Título desktop `40px`.
+
+5. **Contraste** (75fcfd3): count da aba ativa `text-indigo`→`text-fg-1`; total UNIDADES `opacity 0.6`→`fg-3`.
+
+6. **Tabs inline style** (9351e31): `all:unset` inline matava border/font/uppercase/gap do className → portado pra inline completo.
+
+7. **Drag-to-scroll nas tabs** (957f218): scrollbar oculto + click-arrastar; supressão de click quando arrasto >4px.
+
 ## Self-Check: PASSED
 
-- [x] `UnidadesPublicas.js` contém `sortUnits`, `fotoSrcs`, `SORTS`, `minmax(280px,1fr)`, `fotoSrc=`, `Ordenar`, `simulating`
-- [x] `UnidadePublicaCard.js` contém `fotoSrc`, `next/image`, `grayscale(0.3) contrast(1.1) brightness(0.6)`, `var(--primary-hover)`, `StatusBadge`, `transition-opacity duration-700`
-- [x] `UnidadeDetailSheet.js` contém `fotoSrc`, `Simular Aluguel`, `Processando`, `Valor / m`, `RM-2026-`, `rSheetUp`, `valor_visivel && unidade.area_m2`
-- [x] Commits 92b7c18, 96eba47, c0f23b4 existem em `feat/24-02-public-unidades-ui`
-- [x] ESLint limpo nos 3 arquivos
-- [x] Task 4 (checkpoint) aguardando verificação humana
+- [x] PUB-01..PUB-05 verificados ao vivo em /unidades (anon) — aprovado pelo usuário
+- [x] Sheet, card e barra superior batem com o design original
+- [x] CTA pivotado para "Falar com Proprietário" com feedback de interesse
+- [x] Drag-to-scroll funcional nas tabs
+- [x] ESLint limpo nos 3 arquivos após todas as correções
+- [x] Task 4 (checkpoint) aprovado
