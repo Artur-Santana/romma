@@ -235,7 +235,16 @@ Plans:
   3. A ficha da unidade abre em bottom sheet com imagem, descrição, área, valor mensal, valor/m² e refs
   4. "Simular aluguel" remove a unidade da lista com animação, representando a saída de "disponível" via Supabase realtime existente
 
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+**Wave 1**
+
+- [ ] 24-01-PLAN.md — Migration: RPC get_unidades_disponiveis retorna foto_url + foto_signed_url via storage.sign() (PUB-03)
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 24-02-PLAN.md — UnidadesPublicas + UnidadePublicaCard + UnidadeDetailSheet: sort, grid desktop, imagem de capa, ficha bottom-sheet, Simular Aluguel (PUB-01/02/03/04/05)
+
 **UI hint**: yes
 
 ### Phase 25: Portal do Locatário — PIX & Recibo
@@ -266,7 +275,7 @@ Plans:
 | 21. Dashboard — Visão Geral Editorial | 1/3 | In Progress|  |
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 1/2 | In Progress|  |
-| 24. Público — Unidades Disponíveis | 0/TBD | Not started | - |
+| 24. Público — Unidades Disponíveis | 0/2 | Not started | - |
 | 25. Portal do Locatário — PIX & Recibo | 0/TBD | Not started | - |
 
 ---
