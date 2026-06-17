@@ -19,6 +19,9 @@
 --   - foto_url LIKE '/%'           → foto_url direto (asset público: /Detalhe_Arquitetonico.png, /images/*)
 --   - ELSE                         → (storage.sign('unidades-fotos', foto_url, 3600)).signedURL
 
+-- DROP obrigatório: CREATE OR REPLACE não permite mudar RETURNS TABLE (SQLSTATE 42P13).
+DROP FUNCTION IF EXISTS public.get_unidades_disponiveis();
+
 CREATE OR REPLACE FUNCTION public.get_unidades_disponiveis()
 RETURNS TABLE (
   id              uuid,
