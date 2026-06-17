@@ -269,7 +269,7 @@ Plans:
 **Wave 2** *(blocked on Wave 1)*
 
 - [x] 25-02-PLAN.md — VencimentoDestaque + ContratoCard progresso + PortalDashboard wiring (PORT-04, PORT-05)
-- [ ] 25-03-PLAN.md — PixModal completo + public/pix-qr.png (PORT-05, PORT-06)
+- [x] 25-03-PLAN.md — PixModal completo + public/pix-qr.png (PORT-05, PORT-06)
 
 **Wave 3** *(blocked on Wave 2)*
 
@@ -291,7 +291,7 @@ Plans:
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 1/2 | In Progress|  |
 | 24. Público — Unidades Disponíveis | 2/2 | Complete   | 2026-06-17 |
-| 25. Portal do Locatário — PIX & Recibo | 2/4 | In Progress|  |
+| 25. Portal do Locatário — PIX & Recibo | 3/4 | In Progress|  |
 
 ---
 
