@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: System Improvement & Design Augmentation
 status: executing
-last_updated: "2026-06-16T02:10:00.000Z"
+last_updated: "2026-06-16T23:59:51.499Z"
 last_activity: 2026-06-16
 progress:
   total_phases: 9
   completed_phases: 5
-  total_plans: 16
-  completed_plans: 16
+  total_plans: 19
+  completed_plans: 18
   percent: 56
 ---
 
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-03)
 
 **Core value:** Proprietário gerencia edifícios, contratos e pagamentos em um único painel — Locatário acessa seu contrato e histórico via portal próprio — visitantes veem unidades disponíveis em tempo real.
-**Current focus:** Phase 21 — dashboard-vis-o-geral-editorial
+**Current focus:** Phase 22 — contratos-parcelas-renova-o
 
 ---
 
@@ -112,10 +112,16 @@ Items acknowledged and deferred at milestone close on 2026-06-03:
 
 ## Current Position
 
-Phase: 21 (dashboard-vis-o-geral-editorial) — COMPLETE
-All 3 plans done. Side fixes: MobileNav exact-match, Unidades metrics 2×2.
+Phase: 22 (contratos-parcelas-renova-o) — COMPLETE
+Plan: 3 of 3 (Plan 03 complete — renovarContrato SA + modal renovação)
 Last activity: 2026-06-16
+
+## Key Decisions (Phase 22)
+
+- renovarContrato INSERT direto via supabaseAdmin sem invocar Edge Function gerar-parcelas (Plan 03)
+- Botão Renovar exibido só quando contrato.status === 'ativo' — impede renovação de encerrados/cancelados (Plan 03)
+- Re-fetch Promise.all após renovação atualiza grade-resumo Término e timeline ao vivo (Plan 03)
 
 ## Operator Next Steps
 
-- Phase 22: Contratos & Parcelas — Renovação (next in sequence)
+- Phase 23: Locatários — Busca & Máscaras

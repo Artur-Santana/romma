@@ -393,7 +393,8 @@ export default async function Dashboard() {
                   const edi     = edificios.find(e => e.id === uni?.edificio_id)
                   const uniNome = c.unidades?.nome ?? uni?.nome ?? "—"
                   const ediNome = edi?.nome ?? "—"
-                  const diff    = (new Date(c.data_fim) - new Date()) / MS_POR_DIA
+                  const diff    = (new Date(c.data_fim + "T12:00:00") - new Date()) / MS_POR_DIA
+                  const daysLeft = Math.ceil(diff)
                   const isExpiring = diff >= 0 && diff <= 7
                   return (
                     <Link key={c.id} href={`/dashboard/contratos/${c.id}`} style={{ display: "grid", gridTemplateColumns: "2.4fr 1fr 1fr 1.2fr" }} className="px-5 py-4 border-t border-border-3 items-center no-underline hover:bg-surface-hi transition-colors">
@@ -408,7 +409,7 @@ export default async function Dashboard() {
                       </div>
                       <span className="font-mono text-[14px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
                       <span className={cn("font-mono text-[14px]", isExpiring ? "text-warning" : "text-fg-3")}>{fmtData(c.data_fim)}</span>
-                      <StatusBadge status={isExpiring ? "vencendo" : c.status} />
+                      <StatusBadge status={isExpiring ? "vencendo" : c.status} label={isExpiring ? `Vence em ${daysLeft}d` : undefined} />
                     </Link>
                   )
                 })}
@@ -553,7 +554,8 @@ export default async function Dashboard() {
                 const locNome = c.locatarios?.nome_razao_social ?? locatarios.find(l => l.id === c.locatario_id)?.nome_razao_social ?? "—"
                 const uni     = unidades.find(u => u.id === c.unidade_id)
                 const uniNome = c.unidades?.nome ?? uni?.nome ?? "—"
-                const diff    = (new Date(c.data_fim) - new Date()) / MS_POR_DIA
+                const diff    = (new Date(c.data_fim + "T12:00:00") - new Date()) / MS_POR_DIA
+                const daysLeft = Math.ceil(diff)
                 const isExpiring = diff >= 0 && diff <= 7
                 return (
                   <Link key={c.id} href={`/dashboard/contratos/${c.id}`} className={cn("px-4 py-3 flex justify-between items-center no-underline hover:bg-surface-hi transition-colors", i > 0 ? "border-t border-border-3" : "")}>
@@ -563,7 +565,7 @@ export default async function Dashboard() {
                     </div>
                     <div className="flex flex-col items-end gap-1 shrink-0">
                       <span className="font-mono text-[11px] text-fg-2">{fmtBRL(uni?.valor_mensal)}</span>
-                      <StatusBadge status={isExpiring ? "vencendo" : c.status} />
+                      <StatusBadge status={isExpiring ? "vencendo" : c.status} label={isExpiring ? `Vence em ${daysLeft}d` : undefined} />
                     </div>
                   </Link>
                 )
