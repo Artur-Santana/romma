@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase-browser"
-import { getLocatarioByUserId, getContratoAtivoByLocatario, getParcelasPortal, getTodasParcelasPortal } from "@/lib/queries-client"
+import { getLocatarioByUserId, getContratoAtivoByLocatario, getTodasParcelasPortal } from "@/lib/queries-client"
 import ContratoCard from "./ContratoCard"
 import ParcelsTable from "./ParcelsTable"
 import VencimentoDestaque from "./VencimentoDestaque"
@@ -15,7 +15,6 @@ export default function PortalDashboard() {
   const supabase = createClient()
   const [locatario, setLocatario] = useState(null)
   const [contrato, setContrato] = useState(null)
-  const [parcelas, setParcelas] = useState([])
   const [todasParcelas, setTodasParcelas] = useState([])
   const [pixModal, setPixModal] = useState({ open: false, parcela: null })
   const [loading, setLoading] = useState(true)
@@ -32,8 +31,6 @@ export default function PortalDashboard() {
         const ct = await getContratoAtivoByLocatario(loc.id)
         setContrato(ct)
         if (!ct) { setLoading(false); return }
-        const parc = await getParcelasPortal(ct.id)
-        setParcelas(parc ?? [])
         const todasParc = await getTodasParcelasPortal(ct.id)
         setTodasParcelas(todasParc ?? [])
       } catch (e) {
