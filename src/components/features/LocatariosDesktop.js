@@ -86,6 +86,7 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   const [formEdit, setFormEdit] = useState({ nome_razao_social: "", email: "", telefone: "" })
   const [q, setQ] = useState("")
   const [resent, setResent] = useState(new Set())
+  const [sending, setSending] = useState(new Set())
   const [confirmRevogarId, setConfirmRevogarId] = useState(null)
 
   const ativos = locatarios.filter(l => l.status_convite === "aceito").length
@@ -161,7 +162,9 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   }
 
   async function handleReenviar(id) {
+    setSending(s => new Set([...s, id]))
     const { status, erroMessage } = await reenviarConvite(id)
+    setSending(s => { const n = new Set(s); n.delete(id); return n })
     if (status !== 200) {
       toast.error(erroMessage ?? "Erro ao reenviar convite.")
       return
@@ -242,8 +245,8 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
                 <div style={{ display: "flex", gap: 12 }}>
                   {isPendente ? (
                     <>
-                      <button style={ghostBtn(resent.has(l.id) ? "var(--success)" : "var(--indigo)")} onClick={() => handleReenviar(l.id)}>
-                        {resent.has(l.id) ? "✓ Reenviado" : "Reenviar"}
+                      <button style={ghostBtn(resent.has(l.id) ? "var(--success)" : "var(--indigo)")} onClick={() => handleReenviar(l.id)} disabled={sending.has(l.id)}>
+                        {sending.has(l.id) ? "Enviando..." : resent.has(l.id) ? "✓ Reenviado" : "Reenviar"}
                       </button>
                       <button style={ghostBtn("var(--danger-fg)")} onClick={() => setConfirmRevogarId(l.id)}>Revogar</button>
                     </>
@@ -292,8 +295,8 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
               <div style={{ borderTop: "1px solid var(--border-3)", paddingTop: 10, display: "flex", gap: 8, alignItems: "center" }}>
                 {isPendente ? (
                   <>
-                    <button style={ghostBtn(resent.has(l.id) ? "var(--success)" : "var(--indigo)")} onClick={() => handleReenviar(l.id)}>
-                      {resent.has(l.id) ? "✓ Reenviado" : "Reenviar convite"}
+                    <button style={ghostBtn(resent.has(l.id) ? "var(--success)" : "var(--indigo)")} onClick={() => handleReenviar(l.id)} disabled={sending.has(l.id)}>
+                      {sending.has(l.id) ? "Enviando..." : resent.has(l.id) ? "✓ Reenviado" : "Reenviar convite"}
                     </button>
                     <div style={{ flex: 1 }} />
                     <button style={ghostBtn("var(--danger-fg)")} onClick={() => setConfirmRevogarId(l.id)}>Revogar</button>
