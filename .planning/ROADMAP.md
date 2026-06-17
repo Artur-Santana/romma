@@ -211,7 +211,16 @@ Plans:
   4. Reenviar convite para pendentes dá feedback "✓ Reenviado"; revogar acesso exige modal de confirmação
   5. No mobile, cards/linhas de locatário expõem as ações (Reenviar / Revogar / Editar)
 
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+**Wave 1**
+
+- [ ] 23-01-PLAN.md — SA reenviarConvite + whitelist editarLocatario (LOC-03/04)
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 23-02-PLAN.md — LocatariosDesktop cards desktop + rows mobile + busca + máscaras + ConfirmDialog (LOC-01/02/03/05/06)
+
 **UI hint**: yes
 
 ### Phase 24: Público — Unidades Disponíveis
@@ -256,7 +265,7 @@ Plans:
 | 20. Edifícios — Cards & Drill-in | 2/2 | Complete    | 2026-06-15 |
 | 21. Dashboard — Visão Geral Editorial | 1/3 | In Progress|  |
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
-| 23. Locatários — Busca & Máscaras | 0/TBD | Not started | - |
+| 23. Locatários — Busca & Máscaras | 0/2 | Not started | - |
 | 24. Público — Unidades Disponíveis | 0/TBD | Not started | - |
 | 25. Portal do Locatário — PIX & Recibo | 0/TBD | Not started | - |
 
