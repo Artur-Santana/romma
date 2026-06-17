@@ -130,7 +130,7 @@ export default function UnidadesPublicas() {
                   onClick={() => setActiveTab(tab.id)}
                 >
                   {tab.label}
-                  <span className={isActive ? 'text-indigo' : 'text-fg-5'}>{count}</span>
+                  <span className={isActive ? 'text-fg-1' : 'text-fg-5'}>{count}</span>
                 </button>
               )
             })}
@@ -154,7 +154,7 @@ export default function UnidadesPublicas() {
             flexWrap: 'wrap',
           }}
         >
-          <span className="r-meta" style={{ opacity: 0.6 }}>
+          <span className="r-meta" style={{ color: 'var(--fg-3)' }}>
             {sorted.length} {sorted.length === 1 ? 'UNIDADE' : 'UNIDADES'}
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
