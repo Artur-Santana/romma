@@ -1,9 +1,13 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { fmtBRL, fmtBRLk, shortBuilding } from '@/lib/utils'
 
-export default function UnidadeDetailSheet({ unidade, edificio, onClose, onSimular, fotoSrc, simulating }) {
+export default function UnidadeDetailSheet({ unidade, edificio, onClose, fotoSrc }) {
+  // enviado reseta naturalmente: o pai remonta o sheet via key={selected.id}
+  const [enviado, setEnviado] = useState(false)
+
   return (
     <div
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
@@ -111,13 +115,13 @@ export default function UnidadeDetailSheet({ unidade, edificio, onClose, onSimul
             <span className="r-meta">REF: RM-2026-{unidade.id.slice(0, 6).toUpperCase()}</span>
           </div>
 
-          {/* CTA bracket: [>] Simular Aluguel ENTER (D-14) */}
+          {/* CTA bracket: [>] Falar com Proprietário ENTER → [✓] Solicitação enviada */}
           <button
-            onClick={() => onSimular(unidade.id)}
-            disabled={simulating}
+            onClick={() => setEnviado(true)}
+            disabled={enviado}
             style={{
               all: 'unset',
-              cursor: simulating ? 'not-allowed' : 'pointer',
+              cursor: enviado ? 'default' : 'pointer',
               boxSizing: 'border-box',
               width: '100%',
               display: 'flex',
@@ -126,20 +130,25 @@ export default function UnidadeDetailSheet({ unidade, edificio, onClose, onSimul
               gap: 12,
               padding: '16px 22px',
               minHeight: 44,
-              background: 'var(--indigo)',
-              color: 'var(--fg-1)',
+              background: enviado ? 'var(--success)' : 'var(--indigo)',
+              color: enviado ? 'var(--background)' : 'var(--fg-1)',
             }}
           >
             <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 13, letterSpacing: '0.5px' }}>
-              {simulating ? '[···]' : '[>]'}
+              {enviado ? '[✓]' : '[>]'}
             </span>
             <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 13, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-              {simulating ? 'Processando' : 'Simular Aluguel'}
+              {enviado ? 'Solicitação enviada' : 'Falar com Proprietário'}
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 13, letterSpacing: '0.5px', color: 'var(--fg-2)' }}>
-              {simulating ? '' : 'ENTER'}
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 13, letterSpacing: '0.5px', color: enviado ? 'var(--background)' : 'var(--fg-2)' }}>
+              {enviado ? '' : 'ENTER'}
             </span>
           </button>
+          {enviado && (
+            <p className="r-meta" style={{ marginTop: 12, textAlign: 'center' }}>
+              O Proprietário entrará em contato em breve.
+            </p>
+          )}
         </div>
       </div>
     </div>
