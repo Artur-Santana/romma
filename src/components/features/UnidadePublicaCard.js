@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import StatusBadge from '@/components/ui/StatusBadge'
-import { fmtBRL } from '@/lib/utils'
+import { fmtBRL, shortBuilding } from '@/lib/utils'
 
 export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemoving, fotoSrc }) {
   return (
@@ -45,7 +45,7 @@ export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemo
           </div>
           {edificio && (
             <div className="r-meta" style={{ marginTop: 4, letterSpacing: '1px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {edificio.nome}
+              {shortBuilding(edificio.nome)}
             </div>
           )}
         </div>
@@ -66,15 +66,9 @@ export default function UnidadePublicaCard({ unidade, edificio, onSelect, isRemo
         {unidade.area_m2 != null && (
           <span className="r-meta" style={{ letterSpacing: '1px' }}>{unidade.area_m2} m²</span>
         )}
-        {unidade.valor_visivel ? (
-          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 13, letterSpacing: '0.5px', color: 'var(--primary-hover)' }}>
-            {fmtBRL(unidade.valor_mensal)}/mês
-          </span>
-        ) : (
-          <span className="r-meta" style={{ letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Consulte o Proprietário
-          </span>
-        )}
+        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 13, letterSpacing: '0.5px', color: unidade.valor_visivel ? 'var(--primary-hover)' : 'var(--fg-4)' }}>
+          {unidade.valor_visivel ? `${fmtBRL(unidade.valor_mensal)}/mês` : 'Consulte o proprietário'}
+        </span>
       </div>
     </button>
   )
