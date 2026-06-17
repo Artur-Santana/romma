@@ -16,24 +16,57 @@ function shortenName(nome) {
     .replace('Torre ', '')
 }
 
+const SORTS = [
+  { id: 'rel', label: 'Relevância' },
+  { id: 'valor_asc', label: 'Menor valor' },
+  { id: 'valor_desc', label: 'Maior valor' },
+  { id: 'area_desc', label: 'Maior área' },
+]
+
+function sortUnits(list, sort) {
+  const a = [...list]
+  if (sort === 'valor_asc') a.sort((x, y) => (x.valor_mensal ?? Infinity) - (y.valor_mensal ?? Infinity))
+  else if (sort === 'valor_desc') a.sort((x, y) => (y.valor_mensal ?? -Infinity) - (x.valor_mensal ?? -Infinity))
+  else if (sort === 'area_desc') a.sort((x, y) => (y.area_m2 ?? 0) - (x.area_m2 ?? 0))
+  return a
+}
+
+async function resolveFotoUrl(supabase, foto_url) {
+  if (!foto_url) return '/Detalhe_Arquitetonico.png'
+  if (foto_url.startsWith('/')) return foto_url
+  const { data } = await supabase.storage.from('unidades-fotos').createSignedUrl(foto_url, 3600)
+  return data?.signedUrl ?? '/Detalhe_Arquitetonico.png'
+}
+
 export default function UnidadesPublicas() {
   const [unidades, setUnidades] = useState([])
   const [edificios, setEdificios] = useState([])
   const [activeTab, setActiveTab] = useState('todos')
+  const [sort, setSort] = useState('rel')
   const [selected, setSelected] = useState(null)
+  const [simulating, setSimulating] = useState(false)
   const [removedIds, setRemovedIds] = useState(new Set())
   const [removingId, setRemovingId] = useState(null)
+  const [fotoSrcs, setFotoSrcs] = useState({})
   const timerRef = useRef(null)
 
   useEffect(() => {
+    const supabase = createClient()
+
     async function load() {
       const [u, e] = await Promise.all([getUnidadesDisponiveis(), getEdificiosPublicos()])
       setUnidades(u ?? [])
       setEdificios(e ?? [])
+
+      // Resolve signed URLs async (D-04/D-05)
+      const srcs = await Promise.all(
+        (u ?? []).map(async x => [x.id, await resolveFotoUrl(supabase, x.foto_url)])
+      )
+      setFotoSrcs(Object.fromEntries(srcs))
     }
+
     load()
 
-    const supabase = createClient()
     const channel = supabase
       .channel('public-unidades')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'unidades' }, () => load())
@@ -57,13 +90,19 @@ export default function UnidadesPublicas() {
     ? disponiveis
     : disponiveis.filter(u => u.edificio_id === activeTab)
 
+  const sorted = sortUnits(filtered, sort)
+
   function simularAluguel(uid) {
-    setRemovingId(uid)
+    setSimulating(true)
     timerRef.current = setTimeout(() => {
-      setRemovingId(null)
+      setSimulating(false)
       setSelected(null)
-      setRemovedIds(prev => new Set([...prev, uid]))
-    }, 700)
+      setRemovingId(uid)
+      setTimeout(() => {
+        setRemovedIds(prev => new Set([...prev, uid]))
+        setRemovingId(null)
+      }, 700)
+    }, 800)
   }
 
   const edificioById = useMemo(
@@ -111,47 +150,90 @@ export default function UnidadesPublicas() {
         })}
       </div>
 
-      <div className="px-5 py-4 border-b border-border-3 flex justify-between items-baseline">
-        <span className="font-mono text-[11px] text-fg-4 tracking-[0.5px] opacity-50">
-          {filtered.length} {filtered.length === 1 ? 'UNIDADE' : 'UNIDADES'}
-        </span>
-        <span className="font-mono text-[11px] text-fg-4 tracking-[0.5px] opacity-50">
-          SYNC · {new Date().toISOString().slice(0, 10)}
-        </span>
+      {/* Count + Sort bar */}
+      <div
+        style={{ flexShrink: 0, borderBottom: '1px solid var(--border-3)' }}
+      >
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: '0 auto',
+            padding: '10px var(--rd-gutter-m)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 12,
+            flexWrap: 'wrap',
+          }}
+        >
+          <span className="r-meta" style={{ opacity: 0.6 }}>
+            {sorted.length} {sorted.length === 1 ? 'UNIDADE' : 'UNIDADES'}
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="r-label" style={{ fontSize: 9 }}>Ordenar</span>
+            <div className="r-noscroll" style={{ display: 'flex', gap: 4, overflowX: 'auto' }}>
+              {SORTS.map(s => (
+                <button
+                  key={s.id}
+                  onClick={() => setSort(s.id)}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    padding: '5px 10px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10,
+                    letterSpacing: '0.5px',
+                    border: `1px solid ${sort === s.id ? 'var(--indigo)' : 'var(--border-3)'}`,
+                    background: sort === s.id ? 'oklch(0.339 0.179 301.68 / 0.18)' : 'transparent',
+                    color: sort === s.id ? 'var(--fg-1)' : 'var(--fg-4)',
+                  }}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex-1 overflow-auto min-h-0">
-        {filtered.length === 0 ? (
-          <div className="py-20 px-8 text-center flex flex-col gap-3 items-center">
-            <div className="w-12 h-12 border border-border-3 flex items-center justify-center text-[18px] text-fg-4">
-              —
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: 'var(--rd-gutter-m)' }}>
+          {sorted.length === 0 ? (
+            <div className="py-20 px-8 text-center flex flex-col gap-3 items-center">
+              <div className="w-12 h-12 border border-border-3 flex items-center justify-center text-[18px] text-fg-4">
+                —
+              </div>
+              <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-2 block">
+                Nenhuma unidade disponível
+              </span>
+              <p className="text-[12px] text-fg-4 leading-[1.5] max-w-[240px] m-0">
+                Todas as unidades estão ocupadas no momento. Volte em breve.
+              </p>
             </div>
-            <span className="font-body font-bold text-[22px] tracking-[-0.8px] text-fg-2 block">
-              Nenhuma unidade disponível
-            </span>
-            <p className="text-[12px] text-fg-4 leading-[1.5] max-w-[240px] m-0">
-              Todas as unidades estão ocupadas no momento. Volte em breve.
-            </p>
-          </div>
-        ) : (
-          filtered.map(u => {
-            const edificio = getEdificio(u.edificio_id)
-            return (
-              <UnidadePublicaCard
-                key={u.id}
-                unidade={u}
-                edificio={edificio}
-                onSelect={setSelected}
-                isRemoving={removingId === u.id}
-              />
-            )
-          })
-        )}
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-3">
+              {sorted.map(u => {
+                const edificio = getEdificio(u.edificio_id)
+                return (
+                  <UnidadePublicaCard
+                    key={u.id}
+                    unidade={u}
+                    edificio={edificio}
+                    onSelect={setSelected}
+                    isRemoving={removingId === u.id}
+                    fotoSrc={fotoSrcs[u.id] ?? '/Detalhe_Arquitetonico.png'}
+                  />
+                )
+              })}
+            </div>
+          )}
 
-        <div className="py-8 px-5 text-center border-t border-border-3">
-          <span className="font-mono text-[11px] text-fg-5 tracking-[1.5px]">
-            POWERED BY ROMMA · GRID.OS
-          </span>
+          <div className="py-8 px-5 text-center border-t border-border-3">
+            <span className="font-mono text-[11px] text-fg-5 tracking-[1.5px]">
+              POWERED BY ROMMA · GRID.OS
+            </span>
+          </div>
         </div>
       </div>
 
@@ -161,6 +243,8 @@ export default function UnidadesPublicas() {
           edificio={getEdificio(selected.edificio_id)}
           onClose={() => setSelected(null)}
           onSimular={simularAluguel}
+          fotoSrc={fotoSrcs[selected.id] ?? '/Detalhe_Arquitetonico.png'}
+          simulating={simulating}
         />
       )}
     </div>
