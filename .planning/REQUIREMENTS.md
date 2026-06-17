@@ -73,7 +73,7 @@
 - [x] **PUB-02**: Listagem pública permite ordenação (relevância / menor valor / maior valor / maior área)
 - [x] **PUB-03**: Cards públicos exibem imagem de capa, área, valor (ou "Consulte o proprietário" quando oculto) e status "Disponível"
 - [x] **PUB-04**: Ficha da unidade abre em bottom sheet com imagem, descrição, área, valor mensal, valor/m² e refs
-- [x] **PUB-05**: "Simular aluguel" remove a unidade da lista com animação (representa a saída de "disponível" via Supabase realtime existente)
+- [x] **PUB-05**: CTA "Falar com Proprietário" na ficha registra interesse com feedback visual ("[✓] Solicitação enviada") — pivot do "Simular aluguel" original: o visitante não aluga, quem fecha é o Proprietário, então a unidade permanece na lista (Phase 24)
 
 ### Portal do Locatário (variante B — foco em pagamento)
 
