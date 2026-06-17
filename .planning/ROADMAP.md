@@ -264,7 +264,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 25-01-PLAN.md — TDD: testes + confirmarPagamentoLocatario (guard 3-hop) + getTodasParcelasPortal (PORT-06)
+- [x] 25-01-PLAN.md — TDD: testes + confirmarPagamentoLocatario (guard 3-hop) + getTodasParcelasPortal (PORT-06)
 
 **Wave 2** *(blocked on Wave 1)*
 
@@ -291,7 +291,7 @@ Plans:
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 1/2 | In Progress|  |
 | 24. Público — Unidades Disponíveis | 2/2 | Complete   | 2026-06-17 |
-| 25. Portal do Locatário — PIX & Recibo | 0/4 | Not started | - |
+| 25. Portal do Locatário — PIX & Recibo | 1/4 | In Progress|  |
 
 ---
 
