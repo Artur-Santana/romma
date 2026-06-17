@@ -1,4 +1,11 @@
 
+[functions.enviar-email]
+enabled = true
+verify_jwt = true
+import_map = "./functions/enviar-email/deno.json"
+entrypoint = "./functions/enviar-email/index.ts"
+static_files = ["./functions/enviar-email/emails/**"]
+
 [functions.gerar-parcelas]
 enabled = true
 verify_jwt = true
