@@ -30,7 +30,7 @@ vi.mock('@/lib/supabaseAdmin', () => ({ default: mockAdmin }))
 
 // Note: parcelas.js does NOT import supabaseJWT, so no supabaseJWT stub needed here.
 
-import { marcarParcelaComoPaga } from '@/actions/parcelas'
+import { marcarParcelaComoPaga, confirmarPagamentoLocatario } from '@/actions/parcelas'
 
 const validId = '00000000-0000-0000-0000-000000000001'
 
@@ -67,6 +67,25 @@ function setupUpdateThenable() {
   thenMock.mockImplementationOnce((resolve) =>
     Promise.resolve({ error: null }).then(resolve)
   )
+}
+
+// Helper: 3-hop ownership for confirmarPagamentoLocatario (happy path)
+// hops: parcela → contrato → locatario (usuario_id === mockUser.id)
+function setupLocatarioOwnerSingles3() {
+  // Hop 1: parcelas → contrato_id
+  mockAdmin.single.mockResolvedValueOnce({ data: { contrato_id: 'c-id-1' }, error: null })
+  // Hop 2: contratos → locatario_id
+  mockAdmin.single.mockResolvedValueOnce({ data: { locatario_id: 'l-id-1' }, error: null })
+  // Hop 3: locatarios → usuario_id (matches user)
+  mockAdmin.single.mockResolvedValueOnce({ data: { usuario_id: mockUser.id }, error: null })
+}
+
+// Helper: 3-hop cross-tenant (locatario.usuario_id differs from authenticated user)
+function setupLocatarioCrossTenantSingles3() {
+  mockAdmin.single.mockResolvedValueOnce({ data: { contrato_id: 'c-id-other' }, error: null })
+  mockAdmin.single.mockResolvedValueOnce({ data: { locatario_id: 'l-id-other' }, error: null })
+  // usuario_id diferente do user autenticado
+  mockAdmin.single.mockResolvedValueOnce({ data: { usuario_id: 'outro-usuario-uuid' }, error: null })
 }
 
 describe('marcarParcelaComoPaga', () => {
@@ -111,5 +130,53 @@ describe('marcarParcelaComoPaga', () => {
 
     // D-08: assert the ownership filter was applied with the authenticated user's id
     expect(mockAdmin.eq).toHaveBeenCalledWith('proprietario_id', mockUser.id)
+  })
+})
+
+describe('confirmarPagamentoLocatario', () => {
+  beforeEach(() => {
+    resetAll()
+    mockGetUser.mockResolvedValue({ data: { user: mockUser } })
+    // NOTE: mockIsProprietario NOT configured — Locatário guard does not call isProprietario
+  })
+
+  it('happy path — locatário dono, marca como paga (200)', async () => {
+    setupLocatarioOwnerSingles3()
+    setupUpdateThenable()
+    const result = await confirmarPagamentoLocatario(validId)
+    expect(result).toEqual({ status: 200 })
+  })
+
+  it('cross-tenant — usuario_id diferente → 404, update não executado', async () => {
+    setupLocatarioCrossTenantSingles3()
+    const result = await confirmarPagamentoLocatario(validId)
+    expect(result).toEqual({ status: 404, erroMessage: 'Parcela não encontrada.' })
+    expect(mockAdmin.update).not.toHaveBeenCalled()
+  })
+
+  it('não autenticado → 401', async () => {
+    mockGetUser.mockResolvedValue({ data: { user: null } })
+    const result = await confirmarPagamentoLocatario(validId)
+    expect(result.status).toBe(401)
+  })
+
+  it('UUID inválido → 400', async () => {
+    const result = await confirmarPagamentoLocatario('not-a-uuid')
+    expect(result).toEqual({ status: 400, erroMessage: 'ID inválido.' })
+  })
+
+  it('parcela inexistente (hop 1 null) → 404', async () => {
+    mockAdmin.single.mockResolvedValueOnce({ data: null, error: null })
+    const result = await confirmarPagamentoLocatario(validId)
+    expect(result).toEqual({ status: 404, erroMessage: 'Parcela não encontrada.' })
+  })
+
+  it('parcela já paga — .in(status) filtra → update no-op, retorna 200', async () => {
+    // O update usa .in('status', ['pendente','vencida']) — se parcela já paga, 0 rows afetadas
+    // mas não há erro, então action retorna 200. Comportamento correto de no-op.
+    setupLocatarioOwnerSingles3()
+    setupUpdateThenable()
+    const result = await confirmarPagamentoLocatario(validId)
+    expect(result).toEqual({ status: 200 })
   })
 })
