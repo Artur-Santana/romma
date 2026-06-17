@@ -273,7 +273,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2)*
 
-- [ ] 25-04-PLAN.md — ParcelsTable coluna Ação + recibo PDF jsPDF (PORT-05, PORT-07)
+- [x] 25-04-PLAN.md — ParcelsTable coluna Ação + recibo PDF jsPDF (PORT-05, PORT-07)
 
 **UI hint**: yes
 
@@ -291,7 +291,7 @@ Plans:
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 1/2 | In Progress|  |
 | 24. Público — Unidades Disponíveis | 2/2 | Complete   | 2026-06-17 |
-| 25. Portal do Locatário — PIX & Recibo | 3/4 | In Progress|  |
+| 25. Portal do Locatário — PIX & Recibo | 4/4 | Complete   | 2026-06-17 |
 
 ---
 
