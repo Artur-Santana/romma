@@ -56,6 +56,7 @@ GRANT EXECUTE ON FUNCTION public.get_unidades_disponiveis() TO anon, authenticat
 -- Policy: permite que anon gere signed URLs para objetos do bucket unidades-fotos.
 -- Bucket permanece PRIVATE: objetos só acessíveis via signed URL com token válido.
 -- Sem esta policy, createSignedUrl() falha silenciosamente para usuários não autenticados.
+DROP POLICY IF EXISTS "anon_signed_url_unidades_fotos" ON storage.objects;
 CREATE POLICY "anon_signed_url_unidades_fotos"
   ON storage.objects
   FOR SELECT
