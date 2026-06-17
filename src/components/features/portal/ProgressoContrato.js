@@ -1,45 +1,39 @@
-import { cn } from "@/lib/utils"
-
 export default function ProgressoContrato({ parcelas, contrato }) {
   const total = parcelas.length
   const pagas = parcelas.filter(p => p.status === 'paga').length
   const pct = total > 0 ? Math.round((pagas / total) * 100) : 0
 
-  function tileColor(status) {
-    if (status === 'paga') return 'bg-success'
-    if (status === 'pendente') return 'bg-[var(--warning)]'
-    if (status === 'vencida') return 'bg-danger-fg'
-    return 'bg-border-3'
+  function tileBg(status) {
+    if (status === 'paga') return 'var(--success)'
+    if (status === 'pendente') return 'var(--warning)'
+    if (status === 'vencida') return 'var(--danger-fg)'
+    return 'var(--surface-hi)'
   }
 
   return (
-    <section className="border border-border-3 bg-surface p-6 flex flex-col gap-4">
-      <span className="eyebrow eyebrow--indigo">PROGRESSO DO CONTRATO</span>
-
-      <div className="flex items-baseline gap-1">
-        <span className="font-display font-bold text-[48px] leading-none tracking-[-2px] text-fg-1">
-          {pagas}
+    <div style={{ border: "1px solid var(--border-3)", background: "var(--surface)", padding: "var(--rd-panel)" }}>
+      <span className="eyebrow eyebrow--indigo" style={{ marginBottom: 12 }}>Progresso do Contrato</span>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14 }}>
+        <span className="r-metric" style={{ fontSize: 40 }}>
+          {pagas}<span style={{ fontSize: 18, color: "var(--fg-4)", fontFamily: "var(--font-display)", fontWeight: 700 }}>/{total}</span>
         </span>
-        <span className="font-mono text-[12px] text-fg-3">/{total} parcelas pagas</span>
+        <span className="r-meta">parcelas pagas</span>
       </div>
-
-      <div className="flex flex-wrap gap-[5px]" role="img" aria-label={`${pagas} de ${total} parcelas pagas`}>
-        {parcelas.map((p) => (
+      <div style={{ display: "flex", gap: 3 }}>
+        {parcelas.map(p => (
           <div
             key={p.id}
-            className={cn("rounded-sm", tileColor(p.status))}
-            style={{ width: 22, height: 22 }}
+            style={{ flex: 1, height: 24, background: tileBg(p.status) }}
             title={`Parcela ${p.numero}: ${p.status}`}
           />
         ))}
       </div>
-
-      <span className="font-mono text-[11px] text-fg-4">
-        {contrato.unidades?.nome ?? "—"}
-        <span className={cn("ml-2", pct === 100 ? "text-success" : "text-[var(--warning)]")}>
-          · {pct}% adimplente
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
+        <span className="r-meta">{contrato.unidades?.nome ?? "—"}</span>
+        <span className="r-meta" style={{ color: pct === 100 ? "var(--success)" : "var(--warning)" }}>
+          {pct}% adimplente
         </span>
-      </span>
-    </section>
+      </div>
+    </div>
   )
 }

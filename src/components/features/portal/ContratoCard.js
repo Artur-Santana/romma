@@ -1,34 +1,29 @@
 import { fmtBRL, fmtData } from "@/lib/utils"
 
 export default function ContratoCard({ contrato }) {
+  const summary = [
+    { label: "Unidade",      value: contrato.unidades?.nome ?? "—" },
+    { label: "Valor Mensal", value: fmtBRL(contrato.unidades?.valor_mensal) },
+    { label: "Início",       value: fmtData(contrato.data_inicio) },
+    { label: "Fim",          value: fmtData(contrato.data_fim) },
+  ]
+
   return (
-    <section className="border border-border-3 bg-surface">
-      <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-border-3">
-        <div className="px-5 py-5">
-          <span className="font-mono text-[10px] text-fg-4 tracking-[1.2px] uppercase block">UNIDADE</span>
-          <span className="font-display font-bold text-[20px] leading-tight text-fg-1 block mt-2">
-            {contrato.unidades?.nome ?? "—"}
-          </span>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", border: "1px solid var(--border-3)" }}>
+      {summary.map((s, i) => (
+        <div
+          key={s.label}
+          style={{
+            padding: "var(--rd-cell)",
+            borderRight: i < 3 ? "1px solid var(--border-3)" : "none",
+          }}
+        >
+          <div className="r-label" style={{ marginBottom: 8 }}>{s.label}</div>
+          <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 20, letterSpacing: "-0.4px", color: "var(--fg-1)" }}>
+            {s.value}
+          </div>
         </div>
-        <div className="px-5 py-5">
-          <span className="font-mono text-[10px] text-fg-4 tracking-[1.2px] uppercase block">VALOR MENSAL</span>
-          <span className="font-display font-bold text-[20px] leading-tight text-fg-1 block mt-2">
-            {fmtBRL(contrato.unidades?.valor_mensal)}
-          </span>
-        </div>
-        <div className="px-5 py-5">
-          <span className="font-mono text-[10px] text-fg-4 tracking-[1.2px] uppercase block">INÍCIO</span>
-          <span className="font-display font-bold text-[20px] leading-tight text-fg-1 block mt-2">
-            {fmtData(contrato.data_inicio)}
-          </span>
-        </div>
-        <div className="px-5 py-5">
-          <span className="font-mono text-[10px] text-fg-4 tracking-[1.2px] uppercase block">FIM</span>
-          <span className="font-display font-bold text-[20px] leading-tight text-fg-1 block mt-2">
-            {fmtData(contrato.data_fim)}
-          </span>
-        </div>
-      </div>
-    </section>
+      ))}
+    </div>
   )
 }

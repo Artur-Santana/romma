@@ -1,62 +1,54 @@
-import { fmtBRL, fmtData, cn } from "@/lib/utils"
+import { fmtBRL, fmtData } from "@/lib/utils"
+import StatusBadge from "@/components/ui/StatusBadge"
 
 export default function VencimentoDestaque({ parcelas, contrato, onPagar }) {
   const pagaveis = parcelas.filter(p => p.status === 'pendente' || p.status === 'vencida')
-  const proximaPagavel = pagaveis.sort(
+  const proxima = pagaveis.sort(
     (a, b) => new Date(a.data_vencimento) - new Date(b.data_vencimento)
   )[0] ?? null
 
-  if (!proximaPagavel) return null
-
-  const totalParcelas = parcelas.length
-  const diasRestantes = Math.ceil(
-    (new Date(proximaPagavel.data_vencimento + 'T12:00:00') - new Date()) / 86400000
+  if (!proxima) return (
+    <div style={{ border: "1px solid var(--success)", background: "oklch(0.696 0.17 162.5 / 0.08)", padding: "var(--rd-panel)", display: "flex", flexDirection: "column", justifyContent: "center", gap: 8 }}>
+      <span className="eyebrow eyebrow--indigo" style={{ color: "var(--success)" }}>Em dia</span>
+      <span className="r-section">Nenhuma parcela em aberto.</span>
+      <span className="r-meta">Todas as parcelas deste ciclo foram pagas.</span>
+    </div>
   )
-  const vencida = proximaPagavel.status === 'vencida'
+
+  const total = parcelas.length
+  const dias = Math.ceil(
+    (new Date(proxima.data_vencimento + 'T12:00:00') - new Date()) / 86400000
+  )
+  const vencida = proxima.status === 'vencida'
 
   return (
-    <section
-      className="border-l-4 border-l-indigo bg-surface p-6 flex flex-col gap-3 relative"
-      style={{ borderLeftColor: 'var(--indigo)' }}
-      aria-label={`Próximo vencimento: parcela ${proximaPagavel.numero} de ${totalParcelas}`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <span className="eyebrow eyebrow--indigo">PRÓXIMO VENCIMENTO</span>
-        <span className={cn(
-          "font-mono text-[9px] font-bold tracking-[1.2px] uppercase px-2 py-[3px]",
-          vencida
-            ? "bg-[var(--danger-bg2)] text-danger-fg border border-danger-fg"
-            : "bg-[oklch(0.38_0.08_45)] text-[var(--warning)] border border-[var(--warning)]"
-        )}>
-          {vencida ? "VENCIDA" : "PENDENTE"}
-        </span>
+    <div style={{ border: "1px solid var(--indigo)", background: "oklch(0.339 0.179 301.68 / 0.08)", padding: "var(--rd-panel)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div>
+          <span className="eyebrow eyebrow--indigo" style={{ marginBottom: 8 }}>Próximo Vencimento</span>
+          <div className="r-metric" style={{ fontSize: 40 }}>{fmtBRL(contrato.unidades?.valor_mensal)}</div>
+          <div className="r-meta" style={{ marginTop: 6 }}>
+            Parcela {proxima.numero}/{total} · vence {fmtData(proxima.data_vencimento)}
+          </div>
+        </div>
+        <StatusBadge status={proxima.status} />
       </div>
-
-      <span className="font-display font-bold text-[38px] sm:text-[48px] leading-none tracking-[-2px] text-fg-1">
-        {fmtBRL(contrato.unidades?.valor_mensal)}
-      </span>
-
-      <span className="font-mono text-[11px] text-fg-3">
-        Parcela {proximaPagavel.numero}/{totalParcelas} · vence {fmtData(proximaPagavel.data_vencimento)}
-      </span>
-
-      <span className={cn(
-        "font-mono text-[11px] font-bold",
-        vencida ? "text-danger-fg" : diasRestantes <= 7 ? "text-[var(--warning)]" : "text-fg-4"
-      )}>
-        {vencida
-          ? `⚠ ${Math.abs(diasRestantes)} dia(s) em atraso`
-          : `⏱ ${diasRestantes} dia(s) restantes`}
-      </span>
-
-      <button
-        style={{ all: 'unset', cursor: 'pointer' }}
-        className="bg-indigo text-fg-1 font-mono font-bold text-[11px] tracking-[1.5px] uppercase px-5 py-[11px] hover:opacity-90 transition-opacity mt-2 text-center"
-        onClick={() => onPagar(proximaPagavel)}
-        aria-label="Pagar próxima parcela via PIX"
-      >
-        PIX &nbsp; PAGAR AGORA &nbsp;→
-      </button>
-    </section>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: vencida ? "var(--danger-fg)" : "var(--warning)" }}>
+          ⏱ {Math.abs(dias)} dia(s) {vencida ? "em atraso" : "restantes"}
+        </span>
+        <button
+          style={{ all: "unset", boxSizing: "border-box", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10, padding: "10px 16px", background: "var(--indigo)", color: "var(--fg-1)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12, letterSpacing: "1.2px", textTransform: "uppercase" }}
+          onClick={() => onPagar(proxima)}
+          onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+          onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+          aria-label="Pagar próxima parcela via PIX"
+        >
+          <span style={{ fontFamily: "var(--font-mono)", opacity: 0.85 }}>PIX</span>
+          <span>Pagar Agora</span>
+          <span style={{ fontFamily: "var(--font-mono)", opacity: 0.85 }}>→</span>
+        </button>
+      </div>
+    </div>
   )
 }
