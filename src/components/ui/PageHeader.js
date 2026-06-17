@@ -7,7 +7,7 @@ export default function PageHeader({ eyebrow, title, subtitle, cta }) {
     <div className="flex items-end justify-between mb-12">
       <div className="flex flex-col gap-2.5">
         <span className="eyebrow eyebrow--indigo">{eyebrow}</span>
-        <h2 className="font-display font-bold text-[48px] tracking-[-2.4px] text-fg-1 m-0 leading-none">
+        <h2 className="font-display font-bold tracking-[-2.4px] text-fg-1 m-0 leading-none" style={{ fontSize: "clamp(28px, 6vw, 48px)" }}>
           {title}
         </h2>
         {subtitle && (

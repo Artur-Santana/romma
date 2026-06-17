@@ -58,7 +58,7 @@ function OccupationBar({ alugadas, disponiveis }) {
 
 function SkeletonEdificios() {
   return (
-    <div className="romma-page r-fade" style={{ padding: "var(--rd-page-y) var(--rd-gutter)", paddingBottom: 64 }}>
+    <div className="romma-page r-fade" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 520px), 1fr))",
@@ -178,7 +178,7 @@ export default function GestaoEdificios() {
   if (loadingInicial) return <SkeletonEdificios />;
 
   return (
-    <div className="romma-page r-fade" style={{ padding: "var(--rd-page-y) var(--rd-gutter)", paddingBottom: 64, minHeight: "100%" }}>
+    <div className="romma-page r-fade" style={{ paddingTop: 18, paddingRight: 0, paddingBottom: 64, paddingLeft: 0, minHeight: "100%" }}>
       <PageHeader
         eyebrow="E.LIST · EDIFÍCIOS"
         title="Edifícios."
@@ -325,7 +325,7 @@ export default function GestaoEdificios() {
                         </p>
                       </div>
                     </div>
-                    <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                    <div className="hidden md:flex" style={{ gap: 8, flexShrink: 0 }}>
                       <button
                         onClick={() => handleEditar(edificio)}
                         style={{
@@ -364,11 +364,11 @@ export default function GestaoEdificios() {
                   </div>
 
                   {/* Stats Row — horizontal inline */}
-                  <div style={{ display: "flex", gap: 36, marginTop: 11, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", gap: 16, marginTop: 11, flexWrap: "wrap" }}>
                     {[
                       { l: "Ocupação", v: `${stats.ocupacaoPct}%`, gold: false },
                       { l: "MRR", v: fmtBRLk(stats.mrr), gold: false },
-                      { l: "Área total", v: `${stats.areaTotal} m²`, gold: false },
+                      { l: "Área", v: `${stats.areaTotal} m²`, gold: false },
                       { l: "Unidades", v: stats.total, gold: false },
                     ].map((m) => (
                       <div key={m.l}>
@@ -385,7 +385,7 @@ export default function GestaoEdificios() {
                         <div style={{
                           fontFamily: "var(--font-display)",
                           fontWeight: 700,
-                          fontSize: 19,
+                          fontSize: 15,
                           color: m.gold ? "var(--highlight)" : "var(--fg-1)",
                           whiteSpace: "nowrap",
                         }}>
@@ -428,6 +428,42 @@ export default function GestaoEdificios() {
                     </button>
                   </div>
 
+                  {/* Mobile action buttons — base do card */}
+                  <div className="flex md:hidden" style={{ gap: 8, marginTop: 12 }}>
+                    <button
+                      onClick={() => handleEditar(edificio)}
+                      style={{
+                        all: "unset",
+                        cursor: "pointer",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 10,
+                        letterSpacing: "1px",
+                        textTransform: "uppercase",
+                        color: "var(--fg-3)",
+                        padding: "7px 13px",
+                        border: "1px solid var(--fg-5)",
+                      }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDeletar(edificio.id)}
+                      style={{
+                        all: "unset",
+                        cursor: "pointer",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 10,
+                        letterSpacing: "1px",
+                        textTransform: "uppercase",
+                        color: "var(--danger-fg)",
+                        padding: "7px 13px",
+                        border: "1px solid var(--danger-fg)",
+                      }}
+                    >
+                      Remover
+                    </button>
+                  </div>
+
                   {/* Accordion Panel */}
                   {isExpanded && (
                     <div style={{ marginTop: 8, borderTop: "1px solid var(--border-3)" }}>
@@ -439,66 +475,48 @@ export default function GestaoEdificios() {
                             data-testid="unidade-row"
                             onClick={() => setModalState({ unidade: u })}
                             style={{
-                              padding: "7px 14px",
+                              padding: "10px 14px",
                               cursor: "pointer",
                               borderBottom: "1px solid var(--border-3)",
                               background: "transparent",
                               display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              gap: 16,
+                              flexDirection: "column",
+                              gap: 5,
                               transition: "background var(--dur-fast)",
                             }}
                             onMouseEnter={e => e.currentTarget.style.background = "var(--surface-hi)"}
                             onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                           >
-                            {/* Left — name + description */}
-                            <div style={{ minWidth: 0 }}>
-                              <div style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 13, color: "var(--fg-1)" }}>
+                            {/* Linha 1 — nome + área */}
+                            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
+                              <span style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 13, color: "var(--fg-1)", minWidth: 0 }}>
                                 {u.nome}
-                              </div>
-                              {u.descricao && (
-                                <div style={{
-                                  fontFamily: "var(--font-mono)",
-                                  fontSize: 11,
-                                  color: "var(--fg-4)",
-                                  marginTop: 3,
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  maxWidth: 260,
-                                }}>
-                                  {u.descricao}
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Right — area · value · pill · Editar */}
-                            <div style={{ display: "flex", gap: 14, alignItems: "center", flexShrink: 0 }}>
-                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-4)" }}>
+                              </span>
+                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--fg-4)", flexShrink: 0 }}>
                                 {u.area_m2 ? `${u.area_m2} m²` : "—"}
                               </span>
+                            </div>
+
+                            {/* Linha 2 — valor + pill + editar */}
+                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                               <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--fg-1)" }}>
                                 {`R$ ${(parseFloat(u.valor_mensal) || 0).toLocaleString("pt-BR")}`}
                               </span>
                               <span style={{
                                 display: "inline-flex",
                                 alignItems: "center",
-                                gap: 6,
+                                gap: 5,
                                 fontFamily: "var(--font-mono)",
                                 fontSize: 9.5,
                                 letterSpacing: "0.5px",
                                 textTransform: "uppercase",
-                                padding: "4px 8px",
+                                padding: "3px 7px",
                                 background: alugada
                                   ? "color-mix(in oklch, var(--color-primary-hover) 20%, transparent)"
                                   : "color-mix(in oklch, var(--success) 16%, transparent)",
                                 color: alugada ? "var(--color-primary-hover)" : "var(--success)",
                               }}>
-                                <span style={{
-                                  width: 7, height: 7, flexShrink: 0,
-                                  background: alugada ? "var(--color-primary-hover)" : "var(--success)",
-                                }} />
+                                <span style={{ width: 6, height: 6, flexShrink: 0, background: alugada ? "var(--color-primary-hover)" : "var(--success)" }} />
                                 {alugada ? "Alugada" : "Disponível"}
                               </span>
                               <span style={{
@@ -510,6 +528,7 @@ export default function GestaoEdificios() {
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: 5,
+                                marginLeft: "auto",
                               }}>
                                 Editar <span style={{ fontSize: 12 }}>→</span>
                               </span>

@@ -13,7 +13,7 @@ const STATUS_MAP = {
   pendente_convite:  { fg: "var(--warning)",  bg: "oklch(from var(--warning) l c h / 0.12)",   label: "Convite pendente" },
 };
 
-export default function StatusBadge({ status, size = "sm" }) {
+export default function StatusBadge({ status, size = "sm", label: labelOverride }) {
   const config = STATUS_MAP[status] ?? { fg: "var(--fg-3)", bg: "oklch(1 0 0 / 0.05)", label: status };
   const isLg = size === "lg";
 
@@ -43,7 +43,7 @@ export default function StatusBadge({ status, size = "sm" }) {
           display: "inline-block",
         }}
       />
-      {config.label}
+      {labelOverride ?? config.label}
     </span>
   );
 }
