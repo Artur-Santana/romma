@@ -18,10 +18,10 @@ export default function Footer() {
             PLATAFORMA
           </h2>
           <div className="flex flex-col gap-3 font-headline-hanken text-white/50 text-sm tracking-widest">
-            <Link href="/unidades" className="animacao-underscore w-fit">PROPRIEDADES</Link>
-            <Link href="#" aria-disabled="true" tabIndex={-1} className="animacao-underscore w-fit">CONTRATOS</Link>
-            <Link href="#" aria-disabled="true" tabIndex={-1} className="animacao-underscore w-fit">PORTAIS</Link>
-            <Link href="#" aria-disabled="true" tabIndex={-1} className="animacao-underscore w-fit">DASHBOARD</Link>
+            <Link href="/dashboard/unidades" className="animacao-underscore w-fit">PROPRIEDADES</Link>
+            <Link href="/dashboard/contratos" aria-disabled="true" tabIndex={-1} className="animacao-underscore w-fit">CONTRATOS</Link>
+            <Link href="/portal/dashboard" aria-disabled="true" tabIndex={-1} className="animacao-underscore w-fit">PORTAIS</Link>
+            <Link href="/dashboard" aria-disabled="true" tabIndex={-1} className="animacao-underscore w-fit">DASHBOARD</Link>
           </div>
         </div>
 
@@ -42,14 +42,15 @@ export default function Footer() {
           </h2>
           <div className="flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-3">
             <Link
-              href="/login"
+              href="/dashboard"
               className="font-headline-hanken font-normal tracking-widest text-sm text-white/50 animacao-underscore w-fit"
             >
               ENTRAR
             </Link>
-            <button type="button" disabled className="w-fit text-white font-headline-hanken font-semibold tracking-4 bg-linear-45 from-primary to-primary-hover py-3 px-6 text-sm cursor-pointer">
+            <Link
+              href="/signup"className="w-fit text-white font-headline-hanken font-semibold tracking-4 bg-linear-45 from-primary to-primary-hover py-3 px-6 text-sm cursor-pointer">
               COMEÇAR AGORA
-            </button>
+              </Link>
           </div>
         </div>
       </div>

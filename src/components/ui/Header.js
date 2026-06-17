@@ -24,28 +24,28 @@ export default function Header() {
 
         <div className="hidden md:flex text-white/50 md:ml-25 gap-15 font-headline-hanken font-normal tracking-widest text-sm p-0.5 content-center">
           <Link href="/unidades" className="animacao-underscore content-center">
-            PROPRIEDADES
+            UNIDADES DISPONIVEIS
           </Link>
-          <Link href="#" className="animacao-underscore content-center">
+          <Link href="/dashboard/contratos" className="animacao-underscore content-center">
             CONTRATOS
           </Link>
-          <Link href="#" className="animacao-underscore content-center">
+          <Link href="/portal/dashboard" className="animacao-underscore content-center">
             PORTAIS
           </Link>
-          <Link href="#" className="animacao-underscore content-center">
+          <Link href="/dashboard" className="animacao-underscore content-center">
             DASHBOARD
           </Link>
         </div>
 
         <div className="hidden md:flex text-white/70 font-headline-hanken gap-3 content-center">
           <Link
-            href="/login"
+            href="/dashboard"
             className="content-center font-normal tracking-widest text-sm p-3 animacao-underscore"
           >
             ENTRAR
           </Link>
           <Link
-            href="/login"
+            href="/signup"
             className="content-center text-white font-semibold tracking-4 bg-linear-45 from-primary to-primary-hover py-4 px-10 cursor-pointer"
           >
             COMEÇAR AGORA
@@ -68,19 +68,19 @@ export default function Header() {
                 PROPRIEDADES
               </Link>
               <Link
-                href="#"
+                href="/dashboard/contratos"
                 className="text-white/70 font-normal tracking-widest text-sm animacao-underscore w-fit"
               >
                 CONTRATOS
               </Link>
               <Link
-                href="#"
+                href="/portal/dashboard"
                 className="text-white/70 font-normal tracking-widest text-sm animacao-underscore w-fit"
               >
                 PORTAIS
               </Link>
               <Link
-                href="#"
+                href="/dashboard"
                 className="text-white/70 font-normal tracking-widest text-sm animacao-underscore w-fit"
               >
                 DASHBOARD
