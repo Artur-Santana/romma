@@ -72,7 +72,7 @@ export default function ParcelsTable({ parcelas, locatario, contrato, onPagar })
             <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Vencimento</div>
             <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Pagamento</div>
             <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Status</div>
-            <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Ação</div>
+            <div className="px-5 py-3 font-mono text-[10px] font-bold tracking-[1.4px] uppercase text-fg-4">Comprovante</div>
           </div>
           {parcelas.length === 0 && (
             <div className="px-5 py-12 text-center font-mono text-[12px] text-fg-4 tracking-[0.5px]">
@@ -113,7 +113,7 @@ export default function ParcelsTable({ parcelas, locatario, contrato, onPagar })
                     aria-label={`Pagar parcela ${String(parcela.numero).padStart(2, '0')}`}
                     onClick={() => onPagar(parcela)}
                   >
-                    [&gt;] PAGAR
+                    → PAGAR
                   </button>
                 )}
                 {parcela.status === 'paga' && (
@@ -123,7 +123,7 @@ export default function ParcelsTable({ parcelas, locatario, contrato, onPagar })
                     aria-label={`Baixar comprovante da parcela ${String(parcela.numero).padStart(2, '0')}`}
                     onClick={() => handleBaixarRecibo(parcela, parcelas.length)}
                   >
-                    [↓] RECIBO
+                    ↓ BAIXAR
                   </button>
                 )}
                 {!['pendente', 'vencida', 'paga'].includes(parcela.status) && (
