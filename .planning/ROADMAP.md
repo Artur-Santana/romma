@@ -64,7 +64,7 @@ v1.5 recria no codebase Next.js o refino completo de UI/UX do design handoff (es
 - [x] **Phase 21: Dashboard — Visão Geral Editorial** - Bloco de ocupação em destaque, gráfico de fluxo de caixa, contratos recentes/parcelas + atalhos rápidos (completed 2026-06-16)
 - [x] **Phase 22: Contratos & Parcelas — Renovação** - Busca/filtro vencendo, countdown, progresso, arquivo de encerrados, timeline de parcelas, registrar pagamento, renovar contrato (append) (completed 2026-06-16)
 - [ ] **Phase 23: Locatários — Busca & Máscaras** - Busca, convidar/editar com máscaras CPF/CNPJ/telefone, reenviar/revogar, ações expostas no mobile
-- [ ] **Phase 24: Público — Unidades Disponíveis** - Abas por edifício, ordenação, cards com imagem de capa, ficha bottom-sheet, simular aluguel (realtime existente)
+- [x] **Phase 24: Público — Unidades Disponíveis** - Abas por edifício, ordenação, cards com imagem de capa, ficha bottom-sheet, simular aluguel (realtime existente) (completed 2026-06-17)
 - [ ] **Phase 25: Portal do Locatário — PIX & Recibo** - Próximo vencimento em destaque, modal PIX + QR estático, confirmação de pagamento (sync proprietário↔locatário), comprovante PDF
 
 ---
@@ -243,7 +243,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 24-02-PLAN.md — UnidadesPublicas + UnidadePublicaCard + UnidadeDetailSheet: sort, grid desktop, imagem de capa, ficha bottom-sheet, Simular Aluguel (PUB-01/02/03/04/05)
+- [x] 24-02-PLAN.md — UnidadesPublicas + UnidadePublicaCard + UnidadeDetailSheet: sort, grid desktop, imagem de capa, ficha bottom-sheet, Simular Aluguel (PUB-01/02/03/04/05)
 
 **UI hint**: yes
 
@@ -275,7 +275,7 @@ Plans:
 | 21. Dashboard — Visão Geral Editorial | 1/3 | In Progress|  |
 | 22. Contratos & Parcelas — Renovação | 3/3 | Complete   | 2026-06-16 |
 | 23. Locatários — Busca & Máscaras | 1/2 | In Progress|  |
-| 24. Público — Unidades Disponíveis | 1/2 | In Progress|  |
+| 24. Público — Unidades Disponíveis | 2/2 | Complete   | 2026-06-17 |
 | 25. Portal do Locatário — PIX & Recibo | 0/TBD | Not started | - |
 
 ---
