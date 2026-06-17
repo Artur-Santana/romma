@@ -121,16 +121,27 @@ export default function UnidadesPublicas() {
               return (
                 <button
                   key={tab.id}
-                  style={{ all: 'unset', cursor: 'pointer', flexShrink: 0, boxSizing: 'border-box' }}
-                  className={`px-3.5 py-[9px] inline-flex gap-2 font-body font-bold text-[10px] uppercase tracking-[0.5px] items-center border ${
-                    isActive
-                      ? 'border-indigo bg-[oklch(0.339_0.179_301.68/0.20)] text-fg-1'
-                      : 'border-border-3 bg-transparent text-fg-3'
-                  }`}
                   onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    display: 'inline-flex',
+                    gap: 8,
+                    alignItems: 'center',
+                    padding: '9px 14px',
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: 10,
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase',
+                    border: `1px solid ${isActive ? 'var(--indigo)' : 'var(--border-3)'}`,
+                    background: isActive ? 'oklch(0.339 0.179 301.68 / 0.20)' : 'transparent',
+                    color: isActive ? 'var(--fg-1)' : 'var(--fg-3)',
+                  }}
                 >
                   {tab.label}
-                  <span className={isActive ? 'text-fg-1' : 'text-fg-5'}>{count}</span>
+                  <span style={{ color: isActive ? 'var(--fg-1)' : 'var(--fg-5)' }}>{count}</span>
                 </button>
               )
             })}
