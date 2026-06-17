@@ -2,17 +2,22 @@
 
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase-browser"
-import { getLocatarioByUserId, getContratoAtivoByLocatario, getParcelasPortal } from "@/lib/queries-client"
+import { getLocatarioByUserId, getContratoAtivoByLocatario, getParcelasPortal, getTodasParcelasPortal } from "@/lib/queries-client"
 import ContratoCard from "./ContratoCard"
 import ParcelsTable from "./ParcelsTable"
+import VencimentoDestaque from "./VencimentoDestaque"
+import PixModal from "./PixModal"
 import LogoutButton from "@/components/ui/LogoutButton"
 import { Skeleton } from "@/components/ui/skeleton"
+import { toast } from "sonner"
 
 export default function PortalDashboard() {
   const supabase = createClient()
   const [locatario, setLocatario] = useState(null)
   const [contrato, setContrato] = useState(null)
   const [parcelas, setParcelas] = useState([])
+  const [todasParcelas, setTodasParcelas] = useState([])
+  const [pixModal, setPixModal] = useState({ open: false, parcela: null })
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState(null)
 
@@ -29,6 +34,8 @@ export default function PortalDashboard() {
         if (!ct) { setLoading(false); return }
         const parc = await getParcelasPortal(ct.id)
         setParcelas(parc ?? [])
+        const todasParc = await getTodasParcelasPortal(ct.id)
+        setTodasParcelas(todasParc ?? [])
       } catch (e) {
         setErro(e.message ?? "Erro desconhecido")
       } finally {
@@ -37,6 +44,12 @@ export default function PortalDashboard() {
     }
     fetchData()
   }, [])
+
+  async function refetchParcelas() {
+    if (!contrato) return
+    const todasParc = await getTodasParcelasPortal(contrato.id)
+    setTodasParcelas(todasParc ?? [])
+  }
 
   return (
     <div className="romma-page bg-background min-h-full px-4 sm:px-12 pt-6 sm:pt-12 pb-20">
@@ -66,10 +79,27 @@ export default function PortalDashboard() {
         </div>
       ) : (
         <>
+          <VencimentoDestaque
+            parcelas={todasParcelas}
+            contrato={contrato}
+            onPagar={(parcela) => setPixModal({ open: true, parcela })}
+          />
           <div className="mt-8">
-            <ContratoCard contrato={contrato} />
+            <ContratoCard contrato={contrato} parcelas={todasParcelas} />
           </div>
-          <ParcelsTable parcelas={parcelas} />
+          <ParcelsTable
+            parcelas={todasParcelas}
+            locatario={locatario}
+            contrato={contrato}
+            onPagar={(parcela) => setPixModal({ open: true, parcela })}
+          />
+          <PixModal
+            open={pixModal.open}
+            parcela={pixModal.parcela}
+            contrato={contrato}
+            onClose={() => setPixModal({ open: false, parcela: null })}
+            onSucesso={async () => { await refetchParcelas(); toast.success("Pagamento registrado") }}
+          />
         </>
       )}
     </div>
