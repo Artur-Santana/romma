@@ -146,11 +146,10 @@ export default function LocatariosDesktop({ initialLocatarios, contratos }) {
   }
 
   async function handleRevogar(id) {
-    setErro("")
     setRemovingIds(prev => new Set([...prev, id]))
     const { status, erroMessage } = await revogarConvite(id)
     if (status !== 200) {
-      setErro(erroMessage ?? "Erro ao revogar convite.")
+      toast.error(erroMessage ?? "Erro ao revogar convite.")
       setRemovingIds(prev => { const n = new Set(prev); n.delete(id); return n })
       return
     }
