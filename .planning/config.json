@@ -34,7 +34,7 @@
     "text_mode": false,
     "research_before_questions": false,
     "discuss_mode": "discuss",
-    "_auto_chain_active": true
+    "_auto_chain_active": false
   },
   "intel": {
     "enabled": false

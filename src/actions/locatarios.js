@@ -62,8 +62,8 @@ export async function editarLocatario(id, form) {
     if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
     if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
     if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
-    const { nome_razao_social, tipo, documento, email, telefone } = form
-    const { error } = await supabaseAdmin.from('locatarios').update({ nome_razao_social, tipo, documento, email, telefone }).eq('id', id).eq('proprietario_id', user.id)
+    const { nome_razao_social, email, telefone } = form
+    const { error } = await supabaseAdmin.from('locatarios').update({ nome_razao_social, email, telefone }).eq('id', id).eq('proprietario_id', user.id)
     if (error) return { status: 500, erroMessage: error.message }
     return { status: 200 }
 }
@@ -110,5 +110,35 @@ export async function revogarConvite(id) {
     if (!loc.usuario_id) return { status: 200 }
     const { error: authDelErr } = await supabaseAdmin.auth.admin.deleteUser(loc.usuario_id)
     if (authDelErr) return { status: 500, erroMessage: authDelErr.message }
+    return { status: 200 }
+}
+
+export async function reenviarConvite(id) {
+    const supabase = await createServer()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { status: 401, erroMessage: 'Não autenticado.' }
+    if (!await isProprietario(supabase)) return { status: 403, erroMessage: 'Sem permissão.' }
+    if (!UUID_RE.test(id)) return { status: 400, erroMessage: 'ID inválido.' }
+    const { data: loc, error: fetchErr } = await supabaseAdmin
+        .from('locatarios').select('email, status_convite, usuario_id').eq('id', id).eq('proprietario_id', user.id).single()
+    if (fetchErr || !loc) return { status: 404, erroMessage: 'Locatário não encontrado.' }
+    if (loc.status_convite !== 'pendente') return { status: 400, erroMessage: 'Convite já foi aceito.' }
+    const siteUrl = process.env.SITE_URL
+    if (!siteUrl) return { status: 500, erroMessage: 'Configuração de servidor inválida.' }
+    // inviteUserByEmail falha se o e-mail já existe em auth.users (mesmo pendente).
+    // Solução: deletar o auth user atual e re-convidar com novo usuario_id.
+    if (loc.usuario_id) {
+        const { error: delAuthErr } = await supabaseAdmin.auth.admin.deleteUser(loc.usuario_id)
+        if (delAuthErr) return { status: 500, erroMessage: delAuthErr.message }
+    }
+    const { data: inviteData, error: inviteErr } = await supabaseAdmin.auth.admin.inviteUserByEmail(loc.email, {
+        redirectTo: `${siteUrl}/auth/confirm`
+    })
+    if (inviteErr) return { status: 500, erroMessage: inviteErr.message }
+    if (inviteData?.user?.id) {
+        const { error: updateErr } = await supabaseAdmin
+            .from('locatarios').update({ usuario_id: inviteData.user.id }).eq('id', id)
+        if (updateErr) return { status: 500, erroMessage: updateErr.message }
+    }
     return { status: 200 }
 }
