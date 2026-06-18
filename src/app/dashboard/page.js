@@ -82,8 +82,8 @@ function CashFlowChart({ fluxo, testId, height, compact }) {
                 position: "relative",
                 width: "62%",
                 height: `${f.recebido}%`,
-                background: f.peak ? "var(--highlight)" : "var(--color-primary-hover)",
-                boxShadow: f.peak ? "0 0 8px 0 var(--highlight)" : "none",
+                background: f.current ? "var(--highlight)" : "var(--color-primary-hover)",
+                boxShadow: f.current ? "0 0 8px 0 var(--highlight)" : "none",
                 transformOrigin: "bottom",
                 animation: `rGrowY var(--dur-base) var(--ease-crisp)`,
                 animationDelay: `${i * 60}ms`,
@@ -97,7 +97,7 @@ function CashFlowChart({ fluxo, testId, height, compact }) {
               {!compact && f.recebido > 24 && (
                 <span style={{
                   fontSize: 12, fontFamily: "var(--font-mono)", whiteSpace: "nowrap",
-                  color: f.peak ? "oklch(0.25 0.05 70)" : "oklch(0 0 0 / 0.6)",
+                  color: f.current ? "oklch(0.25 0.05 70)" : "oklch(0 0 0 / 0.6)",
                 }}>
                   {fmtChartVal(f.rawRecebido)}
                 </span>
