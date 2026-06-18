@@ -59,7 +59,7 @@ function SignInForm() {
     const { data: isProprietario } = await supabase.rpc("is_proprietario")
     setStatus("success")
     await new Promise(resolve => setTimeout(resolve, 500))
-    router.push(isProprietario ? "/dashboard" : "/portal/dashboard")
+    window.location.href = isProprietario ? "/dashboard" : "/portal/dashboard"
   }
 
   const isLoading = status === "loading"
