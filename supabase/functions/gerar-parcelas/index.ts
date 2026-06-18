@@ -118,7 +118,7 @@ Deno.serve(async (req) => {
       numero: 1,
       data_fechamento: fechamento1.toISOString().split("T")[0],
       data_vencimento: vencimento1.toISOString().split("T")[0],
-      status: "futura",
+      status: "pendente",
     })
 
     // Parcelas 2+: primeiro dia do mês seguinte ao fechamento da parcela 1
