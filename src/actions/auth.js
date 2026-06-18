@@ -1,43 +1,23 @@
 "use server"
 
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import supabaseAdmin from "@/lib/supabaseAdmin"
 
-// emailRedirectTo usa SITE_URL (env server-only) pois window não está disponível em Server Actions.
 export async function cadastrarProprietario({ email, senha, nome, sobrenome, telefone }) {
   if (!email || !senha || !nome || !sobrenome || !telefone) {
     return { status: 400, erroMessage: "Todos os campos são obrigatórios." }
   }
 
-  // Criar conta via cliente Supabase com cookies do browser (necessário para
-  // que o Supabase SSR gerencie a sessão corretamente no fluxo de confirmação de email)
-  const cookieStore = await cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
   const siteUrl = process.env.SITE_URL
   if (!siteUrl) {
     return { status: 500, erroMessage: "Configuração de servidor incompleta. Contate o administrador." }
   }
-  const { error } = await supabase.auth.signUp({
+
+  const { error } = await supabaseAdmin.auth.admin.createUser({
     email,
     password: senha,
+    email_confirm: false,
+    user_metadata: { nome, sobrenome, telefone },
     options: {
-      data: { nome, sobrenome, telefone },
       emailRedirectTo: `${siteUrl}/auth/confirm`,
     },
   })
