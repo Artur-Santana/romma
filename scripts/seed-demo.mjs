@@ -2,7 +2,7 @@
  * Seed de demonstração — Romma
  *
  * Cria:
- *   - Proprietário (artursantana150@gmail.com / Romma@2026)
+ *   - Proprietário (credenciais via DEMO_PROP_EMAIL / DEMO_PROP_PASSWORD)
  *   - 4 edifícios, 12 unidades (com fotos do picsum.photos)
  *   - 8 locatários (mix PF/PJ)
  *   - 8 contratos: ativos, perto de vencer, encerrados, cancelados
@@ -19,8 +19,13 @@ import dotenv from 'dotenv'
 const __dir = dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: join(__dir, '../.env.local') })
 
-const PROP_EMAIL    = 'artursantana150@gmail.com'
-const PROP_PASSWORD = 'Romma@2026'
+const PROP_EMAIL    = process.env.DEMO_PROP_EMAIL
+const PROP_PASSWORD = process.env.DEMO_PROP_PASSWORD
+
+if (!PROP_EMAIL || !PROP_PASSWORD) {
+  console.error('DEMO_PROP_EMAIL ou DEMO_PROP_PASSWORD ausentes em .env.local')
+  process.exit(1)
+}
 
 const sb = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,

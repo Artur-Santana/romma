@@ -52,10 +52,9 @@ supabase/.temp
 supabase/.branches/
 
 #docs
-/docs/code-reviews
+/docs/
 code-review.md
 code-review-plan.md
-/docs/plans
 DEMO.md
 
 #vscode
@@ -69,4 +68,7 @@ code-review-2026-05-14.md
 # Claude Code internals
 .claude/scheduled_tasks.lock
 Romma.zip
+
+# GSD planning artifacts (internal)
+.planning/
 Romma.zip:Zone.Identifier
